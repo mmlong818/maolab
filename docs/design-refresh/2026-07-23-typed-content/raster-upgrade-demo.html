@@ -1,0 +1,127 @@
+<title>位图升级样例 · 位图底 + 矢量标注层</title>
+<style>
+  :root{--bg:#fcfbf9;--surface:#fff;--ink:#16181d;--sub:#5b606b;--faint:#9aa0ab;--line:#e9e6df;
+    --indigo:#3b4e7e;--teal:#0e7c7b;--gold:#b5872f;--jade:#3f7d63;--coral:#c25d4b;
+    --serif:"Songti SC","STSong",serif;--sans:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  header{padding:64px 0 26px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--teal);font-weight:600;margin:0 0 14px}
+  h1{font-family:var(--serif);font-size:clamp(28px,4vw,46px);line-height:1.15;margin:0;text-wrap:balance}
+  .lede{max-width:720px;color:var(--sub);font-size:17px;margin:18px 0 0}
+  .lede b{color:var(--ink)}
+  section{padding:44px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:0 0 6px}
+  .sub{font-family:var(--serif);font-size:23px;margin:0 0 4px}
+  .desc{color:var(--sub);font-size:14px;margin:0 0 22px;max-width:760px}
+  .slide{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px -34px rgba(20,22,28,.4)}
+  .badge{position:absolute;top:18px;left:22px;z-index:5;font-size:12px;letter-spacing:.12em;color:var(--faint)}
+  .badge b{color:var(--ink);font-family:var(--serif);font-size:17px;display:block;margin-top:2px;letter-spacing:0}
+  /* label chips + leader lines */
+  .lab{position:absolute;z-index:4;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:6px 11px;font-size:13px;box-shadow:0 6px 16px -8px rgba(20,22,28,.3);white-space:nowrap}
+  .lab i{font-style:normal;color:var(--faint);font-size:11px;margin-left:5px}
+  .lab b{color:var(--accent,var(--teal));font-weight:600}
+  svg.leaders{position:absolute;inset:0;z-index:3;width:100%;height:100%;pointer-events:none}
+  .cap{padding:15px 22px;border-top:1px solid var(--line);font-size:13.5px;color:var(--sub);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .cap .pill{font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--faint)}
+  .cap .pill.bmp{color:var(--coral);border-color:rgba(194,93,75,.4)}
+  .cap .pill.vec{color:var(--teal);border-color:rgba(14,124,123,.4)}
+  .old{font-size:12.5px;color:var(--faint);margin:14px 0 0}
+  .old b{color:var(--sub)}
+  footer{padding:36px 0 80px;color:var(--faint);font-size:13px}
+  .note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:15px 19px;margin:18px 0 0;font-size:13.5px;color:var(--sub)}
+  .note b{color:var(--ink)}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">位图升级 · 校准</p>
+    <h1>示意不该是扁平线描。<br>位图底 + 矢量标注层。</h1>
+    <p class="lede">用 maolab 现有生图管线(gpt-image-2)实拍三张:写实器官、写实物理情境、氛围意境。<b>「长什么样」重要的部分用生成位图</b>(够档次),<b>「结构/数值」精确的部分用矢量层叠加</b>(引线/箭头/角度,像素级对齐、可核验)。幕面仍<b>白为主</b>。</p>
+  </header>
+
+  <!-- 1. 生物眼球 -->
+  <section>
+    <h2>01 · 生物 · 结构图解</h2>
+    <p class="sub">写实眼球剖面(位图) + 精确引线标注(矢量)</p>
+    <p class="desc">器官「长什么样」由生成位图承担——半写实、有质感血管与光影;结构名称与引线是确定性矢量叠加层,像素级指向、可随数据/学段增删,绝不像位图那样标签错位。</p>
+    <div class="slide" style="aspect-ratio:1536/1024">
+      <div class="badge">02 · 观察<b>眼球的结构与功能</b></div>
+      <img src="_raster/eye.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1">
+      <svg class="leaders" viewBox="0 0 1000 667" preserveAspectRatio="none">
+        <g stroke="#0e7c7b" stroke-width="1.4" fill="none" opacity="0.75">
+          <path d="M215,250 L285,300"/><circle cx="285" cy="300" r="3.5" fill="#0e7c7b" stroke="none"/>
+          <path d="M215,360 L300,340"/><circle cx="300" cy="340" r="3.5" fill="#0e7c7b" stroke="none"/>
+          <path d="M235,470 L360,335"/><circle cx="360" cy="335" r="3.5" fill="#0e7c7b" stroke="none"/>
+          <path d="M760,175 L720,225"/><circle cx="720" cy="225" r="3.5" fill="#0e7c7b" stroke="none"/>
+          <path d="M775,395 L700,345"/><circle cx="700" cy="345" r="3.5" fill="#0e7c7b" stroke="none"/>
+          <path d="M815,475 L820,370"/><circle cx="820" cy="370" r="3.5" fill="#0e7c7b" stroke="none"/>
+        </g>
+      </svg>
+      <div class="lab" style="left:9%;top:33%;--accent:var(--teal)"><b>角膜</b><i>透光折光</i></div>
+      <div class="lab" style="left:9%;top:51%;--accent:var(--teal)"><b>虹膜 · 瞳孔</b><i>调节进光</i></div>
+      <div class="lab" style="left:11%;top:69%;--accent:var(--teal)"><b>晶状体</b><i>调焦成像</i></div>
+      <div class="lab" style="right:16%;top:23%;--accent:var(--teal)"><b>视网膜</b><i>感光成像</i></div>
+      <div class="lab" style="right:8%;top:57%;--accent:var(--teal)"><b>黄斑</b><i>视觉最敏锐</i></div>
+      <div class="lab" style="right:6%;top:70%;--accent:var(--teal)"><b>视神经</b><i>传导冲动</i></div>
+    </div>
+    <div class="cap"><span class="pill bmp">位图 · 器官写实</span><span class="pill vec">矢量 · 引线+名称+功能</span><span class="pill">白为主幕面</span></div>
+    <p class="old">对比:画廊里的旧版是<b>扁平 SVG 线描眼球</b> —— 结构可辨但质感与档次远不及写实位图。</p>
+  </section>
+
+  <!-- 2. 物理受力 -->
+  <section>
+    <h2>02 · 物理 · 受力分析</h2>
+    <p class="sub">写实斜面情境(位图) + 精确力矢量(矢量)</p>
+    <p class="desc">物理情境实物(斜面/木块/质感)由位图承担;力的方向、大小、角度是必须精确的物理量,用矢量箭头叠加(重力竖直向下、支持力垂直斜面、摩擦力沿斜面)——错一个方向就是教学事故,绝不交给位图去「猜」。</p>
+    <div class="slide" style="aspect-ratio:1536/1024">
+      <div class="badge">06 · 例题<b>斜面上木块的受力分析</b></div>
+      <img src="_raster/incline.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1">
+      <svg class="leaders" viewBox="0 0 1000 667" preserveAspectRatio="none">
+        <defs>
+          <marker id="ah" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#c25d4b"/></marker>
+          <marker id="ah2" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#3b4e7e"/></marker>
+          <marker id="ah3" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#0e7c7b"/></marker>
+        </defs>
+        <!-- 木块中心约 (330,290);斜面高端在左、下滑向右下。
+             G 竖直向下;N 垂直斜面向右上(0.34,-0.94);f 沿斜面向左上(-0.94,-0.34)。 -->
+        <line x1="330" y1="290" x2="330" y2="470" stroke="#c25d4b" stroke-width="3.5" marker-end="url(#ah)"/>
+        <line x1="330" y1="290" x2="391" y2="120" stroke="#3b4e7e" stroke-width="3.5" marker-end="url(#ah2)"/>
+        <line x1="330" y1="290" x2="180" y2="236" stroke="#0e7c7b" stroke-width="3.5" marker-end="url(#ah3)"/>
+      </svg>
+      <div class="lab" style="left:30%;top:74%;--accent:var(--coral)"><b>重力 G</b><i>竖直向下</i></div>
+      <div class="lab" style="left:40%;top:11%;--accent:var(--indigo)"><b>支持力 N</b><i>⊥斜面向外</i></div>
+      <div class="lab" style="left:4%;top:29%;--accent:var(--teal)"><b>摩擦力 f</b><i>沿斜面向上</i></div>
+    </div>
+    <div class="cap"><span class="pill bmp">位图 · 斜面木块写实</span><span class="pill vec">矢量 · 力箭头+方向+角度</span><span class="pill">白为主幕面</span></div>
+    <p class="old">对比:旧版是<b>纯 SVG 简笔斜面</b>。位图给真实材质与空间感,矢量保证力的方向/角度精确——各司其职。</p>
+  </section>
+
+  <!-- 3. 古诗意境 -->
+  <section>
+    <h2>03 · 语文 · 古诗「境」方向</h2>
+    <p class="sub">氛围意境(位图,收在卡内) + 竖排诗句(矢量文字)</p>
+    <p class="desc">意境类靠位图的光影/氛围撑「想看」。但深色氛围图<b>必须收在卡内</b>——幕面留白为主,不整幅深底出血(呼应白为主令)。诗句是竖排精排文字层。</p>
+    <div class="slide" style="padding:6%;display:flex;gap:5%;align-items:stretch;background:var(--surface)">
+      <div style="position:relative;flex:1.4;border-radius:12px;overflow:hidden;min-height:420px">
+        <img src="_raster/poem-mood.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        <div style="position:absolute;top:8%;right:8%;display:flex;flex-direction:row-reverse;gap:12px">
+          <span style="writing-mode:vertical-rl;font-family:var(--serif);font-size:23px;color:#fff;letter-spacing:.16em;text-shadow:0 2px 12px rgba(0,0,0,.6)">床前明月光</span>
+          <span style="writing-mode:vertical-rl;font-family:var(--serif);font-size:23px;color:#fff;letter-spacing:.16em;text-shadow:0 2px 12px rgba(0,0,0,.6)">疑是地上霜</span>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:12px 8px">
+        <div style="font-size:12px;letter-spacing:.12em;color:var(--gold);font-weight:700">方向 A · 境</div>
+        <div style="font-family:var(--serif);font-size:22px;margin:8px 0 12px">静夜思 · 李白</div>
+        <div style="color:var(--sub);font-size:14px;line-height:1.8">霜色的月光落在床前,一场关于故乡的静默。氛围由写实位图承担,幕面其余留白 —— 深底只在图卡内,不侵占整幕。</div>
+      </div>
+    </div>
+    <div class="cap"><span class="pill bmp">位图 · 意境氛围(卡内)</span><span class="pill vec">矢量 · 竖排诗句</span><span class="pill">幕面白为主</span></div>
+    <div class="note"><b>张力点(需你定):</b>意境类天然偏暗,与白为主有冲突。此处解法是<b>氛围图收在卡内、幕面留白</b>。若你要更彻底的白为主,可让「境」方向也走亮调氛围(晨光/月白高调),或把「境」限定为少数高年级/特定题材使用。</div>
+  </section>
+
+  <footer>
+    maolab · 位图升级校准 · 2026-07-23 &nbsp;|&nbsp; 三张位图由 gpt-image-2 实拍 &nbsp;|&nbsp; <b>位图底(写实/氛围) + 矢量层(精确标注) · 白为主</b>
+  </footer>
+</div>

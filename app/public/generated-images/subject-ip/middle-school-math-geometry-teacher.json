@@ -1,0 +1,10 @@
+﻿{
+    "prompt":  "Create a generated bitmap portrait for a Chinese middle-school math geometry course recurring IP character. Character: warm, professional geometry teacher, expressive but not cartoonish, holding a slim pointer and a small compass, calm confident classroom presence. Style must match a clean simplified editorial illustration with soft watercolor texture and precise thin linework, same visual world as a geometry detective course cover. Bust portrait, transparent-feeling light background, enough margin for circular cropping. No readable text, Chinese characters, English letters, numbers, formulas, labels, speech bubbles, watermark, or logo.",
+    "model":  "gpt-image-2",
+    "size":  "1024x1024",
+    "quality":  "medium",
+    "generatedAt":  "2026-06-26T11:03:57.9338016Z",
+    "file":  "/generated-images/subject-ip/middle-school-math-geometry-teacher.png",
+    "sha1":  "3b7227ab5d0dfe1c9db92cf88e54f3a33d27d8d9",
+    "bytes":  1644600
+}

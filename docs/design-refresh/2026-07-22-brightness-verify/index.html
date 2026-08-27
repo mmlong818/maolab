@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>白为主 · 母版画廊(2026-07-23 白化第四轮后重拍)</title>
+<style>
+  :root { --ink:#1b1d21; --sub:#6b7078; --line:#e6e3dd; --paper:#faf9f6; --accent:#b23b2e; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:16px/1.6 -apple-system,"Segoe UI",system-ui,sans-serif; color:var(--ink); background:var(--paper); }
+  header { padding:56px 40px 28px; border-bottom:1px solid var(--line); }
+  h1 { margin:0 0 8px; font-size:30px; letter-spacing:-.01em; }
+  .lede { color:var(--sub); max-width:760px; }
+  .lede b { color:var(--accent); }
+  section { padding:36px 40px; border-bottom:1px solid var(--line); }
+  h2 { font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--sub); margin:0 0 18px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(440px,1fr)); gap:22px; }
+  figure { margin:0; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; }
+  figure img { width:100%; display:block; }
+  figcaption { padding:12px 16px; font-size:14px; color:var(--sub); border-top:1px solid var(--line); }
+  figcaption b { color:var(--ink); font-weight:600; }
+  footer { padding:28px 40px 60px; color:var(--sub); font-size:14px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>白为主 · 母版画廊</h1>
+  <p class="lede">白化第四轮收紧后重拍(2026-07-23):地色被压到<b>近纯白</b>(彩度 ≤0.02、明度 ≈0.96),颜色只留在<b>强调物件层</b>——标号卡、导航、说明卡、插画。下面每张都是当前渲染实拍,底色可自行核验「都是白的」。</p>
+</header>
+
+<section>
+  <h2>四门开场 · 白底核验</h2>
+  <div class="grid">
+    <figure><img src="white4-math.png"><figcaption><b>数学</b> · 暖白底 · source-reading</figcaption></figure>
+    <figure><img src="white4-chem.png"><figcaption><b>化学</b> · 白格纸 · teal 强调</figcaption></figure>
+    <figure><img src="white4-physics.png"><figcaption><b>物理</b> · 冷白底 · cite 引言母版</figcaption></figure>
+    <figure><img src="white4-yuwen.png"><figcaption><b>语文</b> · 暖白底</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2>观察 · PPT 式版式(图辅文主)</h2>
+  <div class="grid">
+    <figure><img src="g-ppt-visobs.png"><figcaption><b>语文观察</b> · 大标题 + 整体配图 + 对齐说明卡,红色分层物件在白底上</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2>引进母版 · 结构异质(harvest/layouts 榨取)</h2>
+  <div class="grid">
+    <figure><img src="g-cb-griddiagram.png"><figcaption><b>概念·GridDiagram</b></figcaption></figure>
+    <figure><img src="g-we-windowchrome.png"><figcaption><b>例题·WindowChrome</b></figcaption></figure>
+    <figure><img src="g-we-gridflow.png"><figcaption><b>例题·GridFlow</b></figcaption></figure>
+    <figure><img src="g-we-ledger.png"><figcaption><b>例题·Ledger</b></figcaption></figure>
+    <figure><img src="g-pr-badge.png"><figcaption><b>练习·Badge</b></figcaption></figure>
+    <figure><img src="g-pr-gridpanel.png"><figcaption><b>练习·GridPanel</b></figcaption></figure>
+    <figure><img src="g-pr-stage.png"><figcaption><b>练习·Stage</b></figcaption></figure>
+    <figure><img src="g-recap-outline.png"><figcaption><b>收束·Outline</b></figcaption></figure>
+  </div>
+</section>
+
+<footer>
+  母版总量 ~64(引进两波 +26)。全母版 ground=paper(0 深底)。粉紫禁令已扩至引进 accent。339 测试通过 · typecheck 干净 · 全部未提交。
+</footer>
+</body>
+</html>

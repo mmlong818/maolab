@@ -1,0 +1,29 @@
+{
+  "name": "@maolab/user-profile",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@maolab/db": "workspace:*",
+    "@maolab/shared-types": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^20.0.0",
+    "better-sqlite3": "^11.0.0",
+    "drizzle-orm": "^0.36.0",
+    "typescript": "^5.4.0",
+    "vitest": "^2.0.0"
+  }
+}

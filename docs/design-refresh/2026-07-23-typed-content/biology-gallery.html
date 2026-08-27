@@ -1,0 +1,580 @@
+<title>生物 · 特殊内容呈现画廊</title>
+<style>
+:root{
+  --bg:#fcfbf9;--surface:#ffffff;--ink:#16181d;--sub:#5b606b;--faint:#9aa0ab;
+  --line:#e9e6df;--hair:#efece6;
+  --indigo:#3b4e7e;--teal:#0e7c7b;--gold:#b5872f;--jade:#3f7d63;--coral:#c25d4b;--plum:#7a5c8e;
+  --serif:"Songti SC","STSong","Noto Serif CJK SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 22px 55px -30px rgba(20,22,28,.30);--radius:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+header{padding:74px 0 30px}
+.eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--jade);font-weight:700;margin:0 0 16px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,4.6vw,52px);line-height:1.16;margin:0;letter-spacing:.01em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--faint)}
+.lede{max-width:720px;color:var(--sub);font-size:17px;margin:20px 0 0}
+.lede b{color:var(--ink);font-weight:600}
+.rule{height:1px;background:var(--line);margin:36px 0 0}
+
+.sec{padding:52px 0 6px}
+.sec-k{font-family:var(--serif);font-size:13px;letter-spacing:.14em;color:var(--faint)}
+.sec h2{font-family:var(--serif);font-weight:600;font-size:25px;margin:8px 0 6px}
+.sec .core{color:var(--sub);max-width:800px;margin:0 0 4px;font-size:14.5px}
+.sec .beat{color:var(--faint);max-width:800px;margin:0;font-size:12.5px}
+
+.grid2{display:grid;grid-template-columns:1fr;gap:26px;padding:24px 0 6px}
+@media(min-width:900px){.grid2{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.stage{position:relative;height:360px;overflow:hidden;background:#ffffff}
+.cap{padding:15px 20px 17px;border-top:1px solid var(--hair)}
+.cap .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.cap h3{font-family:var(--serif);font-size:18px;margin:7px 0 5px}
+.cap p{font-size:12.8px;color:var(--sub);margin:0;line-height:1.55}
+.tag-jade{color:var(--jade)} .tag-indigo{color:var(--indigo)} .tag-coral{color:var(--coral)} .tag-gold{color:var(--gold)} .tag-teal{color:var(--teal)}
+
+.bands{display:grid;grid-template-columns:1fr;gap:14px;padding:22px 0 8px}
+@media(min-width:820px){.bands{grid-template-columns:repeat(4,1fr)}}
+.band{border:1px solid var(--line);border-radius:14px;padding:16px 16px 18px;background:var(--surface)}
+.band .g{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.band h4{font-family:var(--serif);font-size:14.5px;margin:7px 0 8px}
+.band p{font-size:12px;color:var(--sub);margin:0;line-height:1.6}
+
+.chip2{position:absolute;width:150px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 10px 22px -14px rgba(20,22,28,.38);border:1px solid var(--line)}
+.chip2 .nm{padding:7px 11px 5px;font-family:var(--serif);font-weight:700;font-size:14px}
+.chip2 .fn{padding:6px 11px 8px;font-size:10.6px;color:var(--sub);line-height:1.42;border-top:1px dashed var(--line)}
+
+footer{padding:40px 0 84px;color:var(--faint);font-size:13px;border-top:1px solid var(--line);margin-top:40px}
+footer b{color:var(--sub);font-weight:600}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">特殊内容呈现 · 生物</p>
+    <h1>关系,才是生物学的<em>真正内容</em>。<br>把结构、流程、层级、遗传、能量的拓扑画出来。</h1>
+    <p class="lede">结构图解、生理流程、分类树、遗传图解、食物网——教材把这五类关系压平成黑白线图和编号表。这里给每一类<b>两个结构真异质</b>的现代方向:地铁图、胶片分镜、年轮辐射树、图鉴护照、族谱时间带、力导向网络,六种跨域语言,没有两类共用同一套皮。</p>
+    <div class="rule"></div>
+  </header>
+
+  <!-- ============ 1. 结构图解 ============ -->
+  <section class="sec">
+    <div class="sec-k">01 / 结构图解</div>
+    <h2>引线标注 · 结构—功能对应</h2>
+    <p class="core">结构决定功能——学生要记住的不是"叫什么",是"为什么长这样、干这件事"。名称与功能必须成对出现。</p>
+    <p class="beat">方向甲:由图心向四周辐射的双层引标(认识单个结构)。方向乙:整体剪影按系统色带切片(理解结构如何归入系统)。降维切片 ≠ 辐射标注,视角不同。</p>
+  </section>
+
+  <div class="grid2">
+    <!-- 1甲 双层引标:眼球结构 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#fbfdfc,#f2f7f4)"></div>
+        <svg width="552" height="360" viewBox="0 0 552 360" style="display:block;position:absolute;inset:0">
+          <ellipse cx="260" cy="182" rx="112" ry="92" fill="#f6faf7" stroke="#c9d6cd" stroke-width="2"/>
+          <path d="M178,118 Q136,182 178,246" fill="none" stroke="#3f7d63" stroke-width="2.5"/>
+          <circle cx="182" cy="182" r="30" fill="none" stroke="#3f7d63" stroke-width="8" opacity=".5"/>
+          <circle cx="182" cy="182" r="13" fill="#232b26"/>
+          <ellipse cx="222" cy="182" rx="15" ry="42" fill="#dfe9e3" stroke="#9fb8ab" stroke-width="1.5"/>
+          <path d="M346,102 Q370,182 346,262" fill="none" stroke="#c07c72" stroke-width="7" opacity=".85"/>
+          <path d="M372,182 L412,182" stroke="#8d938c" stroke-width="9" stroke-linecap="round"/>
+          <path d="M412,168 L432,150 M412,182 L436,182 M412,196 L432,214" stroke="#8d938c" stroke-width="2.5" fill="none"/>
+          <circle cx="176" cy="182" r="4" fill="#3f7d63"/>
+          <circle cx="182" cy="152" r="4" fill="#3f7d63"/>
+          <circle cx="222" cy="182" r="4" fill="#3f7d63"/>
+          <circle cx="352" cy="140" r="4" fill="#3f7d63"/>
+          <circle cx="396" cy="182" r="4" fill="#3f7d63"/>
+          <path d="M176,182 Q95,148 66,66" fill="none" stroke="#3f7d63" stroke-width="1.4" opacity=".5"/>
+          <path d="M182,152 Q120,168 90,196" fill="none" stroke="#3f7d63" stroke-width="1.4" opacity=".5"/>
+          <path d="M222,182 Q238,232 268,278" fill="none" stroke="#3f7d63" stroke-width="1.4" opacity=".5"/>
+          <path d="M352,140 Q414,96 468,60" fill="none" stroke="#3f7d63" stroke-width="1.4" opacity=".5"/>
+          <path d="M396,182 Q432,232 468,290" fill="none" stroke="#3f7d63" stroke-width="1.4" opacity=".5"/>
+        </svg>
+        <div class="chip2" style="left:12px;top:12px">
+          <div class="nm" style="color:var(--jade)">角膜</div>
+          <div class="fn">折射光线,汇聚成像光路</div>
+        </div>
+        <div class="chip2" style="left:12px;top:168px">
+          <div class="nm" style="color:var(--jade)">虹膜</div>
+          <div class="fn">收缩舒张,调节瞳孔进光量</div>
+        </div>
+        <div class="chip2" style="left:190px;top:280px">
+          <div class="nm" style="color:var(--jade)">晶状体</div>
+          <div class="fn">双凸透镜,调节曲度精细对焦</div>
+        </div>
+        <div class="chip2" style="right:12px;top:12px">
+          <div class="nm" style="color:var(--jade)">视网膜</div>
+          <div class="fn">感光细胞层,将光信号转为神经信号</div>
+        </div>
+        <div class="chip2" style="right:12px;top:280px">
+          <div class="nm" style="color:var(--jade)">视神经</div>
+          <div class="fn">传导视觉信号至大脑皮层</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-jade">方向甲 · 双层引标</span>
+        <h3>眼球结构 · 引线标注升级版</h3>
+        <p>引线终点不再是一行说明,是双区块 chip:上区结构名(重音大字),下区功能一句话,物理分层但同属一卡。曲线引线绕开图内容主体,落在结构精确位置——医学解剖 App 的 callout 语法。</p>
+      </div>
+    </div>
+
+    <!-- 1乙 系统图层卡:人体循环系统切片 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#fbfbfd,#f5f4f9)"></div>
+        <svg width="200" height="340" viewBox="0 0 200 340" style="display:block;position:absolute;left:6px;top:10px">
+          <circle cx="95" cy="46" r="24" fill="#f4f5f7" stroke="#c7ccd1" stroke-width="2.5"/>
+          <path d="M65,74 Q95,64 125,74 L138,206 Q95,222 52,206 Z" fill="#f4f5f7" stroke="#c7ccd1" stroke-width="2.5"/>
+          <path d="M65,84 L24,150 M125,84 L166,150" fill="none" stroke="#c7ccd1" stroke-width="10" stroke-linecap="round"/>
+          <path d="M70,206 L54,320 M120,206 L136,320" fill="none" stroke="#c7ccd1" stroke-width="14" stroke-linecap="round"/>
+          <path d="M95,105 c-14,-14 -34,-2 -34,14 c0,18 34,38 34,38 c0,0 34,-20 34,-38 c0,-16 -20,-28 -34,-14 Z" fill="#c25d4b"/>
+          <path d="M95,150 C70,190 60,250 55,320" fill="none" stroke="#c25d4b" stroke-width="3.5" opacity=".85"/>
+          <path d="M95,150 C120,190 132,250 137,320" fill="none" stroke="#c25d4b" stroke-width="3.5" opacity=".85"/>
+          <path d="M80,110 C55,120 30,132 26,150" fill="none" stroke="#c25d4b" stroke-width="3" opacity=".85"/>
+          <path d="M112,110 C138,120 162,132 166,150" fill="none" stroke="#c25d4b" stroke-width="3" opacity=".85"/>
+        </svg>
+        <div style="position:absolute;left:210px;top:14px;width:112px;display:flex;flex-direction:column;gap:8px">
+          <div style="background:var(--coral);color:#fff;border-radius:9px;padding:12px 12px;box-shadow:0 10px 20px -12px rgba(194,93,75,.6)">
+            <div style="font-family:var(--serif);font-weight:700;font-size:13.5px">循环系统</div>
+            <div style="font-size:10px;opacity:.9;margin-top:3px">已点亮</div>
+          </div>
+          <div style="background:#eceef2;color:var(--faint);border-radius:9px;padding:10px 12px;font-size:12px">消化系统</div>
+          <div style="background:#eceef2;color:var(--faint);border-radius:9px;padding:10px 12px;font-size:12px">呼吸系统</div>
+          <div style="background:#eceef2;color:var(--faint);border-radius:9px;padding:10px 12px;font-size:12px">神经系统</div>
+        </div>
+        <div style="position:absolute;left:334px;top:14px;right:14px;display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">循环系统 · 结构展开</div>
+          <div style="background:#fff;border:1px solid var(--line);border-left:3px solid var(--coral);border-radius:9px;padding:10px 12px">
+            <div style="font-family:var(--serif);font-weight:700;font-size:14px;color:var(--coral)">心脏</div>
+            <div style="font-size:11.5px;color:var(--sub);margin-top:3px">泵血动力源,推动血液循环全身</div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--line);border-left:3px solid var(--coral);border-radius:9px;padding:10px 12px">
+            <div style="font-family:var(--serif);font-weight:700;font-size:14px;color:var(--coral)">动脉</div>
+            <div style="font-size:11.5px;color:var(--sub);margin-top:3px">运输含氧血,压力大、管壁厚</div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--line);border-left:3px solid var(--coral);border-radius:9px;padding:10px 12px">
+            <div style="font-family:var(--serif);font-weight:700;font-size:14px;color:var(--coral)">静脉</div>
+            <div style="font-size:11.5px;color:var(--sub);margin-top:3px">运输含碳血,压力小、内有静脉瓣</div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-coral">方向乙 · 系统图层卡</span>
+        <h3>人体剪影 · 系统色带切片</h3>
+        <p>整体剪影居中,侧边一条系统色带;点亮"循环系统"段,图中对应区域联动高亮,该段下方浮现结构-功能卡组。"整体→按系统切片"的降维视角,服务"结构如何归入系统"。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>具象大插画</h4><p>卡通器官/动植物,结构 ≤3 个,chip 做成贴纸圆角,只讲"叫什么/像什么"。</p></div>
+    <div class="band"><div class="g">高小 3–6</div><h4>翻页揭层</h4><p>结构 4–5 个,乙方向做成"翻页揭层"游戏感,系统色带配小徽章。</p></div>
+    <div class="band"><div class="g">初中 7–9</div><h4>双层 chip 上线</h4><p>甲乙皆可,结构 5–8 个,双层 chip 完整上线,系统色带开始多段。</p></div>
+    <div class="band"><div class="g">高中 10–12</div><h4>机制短句</h4><p>结构 8+ 个,功能句改为机制短句(如"肾小球:滤过血浆生成原尿"),克制无装饰。</p></div>
+  </div>
+
+  <!-- ============ 2. 生理流程 ============ -->
+  <section class="sec">
+    <div class="sec-k">02 / 生理流程</div>
+    <h2>环线站台图 · 分镜胶片带</h2>
+    <p class="core">过程是有向的、分阶段的,不少还是环状(血液循环、卡尔文循环)而非线性——学生要看清"流向"与"阶段边界"。</p>
+    <p class="beat">方向甲:地铁线路图语法,空间网络站点视角。方向乙:Kurzgesagt 式横向分镜带,时间轴叙事视角。前者认结构,后者认顺序与镜头感。</p>
+  </section>
+
+  <div class="grid2">
+    <!-- 2甲 环线站台图:心肺循环 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#fffdfb,#fdf5f2)"></div>
+        <svg width="552" height="360" viewBox="0 0 552 360" style="display:block;position:absolute;inset:0">
+          <path d="M276,60 L436,200" fill="none" stroke="#3b6fc2" stroke-width="6" stroke-linecap="round"/>
+          <path d="M436,200 L276,320" fill="none" stroke="#c25d4b" stroke-width="6" stroke-linecap="round"/>
+          <path d="M276,320 L116,200" fill="none" stroke="#c25d4b" stroke-width="6" stroke-linecap="round"/>
+          <path d="M116,200 L276,60" fill="none" stroke="#3b6fc2" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 10"/>
+          <circle cx="276" cy="60" r="17" fill="#fff" stroke="#c25d4b" stroke-width="4"/>
+          <circle cx="436" cy="200" r="17" fill="#fff" stroke="#3b6fc2" stroke-width="4"/>
+          <circle cx="276" cy="320" r="17" fill="#fff" stroke="#c25d4b" stroke-width="4"/>
+          <circle cx="116" cy="200" r="17" fill="#fff" stroke="#c25d4b" stroke-width="4"/>
+        </svg>
+        <div style="position:absolute;left:220px;top:16px;font-family:var(--serif);font-weight:700;font-size:13px;text-align:center;width:112px">右心室</div>
+        <div style="position:absolute;left:456px;top:190px;font-family:var(--serif);font-weight:700;font-size:13px">肺部<br>毛细血管</div>
+        <div style="position:absolute;left:220px;top:328px;font-family:var(--serif);font-weight:700;font-size:13px;text-align:center;width:112px">左心房</div>
+        <div style="position:absolute;left:12px;top:190px;font-family:var(--serif);font-weight:700;font-size:13px;text-align:right;width:96px">左心室</div>
+
+        <div style="position:absolute;left:12px;top:14px;width:150px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:11px;color:var(--sub);box-shadow:0 8px 18px -14px rgba(0,0,0,.3)">收缩,推血入肺动脉<b style="display:block;color:var(--coral);font-size:10px;margin-top:2px">静脉血 → 肺</b></div>
+        <div style="position:absolute;right:8px;top:250px;width:150px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:11px;color:var(--sub);box-shadow:0 8px 18px -14px rgba(0,0,0,.3)">气体交换,血液携氧<b style="display:block;color:var(--jade);font-size:10px;margin-top:2px">O₂ 结合,CO₂ 释放</b></div>
+        <div style="position:absolute;left:12px;top:250px;width:150px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:11px;color:var(--sub);box-shadow:0 8px 18px -14px rgba(0,0,0,.3)">接收含氧血<b style="display:block;color:var(--coral);font-size:10px;margin-top:2px">肺静脉 → 心</b></div>
+        <div style="position:absolute;right:8px;top:14px;width:150px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:11px;color:var(--sub);box-shadow:0 8px 18px -14px rgba(0,0,0,.3)">收缩,推血入主动脉(经全身组织后回心)<b style="display:block;color:var(--indigo);font-size:10px;margin-top:2px">→ 右心室(环线闭合)</b></div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-coral">方向甲 · 环线站台图</span>
+        <h3>心肺循环 · 地铁线路语法</h3>
+        <p>站点 = 心室心房/肺,站徽圆形;红线=含氧血流、蓝线=含碳血流,双色区分动静脉。每站挂一张小卡"这里发生了什么"。地铁"环线"隐喻天然契合闭合的循环过程。</p>
+      </div>
+    </div>
+
+    <!-- 2乙 分镜胶片带:光合作用 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#fbfdfc,#f3f8f5)"></div>
+        <div style="position:absolute;left:24px;top:24px;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">光合作用 · 分镜带</div>
+        <div style="position:absolute;left:20px;top:56px;right:20px;display:flex;gap:10px;height:210px">
+          <div style="flex:1;background:#fff;border:1px solid rgba(63,125,99,.35);border-radius:10px;padding:10px;display:flex;flex-direction:column;box-shadow:0 8px 18px -14px rgba(63,125,99,.45);position:relative">
+            <div style="position:absolute;left:6px;right:6px;top:4px;display:flex;justify-content:space-between"><i style="width:5px;height:5px;border-radius:50%;background:var(--line);display:block"></i><i style="width:5px;height:5px;border-radius:50%;background:var(--line);display:block"></i></div>
+            <div style="width:22px;height:22px;border-radius:7px;background:rgba(181,135,47,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);margin:10px 0 8px">1</div>
+            <svg width="34" height="34" viewBox="0 0 34 34" style="display:block;margin-bottom:6px"><circle cx="17" cy="17" r="7" fill="none" stroke="var(--gold)" stroke-width="2"/><g stroke="var(--gold)" stroke-width="2"><line x1="17" y1="1" x2="17" y2="6"/><line x1="17" y1="28" x2="17" y2="33"/><line x1="1" y1="17" x2="6" y2="17"/><line x1="28" y1="17" x2="33" y2="17"/></g></svg>
+            <div style="font-family:var(--serif);font-weight:700;font-size:12.5px">光反应</div>
+            <div style="font-size:10px;color:var(--sub);margin-top:4px;line-height:1.4">类囊体膜:水裂解释放 O₂,生成 ATP/NADPH</div>
+          </div>
+          <div style="width:16px;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 16 16" style="display:block"><path d="M2,8 L13,8 M8,3 L13,8 L8,13" fill="none" stroke="var(--faint)" stroke-width="2"/></svg></div>
+          <div style="flex:1;background:#fff;border:1px solid rgba(63,125,99,.35);border-radius:10px;padding:10px;display:flex;flex-direction:column;box-shadow:0 8px 18px -14px rgba(63,125,99,.45);position:relative">
+            <div style="position:absolute;left:6px;right:6px;top:4px;display:flex;justify-content:space-between"><i style="width:5px;height:5px;border-radius:50%;background:var(--line);display:block"></i><i style="width:5px;height:5px;border-radius:50%;background:var(--line);display:block"></i></div>
+            <div style="width:22px;height:22px;border-radius:7px;background:rgba(63,125,99,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--jade);margin:10px 0 8px">2</div>
+            <svg width="34" height="34" viewBox="0 0 34 34" style="display:block;margin-bottom:6px"><circle cx="12" cy="17" r="6" fill="none" stroke="var(--jade)" stroke-width="2"/><circle cx="24" cy="17" r="6" fill="none" stroke="var(--jade)" stroke-width="2"/></svg>
+            <div style="font-family:var(--serif);font-weight:700;font-size:12.5px">CO₂ 固定</div>
+            <div style="font-size:10px;color:var(--sub);margin-top:4px;line-height:1.4">基质:CO₂ 与 RuBP 结合,卡尔文循环起点</div>
+          </div>
+          <div style="width:16px;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 16 16" style="display:block"><path d="M2,8 L13,8 M8,3 L13,8 L8,13" fill="none" stroke="var(--faint)" stroke-width="2"/></svg></div>
+          <div style="flex:1;background:#fff;border:1px solid rgba(63,125,99,.35);border-radius:10px;padding:10px;display:flex;flex-direction:column;box-shadow:0 8px 18px -14px rgba(63,125,99,.45);position:relative">
+            <div style="position:absolute;left:6px;right:6px;top:4px;display:flex;justify-content:space-between"><i style="width:5px;height:5px;border-radius:50%;background:var(--line);display:block"></i><i style="width:5px;height:5px;border-radius:50%;background:var(--line);display:block"></i></div>
+            <div style="width:22px;height:22px;border-radius:7px;background:rgba(63,125,99,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--jade);margin:10px 0 8px">3</div>
+            <svg width="34" height="34" viewBox="0 0 34 34" style="display:block;margin-bottom:6px"><path d="M6,22 L14,8 L22,22 Z" fill="none" stroke="var(--jade)" stroke-width="2"/></svg>
+            <div style="font-family:var(--serif);font-weight:700;font-size:12.5px">G3P 生成</div>
+            <div style="font-size:10px;color:var(--sub);margin-top:4px;line-height:1.4">ATP/NADPH 供能,还原为三碳糖</div>
+          </div>
+          <div style="width:16px;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 16 16" style="display:block"><path d="M2,8 L13,8 M8,3 L13,8 L8,13" fill="none" stroke="var(--faint)" stroke-width="2"/></svg></div>
+          <div style="flex:1;background:#fff;border:1px solid rgba(63,125,99,.35);border-radius:10px;padding:10px;display:flex;flex-direction:column;box-shadow:0 8px 18px -14px rgba(63,125,99,.45);position:relative">
+            <div style="position:absolute;left:6px;right:6px;top:4px;display:flex;justify-content:space-between"><i style="width:5px;height:5px;border-radius:50%;background:var(--line);display:block"></i><i style="width:5px;height:5px;border-radius:50%;background:var(--line);display:block"></i></div>
+            <div style="width:22px;height:22px;border-radius:7px;background:rgba(63,125,99,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--jade);margin:10px 0 8px">4</div>
+            <svg width="34" height="34" viewBox="0 0 34 34" style="display:block;margin-bottom:6px"><path d="M8,26 Q8,8 26,8" fill="none" stroke="var(--jade)" stroke-width="2"/><path d="M20,5 L26,8 L21,13" fill="none" stroke="var(--jade)" stroke-width="2"/></svg>
+            <div style="font-family:var(--serif);font-weight:700;font-size:12.5px">糖类合成 / RuBP 再生</div>
+            <div style="font-size:10px;color:var(--sub);margin-top:4px;line-height:1.4">部分合成葡萄糖,部分再生 RuBP</div>
+          </div>
+        </div>
+        <svg width="512" height="46" viewBox="0 0 512 46" style="display:block;position:absolute;left:20px;top:270px">
+          <path d="M470,10 C470,40 120,40 120,10" fill="none" stroke="var(--jade)" stroke-width="2" stroke-dasharray="4 5"/>
+          <path d="M112,16 L120,10 L128,17" fill="none" stroke="var(--jade)" stroke-width="2"/>
+        </svg>
+        <div style="position:absolute;left:170px;top:294px;font-size:11px;color:var(--jade);background:#fff;padding:2px 10px;border-radius:999px;border:1px solid rgba(63,125,99,.35)">卡尔文循环 · 再生回第 2 格</div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-jade">方向乙 · 分镜胶片带</span>
+        <h3>光合作用 · 时间轴分镜</h3>
+        <p>每阶段一格胶片特写,格间箭头衔接;末格弧线回绕连回第 2 格,表达"时间轴叙事首尾呼应"而非环状拓扑。让学生看清先后顺序与镜头感。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>2–3 格绘本</h4><p>超大插画 icon + 巨大圆润箭头,像绘本翻页,不出现"环"的抽象概念。</p></div>
+    <div class="band"><div class="g">高小 3–6</div><h4>逐格点亮</h4><p>4–5 站/格,轻游戏化,逐格点亮像闯关,配小徽章。</p></div>
+    <div class="band"><div class="g">初中 7–9</div><h4>标数据变化</h4><p>完整环线图或 6–8 格分镜,开始标数据变化(如 O₂ 浓度趋势箭头)。</p></div>
+    <div class="band"><div class="g">高中 10–12</div><h4>双线程精密</h4><p>光反应/暗反应两条并行线在类囊体膜/基质两站交汇,学术克制。</p></div>
+  </div>
+
+  <!-- ============ 3. 分类树 ============ -->
+  <section class="sec">
+    <div class="sec-k">03 / 分类树</div>
+    <h2>年轮辐射树 · 检索护照链</h2>
+    <p class="core">分类是嵌套层级(界门纲目科属种),但真正的学习目标是"划分依据"——为什么这个物种归到这一类。</p>
+    <p class="beat">方向甲:radial tree 向心拓扑,一眼看全物种在树中的位置。方向乙:二歧检索表的线性判断链,走一遍科学家的判断过程。</p>
+  </section>
+
+  <div class="grid2">
+    <!-- 3甲 年轮辐射树:家犬分类 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#fbfbfd,#f4f5fa)"></div>
+        <svg width="300" height="340" viewBox="0 0 300 340" style="display:block;position:absolute;left:6px;top:10px">
+          <circle cx="140" cy="200" r="20" fill="none" stroke="#dfe2ec" stroke-width="2"/>
+          <circle cx="140" cy="200" r="42" fill="none" stroke="#dfe2ec" stroke-width="2"/>
+          <circle cx="140" cy="200" r="64" fill="none" stroke="#dfe2ec" stroke-width="2"/>
+          <circle cx="140" cy="200" r="86" fill="none" stroke="#dfe2ec" stroke-width="2"/>
+          <circle cx="140" cy="200" r="108" fill="none" stroke="#dfe2ec" stroke-width="2"/>
+          <circle cx="140" cy="200" r="130" fill="none" stroke="#dfe2ec" stroke-width="2"/>
+          <path d="M140,200 L128,70 A130,130 0 0,1 152,70 Z" fill="var(--indigo)" opacity=".10"/>
+          <path d="M140,200 L140,70" stroke="var(--indigo)" stroke-width="1.5" stroke-dasharray="1 5" opacity=".6"/>
+          <circle cx="140" cy="180" r="4.5" fill="var(--indigo)"/>
+          <circle cx="140" cy="158" r="4.5" fill="var(--indigo)"/>
+          <circle cx="140" cy="136" r="4.5" fill="var(--indigo)"/>
+          <circle cx="140" cy="114" r="4.5" fill="var(--indigo)"/>
+          <circle cx="140" cy="92" r="4.5" fill="var(--indigo)"/>
+          <circle cx="140" cy="70" r="5.5" fill="var(--indigo)"/>
+        </svg>
+        <div style="position:absolute;left:314px;top:14px;right:14px;display:flex;flex-direction:column;gap:7px">
+          <div style="font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-bottom:2px">中心 → 边缘,一条高亮路径</div>
+          <div style="display:flex;gap:8px;align-items:baseline"><span style="width:26px;font-size:10.5px;color:var(--faint)">界</span><b style="font-family:var(--serif);font-size:13.5px">动物界</b></div>
+          <div style="display:flex;gap:8px;align-items:baseline"><span style="width:26px;font-size:10.5px;color:var(--faint)">门</span><b style="font-family:var(--serif);font-size:13.5px">脊索动物门</b><span style="font-size:10px;color:var(--indigo)">具脊索</span></div>
+          <div style="display:flex;gap:8px;align-items:baseline"><span style="width:26px;font-size:10.5px;color:var(--faint)">纲</span><b style="font-family:var(--serif);font-size:13.5px">哺乳纲</b><span style="font-size:10px;color:var(--indigo)">胎生,哺乳</span></div>
+          <div style="display:flex;gap:8px;align-items:baseline"><span style="width:26px;font-size:10.5px;color:var(--faint)">目</span><b style="font-family:var(--serif);font-size:13.5px">食肉目</b><span style="font-size:10px;color:var(--indigo)">犬齿发达</span></div>
+          <div style="display:flex;gap:8px;align-items:baseline"><span style="width:26px;font-size:10.5px;color:var(--faint)">科</span><b style="font-family:var(--serif);font-size:13.5px">犬科</b></div>
+          <div style="display:flex;gap:8px;align-items:baseline"><span style="width:26px;font-size:10.5px;color:var(--indigo)">种</span><b style="font-family:var(--serif);font-size:15px;color:var(--indigo)">家犬</b></div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-indigo">方向甲 · 年轮辐射树</span>
+        <h3>家犬分类 · Radial Tree</h3>
+        <p>中心是最高阶元(界),向外一圈圈辐射到种。同心圆自带"越分越细"的向心/离心隐喻;选中路径高亮成一条辐射带,沿途标注划分依据。</p>
+      </div>
+    </div>
+
+    <!-- 3乙 检索护照链:家鸽分类 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#fbfdfc,#f7f9f7)"></div>
+        <div style="position:absolute;left:22px;top:22px;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">检索护照链 · 家鸽</div>
+        <div style="position:absolute;left:16px;top:60px;right:16px;bottom:60px;display:flex;align-items:center;gap:6px">
+          <div style="flex:1;background:#fff;border:1px solid rgba(14,124,123,.35);border-radius:10px;padding:10px 8px;text-align:center;box-shadow:0 8px 16px -12px rgba(14,124,123,.4)">
+            <div style="width:26px;height:26px;border-radius:50%;background:rgba(14,124,123,.12);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:13px">🐾</div>
+            <div style="font-size:9.5px;color:var(--faint)">界</div>
+            <div style="font-family:var(--serif);font-weight:700;font-size:11.5px">动物界</div>
+          </div>
+          <div style="font-size:9px;color:var(--sub);text-align:center;width:52px;line-height:1.3">因为<br>具脊索</div>
+          <div style="flex:1;background:#fff;border:1px solid rgba(14,124,123,.35);border-radius:10px;padding:10px 8px;text-align:center;box-shadow:0 8px 16px -12px rgba(14,124,123,.4)">
+            <div style="width:26px;height:26px;border-radius:50%;background:rgba(14,124,123,.12);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:12px">◎</div>
+            <div style="font-size:9.5px;color:var(--faint)">门</div>
+            <div style="font-family:var(--serif);font-weight:700;font-size:11.5px">脊索动物门</div>
+          </div>
+          <div style="font-size:9px;color:var(--sub);text-align:center;width:56px;line-height:1.3">因为<br>被羽·恒温</div>
+          <div style="flex:1;background:#fff;border:1px solid rgba(14,124,123,.35);border-radius:10px;padding:10px 8px;text-align:center;box-shadow:0 8px 16px -12px rgba(14,124,123,.4)">
+            <div style="width:26px;height:26px;border-radius:50%;background:rgba(14,124,123,.12);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:13px">🪶</div>
+            <div style="font-size:9.5px;color:var(--faint)">纲</div>
+            <div style="font-family:var(--serif);font-weight:700;font-size:11.5px">鸟纲</div>
+          </div>
+          <div style="font-size:9px;color:var(--sub);text-align:center;width:52px;line-height:1.3">因为<br>喙短·嗉囊</div>
+          <div style="flex:1;background:#fff;border:1px solid rgba(14,124,123,.35);border-radius:10px;padding:10px 8px;text-align:center;box-shadow:0 8px 16px -12px rgba(14,124,123,.4)">
+            <div style="width:26px;height:26px;border-radius:50%;background:rgba(14,124,123,.12);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:12px">✦</div>
+            <div style="font-size:9.5px;color:var(--faint)">科</div>
+            <div style="font-family:var(--serif);font-weight:700;font-size:11.5px">鸠鸽科</div>
+          </div>
+          <div style="font-size:9px;color:var(--sub);text-align:center;width:42px;line-height:1.3">所以是</div>
+          <div style="flex:1;background:var(--teal);color:#fff;border-radius:10px;padding:10px 8px;text-align:center;box-shadow:0 10px 20px -12px rgba(14,124,123,.55)">
+            <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.2);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:13px">🕊</div>
+            <div style="font-size:9.5px;opacity:.85">种</div>
+            <div style="font-family:var(--serif);font-weight:700;font-size:12.5px">家鸽</div>
+          </div>
+        </div>
+        <div style="position:absolute;left:22px;bottom:20px;font-size:11px;color:var(--sub)">护照式卡片 · 每级挂一枚特征徽标,逐步判断而非整体拓扑</div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-teal">方向乙 · 检索护照链</span>
+        <h3>家鸽分类 · 二歧检索重制</h3>
+        <p>每级阶元一张横向卡片,"因为……所以……"的判断句连接,图鉴 App 式护照卡。走一遍科学家判断分类的过程,而非一眼看全整棵树。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>大类判断</h4><p>护照链只留 2–3 级,不出现严格阶元名,只讲"这是像鸟类的动物吗",超大萌系 icon。</p></div>
+    <div class="band"><div class="g">高小 3–6</div><h4>判断句上线</h4><p>4 级卡链,"因为……所以……"判断句上线,图鉴游戏风格。</p></div>
+    <div class="band"><div class="g">初中 7–9</div><h4>完整七阶元</h4><p>甲乙皆可给,完整七阶元,特征 icon 系统化。</p></div>
+    <div class="band"><div class="g">高中 10–12</div><h4>拉丁学名</h4><p>完整辐射树含拉丁学名,或严谨检索链,同心圆分区精密克制。</p></div>
+  </div>
+
+  <!-- ============ 4. 遗传图解 ============ -->
+  <section class="sec">
+    <div class="sec-k">04 / 遗传图解</div>
+    <h2>棋盘卡矩阵 · 世代谱系带</h2>
+    <p class="core">等位基因组合的概率结构(棋盘交叉,一代内)与家族性状的谱系传递结构(多代追溯),是两类不同的教学目标。</p>
+    <p class="beat">方向甲服务单代概率推算;方向乙服务多代遗传病追溯——遗传学里两种不同的分析工具,不是硬造差异。比例与谱系符号必须规范可核验。</p>
+  </section>
+
+  <div class="grid2">
+    <!-- 4甲 棋盘卡矩阵:豌豆圆粒/皱粒 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#fffdf8,#fdf6e9)"></div>
+        <div style="position:absolute;left:24px;top:20px;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">豌豆种子形状 · Rr × Rr</div>
+        <div style="position:absolute;left:120px;top:56px;right:24px;display:grid;grid-template-columns:60px 1fr 1fr;grid-template-rows:44px 1fr 1fr;gap:8px">
+          <div></div>
+          <div style="display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:20px;color:var(--gold)">R</div>
+          <div style="display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:20px;color:var(--gold)">r</div>
+
+          <div style="display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:20px;color:var(--gold)">R</div>
+          <div style="background:#fff;border:1px solid rgba(181,135,47,.4);border-radius:10px;display:flex;align-items:center;gap:8px;padding:8px 10px">
+            <svg width="26" height="26" viewBox="0 0 26 26" style="display:block"><circle cx="13" cy="13" r="11" fill="#8fbf6f"/></svg>
+            <div><div style="font-family:var(--serif);font-weight:700;font-size:14px">RR</div><div style="font-size:10px;color:var(--sub)">圆粒(显性)</div></div>
+          </div>
+          <div style="background:#fff;border:1px solid rgba(181,135,47,.4);border-radius:10px;display:flex;align-items:center;gap:8px;padding:8px 10px">
+            <svg width="26" height="26" viewBox="0 0 26 26" style="display:block"><circle cx="13" cy="13" r="11" fill="#8fbf6f"/></svg>
+            <div><div style="font-family:var(--serif);font-weight:700;font-size:14px">Rr</div><div style="font-size:10px;color:var(--sub)">圆粒(显性)</div></div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:20px;color:var(--gold)">r</div>
+          <div style="background:#fff;border:1px solid rgba(181,135,47,.4);border-radius:10px;display:flex;align-items:center;gap:8px;padding:8px 10px">
+            <svg width="26" height="26" viewBox="0 0 26 26" style="display:block"><circle cx="13" cy="13" r="11" fill="#8fbf6f"/></svg>
+            <div><div style="font-family:var(--serif);font-weight:700;font-size:14px">Rr</div><div style="font-size:10px;color:var(--sub)">圆粒(显性)</div></div>
+          </div>
+          <div style="background:#fff;border:1px solid rgba(181,135,47,.4);border-radius:10px;display:flex;align-items:center;gap:8px;padding:8px 10px">
+            <svg width="26" height="26" viewBox="0 0 26 26" style="display:block"><circle cx="13" cy="13" r="11" fill="#d8c98f"/><path d="M5,10 Q13,6 21,10 M5,13 Q13,17 21,13 M5,17 Q13,13 21,17" fill="none" stroke="#a8935a" stroke-width="1.2"/></svg>
+            <div><div style="font-family:var(--serif);font-weight:700;font-size:14px">rr</div><div style="font-size:10px;color:var(--sub)">皱粒(隐性)</div></div>
+          </div>
+        </div>
+        <div style="position:absolute;left:24px;bottom:22px;right:24px">
+          <div style="display:flex;height:20px;border-radius:6px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)">
+            <div style="width:75%;background:var(--gold)"></div>
+            <div style="width:25%;background:#d8c98f"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-top:5px"><span>圆粒 3</span><span style="font-weight:700;color:var(--ink)">3 : 1</span><span>皱粒 1</span></div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-gold">方向甲 · 棋盘卡矩阵</span>
+        <h3>豌豆种子形状 · Punnett 方格</h3>
+        <p>保留棋盘方阵的教育正确核心,材质现代化:配子表头斜体字母,交叉格是圆角卡片,基因型配表现型小插画(圆润/皱缩),底部比例条把 3:1 做成可视化色块。</p>
+      </div>
+    </div>
+
+    <!-- 4乙 世代谱系带:白化病遗传 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#fffdfb,#fbf4f2)"></div>
+        <div style="position:absolute;left:24px;top:20px;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">白化病(隐性遗传) · 世代谱系带</div>
+        <svg width="504" height="230" viewBox="0 0 504 230" style="display:block;position:absolute;left:24px;top:56px">
+          <line x1="200" y1="60" x2="280" y2="60" stroke="#8d939c" stroke-width="2"/>
+          <line x1="240" y1="60" x2="240" y2="100" stroke="#8d939c" stroke-width="2"/>
+          <line x1="120" y1="100" x2="360" y2="100" stroke="#8d939c" stroke-width="2"/>
+          <line x1="120" y1="100" x2="120" y2="140" stroke="#8d939c" stroke-width="2"/>
+          <line x1="240" y1="100" x2="240" y2="140" stroke="#8d939c" stroke-width="2"/>
+          <line x1="360" y1="100" x2="360" y2="140" stroke="#8d939c" stroke-width="2"/>
+          <circle cx="200" cy="60" r="18" fill="#c25d4b"/>
+          <rect x="262" y="42" width="36" height="36" fill="#fff" stroke="#3b4e7e" stroke-width="2.5"/>
+          <circle cx="120" cy="158" r="16" fill="#fff" stroke="#3b4e7e" stroke-width="2.5"/>
+          <path d="M120,142 a16,16 0 0,1 0,32 Z" fill="#3b4e7e" opacity=".55"/>
+          <rect x="222" y="142" width="34" height="34" fill="#fff" stroke="#3b4e7e" stroke-width="2.5"/>
+          <circle cx="360" cy="158" r="18" fill="#c25d4b"/>
+        </svg>
+        <div style="position:absolute;left:186px;top:114px;font-size:10px;color:var(--sub)">I</div>
+        <div style="position:absolute;left:106px;top:222px;font-size:10px;color:var(--sub);width:32px;text-align:center">II-1<br><b style="color:var(--coral)">携带者</b></div>
+        <div style="position:absolute;left:222px;top:222px;font-size:10px;color:var(--sub);width:56px;text-align:center">II-2<br><b>正常</b></div>
+        <div style="position:absolute;left:345px;top:222px;font-size:10px;color:var(--sub);width:36px;text-align:center">II-3<br><b style="color:var(--coral)">患病</b></div>
+        <div style="position:absolute;right:20px;top:56px;width:150px;display:flex;flex-direction:column;gap:8px;font-size:10.5px;color:var(--sub)">
+          <div style="display:flex;align-items:center;gap:6px"><svg width="16" height="16" style="display:block"><circle cx="8" cy="8" r="7" fill="#fff" stroke="#3b4e7e" stroke-width="2"/></svg>女 / <svg width="16" height="16" style="display:block"><rect x="1" y="1" width="14" height="14" fill="#fff" stroke="#3b4e7e" stroke-width="2"/></svg>男</div>
+          <div style="display:flex;align-items:center;gap:6px"><svg width="16" height="16" style="display:block"><circle cx="8" cy="8" r="7" fill="#c25d4b"/></svg>患病</div>
+          <div style="display:flex;align-items:center;gap:6px"><svg width="16" height="16" style="display:block"><circle cx="8" cy="8" r="7" fill="#fff" stroke="#3b4e7e" stroke-width="2"/><path d="M8,1 a7,7 0 0,1 0,14 Z" fill="#3b4e7e" opacity=".55"/></svg>携带者</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-indigo">方向乙 · 世代谱系带</span>
+        <h3>白化病 · 两代谱系追溯</h3>
+        <p>横向按世代分带,圆(女)/方(男)遵循标准谱系符号规范;患病全填、携带者半填。棋盘服务单代概率,谱系带服务多代遗传病追溯——两种分析工具,不是同一套皮。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>像不像游戏</h4><p>不涉及正式 Punnett 概念,只做"像不像爸爸妈妈"具象配对游戏(毛色/花色)。</p></div>
+    <div class="band"><div class="g">高小 3–6</div><h4>2×2 图标化</h4><p>简化 2×2 棋盘,性状图标化(花色/花瓣数),游戏配对感强。</p></div>
+    <div class="band"><div class="g">初中 7–9</div><h4>单基因 + 比例条</h4><p>完整单基因 Punnett 方格 + 比例条,或简版三代谱系带,编辑设计。</p></div>
+    <div class="band"><div class="g">高中 10–12</div><h4>双因子 + 携带者判定</h4><p>4×4 棋盘 + 严谨统计,或完整多代谱系带含携带者判定,零装饰。</p></div>
+  </div>
+
+  <!-- ============ 5. 食物链与食物网 ============ -->
+  <section class="sec">
+    <div class="sec-k">05 / 食物链与食物网</div>
+    <h2>能量链标带 · 捕食关系网</h2>
+    <p class="core">能量单向流动、逐级递减(十分之一定律);食物网是多条食物链交织的网状结构——"网"本身就是要教的那个结构。</p>
+    <p class="beat">方向甲是线性衰减视角,单链清晰,适合初次接触能量流。方向乙是多对多网络视角,唯一真正呈现"网"而非"链的集合"。</p>
+  </section>
+
+  <div class="grid2">
+    <!-- 5甲 能量链标带 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#fbfdfd,#f2f8f7)"></div>
+        <div style="position:absolute;left:24px;top:22px;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">稻田生态系统 · 能量流</div>
+        <div style="position:absolute;left:20px;top:56px;right:20px;display:flex;align-items:center;gap:0;height:110px">
+          <div style="display:flex;flex-direction:column;align-items:center;width:88px">
+            <svg width="52" height="52" viewBox="0 0 52 52" style="display:block"><circle cx="26" cy="26" r="24" fill="#eef6f0" stroke="var(--teal)" stroke-width="2"/><path d="M26,38 C20,30 20,18 26,12 C32,18 32,30 26,38 Z" fill="var(--teal)" opacity=".8"/></svg>
+            <div style="font-size:11px;font-weight:700;margin-top:5px">水稻</div><div style="font-size:9px;color:var(--faint)">生产者</div>
+          </div>
+          <svg width="46" height="26" viewBox="0 0 46 26" style="display:block;flex:none"><polygon points="0,4 46,9 46,17 0,22" fill="var(--gold)" opacity=".8"/></svg>
+          <div style="display:flex;flex-direction:column;align-items:center;width:80px">
+            <svg width="42" height="42" viewBox="0 0 42 42" style="display:block"><circle cx="21" cy="21" r="19" fill="#fbf6ea" stroke="var(--gold)" stroke-width="2"/><ellipse cx="21" cy="23" rx="7" ry="4" fill="var(--gold)"/><path d="M14,20 L6,14 M28,20 L36,14" stroke="var(--gold)" stroke-width="1.6" fill="none"/></svg>
+            <div style="font-size:10.5px;font-weight:700;margin-top:5px">稻飞虱</div><div style="font-size:9px;color:var(--faint)">初级消费者</div>
+          </div>
+          <svg width="42" height="22" viewBox="0 0 42 22" style="display:block;flex:none"><polygon points="0,6 42,9 42,13 0,16" fill="var(--jade)" opacity=".8"/></svg>
+          <div style="display:flex;flex-direction:column;align-items:center;width:76px">
+            <svg width="38" height="38" viewBox="0 0 38 38" style="display:block"><circle cx="19" cy="21" r="15" fill="#eef6ee" stroke="var(--jade)" stroke-width="2"/><circle cx="13" cy="10" r="4" fill="var(--jade)"/><circle cx="25" cy="10" r="4" fill="var(--jade)"/></svg>
+            <div style="font-size:10.5px;font-weight:700;margin-top:5px">青蛙</div><div style="font-size:9px;color:var(--faint)">次级消费者</div>
+          </div>
+          <svg width="38" height="18" viewBox="0 0 38 18" style="display:block;flex:none"><polygon points="0,7 38,8 38,10 0,11" fill="var(--coral)" opacity=".8"/></svg>
+          <div style="display:flex;flex-direction:column;align-items:center;width:70px">
+            <svg width="34" height="34" viewBox="0 0 34 34" style="display:block"><circle cx="17" cy="17" r="13" fill="#fbf1ef" stroke="var(--coral)" stroke-width="2"/><path d="M8,17 Q13,10 17,17 Q21,24 26,17" fill="none" stroke="var(--coral)" stroke-width="2"/></svg>
+            <div style="font-size:10.5px;font-weight:700;margin-top:5px">蛇</div><div style="font-size:9px;color:var(--faint)">顶级消费者</div>
+          </div>
+          <svg width="34" height="14" viewBox="0 0 34 14" style="display:block;flex:none"><polygon points="0,5.5 34,6.5 34,7.5 0,8.5" fill="var(--indigo)" opacity=".8"/></svg>
+          <div style="display:flex;flex-direction:column;align-items:center;width:64px">
+            <svg width="30" height="30" viewBox="0 0 30 30" style="display:block"><circle cx="15" cy="15" r="11" fill="#eef0f6" stroke="var(--indigo)" stroke-width="2"/><path d="M4,17 L15,11 L26,17 L15,15 Z" fill="var(--indigo)"/></svg>
+            <div style="font-size:10.5px;font-weight:700;margin-top:5px">鹰</div><div style="font-size:9px;color:var(--faint)">顶级消费者</div>
+          </div>
+        </div>
+        <div style="position:absolute;left:24px;right:24px;bottom:24px">
+          <div style="display:flex;align-items:flex-end;gap:4px;height:70px">
+            <div style="flex:1;background:var(--teal);height:100%;border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-size:10px;padding-top:4px">100%</div>
+            <div style="flex:1;background:var(--gold);height:62%;border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-size:10px;padding-top:4px">10%</div>
+            <div style="flex:1;background:var(--jade);height:34%;border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-size:10px;padding-top:4px">1%</div>
+            <div style="flex:1;background:var(--coral);height:18%;border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-size:9px;padding-top:3px">0.1%</div>
+            <div style="flex:1;background:var(--indigo);height:10%;border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-size:9px;padding-top:2px">.01%</div>
+          </div>
+          <div style="font-size:10px;color:var(--faint);margin-top:5px;text-align:center">能量金字塔 · 十分之一定律(箭头逐级收窄同一视觉语法)</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-teal">方向甲 · 能量链标带</span>
+        <h3>稻田能量流 · 横向图标链</h3>
+        <p>营养级圆形插画徽章横排,箭头本身逐级收窄变细,把十分之一定律直接视觉化;底部能量金字塔色块条按比例递减,单链清晰,适合初次接触。</p>
+      </div>
+    </div>
+
+    <!-- 5乙 捕食关系网 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#fbfdfd,#f4f9f8)"></div>
+        <div style="position:absolute;left:24px;top:22px;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">稻田食物网 · 高亮一条子路径</div>
+        <svg width="504" height="300" viewBox="0 0 504 300" style="display:block;position:absolute;left:24px;top:50px">
+          <defs>
+            <marker id="ah1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--teal)"/></marker>
+            <marker id="ah2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#c7cbd2"/></marker>
+          </defs>
+          <path d="M70,250 Q120,230 180,190" fill="none" stroke="var(--teal)" stroke-width="3" marker-end="url(#ah1)"/>
+          <path d="M180,190 Q240,150 300,110" fill="none" stroke="var(--teal)" stroke-width="3" marker-end="url(#ah1)"/>
+          <path d="M300,110 Q360,70 420,40" fill="none" stroke="var(--teal)" stroke-width="3" marker-end="url(#ah1)"/>
+          <path d="M420,40 Q370,15 300,20" fill="none" stroke="var(--teal)" stroke-width="3" marker-end="url(#ah1)"/>
+          <path d="M180,190 Q250,110 292,26" fill="none" stroke="#c7cbd2" stroke-width="2" marker-end="url(#ah2)"/>
+          <circle cx="70" cy="250" r="20" fill="#eef6f0" stroke="var(--teal)" stroke-width="2.5"/>
+          <circle cx="180" cy="190" r="18" fill="#fbf6ea" stroke="var(--gold)" stroke-width="2.5"/>
+          <circle cx="300" cy="110" r="18" fill="#eef6ee" stroke="var(--jade)" stroke-width="2.5"/>
+          <circle cx="420" cy="40" r="18" fill="#fbf1ef" stroke="var(--coral)" stroke-width="2.5"/>
+          <circle cx="292" cy="20" r="18" fill="#eef0f6" stroke="var(--indigo)" stroke-width="2.5"/>
+        </svg>
+        <div style="position:absolute;left:38px;top:288px;font-size:11px;font-weight:700;text-align:center;width:60px">水稻</div>
+        <div style="position:absolute;left:158px;top:222px;font-size:11px;font-weight:700;text-align:center;width:64px">稻飞虱</div>
+        <div style="position:absolute;left:278px;top:142px;font-size:11px;font-weight:700;text-align:center;width:60px">青蛙</div>
+        <div style="position:absolute;left:406px;top:70px;font-size:11px;font-weight:700;text-align:center;width:40px">蛇</div>
+        <div style="position:absolute;left:278px;top:44px;font-size:11px;font-weight:700;text-align:center;width:40px">鹰</div>
+        <div style="position:absolute;right:20px;bottom:20px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:10.5px;color:var(--sub);max-width:190px">高亮:水稻→稻飞虱→青蛙→蛇→鹰 是整张网里的<b style="color:var(--teal)">一条食物链</b>;灰线为网中其它捕食边(青蛙→鹰)</div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-jade">方向乙 · 捕食关系网</span>
+        <h3>稻田食物网 · Force-directed Network</h3>
+        <p>物种按营养级水平分层的节点,曲线指向捕食者表示能量流方向;高亮一条路径演示"食物网里的一条食物链"是整张网的子路径——唯一真正呈现"网"的方向。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>谁吃谁绘本</h4><p>食物链 3–4 环具象动物插画 + 大箭头,不出现能量金字塔抽象概念。</p></div>
+    <div class="band"><div class="g">高小 3–6</div><h4>逐环点亮</h4><p>5–6 环 + 简化能量金字塔色块条,逐环点亮的轻游戏化。</p></div>
+    <div class="band"><div class="g">初中 7–9</div><h4>完整食物网</h4><p>完整食物网节点图(8–12 物种)+ 营养级分层标注,开始标注能量流数据。</p></div>
+    <div class="band"><div class="g">高中 10–12</div><h4>精确能量数值</h4><p>复杂食物网 + 精确能量金字塔数值(100%→10%→1%),学术图表级精密。</p></div>
+  </div>
+
+  <footer>
+    生物 · 特殊内容呈现画廊 · 2026-07-23 &nbsp;|&nbsp; 白为主 · 颜色只在物件层 &nbsp;|&nbsp; 结构图解/生理流程/分类树/遗传图解/食物网 —— 五类关系,六种跨域视觉语言,无同质换皮
+  </footer>
+</div>

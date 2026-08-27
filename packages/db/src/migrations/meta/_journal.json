@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1778234613329,
+      "tag": "0000_happy_the_renegades",
+      "breakpoints": true
+    }
+    ,{
+      "idx": 1,
+      "version": "6",
+      "when": 1746748800000,
+      "tag": "0001_add_profile_fields_and_grade_level",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1779051600000,
+      "tag": "0002_content_units_and_programs",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1779235200000,
+      "tag": "0003_stages_slide_theme",
+      "breakpoints": true
+    }
+  ]
+}

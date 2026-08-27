@@ -1,0 +1,725 @@
+<title>数学 · 特殊内容呈现画廊</title>
+<style>
+:root{
+  --bg:#fcfbf9;--surface:#ffffff;--ink:#16181d;--sub:#5b606b;--faint:#9aa0ab;
+  --line:#e9e6df;--hair:#efece6;
+  --indigo:#3b4e7e;--teal:#0e7c7b;--gold:#b5872f;--jade:#3f7d63;--coral:#c25d4b;--plum:#7a5c8e;
+  --serif:"Songti SC","STSong","Noto Serif CJK SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 22px 55px -30px rgba(20,22,28,.30);--radius:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+header{padding:72px 0 30px}
+.eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);font-weight:600;margin:0 0 16px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,4.4vw,52px);line-height:1.16;margin:0;letter-spacing:.01em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--faint)}
+.lede{max-width:700px;color:var(--sub);font-size:17px;margin:20px 0 0}
+.lede b{color:var(--ink);font-weight:600}
+.rule{height:1px;background:var(--line);margin:36px 0 0}
+.sec{padding:52px 0 6px}
+.sec-k{font-family:var(--serif);font-size:13px;letter-spacing:.12em;color:var(--faint)}
+.sec h2{font-family:var(--serif);font-weight:600;font-size:24px;margin:8px 0 6px}
+.sec p{color:var(--sub);max-width:760px;margin:0;font-size:14.5px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;padding:26px 0 6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.stage{position:relative;height:340px;background:var(--surface);overflow:hidden}
+.cap{padding:15px 20px 17px;border-top:1px solid var(--hair)}
+.cap .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.cap h3{font-family:var(--serif);font-size:18px;margin:6px 0 5px}
+.cap p{font-size:13px;color:var(--sub);margin:0;line-height:1.55}
+.bandrow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:8px 0 6px}
+.bchip{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:var(--surface)}
+.bchip .g{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.bchip p{font-size:12.5px;color:var(--sub);margin:8px 0 0;line-height:1.6}
+.bchip b{color:var(--ink)}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.05;margin:0 2px;font-size:.92em}
+.frac i{font-style:normal;padding:0 3px}
+.frac i.n{border-bottom:1.3px solid currentColor}
+.dot{width:9px;height:13px;border-radius:2px;background:#b5872f;display:inline-block}
+footer{padding:40px 0 90px;color:var(--faint);font-size:13px;border-top:1px solid var(--line);margin-top:38px}
+footer b{color:var(--sub);font-weight:600}
+.note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:10px;padding:16px 20px;margin:34px 0 0;font-size:13.5px;color:var(--sub);line-height:1.7}
+.note b{color:var(--ink)}
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">特殊内容呈现 · 数学画廊</p>
+  <h1>竖式与坐标系,不该只是<em>印刷时代的黑白工具图</em>。<br>八类数学呈现,十六个超越教材的方向。</h1>
+  <p class="lede">从位值制换算到方程推导链,每一类的视觉语法都由<b>内容的本质结构</b>决定——不是同一张卡片换皮。数字、比例、角度、坐标全部算对,参照 Brilliant.org 交互可视化与 3Blue1Brown 的动态直觉。</p>
+  <div class="rule"></div>
+</header>
+
+<!-- ============ 01 竖式计算 ============ -->
+<section class="sec">
+  <div class="sec-k">01 / 竖式计算</div>
+  <h2>进位与借位,是位值制换算,不是书写规范</h2>
+  <p>满十进一、借一当十——竖式的本质是一次单位换算正在发生,而不是数字被写进格子里的规矩。</p>
+</section>
+<div class="grid">
+  <div class="card">
+    <div class="stage" style="background:linear-gradient(180deg,#ffffff,#f3faf9)">
+      <div style="position:absolute;inset:0;padding:24px 26px 18px;display:flex;flex-direction:column">
+        <div style="font-family:var(--serif);font-size:16px;color:var(--ink)">47 + 38 = <b style="color:var(--teal)">85</b></div>
+        <div style="font-size:11px;color:var(--faint);margin:4px 0 10px">位值仓 · 进位即溢出的水位</div>
+        <div style="flex:1;display:flex;align-items:flex-end;justify-content:center;gap:56px;position:relative">
+          <svg width="130" height="50" viewBox="0 0 130 50" style="display:block;position:absolute;top:-6px;left:calc(50% - 65px)">
+            <path d="M104,38 C86,10 46,10 24,32" stroke="#0e7c7b" stroke-width="2.4" fill="none" stroke-dasharray="5 5"/>
+            <path d="M24,32 l-8,-3 l2,9 z" fill="#0e7c7b"/>
+            <text x="64" y="16" font-size="11" fill="#0e7c7b" font-family="PingFang SC" text-anchor="middle">+1 进位</text>
+          </svg>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="font-size:11px;color:var(--faint)">个位仓</div>
+            <div style="width:66px;height:148px;border:2px solid #cfe7e4;border-radius:10px;overflow:hidden;background:#f2fbfa;display:flex;align-items:flex-end">
+              <div style="width:100%;height:96%;background:linear-gradient(180deg,#6fd0cb,#0e7c7b);display:flex;align-items:flex-start;justify-content:center;padding-top:6px">
+                <span style="color:#fff;font-size:12px;font-weight:700">7+8</span>
+              </div>
+            </div>
+            <div style="font-family:var(--serif);font-size:18px;color:var(--ink)">15 → 写 <b style="color:var(--teal)">5</b></div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="font-size:11px;color:var(--faint)">十位仓</div>
+            <div style="width:66px;height:148px;border:2px solid #cfe7e4;border-radius:10px;overflow:hidden;background:#f2fbfa;display:flex;align-items:flex-end">
+              <div style="width:100%;height:88%;background:linear-gradient(180deg,#41aca6,#0b615f);display:flex;align-items:flex-start;justify-content:center;padding-top:6px">
+                <span style="color:#fff;font-size:12px;font-weight:700">4+3+1</span>
+              </div>
+            </div>
+            <div style="font-family:var(--serif);font-size:18px;color:var(--ink)">8</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--teal)">方向甲 · 流光进位</span>
+      <h3>位值仓水位上涨</h3>
+      <p>每个数位是一座水位仓;个位仓满 10 后,溢出的部分化作光斑流向十位仓——进位被"看见发生",而不是被"写下一个小 1"。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage" style="background:linear-gradient(180deg,#ffffff,#fbf7ea)">
+      <div style="position:absolute;inset:0;padding:22px 24px;display:flex;flex-direction:column">
+        <div style="font-family:var(--serif);font-size:16px;color:var(--ink)">52 − 27 = <b style="color:var(--gold)">25</b></div>
+        <div style="font-size:11px;color:var(--faint);margin:4px 0 12px">拆分卡 · 整十卡掰开成十张个位卡</div>
+        <div style="display:flex;flex-direction:column;gap:12px;flex:1;justify-content:center">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:11px;color:var(--faint);width:58px;flex:none">52 =</span>
+            <div style="display:flex;gap:5px">
+              <div style="width:24px;height:36px;border-radius:5px;background:#e7c983;border:1px solid #c9a355"></div>
+              <div style="width:24px;height:36px;border-radius:5px;background:#e7c983;border:1px solid #c9a355"></div>
+              <div style="width:24px;height:36px;border-radius:5px;background:#e7c983;border:1px solid #c9a355"></div>
+              <div style="width:24px;height:36px;border-radius:5px;background:#e7c983;border:1px solid #c9a355"></div>
+              <div style="width:24px;height:36px;border-radius:5px;background:#f0d9a0;border:1px dashed #c9a355;display:flex;align-items:center;justify-content:center;font-size:9px;color:#6b4e14">拆</div>
+            </div>
+            <div style="display:flex;gap:3px;margin-left:2px">
+              <span class="dot"></span><span class="dot"></span>
+            </div>
+          </div>
+          <div style="height:1px;background:var(--line);margin:0 0 0 68px"></div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:11px;color:var(--faint);width:58px;flex:none">拆开后</span>
+            <div style="display:flex;gap:5px">
+              <div style="width:24px;height:36px;border-radius:5px;background:#e7c983;border:1px solid #c9a355"></div>
+              <div style="width:24px;height:36px;border-radius:5px;background:#e7c983;border:1px solid #c9a355"></div>
+              <div style="width:24px;height:36px;border-radius:5px;background:#e7c983;border:1px solid #c9a355"></div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:3px;width:74px;margin-left:2px">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--sub);padding-left:68px">减去 27 → 拿走 <b style="color:var(--ink)">2 张整十卡 + 7 张个位卡</b></div>
+          <div style="display:flex;align-items:center;gap:10px;padding-top:8px;border-top:1px dashed var(--line)">
+            <span style="font-size:11px;color:var(--faint);width:58px;flex:none">剩下</span>
+            <div style="display:flex;gap:5px">
+              <div style="width:24px;height:36px;border-radius:5px;background:#e7c983;border:1px solid #c9a355"></div>
+              <div style="width:24px;height:36px;border-radius:5px;background:#e7c983;border:1px solid #c9a355"></div>
+            </div>
+            <div style="display:flex;gap:3px">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+            <span style="font-family:var(--serif);font-size:19px;color:var(--gold);margin-left:auto">= 25</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--gold)">方向乙 · 拆分卡</span>
+      <h3>整十卡掰开成个位卡</h3>
+      <p>数被拆成位值分量的实体卡片;借位时一张"整十卡"从阵列取出、掰开成十张个位卡落回——像乐高积木的拆解,而非格子里打斜杠改数字。</p>
+    </div>
+  </div>
+</div>
+<div class="bandrow">
+  <div class="bchip"><div class="g">低小 1–2</div><p>拆分卡 + 食物/积木换算实物化,极低密度,<b>只做一次运算</b>。</p></div>
+  <div class="bchip"><div class="g">高小 3–6</div><p>流光进位 / 拆分卡皆可,加<b>验算步骤</b>与过关式徽章。</p></div>
+  <div class="bchip"><div class="g">初中 7–9</div><p>扩展到小数/多位数乘除,拆分卡<b>收敛为规范位值网格</b>,拟物退场。</p></div>
+  <div class="bchip"><div class="g">高中 10–12</div><p>竖式基本退场,转为<b>长除法/多项式除法</b>的位值类比,极简排版。</p></div>
+</div>
+
+<!-- ============ 02 分数与比例 ============ -->
+<section class="sec">
+  <div class="sec-k">02 / 分数与比例</div>
+  <h2>部分—整体的关系,不是圆饼图配色</h2>
+  <p>分数是平分后取几份;比例是两个量之间保持不变的比较关系——共享结构,服务不同问题。</p>
+</section>
+<div class="grid">
+  <div class="card">
+    <div class="stage" style="background:#fff">
+      <div style="position:absolute;inset:0;padding:24px 26px;display:flex;flex-direction:column;align-items:center">
+        <div style="font-size:11px;color:var(--faint);align-self:flex-start;margin-bottom:14px">面积切割 · 统一网格揭示公因数</div>
+        <div style="display:flex;gap:44px;align-items:center;flex:1">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <svg width="120" height="120" viewBox="0 0 120 120" style="display:block">
+              <path d="M60,60 L60,6 A54,54 0 0 1 114,60 Z" fill="#c25d4b" stroke="#fff" stroke-width="2"/>
+              <path d="M60,60 L114,60 A54,54 0 0 1 60,114 Z" fill="#c25d4b" stroke="#fff" stroke-width="2"/>
+              <path d="M60,60 L60,114 A54,54 0 0 1 6,60 Z" fill="#f1e3de" stroke="#fff" stroke-width="2"/>
+              <path d="M60,60 L6,60 A54,54 0 0 1 60,6 Z" fill="#f1e3de" stroke="#fff" stroke-width="2"/>
+              <circle cx="60" cy="60" r="54" fill="none" stroke="#d8b6ac" stroke-width="1.4"/>
+            </svg>
+            <div style="font-family:var(--serif);font-size:15px;color:var(--ink)">1/2 = <span class="frac"><i class="n">2</i><i class="d">4</i></span></div>
+          </div>
+          <div style="font-family:var(--serif);font-size:20px;color:var(--faint)">→</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <svg width="120" height="120" viewBox="0 0 120 120" style="display:block">
+              <path d="M60,60 L60,6 A54,54 0 0 1 114,60 Z" fill="#c25d4b" stroke="#fff" stroke-width="2"/>
+              <path d="M60,60 L114,60 A54,54 0 0 1 60,114 Z" fill="#c25d4b" stroke="#fff" stroke-width="2"/>
+              <path d="M60,60 L60,114 A54,54 0 0 1 6,60 Z" fill="#c25d4b" stroke="#fff" stroke-width="2"/>
+              <path d="M60,60 L6,60 A54,54 0 0 1 60,6 Z" fill="#f1e3de" stroke="#fff" stroke-width="2"/>
+              <circle cx="60" cy="60" r="54" fill="none" stroke="#d8b6ac" stroke-width="1.4"/>
+            </svg>
+            <div style="font-family:var(--serif);font-size:15px;color:var(--ink)"><span class="frac"><i class="n">3</i><i class="d">4</i></span></div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--sub);margin-top:8px">公共分母 = <b style="color:var(--coral)">4</b> → 2/4 &lt; 3/4,一眼可比</div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--coral)">方向甲 · 面积切割</span>
+      <h3>统一网格的通分</h3>
+      <p>正方形/圆形按分母精确等分,分子对应块高亮;异分母对比时叠加同一份数的网格,通分的"公因数"被直接看见。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage" style="background:linear-gradient(180deg,#ffffff,#f4f6fb)">
+      <div style="position:absolute;inset:0;padding:22px 24px;display:flex;flex-direction:column">
+        <div style="font-size:11px;color:var(--faint);margin-bottom:2px">比例天平 · 蜂蜜 : 水 = 3 : 4</div>
+        <svg width="380" height="230" viewBox="0 0 380 230" style="display:block;margin:0 auto">
+          <line x1="60" y1="110" x2="320" y2="110" stroke="#3b4e7e" stroke-width="3"/>
+          <polygon points="190,110 175,150 205,150" fill="#3b4e7e"/>
+          <rect x="180" y="150" width="20" height="10" rx="2" fill="#3b4e7e"/>
+          <line x1="100" y1="110" x2="100" y2="150" stroke="#9aa0ab" stroke-width="1.6"/>
+          <line x1="280" y1="110" x2="280" y2="150" stroke="#9aa0ab" stroke-width="1.6"/>
+          <rect x="55" y="150" width="90" height="18" rx="3" fill="#3b4e7e"/>
+          <rect x="220" y="150" width="120" height="18" rx="3" fill="#7c8cb8"/>
+          <line x1="85" y1="150" x2="85" y2="168" stroke="#fff" stroke-width="1"/>
+          <line x1="115" y1="150" x2="115" y2="168" stroke="#fff" stroke-width="1"/>
+          <line x1="250" y1="150" x2="250" y2="168" stroke="#fff" stroke-width="1"/>
+          <line x1="280" y1="150" x2="280" y2="168" stroke="#fff" stroke-width="1"/>
+          <line x1="310" y1="150" x2="310" y2="168" stroke="#fff" stroke-width="1"/>
+          <text x="100" y="196" font-size="12" fill="#3b4e7e" text-anchor="middle" font-weight="700">蜂蜜 90ml</text>
+          <text x="280" y="196" font-size="12" fill="#7c8cb8" text-anchor="middle" font-weight="700">水 120ml</text>
+          <text x="190" y="30" font-size="13" fill="#5b606b" text-anchor="middle">3 份 : 4 份,每份 30ml</text>
+        </svg>
+        <div style="text-align:center;font-size:12px;color:var(--sub);margin-top:auto">90 : 120 = 3 : 4 <b style="color:var(--indigo)">✓ 比例成立,天平配平</b></div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--indigo)">方向乙 · 比例天平</span>
+      <h3>长度条挂在天平两端</h3>
+      <p>两条色块长度条按题目比例伸缩;比例算对时天平配平,算错时天平倾斜——"比"是一种关系,而不是形状。</p>
+    </div>
+  </div>
+</div>
+<div class="bandrow">
+  <div class="bchip"><div class="g">低小 1–2</div><p>具象食物切分(披萨/巧克力),<b>鲜艳色块</b>配极简数字。</p></div>
+  <div class="bchip"><div class="g">高小 3–6</div><p>面积切割 + 比例条并用,<b>异分母通分</b>动画演示。</p></div>
+  <div class="bchip"><div class="g">初中 7–9</div><p>比例天平扩展到百分比/负数比统计,<b>编辑设计感</b>环形图。</p></div>
+  <div class="bchip"><div class="g">高中 10–12</div><p>收敛为<b>函数比率</b>的极简图表,代数结构优先于具象切割。</p></div>
+</div>
+
+<!-- ============ 03 数轴 ============ -->
+<section class="sec">
+  <div class="sec-k">03 / 数轴</div>
+  <h2>顺序、区间与距离,不是一条画好刻度的直线</h2>
+  <p>数的大小关系、不等式解集、绝对值即"到 0 的距离"——数轴的信息量不该只压在开闭点这一处细节上。</p>
+</section>
+<div class="grid">
+  <div class="card">
+    <div class="stage" style="background:#fff;display:flex;flex-direction:column;justify-content:center">
+      <div style="font-size:11px;color:var(--faint);padding:0 24px;margin-bottom:6px">地铁线路图 · 区间 [-2, 3)</div>
+      <svg width="520" height="130" viewBox="0 0 600 150" style="display:block;margin:0 auto">
+        <line x1="40" y1="70" x2="560" y2="70" stroke="#d8d5cd" stroke-width="4" stroke-linecap="round"/>
+        <path d="M30,70 l14,-7 v14 z" fill="#9aa0ab"/>
+        <path d="M570,70 l-14,-7 v14 z" fill="#9aa0ab"/>
+        <line x1="196" y1="70" x2="456" y2="70" stroke="#3b4e7e" stroke-width="7" stroke-linecap="round"/>
+        <g stroke="#c7c3ba" stroke-width="2">
+          <line x1="40" y1="64" x2="40" y2="76"/><line x1="92" y1="64" x2="92" y2="76"/><line x1="144" y1="64" x2="144" y2="76"/>
+          <line x1="248" y1="64" x2="248" y2="76"/><line x1="300" y1="64" x2="300" y2="76"/><line x1="352" y1="64" x2="352" y2="76"/>
+          <line x1="404" y1="64" x2="404" y2="76"/><line x1="508" y1="64" x2="508" y2="76"/><line x1="560" y1="64" x2="560" y2="76"/>
+        </g>
+        <g font-size="12" fill="#9aa0ab" text-anchor="middle" font-family="PingFang SC">
+          <text x="40" y="96">-5</text><text x="92" y="96">-4</text><text x="144" y="96">-3</text>
+          <text x="300" y="96">0</text><text x="352" y="96">1</text><text x="404" y="96">2</text>
+          <text x="508" y="96">4</text><text x="560" y="96">5</text>
+        </g>
+        <circle cx="196" cy="70" r="8" fill="#fff" stroke="#3b4e7e" stroke-width="3"/>
+        <text x="196" y="50" font-size="13" fill="#3b4e7e" text-anchor="middle" font-weight="700">-2 站(不停靠)</text>
+        <circle cx="456" cy="70" r="8" fill="#3b4e7e"/>
+        <text x="456" y="50" font-size="13" fill="#3b4e7e" text-anchor="middle" font-weight="700">3 站(停靠)</text>
+        <text x="326" y="112" font-size="13" fill="#3b4e7e" text-anchor="middle" font-family="var(--mono)">[-2, 3)</text>
+      </svg>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--indigo)">方向甲 · 地铁线路图</span>
+      <h3>站点即刻度,线路即区间</h3>
+      <p>整数刻度是"站点",空心圆=不停靠(开区间)、实心圆=停靠(闭区间),区间是高亮的"线路段",可局部放大聚焦某段刻度。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage" style="background:linear-gradient(90deg,#eef6f5,#fff 50%,#fdf1ee);display:flex;flex-direction:column;justify-content:center">
+      <div style="font-size:11px;color:var(--faint);padding:0 24px;margin-bottom:6px">弹性尺 · |−3| = |3| = 3</div>
+      <svg width="520" height="147" viewBox="0 0 600 170" style="display:block;margin:0 auto">
+        <g stroke="#3f7d63" fill="none" opacity=".22">
+          <path d="M248,90 A52,52 0 0 1 352,90"/>
+        </g>
+        <g stroke="#c25d4b" fill="none" opacity=".35">
+          <path d="M196,90 A104,104 0 0 1 404,90"/>
+        </g>
+        <g stroke="#9aa0ab" fill="none" opacity=".35">
+          <path d="M144,90 A156,156 0 0 1 456,90"/>
+        </g>
+        <line x1="40" y1="90" x2="560" y2="90" stroke="#d8d5cd" stroke-width="3"/>
+        <g stroke="#d8d5cd" stroke-width="1.6">
+          <line x1="92" y1="85" x2="92" y2="95"/><line x1="144" y1="85" x2="144" y2="95"/><line x1="196" y1="85" x2="196" y2="95"/>
+          <line x1="404" y1="85" x2="404" y2="95"/><line x1="456" y1="85" x2="456" y2="95"/><line x1="508" y1="85" x2="508" y2="95"/>
+        </g>
+        <circle cx="300" cy="90" r="5.5" fill="#16181d"/>
+        <text x="300" y="112" font-size="12" fill="#16181d" text-anchor="middle" font-weight="700">0</text>
+        <circle cx="144" cy="90" r="7" fill="#3f7d63"/>
+        <text x="144" y="72" font-size="13" fill="#3f7d63" text-anchor="middle" font-weight="700">-3</text>
+        <circle cx="456" cy="90" r="7" fill="#c25d4b"/>
+        <text x="456" y="72" font-size="13" fill="#c25d4b" text-anchor="middle" font-weight="700">3</text>
+        <line x1="144" y1="130" x2="300" y2="130" stroke="#3f7d63" stroke-width="1.4" stroke-dasharray="3 3"/>
+        <line x1="300" y1="130" x2="456" y2="130" stroke="#c25d4b" stroke-width="1.4" stroke-dasharray="3 3"/>
+        <text x="222" y="148" font-size="12" fill="#3f7d63" text-anchor="middle">距离 3</text>
+        <text x="378" y="148" font-size="12" fill="#c25d4b" text-anchor="middle">距离 3</text>
+      </svg>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--jade)">方向乙 · 弹性尺</span>
+      <h3>回声波纹里的绝对值</h3>
+      <p>负数区冷色、正数区暖色形成温度隐喻;绝对值表现为从 0 向两端等长扩散的回声波纹,直观呈现"距离"的对称性。</p>
+    </div>
+  </div>
+</div>
+<div class="bandrow">
+  <div class="bchip"><div class="g">低小 1–2</div><p>数轴变"数字小路",角色沿路跳格子,<b>只显示相关范围</b>。</p></div>
+  <div class="bchip"><div class="g">高小 3–6</div><p>地铁线路图引入,<b>负数用温度计</b>类比。</p></div>
+  <div class="bchip"><div class="g">初中 7–9</div><p>不等式解集用<b>区间高亮 + 开闭点</b>规范符号上线。</p></div>
+  <div class="bchip"><div class="g">高中 10–12</div><p>扩展为复合不等式/绝对值不等式的<b>精密区间图</b>,去除拟物装饰。</p></div>
+</div>
+
+<!-- ============ 04 几何图形 ============ -->
+<section class="sec">
+  <div class="sec-k">04 / 几何图形</div>
+  <h2>辅助线是被显式添加的操作,不是一次性画完的线稿</h2>
+  <p>空间关系与图形性质,辅助线是"揭示隐藏结构"的显式动作,证明是一条有先后顺序的逻辑链。</p>
+</section>
+<div class="grid">
+  <div class="card">
+    <div class="stage" style="background:#fff">
+      <div style="position:absolute;inset:0;padding:18px 20px">
+        <div style="font-size:11px;color:var(--faint);margin-bottom:4px">蓝图工程图 · 3-4-5 直角三角形,BD⊥AC</div>
+        <svg width="280" height="229" viewBox="0 0 330 270" style="display:block;margin:0 auto">
+          <g stroke="#eef2f7" stroke-width="1">
+            <line x1="60" y1="60" x2="60" y2="260"/><line x1="110" y1="60" x2="110" y2="260"/><line x1="160" y1="60" x2="160" y2="260"/>
+            <line x1="210" y1="60" x2="210" y2="260"/><line x1="260" y1="60" x2="260" y2="260"/>
+            <line x1="60" y1="60" x2="260" y2="60"/><line x1="60" y1="110" x2="260" y2="110"/><line x1="60" y1="160" x2="260" y2="160"/>
+            <line x1="60" y1="210" x2="260" y2="210"/><line x1="60" y1="260" x2="260" y2="260"/>
+          </g>
+          <path d="M60,260 L260,260 L260,110 Z" fill="rgba(59,78,126,.05)" stroke="#3b4e7e" stroke-width="2.4"/>
+          <path d="M248,260 L248,246 L260,246" fill="none" stroke="#3b4e7e" stroke-width="1.8"/>
+          <path d="M90,260 Q88,250 84,242" fill="none" stroke="#b5872f" stroke-width="1.6"/>
+          <text x="98" y="248" font-size="12" fill="#b5872f" font-weight="700">37°</text>
+          <path d="M260,130 Q248,132 244,122" fill="none" stroke="#b5872f" stroke-width="1.6"/>
+          <text x="228" y="140" font-size="12" fill="#b5872f" font-weight="700">53°</text>
+          <line x1="260" y1="260" x2="188" y2="164" stroke="#c25d4b" stroke-width="2" stroke-dasharray="6 4"/>
+          <circle cx="188" cy="164" r="3.4" fill="#c25d4b"/>
+          <circle cx="60" cy="260" r="3.4" fill="#3b4e7e"/><text x="46" y="272" font-size="12" fill="#3b4e7e">A</text>
+          <circle cx="260" cy="260" r="3.4" fill="#3b4e7e"/><text x="266" y="272" font-size="12" fill="#3b4e7e">B</text>
+          <circle cx="260" cy="110" r="3.4" fill="#3b4e7e"/><text x="266" y="106" font-size="12" fill="#3b4e7e">C</text>
+          <text x="196" y="152" font-size="11.5" fill="#c25d4b" font-weight="700">D</text>
+          <text x="150" y="278" font-size="11.5" fill="#5b606b">AB = 4</text>
+          <text x="272" y="188" font-size="11.5" fill="#5b606b">BC = 3</text>
+          <text x="130" y="178" font-size="11.5" fill="#5b606b">AC = 5</text>
+        </svg>
+        <div style="position:absolute;left:20px;right:20px;bottom:8px;font-size:11px;color:var(--sub);border-top:1px dashed var(--line);padding-top:8px;background:var(--surface)">
+          <b style="color:var(--coral)">① 作 BD⊥AC 于 D</b> —— 为构造两个相似直角三角形(射影定理)
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--indigo)">方向甲 · 蓝图工程图</span>
+      <h3>制图蓝 + 工程橙辅助线</h3>
+      <p>原图实线用制图蓝,辅助线用工程橙虚线按证明步骤编号出现;角度用弧线+度数标签,标注用引线 callout,强调规范与顺序。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage" style="background:linear-gradient(180deg,#fffefb,#fdf8ec)">
+      <div style="position:absolute;inset:0;padding:20px 22px;display:flex;gap:14px">
+        <svg width="220" height="270" viewBox="0 0 220 270" style="display:block;flex:none">
+          <path d="M30,220 L200,220 L110,60 Z" fill="rgba(181,135,47,.10)" stroke="#8a6a24" stroke-width="2.2"/>
+          <line x1="40" y1="60" x2="190" y2="60" stroke="#b5872f" stroke-width="1.8" stroke-dasharray="6 4"/>
+          <text x="40" y="50" font-size="10.5" fill="#b5872f">P</text>
+          <text x="184" y="50" font-size="10.5" fill="#b5872f">Q</text>
+          <path d="M78,60 Q92,64 96,68" fill="none" stroke="#3b4e7e" stroke-width="1.6"/>
+          <text x="70" y="82" font-size="12" fill="#3b4e7e" font-weight="700">α</text>
+          <path d="M124,68 Q132,64 142,60" fill="none" stroke="#c25d4b" stroke-width="1.6"/>
+          <text x="140" y="80" font-size="12" fill="#c25d4b" font-weight="700">β</text>
+          <path d="M104,72 Q110,78 116,72" fill="none" stroke="#3f7d63" stroke-width="1.6"/>
+          <text x="104" y="92" font-size="12" fill="#3f7d63" font-weight="700">γ</text>
+          <circle cx="30" cy="220" r="3.2" fill="#8a6a24"/><text x="16" y="234" font-size="11" fill="#5b606b">A(∠A=α)</text>
+          <circle cx="200" cy="220" r="3.2" fill="#8a6a24"/><text x="176" y="234" font-size="11" fill="#5b606b">B(∠B=β)</text>
+          <circle cx="110" cy="60" r="3.2" fill="#8a6a24"/><text x="116" y="48" font-size="11" fill="#5b606b">C(∠C=γ)</text>
+        </svg>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;justify-content:center;font-size:11.5px;color:var(--sub);line-height:1.6">
+          <div><b style="color:var(--gold)">① 过 C 作 AB 的平行线 PQ</b><br>为什么:把 ∠A、∠B "搬"到 C 点比较</div>
+          <div><b style="color:var(--gold)">② 内错角相等</b><br>PQ∥AB 被 AC、BC 所截 → ∠1=α,∠2=β</div>
+          <div><b style="color:var(--gold)">③ 平角 = 180°</b><br>α + γ + β = 180°,即三角形内角和</div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--gold)">方向乙 · 分层揭示</span>
+      <h3>图形先成形,辅助线后叠加</h3>
+      <p>图形本体先以完整实体呈现,辅助线作为叠加图层逐条淡入,每条辅助线附一句"为什么加这条线"的因果标注,强调证明的思路顺序。</p>
+    </div>
+  </div>
+</div>
+<div class="bandrow">
+  <div class="bchip"><div class="g">低小 1–2</div><p>图形认知具象化(圆=披萨轮廓),<b>无辅助线</b>。</p></div>
+  <div class="bchip"><div class="g">高小 3–6</div><p>简单边角度量,标注开始规范化,<b>面积周长格子计数</b>。</p></div>
+  <div class="bchip"><div class="g">初中 7–9</div><p>标注体系全面上线,蓝图或分层揭示均可,<b>强调证明步骤</b>。</p></div>
+  <div class="bchip"><div class="g">高中 10–12</div><p>扩展到解析几何/立体几何,<b>精密排版</b>,证明链完整呈现。</p></div>
+</div>
+
+<!-- ============ 05 函数图像与坐标系 ============ -->
+<section class="sec">
+  <div class="sec-k">05 / 函数图像与坐标系</div>
+  <h2>图像是映射关系的生成过程,不是方格纸上数出来的曲线</h2>
+  <p>给定 x 如何决定 y,以及零点、极值、渐近线等关键结构——图像该被"画出来",而不是既定摆在那里。</p>
+</section>
+<div class="grid">
+  <div class="card">
+    <div class="stage" style="background:#fff">
+      <div style="position:absolute;inset:0;padding:18px 20px">
+        <div style="font-size:11px;color:var(--faint);margin-bottom:2px">动态描点 · y = x² − 2x − 3</div>
+        <svg width="480" height="250" viewBox="0 0 480 250" style="display:block;margin:0 auto">
+          <line x1="40" y1="140" x2="440" y2="140" stroke="#d8d5cd" stroke-width="1.6"/>
+          <line x1="190" y1="20" x2="190" y2="220" stroke="#d8d5cd" stroke-width="1.6"/>
+          <text x="432" y="134" font-size="11" fill="#9aa0ab">x</text>
+          <text x="196" y="28" font-size="11" fill="#9aa0ab">y</text>
+          <path d="M90,40 L115,95 L140,140 L165,175 L190,200 L215,215 L240,220 L265,215" fill="none" stroke="#0e7c7b" stroke-width="2.6"/>
+          <path d="M265,215 L290,200 L315,175 L340,140 L365,95 L390,40" fill="none" stroke="#0e7c7b" stroke-width="2.6" stroke-dasharray="1 7" stroke-linecap="round" opacity=".55"/>
+          <circle cx="315" cy="175" r="6" fill="#0e7c7b"/>
+          <text x="315" y="165" font-size="11" fill="#0e7c7b" text-anchor="middle" font-weight="700">当前描点</text>
+          <circle cx="140" cy="140" r="4.5" fill="#c25d4b"/><text x="140" y="158" font-size="11" fill="#c25d4b" text-anchor="middle">(-1,0)</text>
+          <circle cx="340" cy="140" r="4.5" fill="#c25d4b"/><text x="340" y="158" font-size="11" fill="#c25d4b" text-anchor="middle">(3,0)</text>
+          <circle cx="240" cy="220" r="4.5" fill="#3b4e7e"/><text x="240" y="236" font-size="11" fill="#3b4e7e" text-anchor="middle">顶点(1,-4)</text>
+        </svg>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--teal)">方向甲 · 动态描点</span>
+      <h3>点沿定义域滑动,轨迹渐渐连成曲线</h3>
+      <p>3Blue1Brown 式:点沿 x 滑动,y 值实时计算并描出轨迹;坐标轴极简,只保留关键刻度,不铺满网格线——图像是"画出来的"。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage" style="background:linear-gradient(180deg,#ffffff,#f4f6fb)">
+      <div style="position:absolute;inset:0;padding:18px 20px;display:flex;gap:10px">
+        <svg width="330" height="187" viewBox="0 0 460 260" style="display:block;flex:none">
+          <line x1="14" y1="130" x2="450" y2="130" stroke="#9aa0ab" stroke-width="1.6" stroke-dasharray="5 4"/>
+          <line x1="240" y1="10" x2="240" y2="250" stroke="#3b4e7e" stroke-width="1.6" stroke-dasharray="5 4"/>
+          <text x="244" y="22" font-size="11" fill="#3b4e7e">渐近线 x=2</text>
+          <text x="18" y="122" font-size="11" fill="#9aa0ab">渐近线 y=0</text>
+          <path d="M40,137 L90,139 L140,144 L190,158 L215,185 L227.5,240" fill="none" stroke="#0e7c7b" stroke-width="2.4"/>
+          <path d="M252.5,20 L290,102.5 L340,116 L390,121 L440,123" fill="none" stroke="#0e7c7b" stroke-width="2.4"/>
+          <circle cx="140" cy="144" r="4.5" fill="#c25d4b"/>
+          <text x="140" y="128" font-size="11" fill="#c25d4b" text-anchor="middle">(0,-0.5)</text>
+        </svg>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;justify-content:center">
+          <div style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:12px"><b style="color:var(--indigo)">渐近线</b> x = 2(垂直)</div>
+          <div style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:12px"><b style="color:var(--indigo)">渐近线</b> y = 0(水平)</div>
+          <div style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:12px;background:#fdf1ee"><b style="color:var(--coral)">聚焦</b> x=0 → y=−0.5</div>
+          <div style="font-size:11px;color:var(--sub)">y = <span class="frac"><i class="n">1</i><i class="d">x−2</i></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--indigo)">方向乙 · 数据仪表盘</span>
+      <h3>图像为主视觉,读数卡片侧边联动</h3>
+      <p>坐标系设计成现代分析面板:图像本体为主视觉,零点/极值/渐近线作为侧边"读数卡片",随聚焦的 x 区间联动高亮更新。</p>
+    </div>
+  </div>
+</div>
+<div class="bandrow">
+  <div class="bchip"><div class="g">低小 1–2</div><p>不作正式函数图像,<b>身高/成长记录</b>类简单折线,具象拟物。</p></div>
+  <div class="bchip"><div class="g">高小 3–6</div><p><b>正比例关系</b>图像(路程—时间),折线+情境点缀。</p></div>
+  <div class="bchip"><div class="g">初中 7–9</div><p>一次/二次函数标准图像,<b>坐标轴刻度</b>开始严谨规范。</p></div>
+  <div class="bchip"><div class="g">高中 10–12</div><p>扩展到三角/指数/对数函数,<b>渐近线/极值点</b>专业标注,拟物退场。</p></div>
+</div>
+
+<!-- ============ 06 统计图表 ============ -->
+<section class="sec">
+  <div class="sec-k">06 / 统计图表</div>
+  <h2>从图里读出一句话结论,不是画出几根柱子</h2>
+  <p>数据的分布、比较与趋势——统计的核心是"结论"这一层,不是柱状图本身。</p>
+</section>
+<div class="grid">
+  <div class="card">
+    <div class="stage" style="background:#fff">
+      <div style="position:absolute;inset:0;padding:22px 24px;display:flex;flex-direction:column">
+        <div style="font-family:var(--serif);font-size:17px;color:var(--ink);line-height:1.4">苹果最受欢迎,喜爱人数是葡萄的<b style="color:var(--coral)">4 倍</b></div>
+        <div style="font-size:11px;color:var(--faint);margin:4px 0 14px">单位:人 · 共调查 28 人</div>
+        <div style="flex:1;display:flex;align-items:flex-end;justify-content:center;gap:22px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <span style="font-size:12px;color:var(--coral);font-weight:700">12</span>
+            <div style="width:52px;height:170px;background:var(--coral);border-radius:6px 6px 0 0"></div>
+            <span style="font-size:11.5px;color:var(--sub)">苹果</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <span style="font-size:12px;color:var(--faint);font-weight:700">8</span>
+            <div style="width:52px;height:113px;background:#d9d5cc;border-radius:6px 6px 0 0"></div>
+            <span style="font-size:11.5px;color:var(--sub)">香蕉</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <span style="font-size:12px;color:var(--faint);font-weight:700">5</span>
+            <div style="width:52px;height:71px;background:#d9d5cc;border-radius:6px 6px 0 0"></div>
+            <span style="font-size:11.5px;color:var(--sub)">橙子</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <span style="font-size:12px;color:var(--faint);font-weight:700">3</span>
+            <div style="width:52px;height:43px;background:#d9d5cc;border-radius:6px 6px 0 0"></div>
+            <span style="font-size:11.5px;color:var(--sub)">葡萄</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--coral)">方向甲 · 编辑部信息图</span>
+      <h3>大字号结论标题先行</h3>
+      <p>参照数据新闻的编辑设计:大字号"一句话结论"标题,注释直接标在关键位置而非另设图例,色彩克制(1 主色 + 灰阶)。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage" style="background:linear-gradient(180deg,#ffffff,#f2f7f4)">
+      <div style="position:absolute;inset:0;padding:22px 24px">
+        <div style="font-size:11px;color:var(--faint);margin-bottom:12px">象形实体 · 最喜欢的运动(人数)</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:rgba(63,125,99,.10)">
+            <span style="font-size:11.5px;color:var(--ink);width:56px;flex:none;font-weight:700">篮球</span>
+            <span style="font-size:17px;letter-spacing:3px">🏀🏀🏀🏀🏀</span>
+            <b style="margin-left:auto;color:var(--jade)">5</b>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px">
+            <span style="font-size:11.5px;color:var(--ink);width:56px;flex:none">足球</span>
+            <span style="font-size:17px;letter-spacing:3px">⚽⚽⚽⚽</span>
+            <b style="margin-left:auto;color:var(--sub)">4</b>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px">
+            <span style="font-size:11.5px;color:var(--ink);width:56px;flex:none">羽毛球</span>
+            <span style="font-size:17px;letter-spacing:3px">🏸🏸🏸</span>
+            <b style="margin-left:auto;color:var(--sub)">3</b>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px">
+            <span style="font-size:11.5px;color:var(--ink);width:56px;flex:none">游泳</span>
+            <span style="font-size:17px;letter-spacing:3px">🏊🏊</span>
+            <b style="margin-left:auto;color:var(--sub)">2</b>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--sub);margin-top:16px">点击某一行 → 高亮对应统计结果(篮球最多)</div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--jade)">方向乙 · 象形实体</span>
+      <h3>可数实体图标堆叠</h3>
+      <p>统计对象具象化为可数实体图标堆叠,而非抽象柱子;点击某类实体高亮对应结果,建立"象形→抽象"的认知桥梁。</p>
+    </div>
+  </div>
+</div>
+<div class="bandrow">
+  <div class="bchip"><div class="g">低小 1–2</div><p>象形统计图为主,<b>实体图标堆叠</b>,颜色明快。</p></div>
+  <div class="bchip"><div class="g">高小 3–6</div><p>象形图过渡到简化柱状图,加<b>"最多/最少"游戏化</b>提问卡。</p></div>
+  <div class="bchip"><div class="g">初中 7–9</div><p>编辑部信息图上线,<b>柱状/折线/饼图规范化</b>,一句话结论标题。</p></div>
+  <div class="bchip"><div class="g">高中 10–12</div><p>扩展到<b>箱线图/频率分布直方图/散点趋势线</b>,学术级图表规范。</p></div>
+</div>
+
+<!-- ============ 07 应用题 ============ -->
+<section class="sec">
+  <div class="sec-k">07 / 应用题(已知/求/解)</div>
+  <h2>从情境抽取条件、建立模型,不是套哪个公式</h2>
+  <p>已知/求/解三者不该混在一段文字里靠学生自己拆解——建模能力,而不是套公式的肌肉记忆。</p>
+</section>
+<div class="grid">
+  <div class="card">
+    <div class="stage" style="background:linear-gradient(180deg,#fdfcfa,#f3f2ee)">
+      <div style="position:absolute;inset:0;padding:20px 22px;display:flex;flex-direction:column;font-family:var(--serif)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="width:34px;height:34px;border-radius:50%;background:var(--indigo);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none">案 №360</div>
+          <div style="font-size:12px;color:var(--sub);font-family:var(--sans)">甲乙两地相距 360 千米,两车相向而行</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <div style="flex:1;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11px;font-family:var(--sans);background:#fff">证据①<br><b>甲车 90km/h</b></div>
+          <div style="flex:1;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11px;font-family:var(--sans);background:#fff">证据②<br><b>乙车 70km/h</b></div>
+          <div style="flex:1;border:1px dashed var(--coral);border-radius:8px;padding:8px 10px;font-size:11px;font-family:var(--sans);color:var(--coral)">待解之谜<br><b>几小时相遇?</b></div>
+        </div>
+        <div style="font-size:11.5px;font-family:var(--sans);color:var(--sub);line-height:1.9;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px">
+          推理链:设 t 小时后相遇 → 90t + 70t = 360 → 160t = 360 → <b style="color:var(--ink)">t = 2.25</b>
+        </div>
+        <div style="margin-top:auto;font-size:12px;font-family:var(--sans);background:rgba(59,78,126,.08);border-left:3px solid var(--indigo);border-radius:6px;padding:8px 10px;color:var(--ink)">
+          结案陈词:<b>2.25 小时(2 小时 15 分)</b>后两车相遇 —— 已验证 90×2.25+70×2.25=360 ✓
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--indigo)">方向甲 · 案件卷宗</span>
+      <h3>已知是证据,求解是结案陈词</h3>
+      <p>侦探破案隐喻:题目是案件描述,已知条件是逐条揭示的证据卡片,步骤是推理链,结论是结案陈词。情绪驱动,呼应侦探人设基因。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage" style="background:#fff">
+      <div style="position:absolute;inset:0;padding:18px 20px">
+        <div style="font-size:11px;color:var(--faint);margin-bottom:10px">建模看板 · 全班 45 人,男生比女生 2 倍少 3 人</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;height:230px">
+          <div style="background:#f6f5f2;border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10.5px;color:var(--faint);font-weight:700">已知</div>
+            <div style="font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 6px">总人数=45</div>
+            <div style="font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 6px">男=2×女−3</div>
+          </div>
+          <div style="background:#f6f5f2;border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10.5px;color:var(--faint);font-weight:700">建模</div>
+            <div style="font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 6px">设女生 = x</div>
+            <div style="font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 6px">男生 = 2x−3</div>
+          </div>
+          <div style="background:#f6f5f2;border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10.5px;color:var(--gold);font-weight:700">求解</div>
+            <div style="font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 6px">x+(2x−3)=45</div>
+            <div style="font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 6px"><b>x = 16</b></div>
+          </div>
+          <div style="background:rgba(181,135,47,.10);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10.5px;color:var(--gold);font-weight:700">检验</div>
+            <div style="font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 6px">女16 男29</div>
+            <div style="font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 6px">16+29=45 ✓</div>
+          </div>
+        </div>
+        <div style="position:absolute;left:56px;right:56px;top:150px;height:1px;border-top:1.6px dashed var(--gold)"></div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--gold)">方向乙 · 建模看板</span>
+      <h3>已知→建模→求解→检验</h3>
+      <p>工程/产品看板隐喻:已知条件是"输入参数卡",看板式分栏呈现"已知→中间量→答案"的推导路径,系统/逻辑驱动。</p>
+    </div>
+  </div>
+</div>
+<div class="bandrow">
+  <div class="bchip"><div class="g">低小 1–2</div><p>案件卷宗简化为<b>故事情境卡</b>(买东西/分苹果插画)。</p></div>
+  <div class="bchip"><div class="g">高小 3–6</div><p>两个方向轻量引入,<b>已知条件卡片化</b>,一到两步应用题。</p></div>
+  <div class="bchip"><div class="g">初中 7–9</div><p>建模看板上线,覆盖方程组应用,<b>设未知数→列方程→解→检验</b>。</p></div>
+  <div class="bchip"><div class="g">高中 10–12</div><p>扩展到数列/概率/导数应用,<b>专业看板排版</b>,卡通元素去除。</p></div>
+</div>
+
+<!-- ============ 08 方程分步求解 ============ -->
+<section class="sec">
+  <div class="sec-k">08 / 方程分步求解</div>
+  <h2>每一步是合法操作,不是右侧写两个字"移项"</h2>
+  <p>两边同加/同乘、移项变号——核心是推导链的因果性,与每一步操作为何仍保持等价。</p>
+</section>
+<div class="grid">
+  <div class="card">
+    <div class="stage" style="background:#fff">
+      <div style="position:absolute;inset:0;padding:20px 22px;display:flex;flex-direction:column;gap:10px;font-family:var(--mono)">
+        <div style="border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:15px">3x + 5 = 20</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--faint);font-family:var(--sans)">
+          <span style="color:var(--coral)">− 5</span> 两边同减 5
+        </div>
+        <div style="border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:15px;background:#f6fbfa">
+          <span style="text-decoration:line-through;color:var(--coral);opacity:.6">3x + 5 = 20</span><br>
+          3x <span style="color:var(--teal)">= 15</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--faint);font-family:var(--sans)">
+          <span style="color:var(--coral)">÷ 3</span> 两边同除以 3
+        </div>
+        <div style="border:1px solid var(--teal);border-radius:8px;padding:10px 12px;font-size:16px;background:#f2fbfa">
+          <b style="color:var(--teal)">x = 5</b>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--teal)">方向甲 · 操作日志</span>
+      <h3>每步等式是一条提交记录</h3>
+      <p>代码 diff/版本控制视觉语言:每一步是一条"提交记录",高亮该步变化的项,可展开查看"合法性凭证"——强调可追溯性。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage" style="background:linear-gradient(180deg,#ffffff,#fdf1ee)">
+      <div style="position:absolute;inset:0;padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:11px;color:var(--faint)">2x + 3 = 11 · 镜像折叠</div>
+        <div style="display:flex;align-items:center;gap:0">
+          <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;gap:6px">
+            <div style="width:34px;height:26px;border-radius:5px;background:var(--coral);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:700">2x</div>
+            <span class="dot" style="background:#c25d4b"></span><span class="dot" style="background:#c25d4b"></span><span class="dot" style="background:#c25d4b"></span>
+          </div>
+          <div style="width:1px;align-self:stretch;background:var(--line);margin:0 14px"></div>
+          <div style="flex:1;display:flex;gap:3px;flex-wrap:wrap;width:100px">
+            <span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:11px;color:var(--coral)">↕ 两边同减 3(镜像同步拿走 3 个单位)</div>
+        <div style="display:flex;align-items:center;gap:0">
+          <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;gap:6px">
+            <div style="width:34px;height:26px;border-radius:5px;background:var(--coral);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:700">2x</div>
+          </div>
+          <div style="width:1px;align-self:stretch;background:var(--line);margin:0 14px"></div>
+          <div style="flex:1;display:flex;gap:3px;flex-wrap:wrap;width:100px">
+            <span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span><span class="dot" style="background:#7c8cb8"></span>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:11px;color:var(--coral)">↕ 两边同除以 2(对折成两等份)</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:20px;font-family:var(--serif);font-size:18px;color:var(--ink)">
+          <span>x</span><span style="color:var(--faint)">=</span><span><b style="color:var(--coral)">4</b></span>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag" style="color:var(--coral)">方向乙 · 镜像折叠</span>
+      <h3>等号是镜线,两侧同步操作</h3>
+      <p>等式两侧设计成以等号为镜线的对称面板,每次操作在两侧镜像同步执行——空间对称隐喻,直觉呈现"对称操作保持相等"。</p>
+    </div>
+  </div>
+</div>
+<div class="bandrow">
+  <div class="bchip"><div class="g">低小 1–2</div><p>不作完整方程链,镜像折叠做<b>「□+3=7」未知数猜谜</b>的直觉引入。</p></div>
+  <div class="bchip"><div class="g">高小 3–6</div><p>简单一元一次方程,镜像折叠为主,<b>操作具象化</b>(积木同步拿走)。</p></div>
+  <div class="bchip"><div class="g">初中 7–9</div><p>操作日志/镜像折叠均可,覆盖二元一次方程组,<b>移项变号</b>显式标注。</p></div>
+  <div class="bchip"><div class="g">高中 10–12</div><p>扩展到不等式/二次/指数对数方程,收敛为<b>操作日志风格</b>,拟物退场。</p></div>
+</div>
+
+<div class="note"><b>反同质自检:</b>8 类 × 2 方向共 16 个视觉隐喻——流体仓位/拆分卡片(竖式)、几何切割/平衡天平(分数比例)、地铁线路/物理张力(数轴)、工程蓝图/认知分层(几何图形)、生成描点/数据仪表盘(函数图像)、编辑信息图/象形实体(统计图表)、侦探卷宗/工程看板(应用题)、版本日志/镜像折叠(方程分步),互不重复,同一隐喻家族未跨类型复用。</div>
+
+<footer>
+  maolab · 数学 · 特殊内容呈现画廊 · 2026-07-23 &nbsp;|&nbsp; 白为主 · 颜色只在物件层 &nbsp;|&nbsp; 参照 Brilliant.org 交互可视化 / 3Blue1Brown 动态直觉,不是课本黑白图
+</footer>
+</div>

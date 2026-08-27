@@ -1,0 +1,49 @@
+{
+  "name": "@maolab/textbook-index",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "sync": "tsx scripts/sync.ts",
+    "sync:trees": "tsx scripts/sync-trees.ts",
+    "annotate": "tsx scripts/label-knowledge-types.ts",
+    "annotate:estimate": "tsx scripts/estimate-label-cost.ts",
+    "annotate:test-mock": "tsx scripts/test-label-with-mock.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@maolab/db": "workspace:*",
+    "@maolab/shared-types": "workspace:*",
+    "jsonrepair": "^3.14.0",
+    "zod": "^3.25.0"
+  },
+  "peerDependencies": {
+    "@ai-sdk/anthropic": "^1.2.0",
+    "@ai-sdk/openai": "^1.3.0",
+    "ai": "^4.3.0"
+  },
+  "peerDependenciesMeta": {
+    "ai": {
+      "optional": true
+    },
+    "@ai-sdk/anthropic": {
+      "optional": true
+    },
+    "@ai-sdk/openai": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "tsx": "^4.15.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0",
+    "@types/node": "^20"
+  }
+}

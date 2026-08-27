@@ -1,0 +1,444 @@
+{
+  "source": {
+    "repo": "https://github.com/rebelot/kanagawa.nvim",
+    "license": "MIT",
+    "fetchedAt": "2026-07-21",
+    "sourceUrls": [
+      "https://raw.githubusercontent.com/rebelot/kanagawa.nvim/master/lua/kanagawa/colors.lua",
+      "https://raw.githubusercontent.com/rebelot/kanagawa.nvim/master/lua/kanagawa/themes.lua",
+      "https://raw.githubusercontent.com/rebelot/kanagawa.nvim/master/LICENSE"
+    ]
+  },
+  "flavors": [
+    {
+      "id": "wave",
+      "name": "Kanagawa Wave",
+      "colors": [
+        {
+          "name": "sumiInk0",
+          "hex": "#16161D"
+        },
+        {
+          "name": "sumiInk1",
+          "hex": "#181820"
+        },
+        {
+          "name": "sumiInk2",
+          "hex": "#1a1a22"
+        },
+        {
+          "name": "sumiInk3",
+          "hex": "#1F1F28"
+        },
+        {
+          "name": "sumiInk4",
+          "hex": "#2A2A37"
+        },
+        {
+          "name": "sumiInk5",
+          "hex": "#363646"
+        },
+        {
+          "name": "sumiInk6",
+          "hex": "#54546D"
+        },
+        {
+          "name": "waveBlue1",
+          "hex": "#223249"
+        },
+        {
+          "name": "waveBlue2",
+          "hex": "#2D4F67"
+        },
+        {
+          "name": "winterGreen",
+          "hex": "#2B3328"
+        },
+        {
+          "name": "winterYellow",
+          "hex": "#49443C"
+        },
+        {
+          "name": "winterRed",
+          "hex": "#43242B"
+        },
+        {
+          "name": "winterBlue",
+          "hex": "#252535"
+        },
+        {
+          "name": "autumnGreen",
+          "hex": "#76946A"
+        },
+        {
+          "name": "autumnRed",
+          "hex": "#C34043"
+        },
+        {
+          "name": "autumnYellow",
+          "hex": "#DCA561"
+        },
+        {
+          "name": "samuraiRed",
+          "hex": "#E82424"
+        },
+        {
+          "name": "roninYellow",
+          "hex": "#FF9E3B"
+        },
+        {
+          "name": "waveAqua1",
+          "hex": "#6A9589"
+        },
+        {
+          "name": "dragonBlue",
+          "hex": "#658594"
+        },
+        {
+          "name": "oldWhite",
+          "hex": "#C8C093"
+        },
+        {
+          "name": "fujiWhite",
+          "hex": "#DCD7BA"
+        },
+        {
+          "name": "fujiGray",
+          "hex": "#727169"
+        },
+        {
+          "name": "oniViolet",
+          "hex": "#957FB8"
+        },
+        {
+          "name": "oniViolet2",
+          "hex": "#b8b4d0"
+        },
+        {
+          "name": "crystalBlue",
+          "hex": "#7E9CD8"
+        },
+        {
+          "name": "springViolet1",
+          "hex": "#938AA9"
+        },
+        {
+          "name": "springViolet2",
+          "hex": "#9CABCA"
+        },
+        {
+          "name": "springBlue",
+          "hex": "#7FB4CA"
+        },
+        {
+          "name": "lightBlue",
+          "hex": "#A3D4D5"
+        },
+        {
+          "name": "waveAqua2",
+          "hex": "#7AA89F"
+        },
+        {
+          "name": "springGreen",
+          "hex": "#98BB6C"
+        },
+        {
+          "name": "boatYellow1",
+          "hex": "#938056"
+        },
+        {
+          "name": "boatYellow2",
+          "hex": "#C0A36E"
+        },
+        {
+          "name": "carpYellow",
+          "hex": "#E6C384"
+        },
+        {
+          "name": "sakuraPink",
+          "hex": "#D27E99"
+        },
+        {
+          "name": "waveRed",
+          "hex": "#E46876"
+        },
+        {
+          "name": "peachRed",
+          "hex": "#FF5D62"
+        },
+        {
+          "name": "surimiOrange",
+          "hex": "#FFA066"
+        },
+        {
+          "name": "katanaGray",
+          "hex": "#717C7C"
+        }
+      ]
+    },
+    {
+      "id": "dragon",
+      "name": "Kanagawa Dragon",
+      "colors": [
+        {
+          "name": "dragonBlack0",
+          "hex": "#0d0c0c"
+        },
+        {
+          "name": "dragonBlack1",
+          "hex": "#12120f"
+        },
+        {
+          "name": "dragonBlack2",
+          "hex": "#1D1C19"
+        },
+        {
+          "name": "dragonBlack3",
+          "hex": "#181616"
+        },
+        {
+          "name": "dragonBlack4",
+          "hex": "#282727"
+        },
+        {
+          "name": "dragonBlack5",
+          "hex": "#393836"
+        },
+        {
+          "name": "dragonBlack6",
+          "hex": "#625e5a"
+        },
+        {
+          "name": "dragonWhite",
+          "hex": "#c5c9c5"
+        },
+        {
+          "name": "dragonGreen",
+          "hex": "#87a987"
+        },
+        {
+          "name": "dragonGreen2",
+          "hex": "#8a9a7b"
+        },
+        {
+          "name": "dragonPink",
+          "hex": "#a292a3"
+        },
+        {
+          "name": "dragonOrange",
+          "hex": "#b6927b"
+        },
+        {
+          "name": "dragonOrange2",
+          "hex": "#b98d7b"
+        },
+        {
+          "name": "dragonGray",
+          "hex": "#a6a69c"
+        },
+        {
+          "name": "dragonGray2",
+          "hex": "#9e9b93"
+        },
+        {
+          "name": "dragonGray3",
+          "hex": "#7a8382"
+        },
+        {
+          "name": "dragonBlue2",
+          "hex": "#8ba4b0"
+        },
+        {
+          "name": "dragonViolet",
+          "hex": "#8992a7"
+        },
+        {
+          "name": "dragonRed",
+          "hex": "#c4746e"
+        },
+        {
+          "name": "dragonAqua",
+          "hex": "#8ea4a2"
+        },
+        {
+          "name": "dragonAsh",
+          "hex": "#737c73"
+        },
+        {
+          "name": "dragonTeal",
+          "hex": "#949fb5"
+        },
+        {
+          "name": "dragonYellow",
+          "hex": "#c4b28a"
+        }
+      ]
+    },
+    {
+      "id": "lotus",
+      "name": "Kanagawa Lotus",
+      "colors": [
+        {
+          "name": "lotusInk1",
+          "hex": "#545464"
+        },
+        {
+          "name": "lotusInk2",
+          "hex": "#43436c"
+        },
+        {
+          "name": "lotusGray",
+          "hex": "#dcd7ba"
+        },
+        {
+          "name": "lotusGray2",
+          "hex": "#716e61"
+        },
+        {
+          "name": "lotusGray3",
+          "hex": "#8a8980"
+        },
+        {
+          "name": "lotusWhite0",
+          "hex": "#d5cea3"
+        },
+        {
+          "name": "lotusWhite1",
+          "hex": "#dcd5ac"
+        },
+        {
+          "name": "lotusWhite2",
+          "hex": "#e5ddb0"
+        },
+        {
+          "name": "lotusWhite3",
+          "hex": "#f2ecbc"
+        },
+        {
+          "name": "lotusWhite4",
+          "hex": "#e7dba0"
+        },
+        {
+          "name": "lotusWhite5",
+          "hex": "#e4d794"
+        },
+        {
+          "name": "lotusViolet1",
+          "hex": "#a09cac"
+        },
+        {
+          "name": "lotusViolet2",
+          "hex": "#766b90"
+        },
+        {
+          "name": "lotusViolet3",
+          "hex": "#c9cbd1"
+        },
+        {
+          "name": "lotusViolet4",
+          "hex": "#624c83"
+        },
+        {
+          "name": "lotusBlue1",
+          "hex": "#c7d7e0"
+        },
+        {
+          "name": "lotusBlue2",
+          "hex": "#b5cbd2"
+        },
+        {
+          "name": "lotusBlue3",
+          "hex": "#9fb5c9"
+        },
+        {
+          "name": "lotusBlue4",
+          "hex": "#4d699b"
+        },
+        {
+          "name": "lotusBlue5",
+          "hex": "#5d57a3"
+        },
+        {
+          "name": "lotusGreen",
+          "hex": "#6f894e"
+        },
+        {
+          "name": "lotusGreen2",
+          "hex": "#6e915f"
+        },
+        {
+          "name": "lotusGreen3",
+          "hex": "#b7d0ae"
+        },
+        {
+          "name": "lotusPink",
+          "hex": "#b35b79"
+        },
+        {
+          "name": "lotusOrange",
+          "hex": "#cc6d00"
+        },
+        {
+          "name": "lotusOrange2",
+          "hex": "#e98a00"
+        },
+        {
+          "name": "lotusYellow",
+          "hex": "#77713f"
+        },
+        {
+          "name": "lotusYellow2",
+          "hex": "#836f4a"
+        },
+        {
+          "name": "lotusYellow3",
+          "hex": "#de9800"
+        },
+        {
+          "name": "lotusYellow4",
+          "hex": "#f9d791"
+        },
+        {
+          "name": "lotusRed",
+          "hex": "#c84053"
+        },
+        {
+          "name": "lotusRed2",
+          "hex": "#d7474b"
+        },
+        {
+          "name": "lotusRed3",
+          "hex": "#e82424"
+        },
+        {
+          "name": "lotusRed4",
+          "hex": "#d9a594"
+        },
+        {
+          "name": "lotusAqua",
+          "hex": "#597b75"
+        },
+        {
+          "name": "lotusAqua2",
+          "hex": "#5e857a"
+        },
+        {
+          "name": "lotusTeal1",
+          "hex": "#4e8ca2"
+        },
+        {
+          "name": "lotusTeal2",
+          "hex": "#6693bf"
+        },
+        {
+          "name": "lotusTeal3",
+          "hex": "#5a7785"
+        },
+        {
+          "name": "lotusCyan",
+          "hex": "#d7e3d8"
+        }
+      ]
+    }
+  ]
+}

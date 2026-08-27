@@ -1,0 +1,10 @@
+﻿{
+    "prompt":  "Create a generated bitmap portrait for a Chinese middle-school math geometry course recurring IP character. Character: curious junior-high student who asks questions in class, bright attentive expression, holding a pencil and small notebook, friendly learner role. Style must match a clean simplified editorial illustration with soft watercolor texture and precise thin linework, same visual world as a geometry detective course cover. Bust portrait with a real solid warm off-white watercolor paper background, not transparent, not checkerboard, not gray grid. Enough margin for circular cropping. No readable text, Chinese characters, English letters, numbers, formulas, labels, speech bubbles, watermark, or logo.",
+    "model":  "gpt-image-2",
+    "size":  "1024x1024",
+    "quality":  "medium",
+    "generatedAt":  "2026-06-26T11:06:35.6782184Z",
+    "file":  "/generated-images/subject-ip/middle-school-math-geometry-student.png",
+    "sha1":  "e480a81b7b3849b1d0c01b5f339f9492ad7b23b4",
+    "bytes":  1816741
+}

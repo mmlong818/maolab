@@ -1,0 +1,8 @@
+### marp-rosepine/palette-port-dark
+- 网格：无自定义网格/分栏结构——继承 Marp 默认主题的单栏 section 布局（`@import "default"`）；`rose-pine.css` 文件内另写了 `@import "schema"; @import "structure";` 两行，但仓库中不存在 `schema.css`/`structure.css`（recursive tree 核实：`css/` 目录下只有 `rose-pine.css`/`rose-pine-dawn.css`/`rose-pine-moon.css` 三个文件），这两条 import 是失效引用，实际生效的布局完全由 `default` 主题决定，未做二次改版。
+- 区域：section 整体单一内容区（沿用 default 主题的 78.5px 内边距，未覆盖）；标题 h1–h6 统一使用 `--rose` 强调色；正文 p/ul/li 分别用 `--text`/`--subtle` 两级灰度区分层级；代码块走 highlight.js token 着色（`.hljs-*` 选择器逐类映射到 Rosé Pine 12 色）。
+- 关键值：完整 CSS 变量色板（Rosé Pine 主题标准色，非近似）——`--base:#191724` `--surface:#1f1d2e` `--overlay:#26233a` `--muted:#6e6a86` `--subtle:#908caa` `--text:#e0def4` `--love:#eb6f92` `--gold:#f6c177` `--rose:#ebbcba` `--pine:#31748f` `--foam:#9ccfd8` `--iris:#c4a7e7` `--highlight-low:#21202e` `--highlight-muted:#403d52` `--highlight-high:#524f67`；h1 额外 `padding-bottom:2mm; margin-bottom:12mm`；正文 p 字号 `20pt`，`font-weight:600`；代码块背景 `--highlight-muted`，围栏代码容器（`marp-pre`）背景 `--overlay` 配边框 `--highlight-high`。
+- 装饰构件：无网格/图案类装饰，纯色板迁移——用 CSS 自定义属性把 Rosé Pine 的 15 个语义色 token（base/surface/overlay/muted/subtle/text + 6 强调色 + 3 级 highlight）逐一挂到 Marp 默认结构上，等价于"换色不换版"。
+- 气质：深夜诗意的低饱和暗色调——柔粉+松绿+云雾紫，克制但有情绪温度，偏"人文/阅读"而非"数据/工程"。
+- 建议映射幕型：recap（低对比暖色调适合收束情绪、总结氛围）、contrast（多组强调色 love/gold/pine/foam/iris 天然可做多分支对比标注）；dark pack 首选（本体是暗色变体，另有 `rose-pine-dawn.css` 浅色姊妹版可作 light pack 对应）。
+- 源码路径或URL：https://github.com/rainbowflesh/Rose-Pine-For-Marp（`css/rose-pine.css`，通过 GitHub Contents API 抓取，default branch `master`）；主题画廊 https://rnd195.github.io/marp-community-themes/theme/rose-pine.html

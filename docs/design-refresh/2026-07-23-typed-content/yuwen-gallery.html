@@ -1,0 +1,790 @@
+<title>语文 · 特殊内容呈现画廊</title>
+<style>
+:root{
+  --bg:#fcfbf9;--surface:#ffffff;--ink:#16181d;--sub:#5b606b;--faint:#9aa0ab;
+  --line:#e9e6df;--hair:#efece6;
+  --indigo:#3b4e7e;--teal:#0e7c7b;--gold:#b5872f;--jade:#3f7d63;--coral:#c25d4b;--plum:#7a5c8e;
+  --serif:"Songti SC","STSong","Noto Serif CJK SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 22px 55px -30px rgba(20,22,28,.30);--radius:16px;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0f1013;--surface:#17191e;--ink:#f2f0ea;--sub:#a7adb8;--faint:#6b7280;
+    --line:#282b32;--hair:#22242a;--shadow:0 22px 55px -30px rgba(0,0,0,.6);}
+}
+:root[data-theme="dark"]{--bg:#0f1013;--surface:#17191e;--ink:#f2f0ea;--sub:#a7adb8;--faint:#6b7280;--line:#282b32;--hair:#22242a;--shadow:0 22px 55px -30px rgba(0,0,0,.6);}
+:root[data-theme="light"]{--bg:#fcfbf9;--surface:#ffffff;--ink:#16181d;--sub:#5b606b;--faint:#9aa0ab;--line:#e9e6df;--hair:#efece6;--shadow:0 22px 55px -30px rgba(20,22,28,.30);}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+header{padding:76px 0 30px}
+.eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);font-weight:600;margin:0 0 18px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,4.6vw,54px);line-height:1.15;margin:0;letter-spacing:.01em}
+h1 em{font-style:normal;color:var(--faint)}
+.lede{max-width:700px;color:var(--sub);font-size:17px;margin:20px 0 0}
+.lede b{color:var(--ink);font-weight:600}
+.guide{margin:22px 0 0;padding:14px 18px;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;background:var(--surface);font-size:13.5px;color:var(--sub);max-width:760px}
+.guide b{color:var(--ink)}
+.rule{height:1px;background:var(--line);margin:36px 0 0}
+
+.sec{padding:52px 0 6px}
+.sec-k{font-family:var(--serif);font-size:13px;letter-spacing:.14em;color:var(--faint)}
+.sec h2{font-family:var(--serif);font-weight:600;font-size:24px;margin:8px 0 6px}
+.sec p{color:var(--sub);max-width:740px;margin:0;font-size:14.5px}
+
+.grid2{display:grid;grid-template-columns:1fr;gap:26px;padding:26px 0 6px}
+@media(min-width:860px){.grid2{grid-template-columns:1fr 1fr}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.stage{position:relative;height:344px;overflow:hidden;background:var(--surface)}
+.cap{padding:15px 19px;border-top:1px solid var(--hair);background:var(--surface)}
+.cap .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.cap h3{font-family:var(--serif);font-size:18px;margin:7px 0 5px}
+.cap p{font-size:13.2px;color:var(--sub);margin:0}
+
+.bands-mini{display:grid;grid-template-columns:1fr;gap:14px;padding:20px 0 6px}
+@media(min-width:820px){.bands-mini{grid-template-columns:repeat(4,1fr)}}
+.band-mini{border:1px solid var(--line);border-radius:12px;padding:14px 16px 16px;background:var(--surface)}
+.band-mini .g{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.band-mini p{margin:8px 0 0;font-size:12.8px;color:var(--sub);line-height:1.65}
+.band-mini p b{color:var(--ink)}
+
+footer{padding:40px 0 90px;color:var(--faint);font-size:13px;border-top:1px solid var(--line);margin-top:40px}
+footer b{color:var(--sub);font-weight:600}
+
+/* ============ 文言文 ============ */
+.wy-a{position:absolute;inset:0;padding:7% 7% 6%;background:linear-gradient(180deg,#fff,#f7f8fb);display:flex;flex-direction:column}
+.wy-a .head{font-family:var(--serif);font-size:13px;color:var(--indigo);letter-spacing:.1em;margin-bottom:14px}
+.wy-a .orig{font-family:var(--serif);font-size:23px;line-height:2.05;color:#20242f;position:relative}
+.wy-a .orig .fn{color:var(--indigo);border-bottom:2px solid var(--indigo);padding:0 1px;position:relative}
+.wy-a .orig .fn::after{content:"虚";position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-family:var(--sans);font-size:9px;color:var(--indigo);background:rgba(59,78,126,.12);border-radius:3px;padding:0 3px}
+.wy-a .orig .act{color:var(--coral);border-bottom:2px solid var(--coral);padding:0 1px;position:relative}
+.wy-a .orig .act::after{content:"活用";position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-family:var(--sans);font-size:9px;color:var(--coral);background:rgba(194,93,75,.12);border-radius:3px;padding:0 3px;white-space:nowrap}
+.wy-a .pop{margin-top:16px;background:#fff;border:1px solid rgba(194,93,75,.35);border-radius:10px;padding:10px 13px;font-size:12.5px;color:var(--sub);box-shadow:0 10px 24px -18px rgba(20,22,28,.3)}
+.wy-a .pop b{color:var(--coral);font-family:var(--serif);font-size:14px}
+.wy-a .gloss{margin-top:auto;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;color:var(--faint);line-height:1.7}
+.wy-a .gloss b{color:var(--sub);font-weight:600}
+
+.wy-b{position:absolute;inset:0;padding:7% 6%;background:linear-gradient(180deg,#fff,#faf8f2);display:flex;flex-direction:column}
+.wy-b .head{font-family:var(--serif);font-size:13px;color:var(--gold);letter-spacing:.1em;margin-bottom:16px}
+.wy-b .track{position:relative;flex:1;display:flex;align-items:center}
+.wy-b .line{position:absolute;left:14px;right:14px;top:18px;height:2px;background:var(--line)}
+.wy-b .nodes{position:relative;display:flex;justify-content:space-between;width:100%}
+.wy-b .node{display:flex;flex-direction:column;align-items:center;width:23%}
+.wy-b .dot{width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid #fff;box-shadow:0 0 0 1.5px var(--gold);margin-bottom:10px;flex:none}
+.wy-b .node.cur .dot{width:18px;height:18px;box-shadow:0 0 0 2px var(--gold),0 0 0 6px rgba(181,135,47,.16)}
+.wy-b .ic{width:44px;height:44px;color:var(--gold);margin-bottom:8px}
+.wy-b .node .txt{font-family:var(--serif);font-size:13px;color:#24262d;text-align:center;line-height:1.5}
+.wy-b .node .tr{font-size:10.5px;color:var(--faint);text-align:center;margin-top:4px;line-height:1.5}
+
+/* ============ 现代文精读 ============ */
+.xd-a{position:absolute;inset:0;padding:6.5% 6%;background:#fff;display:flex;gap:14px}
+.xd-a .main{flex:1.5;font-family:var(--serif);font-size:14.5px;line-height:2.05;color:#2a2c33}
+.xd-a .main .hl1{background:rgba(181,135,47,.16);border-radius:2px}
+.xd-a .main .hl2{background:rgba(59,78,126,.14);border-radius:2px}
+.xd-a .side{flex:1;position:relative;display:flex;flex-direction:column;gap:10px;padding-top:2px}
+.xd-a .note{background:#fffdf7;border:1px solid rgba(181,135,47,.3);border-radius:9px;padding:8px 10px;font-size:11.5px;color:var(--sub);line-height:1.55}
+.xd-a .note .mk{color:var(--gold);font-weight:700;margin-right:3px}
+.xd-a .note2{background:#f6f7fb;border:1px solid rgba(59,78,126,.28);border-radius:9px;padding:8px 10px;font-size:11.5px;color:var(--sub);line-height:1.55}
+.xd-a .note2 .mk{color:var(--indigo);font-weight:700;margin-right:3px}
+.xd-a svg.conn{position:absolute;left:-42px;top:2px;width:42px;height:24px}
+
+.xd-b{position:absolute;inset:0;padding:6.5% 6%;background:#fff;display:flex;gap:16px}
+.xd-b .bar{width:26px;display:flex;flex-direction:column;gap:3px;flex:none}
+.xd-b .bar i{display:block;border-radius:4px}
+.xd-b .txt{flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.xd-b .row{display:flex;align-items:center;gap:10px}
+.xd-b .chip{font-size:10px;letter-spacing:.06em;padding:2px 8px;border-radius:999px;flex:none;font-weight:700}
+.xd-b .row p{margin:0;font-size:12px;color:var(--sub);line-height:1.55}
+.xd-b .row p b{color:#2a2c33;font-weight:600}
+
+/* ============ 拼音 ============ */
+.py-a{position:absolute;inset:0;padding:7% 6%;background:#fff;display:flex;flex-direction:column}
+.py-a .head{font-family:var(--serif);font-size:13px;color:var(--teal);letter-spacing:.1em;margin-bottom:14px}
+.py-a .row{display:flex;justify-content:space-between;flex:1}
+.py-a .syl{display:flex;flex-direction:column;align-items:center;gap:6px;width:23%}
+.py-a .curve{width:64px;height:34px;color:var(--teal)}
+.py-a .puzzle{display:flex;align-items:center}
+.py-a .sm{background:#eaf3f4;color:var(--teal);border-radius:8px 2px 2px 8px;padding:5px 4px;font-family:var(--serif);font-size:18px}
+.py-a .ym{background:#fdf1e2;color:var(--gold);border-radius:2px 8px 8px 2px;padding:5px 4px;font-family:var(--serif);font-size:18px}
+.py-a .lab{font-size:11px;color:var(--faint)}
+.py-a .py{font-family:var(--sans);font-size:11px;color:var(--sub)}
+
+.py-b{position:absolute;inset:0;padding:7% 6%;background:#fff;display:flex;flex-direction:column}
+.py-b .head{font-family:var(--serif);font-size:13px;color:var(--coral);letter-spacing:.1em;margin-bottom:14px}
+.py-b .row{display:flex;justify-content:space-between;flex:1;align-items:center}
+.py-b .card2{display:flex;flex-direction:column;align-items:center;gap:8px;width:30%}
+.py-b .face{width:56px;height:56px;border-radius:50%;background:#fff0ec;display:flex;align-items:center;justify-content:center;color:var(--coral)}
+.py-b .nm{font-family:var(--serif);font-size:15px;color:#24262d}
+.py-b .desc{font-size:11px;color:var(--faint);text-align:center;line-height:1.5}
+
+/* ============ 汉字 ============ */
+.hz-a{position:absolute;inset:0;padding:6% 6%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hz-a .ghost{position:absolute;top:6%;right:4%;font-family:var(--serif);font-size:150px;color:rgba(59,78,126,.05);line-height:1;user-select:none}
+.hz-a .compose{display:flex;align-items:center;gap:10px;z-index:1}
+.hz-a .blk{display:flex;flex-direction:column;align-items:center;gap:6px}
+.hz-a .glyph{width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:34px}
+.hz-a .rad{background:rgba(14,124,123,.12);color:var(--teal)}
+.hz-a .comp{background:var(--hair);color:#2a2c33}
+.hz-a .result{background:rgba(59,78,126,.1);color:var(--indigo)}
+.hz-a .glyph.result{font-size:40px}
+.hz-a .op{font-size:20px;color:var(--faint)}
+.hz-a .tag{font-size:10.5px;color:var(--faint)}
+.hz-a .drop{width:16px;height:16px;color:var(--teal)}
+.hz-a .strokes{z-index:1;display:flex;gap:6px;margin-top:20px}
+.hz-a .sc{width:26px;height:26px;border-radius:50%;border:1.4px solid var(--teal);color:var(--teal);font-size:11px;display:flex;align-items:center;justify-content:center}
+
+.hz-b{position:absolute;inset:0;padding:7% 6%;background:linear-gradient(180deg,#fff,#faf8f2);display:flex;flex-direction:column}
+.hz-b .head{font-family:var(--serif);font-size:13px;color:var(--gold);letter-spacing:.1em;margin-bottom:12px}
+.hz-b .tl{display:flex;align-items:center;justify-content:space-between;position:relative;padding:6px 0}
+.hz-b .tl::before{content:"";position:absolute;left:6%;right:6%;top:50%;height:1.5px;background:var(--line);z-index:0}
+.hz-b .node{display:flex;flex-direction:column;align-items:center;gap:6px;z-index:1;width:24%}
+.hz-b .ic{width:46px;height:46px;color:#8a6a2e;background:#fffdf7;border:1px solid rgba(181,135,47,.3);border-radius:10px;padding:4px}
+.hz-b .kai{font-family:var(--serif);font-size:34px;color:var(--gold);width:46px;height:46px;display:flex;align-items:center;justify-content:center}
+.hz-b .stg{font-size:11px;color:var(--sub)}
+.hz-b .story{margin-top:16px;font-size:12.5px;color:var(--sub);line-height:1.6;border-top:1px dashed var(--line);padding-top:12px}
+.hz-b .story b{color:var(--gold)}
+
+/* ============ 成语 ============ */
+.cy-a{position:absolute;inset:0;background:radial-gradient(120% 100% at 50% 45%,rgba(59,78,126,.07),transparent 62%),#fff}
+.cy-a .star{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);background:var(--surface);border:1.5px solid var(--indigo);border-radius:14px;padding:12px 18px;text-align:center;box-shadow:0 14px 30px -18px rgba(59,78,126,.4);z-index:2}
+.cy-a .star .word{font-family:var(--serif);font-size:22px;color:var(--indigo);font-weight:700}
+.cy-a .star .py{font-size:10.5px;color:var(--faint);margin-top:2px}
+.cy-a .sat{position:absolute;background:#fff;border-radius:10px;padding:6px 11px;font-size:12px;font-family:var(--serif);box-shadow:0 8px 18px -14px rgba(20,22,28,.3)}
+.cy-a .sat.near{border:1px solid rgba(181,135,47,.4);color:#8a6a2e}
+.cy-a .sat.far{border:1px solid rgba(59,78,126,.28);color:var(--sub)}
+.cy-a svg.link{position:absolute;inset:0;width:100%;height:100%}
+
+.cy-b{position:absolute;inset:0;background:linear-gradient(180deg,#eef4f6,#fdfdfb)}
+.cy-b .poster{position:absolute;top:6%;left:50%;transform:translateX(-50%);font-family:var(--serif);font-weight:700;font-size:17px;color:#1c3a4a;background:#fff;padding:4px 16px;border-radius:999px;box-shadow:0 8px 20px -14px rgba(20,22,28,.3);z-index:2}
+.cy-b .bubble{position:absolute;background:#fff;border-radius:12px 12px 12px 2px;padding:6px 10px;font-size:11.5px;color:#2a2c33;box-shadow:0 6px 14px -10px rgba(20,22,28,.3);z-index:2}
+.cy-b .foot{position:absolute;left:0;right:0;bottom:8%;text-align:center;font-size:11.5px;color:var(--sub);padding:0 12%}
+
+/* ============ 对联 ============ */
+.dl-a{position:absolute;inset:0;padding:6% 6%;background:#fff;display:flex;flex-direction:column}
+.dl-a .hb{text-align:center;font-family:var(--serif);font-size:14px;color:var(--jade);letter-spacing:.3em;margin-bottom:14px}
+.dl-a .cols{display:flex;justify-content:center;gap:18px;flex:1;align-items:flex-start}
+.dl-a .col{display:flex;flex-direction:column;align-items:center;gap:4px}
+.dl-a .ch2{display:flex;flex-direction:column;align-items:center}
+.dl-a .grp{display:flex;gap:2px;border-radius:6px;padding:2px 3px}
+.dl-a .g-noun{background:rgba(59,78,126,.1)}
+.dl-a .g-verb{background:rgba(14,124,123,.1)}
+.dl-a .g-adj{background:rgba(181,135,47,.12)}
+.dl-a .char{font-family:var(--serif);font-size:20px;color:#20242f;width:22px;text-align:center}
+.dl-a .tone{font-size:10px;color:var(--faint);margin-top:3px}
+.dl-a .tone.ze{color:var(--coral)}
+.dl-a .legend{display:flex;gap:14px;justify-content:center;margin-top:auto;padding-top:12px;border-top:1px dashed var(--line);font-size:10.5px;color:var(--sub)}
+.dl-a .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+
+.dl-b{position:absolute;inset:0;background:linear-gradient(180deg,#fdf6f0,#fffaf5);display:flex;flex-direction:column;align-items:center;padding:6% 4%}
+.dl-b .plaque{font-family:var(--serif);font-size:15px;color:#7a3226;background:#fff;border:1.5px solid var(--coral);border-radius:8px;padding:5px 20px;letter-spacing:.16em;box-shadow:0 8px 18px -14px rgba(194,93,75,.4)}
+.dl-b .gate{display:flex;justify-content:center;gap:44px;flex:1;align-items:center;margin-top:10px}
+.dl-b .pillar{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff;border:1.5px solid rgba(194,93,75,.35);border-radius:10px;padding:14px 8px}
+.dl-b .pillar span{writing-mode:vertical-rl;font-family:var(--serif);font-size:19px;color:#7a3226;letter-spacing:.1em}
+.dl-b .lantern{width:24px;height:32px;color:var(--coral);margin-bottom:4px}
+
+/* ============ 修辞 ============ */
+.xc-a{position:absolute;inset:0;padding:6.5% 6%;background:#fff;display:flex;flex-direction:column;gap:12px}
+.xc-a .row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--hair);border-radius:10px}
+.xc-a .ic{width:34px;height:38px;flex:none}
+.xc-a .arrow{flex:none;color:var(--faint);font-size:15px}
+.xc-a .lab{font-size:11px;color:var(--faint);flex:none;width:52px}
+.xc-a .mid{font-size:11px;color:var(--sub);flex:1;text-align:center}
+.xc-a .mid b{color:var(--ink)}
+.xc-a .three{display:flex;gap:5px;flex:1}
+.xc-a .three i{flex:1;height:5px;border-radius:3px;background:var(--jade)}
+
+.xc-b{position:absolute;inset:0;padding:7% 6%;background:#fff;display:flex;flex-direction:column;justify-content:center;gap:16px}
+.xc-b .sentence{font-family:var(--serif);font-size:17px;color:#2a2c33;line-height:1.9;text-align:center}
+.xc-b .sentence .focus{position:relative;color:var(--coral);font-weight:700}
+.xc-b .sentence .focus::after{content:"";position:absolute;left:-6px;right:-6px;top:-6px;bottom:-4px;border:1.5px dashed var(--coral);border-radius:999px}
+.xc-b .zoom{display:flex;align-items:center;gap:10px;background:#fff6f4;border:1px solid rgba(194,93,75,.3);border-radius:10px;padding:10px 14px}
+.xc-b .zoom svg{flex:none;width:30px;height:30px;color:var(--coral)}
+.xc-b .zoom p{margin:0;font-size:12px;color:var(--sub);line-height:1.55}
+.xc-b .zoom p b{color:var(--coral)}
+
+/* ============ 病句标点 ============ */
+.bj-a{position:absolute;inset:0;padding:6.5% 6%;background:#fff;display:flex;flex-direction:column;gap:12px}
+.bj-a .ln{font-family:var(--serif);font-size:15px;line-height:1.8}
+.bj-a .bad{text-decoration:underline;text-decoration-style:wavy;text-decoration-color:var(--coral);text-decoration-thickness:1.5px}
+.bj-a .diagBox{display:flex;gap:8px;align-items:flex-start;background:#fff8f6;border:1px solid rgba(194,93,75,.3);border-radius:9px;padding:9px 12px}
+.bj-a .diagBox svg{flex:none;width:16px;height:16px;margin-top:2px}
+.bj-a .diagBox p{margin:0;font-size:11.8px;color:var(--sub);line-height:1.55}
+.bj-a .diagBox b{color:var(--coral)}
+.bj-a .fix{font-family:var(--serif);font-size:14.5px;color:#2a2c33}
+.bj-a .fix .rm{text-decoration:line-through;color:var(--faint)}
+.bj-a .badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;color:var(--jade);border:1px solid rgba(63,125,99,.35);border-radius:999px;padding:2px 9px;background:rgba(63,125,99,.08)}
+.bj-a .punct{margin-top:auto;padding-top:10px;border-top:1px dashed var(--line);font-size:11px;color:var(--faint)}
+.bj-a .punct b{color:var(--sub)}
+
+.bj-b{position:absolute;inset:0;background:linear-gradient(180deg,#fff,#f9f6f1);padding:6.5% 6%;display:flex;flex-direction:column;gap:10px}
+.bj-b .case{display:flex;align-items:center;gap:8px}
+.bj-b .no{font-size:10.5px;color:var(--faint);letter-spacing:.08em}
+.bj-b .crime{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#8a6a2e;background:#fffdf7;border:1px solid rgba(181,135,47,.35);border-radius:999px;padding:3px 11px}
+.bj-b .crime svg{width:14px;height:14px}
+.bj-b .fact{font-family:var(--serif);font-size:15px;color:#2a2c33;line-height:1.7}
+.bj-b .fact u{text-decoration:none;background:rgba(181,135,47,.16);border-radius:2px}
+.bj-b .evidence{font-size:11.8px;color:var(--sub);line-height:1.55}
+.bj-b .evidence b{color:#8a6a2e}
+.bj-b .verdict{margin-top:auto;font-size:12.5px;color:var(--jade);background:rgba(63,125,99,.08);border:1px solid rgba(63,125,99,.3);border-radius:9px;padding:8px 12px}
+.bj-b .verdict b{font-weight:700}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">特殊内容呈现 · 语文画廊</p>
+    <h1>语文课本翻开的样子,<em>不只是黑字竖排。</em><br>八类专属内容的现代呈现。</h1>
+    <p class="lede">古诗词的<b>境·律·叙</b>三方向已在校准页完成,是本页的野心标杆。这里覆盖语文剩余八类:<b>文言文、现代文精读、拼音、汉字、成语与词语、对联、修辞手法、病句与标点</b>——每类 2 个结构真异质的方向,白为主地色,颜色只在物件层。</p>
+    <div class="guide">古诗词呈现另见校准页(境/律/叙);本页从文言文开始,是它在「非诗歌」语文内容上的规模化延伸。</div>
+    <div class="rule"></div>
+  </header>
+
+  <!-- ============ 1. 文言文 ============ -->
+  <section class="sec">
+    <div class="sec-k">01 / 文言文</div>
+    <h2>断句语感 · 虚词功能 · 词类活用</h2>
+    <p>建立文言→现代汉语的映射能力,不是逐字翻译背诵。</p>
+  </section>
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="wy-a">
+          <div class="head">叠层批注 · 《狼》蒲松龄</div>
+          <div class="orig">一狼径去,其<span class="fn">一</span>犬坐于前。久<span class="fn">之</span>,目似瞑,意暇甚。</div>
+          <div class="pop"><b>犬坐</b> 名词作状语 · 像狗一样(坐)—— 点击原字弹出的释义卡,建立词类活用的视觉词性意识。</div>
+          <div class="gloss"><b>译文</b>:一只狼径直走开,另一只狼像狗一样蹲坐在前面。过了一会儿,那只狼好像闭上了眼睛,神情很悠闲。</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--indigo)">方向甲 · 叠层批注 Interlinear Layer</span>
+        <h3>原文-释义-译文三层堆叠</h3>
+        <p>虚词描边高亮,活用词弹出色块小卡,译文小字浮现于正下方——像 Kindle 生词查询,不是页脚注释。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="stage">
+        <div class="wy-b">
+          <div class="head">卷轴旅程 · 《狼》情节推进</div>
+          <div class="track">
+            <div class="line"></div>
+            <div class="nodes">
+              <div class="node">
+                <svg class="ic" viewBox="0 0 44 44" width="44" height="44" style="display:block" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 34h24M10 34c0-10 4-16 12-16s12 6 12 16"/><circle cx="14" cy="12" r="3"/><circle cx="30" cy="12" r="3"/></svg>
+                <div class="dot"></div>
+                <div class="txt">一屠晚归,担中肉尽,止有剩骨</div>
+                <div class="tr">屠夫挑着空担回家,只剩几根骨头</div>
+              </div>
+              <div class="node">
+                <svg class="ic" viewBox="0 0 44 44" width="44" height="44" style="display:block" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 30c4-14 10-14 14 0M24 30c4-14 10-14 14 0"/></svg>
+                <div class="dot"></div>
+                <div class="txt">途中两狼,缀行甚远</div>
+                <div class="tr">路上两只狼,远远地跟着</div>
+              </div>
+              <div class="node cur">
+                <svg class="ic" viewBox="0 0 44 44" width="44" height="44" style="display:block" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="22" cy="14" r="7"/><path d="M16 10 8 4M28 10l8-6"/><path d="M14 20q0 14 8 14t8-14"/><path d="M30 26q6-2 4 6"/></svg>
+                <div class="dot"></div>
+                <div class="txt">其一犬坐于前</div>
+                <div class="tr">一只狼像狗一样蹲坐在前面</div>
+              </div>
+              <div class="node">
+                <svg class="ic" viewBox="0 0 44 44" width="44" height="44" style="display:block" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="36" x2="30" y2="14"/><line x1="30" y1="14" x2="36" y2="8"/><line x1="34" y1="18" x2="26" y2="10"/></svg>
+                <div class="dot"></div>
+                <div class="txt">屠暴起,以刀劈狼首</div>
+                <div class="tr">屠夫突然跳起,用刀砍向狼头</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--gold)">方向乙 · 卷轴旅程 Scroll Journey</span>
+        <h3>地铁站点式情节节点</h3>
+        <p>大字沿卷铺开,断句处是可点开的"站点",配一句译文 + 一张线描小图——读古文变成通关一段旅程。</p>
+      </div>
+    </div>
+  </div>
+  <div class="bands-mini">
+    <div class="band-mini"><div class="g">低小 1-2</div><p>蒙学短句走<b>方向乙</b>,插图主导,节点稀疏。</p></div>
+    <div class="band-mini"><div class="g">高小 3-6</div><p>简短文言小故事以<b>方向乙</b>为主,断句提示弱化为韵律拍点。</p></div>
+    <div class="band-mini"><div class="g">初中 7-9</div><p><b>方向甲</b>为主力,虚词/实词/词类活用系统上线,断句判断标为考点。</p></div>
+    <div class="band-mini"><div class="g">高中 10-12</div><p><b>方向甲</b>深化,浮层卡含通假字/古今异义/特殊句式,插图全撤,近古籍数字化平台。</p></div>
+  </div>
+
+  <!-- ============ 2. 现代文精读 ============ -->
+  <section class="sec">
+    <div class="sec-k">02 / 现代文精读</div>
+    <h2>段落功能识别 · 证据链</h2>
+    <p>结构化地读——识别总起/论证/转折/总结,而非逐字翻译。</p>
+  </section>
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="xd-a">
+          <div class="main">盼望着,盼望着,东风来了,<span class="hl1">春天的脚步近了</span>。一切都像刚睡醒的样子,欣欣然张开了眼。<span class="hl2">山朗润起来了,水涨起来了,太阳的脸红起来了</span>。</div>
+          <div class="side">
+            <div class="note">
+              <svg class="conn" viewBox="0 0 70 26" width="70" height="26" style="display:block"><path d="M2 4 Q40 4 68 14" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-dasharray="2 3"/></svg>
+              <span class="mk">★</span>首句反复"盼望着",渲染急切的期盼心情,是全文情感基调的主旨句。
+            </div>
+            <div class="note2">
+              <svg class="conn" viewBox="0 0 70 26" width="70" height="26" style="display:block"><path d="M2 4 Q40 4 68 14" fill="none" stroke="var(--indigo)" stroke-width="1.6" stroke-dasharray="2 3"/></svg>
+              <span class="mk">→</span>山、水、太阳依次拟人化,呼应"睡醒"——写春回大地的复苏过程。
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--gold)">方向甲 · 编辑手写批注层 Editorial Marginalia</span>
+        <h3>高亮划线 + 右栏批注气泡</h3>
+        <p>"?"疑问/"→"逻辑关系/"★"主旨句,SVG 连接线回指正文——像 Notion 批注,不是泛黄仿古眉批。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="stage">
+        <div class="xd-b">
+          <div class="bar">
+            <i style="height:22%;background:var(--gold)"></i>
+            <i style="height:40%;background:var(--indigo)"></i>
+            <i style="height:20%;background:var(--indigo)"></i>
+            <i style="height:18%;background:var(--gold)"></i>
+          </div>
+          <div class="txt">
+            <div class="row"><span class="chip" style="background:rgba(181,135,47,.16);color:#8a6a2e">抒情</span><p>开篇:"盼望着,盼望着,东风来了"——短句反复,情感先行</p></div>
+            <div class="row"><span class="chip" style="background:rgba(59,78,126,.14);color:var(--indigo)">描写</span><p>中段:<b>山、水、太阳</b>依次白描,篇幅最长,是文章主体</p></div>
+            <div class="row"><span class="chip" style="background:rgba(63,125,99,.14);color:var(--jade)">结尾抒情</span><p>"春天像刚落地的娃娃,从头到脚都是新的,它生长着"——排比收束</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--indigo)">方向乙 · 文脉热力条 Structural Rhythm Bar</span>
+        <h3>纵向色块映射段落功能</h3>
+        <p>块宽映射段落长度,颜色映射叙述/描写/抒情——先读"文章心电图"整体把握,再入正文细读。</p>
+      </div>
+    </div>
+  </div>
+  <div class="bands-mini">
+    <div class="band-mini"><div class="g">低小 1-2</div><p>几乎不做精读训练,如需要用<b>方向乙</b>简化版,只分"开头/中间/结尾"三色块。</p></div>
+    <div class="band-mini"><div class="g">高小 3-6</div><p><b>方向乙</b>为主,功能分类扩到 4-5 种,引入"过渡句"概念。</p></div>
+    <div class="band-mini"><div class="g">初中 7-9</div><p><b>方向甲</b>上线,批注标准化为"论点/论据/论证方法",两方向可共存。</p></div>
+    <div class="band-mini"><div class="g">高中 10-12</div><p><b>方向甲</b>深化为议论文/文学类两套批注词表,文脉条弱化为极简侧边缩略条。</p></div>
+  </div>
+
+  <!-- ============ 3. 拼音 ============ -->
+  <section class="sec">
+    <div class="sec-k">03 / 拼音</div>
+    <h2>音形对应 · 四声调值升降</h2>
+    <p>抽象符号对低龄学生偏晦涩,声调需要被"看见"和"模仿"。</p>
+  </section>
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="py-a">
+          <div class="head">调值曲线 · 妈麻马骂</div>
+          <div class="row">
+            <div class="syl">
+              <svg class="curve" viewBox="0 0 70 34" width="70" height="34" style="display:block" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 10 L64 10"/></svg>
+              <div class="puzzle"><span class="sm">m</span><span class="ym">ā</span></div>
+              <div class="py">mā · 妈</div>
+              <div class="lab">阴平 · 一声高平</div>
+            </div>
+            <div class="syl">
+              <svg class="curve" viewBox="0 0 70 34" width="70" height="34" style="display:block" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 28 L64 8"/></svg>
+              <div class="puzzle"><span class="sm">m</span><span class="ym">á</span></div>
+              <div class="py">má · 麻</div>
+              <div class="lab">阳平 · 二声上扬</div>
+            </div>
+            <div class="syl">
+              <svg class="curve" viewBox="0 0 70 34" width="70" height="34" style="display:block" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 14 Q30 34 64 8"/></svg>
+              <div class="puzzle"><span class="sm">m</span><span class="ym">ǎ</span></div>
+              <div class="py">mǎ · 马</div>
+              <div class="lab">上声 · 三声先降后扬</div>
+            </div>
+            <div class="syl">
+              <svg class="curve" viewBox="0 0 70 34" width="70" height="34" style="display:block" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 8 L64 30"/></svg>
+              <div class="puzzle"><span class="sm">m</span><span class="ym">à</span></div>
+              <div class="py">mà · 骂</div>
+              <div class="lab">去声 · 四声陡降</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--teal)">方向甲 · 调值曲线 Tone Contour</span>
+        <h3>声母韵母咬合成拼图,曲线悬浮标声调</h3>
+        <p>声母浅蓝、韵母浅橙,像音频编辑软件的 pitch curve——抽象调值变成看得见的运动轨迹。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="stage">
+        <div class="py-b">
+          <div class="head">口型剖面卡 · a / i / u</div>
+          <div class="row">
+            <div class="card2">
+              <div class="face"><svg viewBox="0 0 40 40" width="40" height="40" style="display:block" fill="none" stroke="currentColor" stroke-width="2.4"><ellipse cx="20" cy="21" rx="12" ry="15"/></ellipse></svg></div>
+              <div class="nm">bā · 巴</div>
+              <div class="desc">张口 a<br>口腔大开,下颌下拉</div>
+            </div>
+            <div class="card2">
+              <div class="face"><svg viewBox="0 0 40 40" width="40" height="40" style="display:block" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 20 Q20 27 36 20"/></svg></div>
+              <div class="nm">dī · 滴</div>
+              <div class="desc">扁口 i<br>嘴角向两侧咧开</div>
+            </div>
+            <div class="card2">
+              <div class="face"><svg viewBox="0 0 40 40" width="40" height="40" style="display:block" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="20" cy="20" r="10"/></svg></div>
+              <div class="nm">gū · 咕</div>
+              <div class="desc">圆口 u<br>双唇收圆并前突</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--coral)">方向乙 · 口型剖面卡 Mouth Shape Card</span>
+        <h3>发音部位口型剖面(友好插画,非医学图)</h3>
+        <p>从"听觉"转向"发音动作"——具身可模仿的动作指导,契合低龄学生的模仿学习方式。</p>
+      </div>
+    </div>
+  </div>
+  <div class="bands-mini">
+    <div class="band-mini"><div class="g">低小 1-2</div><p>拼音教学主战场,两方向均以大插画 + 单音节一屏为主,口型卡尤适合跟读模仿。</p></div>
+    <div class="band-mini"><div class="g">高小 3-6</div><p><b>调值曲线</b>用于"声调竞猜"轻游戏化练习,服务多音字辨析。</p></div>
+    <div class="band-mini"><div class="g">初中 7-9</div><p>拼音降为工具,仅生僻字/文言文场景走极简小标注。</p></div>
+    <div class="band-mini"><div class="g">高中 10-12</div><p>几乎不独立出现,仅诗词平仄场景复用调值曲线的极简变体。</p></div>
+  </div>
+
+  <!-- ============ 4. 汉字 ============ -->
+  <section class="sec">
+    <div class="sec-k">04 / 汉字</div>
+    <h2>结构可拆解 · 部首表意 · 造字理据</h2>
+    <p>汉字不是任意符号——部首表意,六书造字有历史理据。</p>
+  </section>
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="hz-a">
+          <div class="ghost">江</div>
+          <div class="compose">
+            <div class="blk">
+              <div class="glyph rad">氵</div>
+              <div class="tag"><svg class="drop" viewBox="0 0 28 28" width="16" height="16" style="display:block;vertical-align:-3px" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M14 3C14 3 6 14 6 19a8 8 0 0016 0c0-5-8-16-8-16z"/></svg> 氵= 水</div>
+            </div>
+            <div class="op">+</div>
+            <div class="blk">
+              <div class="glyph comp">工</div>
+              <div class="tag">声旁·工</div>
+            </div>
+            <div class="op">=</div>
+            <div class="blk">
+              <div class="glyph result">江</div>
+              <div class="tag">形声字 · 6 画</div>
+            </div>
+          </div>
+          <div class="strokes">
+            <div class="sc">1</div><div class="sc">2</div><div class="sc">3</div><div class="sc">4</div><div class="sc">5</div><div class="sc">6</div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--teal)">方向甲 · 笔顺编舞 Stroke Choreography</span>
+        <h3>淡灰骨架 + 部首高亮 + 逐笔编号</h3>
+        <p>先拆部件("氵"=水滴图标),再合成结果字,笔画编号贴底——像字体设计软件的路径动画。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="stage">
+        <div class="hz-b">
+          <div class="head">造字理据卡 · "休"</div>
+          <div class="tl">
+            <div class="node">
+              <svg class="ic" viewBox="0 0 46 46" width="46" height="46"><g fill="none" stroke="#8a6a2e" stroke-width="2" stroke-linecap="round"><path d="M10 40l4-30M32 10l4 30"/><circle cx="15" cy="16" r="3"/><path d="M15 20l-3 14M15 20l4 6"/></g></svg>
+              <div class="stg">甲骨文</div>
+            </div>
+            <div class="node">
+              <svg class="ic" viewBox="0 0 46 46" width="46" height="46"><g fill="none" stroke="#8a6a2e" stroke-width="2" stroke-linecap="round"><path d="M11 39V11M35 11v28"/><circle cx="17" cy="15" r="3.2"/><path d="M17 19v12M17 20l5 5"/></g></svg>
+              <div class="stg">金文</div>
+            </div>
+            <div class="node">
+              <svg class="ic" viewBox="0 0 46 46" width="46" height="46"><g fill="none" stroke="#8a6a2e" stroke-width="2" stroke-linecap="round"><path d="M12 39V9M34 9v30"/><circle cx="18" cy="14" r="3"/><path d="M18 18v10M18 20h5"/></g></svg>
+              <div class="stg">小篆</div>
+            </div>
+            <div class="node">
+              <div class="kai">休</div>
+              <div class="stg">楷书</div>
+            </div>
+          </div>
+          <div class="story"><b>休</b> = 亻(人)+ 木。一个人靠在树旁歇息,本义就是"休息"——字形本身就是一幅小画。</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--gold)">方向乙 · 造字理据卡 Etymology Card</span>
+        <h3>字形演变时间轴 + 白话造字故事</h3>
+        <p>甲骨文→金文→小篆→楷书,历史纵深叙事——满足文字考古式好奇心,与方向甲"当下书写动作"完全异质。</p>
+      </div>
+    </div>
+  </div>
+  <div class="bands-mini">
+    <div class="band-mini"><div class="g">低小 1-2</div><p><b>方向甲</b>为主,大字 + 慢速逐笔动画 + "跟写打星"游戏化反馈。</p></div>
+    <div class="band-mini"><div class="g">高小 3-6</div><p><b>方向甲乙</b>轻量结合,引入部首"家族墙",造字理据故事化讲述。</p></div>
+    <div class="band-mini"><div class="g">初中 7-9</div><p><b>方向乙</b>上线为主力,六书完整引入,形声字双色区分形旁声旁。</p></div>
+    <div class="band-mini"><div class="g">高中 10-12</div><p><b>方向乙</b>深化为文字学视角(通假字/异体字),笔顺动效退场。</p></div>
+  </div>
+
+  <!-- ============ 5. 成语与词语 ============ -->
+  <section class="sec">
+    <div class="sec-k">05 / 成语与词语</div>
+    <h2>语义网络节点 · 源流 · 用例</h2>
+    <p>词语不是孤立释义条目——有出处、有语义邻居、有使用语境。</p>
+  </section>
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="cy-a">
+          <svg class="link" viewBox="0 0 400 300" width="100%" height="100%" style="display:block" fill="none">
+            <line x1="200" y1="150" x2="90" y2="80" stroke="var(--gold)" stroke-width="1.4" opacity=".55"/>
+            <line x1="200" y1="150" x2="90" y2="220" stroke="var(--gold)" stroke-width="1.4" opacity=".55"/>
+            <line x1="200" y1="150" x2="310" y2="80" stroke="var(--indigo)" stroke-width="1.4" opacity=".45" stroke-dasharray="3 3"/>
+            <line x1="200" y1="150" x2="310" y2="220" stroke="var(--indigo)" stroke-width="1.4" opacity=".45" stroke-dasharray="3 3"/>
+          </svg>
+          <div class="star"><div class="word">画蛇添足</div><div class="py">huà shé tiān zú</div></div>
+          <div class="sat near" style="left:6%;top:20%">多此一举</div>
+          <div class="sat near" style="left:6%;top:68%">弄巧成拙</div>
+          <div class="sat far" style="right:6%;top:20%">恰到好处</div>
+          <div class="sat far" style="right:6%;top:68%">画龙点睛</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--indigo)">方向甲 · 语义星系 Semantic Constellation</span>
+        <h3>中心恒星词 + 近反义卫星环绕</h3>
+        <p>近义词暖色连线靠近,反义词冷色连线在对侧——点击卫星词可切换新中心,像知识图谱工具的"词语漫游"。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="stage">
+        <div class="cy-b">
+          <div class="poster">刻舟求剑</div>
+          <svg width="100%" height="100%" viewBox="0 0 320 150" style="display:block;position:absolute;inset:0">
+            <path d="M0 118 Q20 110 40 118 T80 118 T120 118 T160 118 T200 118 T240 118 T280 118 T320 118" stroke="var(--indigo)" stroke-width="2" fill="none" opacity=".45"/>
+            <path d="M0 130 Q20 122 40 130 T80 130 T120 130 T160 130 T200 130 T240 130 T280 130 T320 130" stroke="var(--indigo)" stroke-width="2" fill="none" opacity=".28"/>
+            <line x1="88" y1="58" x2="88" y2="116" stroke="var(--faint)" stroke-dasharray="4 4" stroke-width="1.4"/>
+            <text x="88" y="50" font-size="11" fill="var(--faint)" text-anchor="middle" font-family="var(--sans)">刻痕原位</text>
+            <path d="M150 98 L250 98 L236 116 L164 116 Z" fill="none" stroke="#2a2c33" stroke-width="2.2"/>
+            <line x1="172" y1="88" x2="172" y2="98" stroke="var(--coral)" stroke-width="2.6"/>
+            <circle cx="200" cy="75" r="7" fill="none" stroke="#2a2c33" stroke-width="2"/>
+            <line x1="200" y1="82" x2="200" y2="98" stroke="#2a2c33" stroke-width="2"/>
+            <line x1="200" y1="87" x2="212" y2="95" stroke="#2a2c33" stroke-width="2"/>
+            <line x1="212" y1="95" x2="222" y2="116" stroke="var(--coral)" stroke-width="2"/>
+            <line x1="222" y1="116" x2="222" y2="138" stroke="var(--faint)" stroke-dasharray="3 3" stroke-width="1.2"/>
+            <circle cx="222" cy="138" r="3" fill="var(--faint)"/>
+            <path d="M88 116 Q125 126 163 116" stroke="var(--gold)" stroke-width="2" fill="none"/>
+            <path d="M160 112 L163 116 L157 119" stroke="var(--gold)" stroke-width="2" fill="none"/>
+          </svg>
+          <div class="bubble" style="left:8%;bottom:14%">"剑掉这儿了,做个记号!"</div>
+          <div class="foot">楚人渡江,剑坠水中,他在船舷刻记号——船已行,水未动,剑当然找不回来了。</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--teal)">方向乙 · 成语剧场卡 Idiom Scene Card</span>
+        <h3>典故场景重现,释义作海报标语</h3>
+        <p>船舷刻痕原位与船的实际移动用箭头对照——让"望文生义"式误解在具象场景中被当场纠正。</p>
+      </div>
+    </div>
+  </div>
+  <div class="bands-mini">
+    <div class="band-mini"><div class="g">低小 1-2</div><p><b>方向乙</b>为主,场景插画大而简单,聚焦"字面意思 vs 实际含义"的反差趣味。</p></div>
+    <div class="band-mini"><div class="g">高小 3-6</div><p><b>方向乙</b>继续,叠加简单"近义词朋友圈"小标签建立语义关联意识。</p></div>
+    <div class="band-mini"><div class="g">初中 7-9</div><p><b>方向甲</b>上线为主力,语义网络扩大到 4-6 个关联词,源流故事文字量增加。</p></div>
+    <div class="band-mini"><div class="g">高中 10-12</div><p><b>方向甲</b>深化,节点加入感情色彩/语体色彩维度分层,排版转向工具书质感。</p></div>
+  </div>
+
+  <!-- ============ 6. 对联 ============ -->
+  <section class="sec">
+    <div class="sec-k">06 / 对联</div>
+    <h2>字数相等 · 词性相对 · 平仄相反</h2>
+    <p>尤重句脚二四六分明,横批点题——几乎不讲对仗这层结构对应关系。</p>
+  </section>
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="dl-a">
+          <div class="hb">横批 · 万象更新</div>
+          <div class="cols">
+            <div class="col">
+              <div class="ch2"><div class="grp g-noun"><span class="char">春</span></div><span class="tone">平</span></div>
+            </div>
+            <div class="col">
+              <div class="ch2"><div class="grp g-verb"><span class="char">回</span></div><span class="tone">平</span></div>
+            </div>
+            <div class="col">
+              <div class="ch2"><div class="grp g-noun"><span class="char">大</span><span class="char">地</span></div><span class="tone ze">仄&nbsp;仄</span></div>
+            </div>
+            <div class="col">
+              <div class="ch2"><div class="grp g-noun"><span class="char">千</span><span class="char">山</span></div><span class="tone">平&nbsp;平</span></div>
+            </div>
+            <div class="col">
+              <div class="ch2"><div class="grp g-adj"><span class="char">秀</span></div><span class="tone ze">仄</span></div>
+            </div>
+          </div>
+          <div class="cols" style="margin-top:6px">
+            <div class="col"><div class="ch2"><div class="grp g-noun"><span class="char">日</span></div><span class="tone ze">仄</span></div></div>
+            <div class="col"><div class="ch2"><div class="grp g-verb"><span class="char">照</span></div><span class="tone ze">仄</span></div></div>
+            <div class="col"><div class="ch2"><div class="grp g-noun"><span class="char">神</span><span class="char">州</span></div><span class="tone">平&nbsp;平</span></div></div>
+            <div class="col"><div class="ch2"><div class="grp g-noun"><span class="char">百</span><span class="char">业</span></div><span class="tone ze">仄&nbsp;仄</span></div></div>
+            <div class="col"><div class="ch2"><div class="grp g-adj"><span class="char">兴</span></div><span class="tone">平</span></div></div>
+          </div>
+          <div class="legend">
+            <span><i style="background:var(--indigo)"></i>名词对名词</span>
+            <span><i style="background:var(--teal)"></i>动词对动词</span>
+            <span><i style="background:var(--gold)"></i>形容词对形容词</span>
+            <span>句脚仄起<b style="color:var(--coral)">平收</b></span>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--jade)">方向甲 · 镜像对齐轨道 Mirror Alignment Track</span>
+        <h3>逐字对齐 + 词性色块 + 平仄圈点</h3>
+        <p>像 Git diff 并排对比——把"对仗"这一抽象语法关系变成看得见的一一映射。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="stage">
+        <div class="dl-b">
+          <div class="plaque">吉星高照</div>
+          <div class="gate">
+            <div class="pillar">
+              <svg class="lantern" viewBox="0 0 26 34" width="24" height="32" style="display:block"><ellipse cx="13" cy="17" rx="10" ry="13" fill="none" stroke="currentColor" stroke-width="2"/><line x1="13" y1="1" x2="13" y2="4" stroke="currentColor" stroke-width="2"/><line x1="13" y1="30" x2="13" y2="34" stroke="currentColor" stroke-width="2"/><line x1="6" y1="17" x2="20" y2="17" stroke="currentColor" stroke-width="1.2" opacity=".6"/></svg>
+              <span>福满人间迎新岁</span>
+            </div>
+            <div class="pillar">
+              <svg class="lantern" viewBox="0 0 26 34" width="24" height="32" style="display:block"><ellipse cx="13" cy="17" rx="10" ry="13" fill="none" stroke="currentColor" stroke-width="2"/><line x1="13" y1="1" x2="13" y2="4" stroke="currentColor" stroke-width="2"/><line x1="13" y1="30" x2="13" y2="34" stroke="currentColor" stroke-width="2"/><line x1="6" y1="17" x2="20" y2="17" stroke="currentColor" stroke-width="1.2" opacity=".6"/></svg>
+              <span>春归大地绽新颜</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--coral)">方向乙 · 对称门楼 Symmetric Portal</span>
+        <h3>横批作匾额,竖排柱身对称留白</h3>
+        <p>不做逐字分析,先建立"整体美感直觉"——像建筑摄影海报,灯笼只作氛围点缀,不做满版红地。</p>
+      </div>
+    </div>
+  </div>
+  <div class="bands-mini">
+    <div class="band-mini"><div class="g">低小 1-2</div><p>如遇春联民俗内容走<b>方向乙</b>门楼隐喻,重氛围轻语法。</p></div>
+    <div class="band-mini"><div class="g">高小 3-6</div><p><b>方向乙</b>为主,引入"横批点题"与"字数相等/意思相关"直觉。</p></div>
+    <div class="band-mini"><div class="g">初中 7-9</div><p><b>方向甲</b>上线,词性对仗 + 基础平仄("马蹄韵")系统讲解。</p></div>
+    <div class="band-mini"><div class="g">高中 10-12</div><p><b>方向甲</b>深化到"一三五不论二四六分明",连线增加工对/宽对分级。</p></div>
+  </div>
+
+  <!-- ============ 7. 修辞手法 ============ -->
+  <section class="sec">
+    <div class="sec-k">07 / 修辞手法</div>
+    <h2>本体-喻体的相似点 · 联结机制</h2>
+    <p>理解"为什么这样比",而非死记术语名字。</p>
+  </section>
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="xc-a">
+          <div class="row">
+            <svg class="ic" viewBox="0 0 30 40" width="26" height="34" style="display:block" fill="none" stroke="var(--indigo)" stroke-width="2"><path d="M6 2 Q10 10 6 18 Q2 26 6 34"/><path d="M14 2 Q18 10 14 18 Q10 26 14 34" opacity=".6"/><path d="M22 2 Q26 10 22 18 Q18 26 22 34" opacity=".35"/></svg>
+            <span class="arrow">→</span>
+            <svg class="ic" viewBox="0 0 40 30" width="32" height="24" style="display:block" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linejoin="round"><path d="M2 8 L38 8 L2 16 L38 16 L2 24"/></svg>
+            <div class="mid"><b>比喻</b>:瀑布 → 白练 · 相似点「长又白」</div>
+          </div>
+          <div class="row">
+            <svg class="ic" viewBox="0 0 34 34" width="28" height="28" style="display:block" fill="none" stroke="var(--jade)" stroke-width="2.2" stroke-linecap="round"><path d="M8 30 Q6 18 10 6"/><path d="M17 30 Q17 16 17 4"/><path d="M26 30 Q28 18 24 6"/><circle cx="14" cy="14" r="1.4" fill="var(--jade)" stroke="none"/><circle cx="20" cy="14" r="1.4" fill="var(--jade)" stroke="none"/><path d="M14 19q3 2 6 0"/></svg>
+            <span class="arrow" style="letter-spacing:-2px">~~</span>
+            <div class="mid" style="flex:2"><b>拟人</b>:"小草偷偷地从土里钻出来"—— 波浪线连回本体,赋予人的动作</div>
+          </div>
+          <div class="row">
+            <div class="three"><i></i><i></i><i></i></div>
+            <div class="mid" style="flex:2"><b>排比</b>:"像刚落地的娃娃…像小姑娘…像健壮的青年" 三条等长线,强调节奏重复</div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--indigo)">方向甲 · 映射光路图 Mapping Diagram</span>
+        <h3>连线形态呼应修辞类型的功能性图形</h3>
+        <p>比喻实线箭头、拟人波浪线、排比等长平行线——靠图形而非术语区分修辞类型。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="stage">
+        <div class="xc-b">
+          <div class="sentence">远远望去,瀑布如一条<span class="focus">白练</span>悬挂在山间。</div>
+          <div class="zoom">
+            <svg viewBox="0 0 40 40" width="30" height="30" style="display:block"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 3"/><line x1="25" y1="25" x2="34" y2="34" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+            <p><b>取景框解读</b>:把瀑布比作"白练",取的是又长又白这个相似点——本体瀑布,喻体白练,比喻词"如"。</p>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--coral)">方向乙 · 修辞显微镜 Rhetoric Zoom</span>
+        <h3>关键词圆形取景框放大聚焦</h3>
+        <p>沉浸真实语境逐句显微分析——像探案找线索,与方向甲"抽离符号化"认知起点完全相反。</p>
+      </div>
+    </div>
+  </div>
+  <div class="bands-mini">
+    <div class="band-mini"><div class="g">低小 1-2</div><p><b>方向乙</b>为主,例句极简,一次只讲一种修辞,不用术语连线。</p></div>
+    <div class="band-mini"><div class="g">高小 3-6</div><p><b>方向乙</b>继续,方向甲图形符号开始渗透(拟人波浪线简化版)。</p></div>
+    <div class="band-mini"><div class="g">初中 7-9</div><p><b>方向甲</b>上线为主力,类型扩展到排比/夸张/设问/反问/反复。</p></div>
+    <div class="band-mini"><div class="g">高中 10-12</div><p><b>方向甲</b>深化,加入表达效果分析维度,常与现代文精读批注层联动。</p></div>
+  </div>
+
+  <!-- ============ 8. 病句与标点修改 ============ -->
+  <section class="sec">
+    <div class="sec-k">08 / 病句与标点修改</div>
+    <h2>诊断-修复闭环 · 定位错误类型</h2>
+    <p>不是"原句→改句"的红笔痕迹,是一次带原因的报错-修复过程。</p>
+  </section>
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="bj-a">
+          <div class="ln"><span class="bad">通过这次活动</span>,<span class="bad">使</span>我受到了深刻的教育。</div>
+          <div class="diagBox">
+            <svg viewBox="0 0 18 18" width="16" height="16"><path d="M9 2 L17 16 L1 16 Z" fill="none" stroke="var(--coral)" stroke-width="1.8" stroke-linejoin="round"/><line x1="9" y1="7" x2="9" y2="11" stroke="var(--coral)" stroke-width="1.8"/><circle cx="9" cy="13.3" r="0.9" fill="var(--coral)"/></svg>
+            <p><b>成分残缺</b>:"通过"与"使"连用,介词结构掩盖了主语,整句缺少主语。</p>
+          </div>
+          <div class="fix"><span class="rm">通过</span>这次活动,使我受到了深刻的教育。 <span class="badge">✓ 已修正</span></div>
+          <div class="punct"><b>标点专项同款面板</b>:「老师说 明天考试」→ 补全引号「老师说:"明天考试。"」</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--coral)">方向甲 · 语法诊断面板 Syntax Diagnostics Panel</span>
+        <h3>红色波浪线 + 悬浮诊断卡 + diff 修复</h3>
+        <p>借鉴 IDE linter 报错——报错→原因→修复闭环,标点修改并入同一面板。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="stage">
+        <div class="bj-b">
+          <div class="case">
+            <span class="no">案件编号 No.12</span>
+            <span class="crime"><svg viewBox="0 0 20 20" width="14" height="14"><rect x="2" y="12" width="10" height="4" rx="1" transform="rotate(-30 2 12)" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="6" x2="17" y2="1" stroke="currentColor" stroke-width="1.8"/></svg>语义重复案</span>
+          </div>
+          <div class="fact">案发现场:"他的年龄<u>大约</u>十五岁<u>左右</u>。"</div>
+          <div class="evidence"><b>证据</b>:"大约"与"左右"都表约数,二词重复,语义打架。</div>
+          <div class="verdict"><b>判决</b>:删去"大约"或"左右"其一 → "他的年龄十五岁左右。"</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag" style="color:var(--gold)">方向乙 · 病句法庭卡 Sentence Courtroom Card</span>
+        <h3>案发-证据-判决的破案叙事</h3>
+        <p>拟人化"罪名"标签取代冷冰冰的语法术语——你是侦探在破案,而非程序员在 debug。</p>
+      </div>
+    </div>
+  </div>
+  <div class="bands-mini">
+    <div class="band-mini"><div class="g">低小 1-2</div><p>极少出现,如有走<b>方向乙</b>极简版,类型仅"话没说完/说重复了"两三种。</p></div>
+    <div class="band-mini"><div class="g">高小 3-6</div><p><b>方向乙</b>继续,类型扩展到 4-5 类,出现"你来当小法官"式互动措辞。</p></div>
+    <div class="band-mini"><div class="g">初中 7-9</div><p><b>方向甲</b>上线为主力,对齐考纲六大类,标点修改并入同一诊断面板。</p></div>
+    <div class="band-mini"><div class="g">高中 10-12</div><p><b>方向甲</b>深化,增加逻辑严密性/歧义句诊断维度,去装饰趋近专业工具。</p></div>
+  </div>
+
+  <footer>
+    语文 · 特殊内容呈现画廊 · 2026-07-23 &nbsp;|&nbsp; 白为主 · 颜色只在物件层 &nbsp;|&nbsp; 古诗词境/律/叙另见校准页,本页覆盖文言文/现代文精读/拼音/汉字/成语/对联/修辞/病句标点共八类
+  </footer>
+</div>

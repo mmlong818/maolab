@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .collab/brief.mjs",
+            "timeout": 10,
+            "statusMessage": "读取 Codex 信箱与路径锁"
+          }
+        ]
+      }
+    ]
+  }
+}

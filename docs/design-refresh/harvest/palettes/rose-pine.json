@@ -1,0 +1,77 @@
+{
+  "source": {
+    "repo": "https://github.com/rose-pine/palette",
+    "license": "MIT",
+    "fetchedAt": "2026-07-21",
+    "sourceUrls": [
+      "https://raw.githubusercontent.com/rose-pine/palette/main/palette.json",
+      "https://rosepinetheme.com/palette",
+      "https://raw.githubusercontent.com/rose-pine/neovim/main/lua/rose-pine/palette.lua"
+    ]
+  },
+  "flavors": [
+    {
+      "id": "main",
+      "name": "Rosé Pine",
+      "colors": [
+        { "name": "base", "hex": "#191724" },
+        { "name": "surface", "hex": "#1f1d2e" },
+        { "name": "overlay", "hex": "#26233a" },
+        { "name": "muted", "hex": "#6e6a86" },
+        { "name": "subtle", "hex": "#908caa" },
+        { "name": "text", "hex": "#e0def4" },
+        { "name": "love", "hex": "#eb6f92" },
+        { "name": "gold", "hex": "#f6c177" },
+        { "name": "rose", "hex": "#ebbcba" },
+        { "name": "pine", "hex": "#31748f" },
+        { "name": "foam", "hex": "#9ccfd8" },
+        { "name": "iris", "hex": "#c4a7e7" },
+        { "name": "highlightLow", "hex": "#21202e" },
+        { "name": "highlightMed", "hex": "#403d52" },
+        { "name": "highlightHigh", "hex": "#524f67" }
+      ]
+    },
+    {
+      "id": "moon",
+      "name": "Rosé Pine Moon",
+      "colors": [
+        { "name": "base", "hex": "#232136" },
+        { "name": "surface", "hex": "#2a273f" },
+        { "name": "overlay", "hex": "#393552" },
+        { "name": "muted", "hex": "#6e6a86" },
+        { "name": "subtle", "hex": "#908caa" },
+        { "name": "text", "hex": "#e0def4" },
+        { "name": "love", "hex": "#eb6f92" },
+        { "name": "gold", "hex": "#f6c177" },
+        { "name": "rose", "hex": "#ea9a97" },
+        { "name": "pine", "hex": "#3e8fb0" },
+        { "name": "foam", "hex": "#9ccfd8" },
+        { "name": "iris", "hex": "#c4a7e7" },
+        { "name": "highlightLow", "hex": "#2a283e" },
+        { "name": "highlightMed", "hex": "#44415a" },
+        { "name": "highlightHigh", "hex": "#56526e" }
+      ]
+    },
+    {
+      "id": "dawn",
+      "name": "Rosé Pine Dawn",
+      "colors": [
+        { "name": "base", "hex": "#faf4ed" },
+        { "name": "surface", "hex": "#fffaf3" },
+        { "name": "overlay", "hex": "#f2e9e1" },
+        { "name": "muted", "hex": "#9893a5" },
+        { "name": "subtle", "hex": "#797593" },
+        { "name": "text", "hex": "#464261" },
+        { "name": "love", "hex": "#b4637a" },
+        { "name": "gold", "hex": "#ea9d34" },
+        { "name": "rose", "hex": "#d7827e" },
+        { "name": "pine", "hex": "#286983" },
+        { "name": "foam", "hex": "#56949f" },
+        { "name": "iris", "hex": "#907aa9" },
+        { "name": "highlightLow", "hex": "#f4ede8" },
+        { "name": "highlightMed", "hex": "#dfdad9" },
+        { "name": "highlightHigh", "hex": "#cecacd" }
+      ]
+    }
+  ]
+}

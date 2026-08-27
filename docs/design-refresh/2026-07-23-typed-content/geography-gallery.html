@@ -1,0 +1,864 @@
+<title>地理 · 特殊内容呈现画廊</title>
+<style>
+:root{
+  --bg:#fcfbf9;--surface:#ffffff;--ink:#16181d;--sub:#5b606b;--faint:#9aa0ab;
+  --line:#e9e6df;--hair:#efece6;
+  --indigo:#3b4e7e;--teal:#0e7c7b;--gold:#b5872f;--jade:#3f7d63;--coral:#c25d4b;--plum:#7a5c8e;
+  --serif:"Songti SC","STSong","Noto Serif CJK SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 22px 55px -30px rgba(20,22,28,.30);--radius:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+header{padding:72px 0 30px}
+.eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);font-weight:600;margin:0 0 18px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,4.6vw,54px);line-height:1.16;margin:0;text-wrap:balance;letter-spacing:.01em}
+h1 em{font-style:normal;color:var(--faint)}
+.lede{max-width:720px;color:var(--sub);font-size:17px;margin:20px 0 0}
+.lede b{color:var(--ink);font-weight:600}
+.rule{height:1px;background:var(--line);margin:36px 0 0}
+
+.sec{padding:52px 0 6px}
+.sec-k{font-family:var(--serif);font-size:13px;letter-spacing:.14em;color:var(--faint)}
+.sec h2{font-family:var(--serif);font-weight:600;font-size:25px;margin:8px 0 6px}
+.sec p{color:var(--sub);max-width:760px;margin:0;font-size:14.5px}
+.sec p b{color:var(--ink);font-weight:600}
+
+.grid2{display:grid;grid-template-columns:1fr;gap:26px;padding:28px 0 4px}
+@media(min-width:900px){.grid2{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.stage{position:relative;height:360px;background:var(--surface);overflow:hidden}
+.cap{padding:16px 20px;border-top:1px solid var(--hair);background:var(--surface)}
+.cap .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.cap h3{font-family:var(--serif);font-size:18px;margin:7px 0 5px}
+.cap p{font-size:13px;color:var(--sub);margin:0;line-height:1.55}
+
+.tag-teal{color:var(--teal)} .tag-indigo{color:var(--indigo)} .tag-gold{color:var(--gold)}
+.tag-jade{color:var(--jade)} .tag-coral{color:var(--coral)}
+
+.svgwrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--surface)}
+
+.bands-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:26px 0 0}
+.bands{display:grid;grid-template-columns:1fr;gap:14px;padding:14px 0 8px}
+@media(min-width:820px){.bands{grid-template-columns:repeat(4,1fr)}}
+.band{border:1px solid var(--line);border-radius:14px;padding:16px 16px 18px;background:var(--surface)}
+.band .g{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.band h4{font-family:var(--serif);font-size:15.5px;margin:7px 0 8px}
+.band .demo{height:78px;border-radius:9px;margin:0 0 11px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.band ul{margin:0;padding-left:15px;color:var(--sub);font-size:11.8px;line-height:1.65}
+.band ul b{color:var(--ink);font-weight:600}
+
+footer{padding:40px 0 90px;color:var(--faint);font-size:13px;border-top:1px solid var(--line);margin-top:40px}
+footer b{color:var(--sub);font-weight:600}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">特殊内容呈现 · 画廊</p>
+    <h1>地图不是插画,<em>是分层的信息。</em><br>五类地理专属图像的现代呈现。</h1>
+    <p class="lede">地图的本质是<b>分层抽象</b>,等高线是<b>水平切片的集合</b>,气候图是<b>周期性现象</b>,经纬网是<b>球面坐标被展平</b>,地理剖面是<b>一次垂直切割</b>。五个第一性结构,五套现代视觉语法 —— 不是「土黄大地色 + 喷绘晕渲 + 军事地图既视感」的教材陈词,而是数据新闻、GIS 图层面板、天气 App、地图定位卡的当代语言。图例、比例尺、指北针、经纬度、等高距一律规范可核验。</p>
+    <div class="rule"></div>
+  </header>
+
+  <!-- ============ 01 地图 ============ -->
+  <section class="sec">
+    <div class="sec-k">01 / 地图</div>
+    <h2>图例 · 比例尺 · 指北针 —— 空间分布</h2>
+    <p>读懂一张地图靠图例、比例尺、指北针三件「元信息」共同作用:图例保证符号可解读,比例尺保证距离可换算,指北针保证方向可判断。缺一,地图就从信息退化成插画。</p>
+  </section>
+
+  <div class="grid2">
+    <!-- 地图 · 方向甲 数据地图 -->
+    <div class="card">
+      <div class="stage">
+        <div class="svgwrap">
+          <svg width="460" height="340" viewBox="0 0 460 340" style="display:block">
+            <defs>
+              <linearGradient id="precipGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#eaf5f4"/>
+                <stop offset="25%" stop-color="#b7ded9"/>
+                <stop offset="50%" stop-color="#5fb0ac"/>
+                <stop offset="75%" stop-color="#1c8783"/>
+                <stop offset="100%" stop-color="#063f3d"/>
+              </linearGradient>
+              <clipPath id="basinClip">
+                <path d="M60,150 C70,100 110,55 175,45 C240,35 300,55 340,95 C375,130 380,175 350,205 C315,240 260,250 200,245 C145,240 95,235 70,205 C50,180 52,168 60,150 Z"/>
+              </clipPath>
+            </defs>
+
+            <text x="55" y="25" font-family="var(--serif)" font-size="14" fill="#16181d" font-weight="600">年降水量分布 · 长江中下游</text>
+            <text x="55" y="40" font-size="9.5" fill="#9aa0ab" font-style="italic">示意区域 · 非精确行政边界</text>
+
+            <path d="M60,150 C70,100 110,55 175,45 C240,35 300,55 340,95 C375,130 380,175 350,205 C315,240 260,250 200,245 C145,240 95,235 70,205 C50,180 52,168 60,150 Z"
+                  fill="url(#precipGrad)" stroke="#ffffff" stroke-width="2"/>
+            <g clip-path="url(#basinClip)" opacity=".5">
+              <path d="M150,40 C160,90 145,150 155,240" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="1 5"/>
+              <path d="M260,45 C270,100 255,160 265,245" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="1 5"/>
+            </g>
+            <path d="M70,150 C120,135 200,145 340,140" fill="none" stroke="#8fb9e0" stroke-width="2" opacity=".55"/>
+            <text x="80" y="140" font-size="9" fill="#3b6fa0" opacity=".8">长江</text>
+
+            <text x="65" y="115" font-size="9.5" fill="#0e7c7b" opacity=".85">西 · 偏干</text>
+            <text x="300" y="200" font-size="9.5" fill="#ffffff" opacity=".9">东 · 多雨</text>
+
+            <!-- 指北针:克制到近乎消失 -->
+            <line x1="412" y1="62" x2="412" y2="34" stroke="#16181d" stroke-width="1.6"/>
+            <polygon points="412,24 406,38 418,38" fill="#16181d"/>
+            <text x="412" y="78" font-size="11" fill="#16181d" font-weight="700" text-anchor="middle">N</text>
+
+            <!-- 比例尺:极简线段刻度尺 -->
+            <line x1="60" y1="262" x2="160" y2="262" stroke="#16181d" stroke-width="1.4"/>
+            <line x1="60" y1="257" x2="60" y2="267" stroke="#16181d" stroke-width="1.4"/>
+            <line x1="110" y1="259" x2="110" y2="265" stroke="#16181d" stroke-width="1.2"/>
+            <line x1="160" y1="257" x2="160" y2="267" stroke="#16181d" stroke-width="1.4"/>
+            <text x="60" y="277" font-size="9" fill="#5b606b" text-anchor="middle">0</text>
+            <text x="110" y="277" font-size="9" fill="#5b606b" text-anchor="middle">50</text>
+            <text x="160" y="277" font-size="9" fill="#5b606b" text-anchor="middle">100 km</text>
+
+            <!-- 图例:横置渐变色标尺 -->
+            <text x="60" y="278" font-size="9.5" fill="#5b606b" opacity="0" ></text>
+            <text x="60" y="290" font-size="10" fill="#5b606b">年降水量(mm)· 连续色阶</text>
+            <rect x="60" y="296" width="300" height="13" rx="3" fill="url(#precipGrad)"/>
+            <g stroke="#c7cac5" stroke-width="1">
+              <line x1="60" y1="309" x2="60" y2="314"/>
+              <line x1="135" y1="309" x2="135" y2="314"/>
+              <line x1="210" y1="309" x2="210" y2="314"/>
+              <line x1="285" y1="309" x2="285" y2="314"/>
+              <line x1="360" y1="309" x2="360" y2="314"/>
+            </g>
+            <g font-size="9" fill="#5b606b" text-anchor="middle">
+              <text x="60" y="325">200</text>
+              <text x="135" y="325">700</text>
+              <text x="210" y="325">1200</text>
+              <text x="285" y="325">1700</text>
+              <text x="360" y="325">2200</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-teal">方向甲 · 数据地图 Data Map</span>
+        <h3>连续色阶,不铺政区色块</h3>
+        <p>近纯白底,一个专题变量(降水量)用连续渐变表达;图例是横置渐变色标尺(色阶+数值刻度),比例尺是极简线段,指北针只留一支箭头。参照 Our World in Data / 数据新闻的地图语言:层次靠色彩梯度和留白建立,不靠边框纹样。</p>
+      </div>
+    </div>
+
+    <!-- 地图 · 方向乙 图层堆叠卡 -->
+    <div class="card">
+      <div class="stage">
+        <!-- 图层面板(左) -->
+        <div style="position:absolute;left:3%;top:6%;width:21%;background:#ffffff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 24px -16px rgba(20,22,28,.25);padding:10px 10px 12px;z-index:5">
+          <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:8px">图层</div>
+          <div style="display:flex;align-items:center;gap:7px;padding:5px 0">
+            <span style="width:10px;height:10px;border-radius:3px;background:#b5872f;display:block;flex:none"></span>
+            <span style="font-size:11px;color:#16181d;flex:1">图例</span>
+            <span style="width:20px;height:11px;border-radius:6px;background:#0e7c7b;position:relative;flex:none"><i style="position:absolute;right:1.5px;top:1.5px;width:8px;height:8px;border-radius:50%;background:#fff;display:block"></i></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;padding:5px 0">
+            <span style="width:10px;height:10px;border-radius:3px;background:#3b4e7e;display:block;flex:none;opacity:.6"></span>
+            <span style="font-size:11px;color:#16181d;flex:1">专题·降水</span>
+            <span style="width:20px;height:11px;border-radius:6px;background:#0e7c7b;position:relative;flex:none"><i style="position:absolute;right:1.5px;top:1.5px;width:8px;height:8px;border-radius:50%;background:#fff;display:block"></i></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;padding:5px 0">
+            <span style="width:10px;height:10px;border-radius:3px;background:#9aa0ab;display:block;flex:none"></span>
+            <span style="font-size:11px;color:#5b606b;flex:1">底图·海岸线</span>
+            <span style="width:20px;height:11px;border-radius:6px;background:#e9e6df;position:relative;flex:none"><i style="position:absolute;left:1.5px;top:1.5px;width:8px;height:8px;border-radius:50%;background:#fff;display:block"></i></span>
+          </div>
+        </div>
+
+        <!-- 底图层(最下,右下偏移) -->
+        <div style="position:absolute;left:30%;top:24%;width:62%;height:60%;background:#ffffff;border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 34px -20px rgba(20,22,28,.28);z-index:1">
+          <svg width="100%" height="100%" viewBox="0 0 300 200" preserveAspectRatio="none" style="display:block">
+            <path d="M20,40 C60,25 110,20 160,35 C210,50 260,45 285,70 C295,110 270,150 220,165 C170,178 110,175 70,155 C35,138 15,90 20,40 Z" fill="none" stroke="#c7cac5" stroke-width="2"/>
+            <path d="M60,30 L110,150" stroke="#d6d3cb" stroke-width="1.4" stroke-dasharray="4 3"/>
+            <path d="M150,25 L200,175" stroke="#d6d3cb" stroke-width="1.4" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+
+        <!-- 专题层(半透明色块,悬浮偏移) -->
+        <div style="position:absolute;left:24%;top:14%;width:62%;height:60%;background:rgba(59,78,126,.045);border:1px solid rgba(59,78,126,.30);border-radius:12px;box-shadow:0 16px 34px -18px rgba(20,22,28,.3);z-index:2">
+          <svg width="100%" height="100%" viewBox="0 0 300 200" preserveAspectRatio="none" style="display:block">
+            <circle cx="90" cy="70" r="46" fill="#3b4e7e" opacity=".38"/>
+            <circle cx="180" cy="110" r="58" fill="#3b4e7e" opacity=".52"/>
+            <circle cx="230" cy="60" r="30" fill="#3b4e7e" opacity=".3"/>
+          </svg>
+        </div>
+
+        <!-- 图例浮卡(右上角) -->
+        <div style="position:absolute;right:3%;top:8%;width:26%;background:#ffffff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 26px -16px rgba(20,22,28,.3);padding:9px 11px;z-index:6">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:10px;color:var(--faint);letter-spacing:.1em;font-weight:700">图例</span>
+            <span style="font-size:10px;color:var(--faint)">▾</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:#5b606b;padding:2px 0"><i style="width:9px;height:9px;border-radius:50%;background:#3b4e7e;opacity:.35;display:block"></i>低密度</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:#5b606b;padding:2px 0"><i style="width:9px;height:9px;border-radius:50%;background:#3b4e7e;opacity:.65;display:block"></i>高密度</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-indigo">方向乙 · 图层堆叠卡 Layer Stack</span>
+        <h3>地图 = 多层信息叠加</h3>
+        <p>不给一整幅合成大图,而是把地图拆成可视的堆叠图层:底图(海岸线/边界线稿)在最下,专题层(半透明色块)悬浮其上可开关,图例作独立浮卡。视觉语法直接借用 QGIS/Figma 的图层面板隐喻。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bands-label">学段四档 · 地图</div>
+  <div class="bands">
+    <div class="band">
+      <div class="g">低小 1–2</div>
+      <h4>海岛寻宝图</h4>
+      <div class="demo" style="background:linear-gradient(180deg,#eaf6f2,#dcefe8)">
+        <span style="font-size:22px">🌴&nbsp;🏠&nbsp;🌊</span>
+      </div>
+      <ul><li>图例全是<b>贴纸图标</b>(树/房/河)</li><li>指北针是玩具指南针</li><li>无数值,只认方位</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高小 3–6</div>
+      <h4>城市探索地图</h4>
+      <div class="demo" style="background:#f4f2ec;gap:6px">
+        <span style="width:26px;height:26px;border-radius:6px;background:#7fb3ae"></span>
+        <span style="width:26px;height:26px;border-radius:6px;background:#b5872f;opacity:.6"></span>
+        <span style="font-size:11px;color:var(--sub)">1步≈2米</span>
+      </div>
+      <ul><li>图例做<b>模块化色块+小图标</b></li><li>比例尺变成互动步数尺</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">初中 7–9</div>
+      <h4>专题数据地图</h4>
+      <div class="demo" style="background:linear-gradient(90deg,#eaf5f4,#0e7c7b)">
+        <span style="font-size:11px;color:#fff;font-weight:600">人口 / 气候分布</span>
+      </div>
+      <ul><li>练<b>用图例读数据</b></li><li>比例尺换算距离上线</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高中 10–12</div>
+      <h4>多图层叠加对比</h4>
+      <div class="demo" style="background:var(--bg);gap:4px">
+        <span style="width:44px;height:44px;border-radius:8px;border:1.5px solid #3b4e7e;position:relative"><i style="position:absolute;inset:6px;border-radius:5px;background:#0e7c7b;opacity:.35;display:block"></i></span>
+      </div>
+      <ul><li>地形+洋流+资源<b>叠加对比</b></li><li>图例分级精密,比例尺与经纬度并重</li></ul>
+    </div>
+  </div>
+
+  <!-- ============ 02 等高线与地形 ============ -->
+  <section class="sec">
+    <div class="sec-k">02 / 等高线与地形</div>
+    <h2>水平切片的集合 —— 立体地表</h2>
+    <p>等高线疏密对应坡度陡缓,闭合等高线对应山峰或洼地(靠数值升降判断内外)。核心是训练「从平面等值线图,在脑内重建立体地形」的空间转换能力。全图等高距统一 100m。</p>
+  </section>
+
+  <div class="grid2">
+    <!-- 等高线 · 方向甲 地形切片 -->
+    <div class="card">
+      <div class="stage">
+        <div class="svgwrap">
+          <svg width="440" height="336" viewBox="0 0 440 336" style="display:block">
+            <text x="14" y="22" font-family="var(--serif)" font-size="13" fill="#16181d" font-weight="600">等高线地形图 · 等高距 100m</text>
+
+            <g fill="none" stroke="#9aa0ab" stroke-width="1.4">
+              <path d="M375.1,205.0 L371.8,231.4 L360.1,256.0 L340.6,276.6 L315.2,291.3 L287.1,299.6 L259.4,302.8 L233.8,303.3 L210.0,303.6 L185.7,305.1 L158.5,306.9 L127.5,306.2 L94.4,299.8 L63.6,285.2 L40.6,262.5 L29.9,234.4 L33.0,205.0 L48.0,178.6 L70.5,157.6 L95.4,142.2 L119.4,130.7 L141.2,120.6 L162.2,110.4 L184.6,100.4 L210.0,92.2 L238.4,88.0 L268.2,89.8 L297.1,98.2 L322.8,112.5 L344.2,131.5 L360.4,153.9 L371.0,178.7 Z"/>
+              <path d="M353.3,197.0 L350.6,218.5 L341.1,238.5 L325.2,255.2 L304.6,267.2 L281.7,274.0 L259.2,276.6 L238.4,277.0 L219.0,277.2 L199.3,278.4 L177.2,279.8 L151.9,279.3 L125.0,274.1 L100.0,262.2 L81.3,243.8 L72.5,220.9 L75.0,197.0 L87.2,175.5 L105.5,158.5 L125.8,146.0 L145.3,136.6 L163.1,128.3 L180.2,120.1 L198.4,111.9 L219.0,105.2 L242.1,101.9 L266.3,103.3 L289.8,110.1 L310.8,121.7 L328.1,137.2 L341.3,155.5 L349.9,175.6 Z"/>
+              <path d="M331.5,189.0 L329.4,205.5 L322.1,221.0 L309.9,233.8 L293.9,243.1 L276.3,248.3 L259.0,250.3 L242.9,250.6 L228.0,250.8 L212.8,251.7 L195.8,252.8 L176.3,252.4 L155.6,248.4 L136.3,239.3 L121.9,225.0 L115.2,207.4 L117.1,189.0 L126.5,172.4 L140.6,159.3 L156.2,149.7 L171.2,142.4 L184.9,136.1 L198.1,129.7 L212.1,123.5 L228.0,118.3 L245.8,115.7 L264.5,116.8 L282.6,122.1 L298.7,131.0 L312.1,142.9 L322.2,157.0 L328.9,172.5 Z"/>
+              <path d="M309.7,181.0 L308.2,192.6 L303.1,203.4 L294.5,212.5 L283.3,219.0 L270.9,222.6 L258.7,224.0 L247.5,224.3 L237.0,224.4 L226.3,225.0 L214.4,225.8 L200.7,225.5 L186.1,222.7 L172.6,216.3 L162.5,206.3 L157.8,193.9 L159.1,181.0 L165.7,169.4 L175.6,160.1 L186.6,153.4 L197.1,148.3 L206.7,143.9 L216.0,139.4 L225.8,135.0 L237.0,131.4 L249.5,129.5 L262.6,130.3 L275.3,134.0 L286.6,140.3 L296.0,148.7 L303.2,158.5 L307.8,169.4 Z"/>
+              <path d="M290.2,175.0 L289.3,182.4 L286.0,189.3 L280.6,195.0 L273.5,199.2 L265.6,201.5 L257.8,202.4 L250.7,202.5 L244.0,202.6 L237.2,203.0 L229.6,203.5 L220.9,203.3 L211.6,201.5 L203.0,197.5 L196.6,191.1 L193.6,183.2 L194.4,175.0 L198.6,167.6 L204.9,161.7 L211.9,157.4 L218.6,154.2 L224.7,151.4 L230.6,148.5 L236.9,145.7 L244.0,143.4 L251.9,142.2 L260.3,142.7 L268.4,145.1 L275.6,149.1 L281.6,154.4 L286.1,160.7 L289.1,167.6 Z" stroke="#3f7d63" stroke-width="1.8"/>
+            </g>
+
+            <g font-size="10.5" fill="#5b606b">
+              <text x="4" y="248">300m</text>
+              <text x="46" y="233">400m</text>
+              <text x="88" y="218">500m</text>
+              <text x="130" y="203">600m</text>
+              <text x="150" y="190" fill="#3f7d63" font-weight="700">700m 峰顶</text>
+            </g>
+
+            <text x="330" y="120" font-size="10.5" fill="#c25d4b" font-weight="600">陡坡 · 等高线密集</text>
+            <text x="60" y="290" font-size="10.5" fill="#5b606b">缓坡 · 等高线稀疏</text>
+
+            <!-- 垂直剖面胶囊(蛋糕切片) -->
+            <g transform="translate(392,60)">
+              <rect x="0" y="0" width="34" height="220" rx="8" fill="#eef1ee" stroke="#c7cac5" stroke-width="1"/>
+              <rect x="0" y="150" width="34" height="70" rx="0" fill="#9c8f74"/>
+              <rect x="0" y="80" width="34" height="70" fill="#5f9c7c"/>
+              <rect x="0" y="30" width="34" height="50" fill="#cfe0b8"/>
+              <rect x="0" y="0" width="34" height="30" rx="8" fill="#f5f5f2"/>
+              <text x="17" y="238" font-size="8.5" text-anchor="middle" fill="#5b606b">剖面</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-jade">方向甲 · 地形切片 Terrain Slice</span>
+        <h3>纯净细线,不叠喷绘晕渲</h3>
+        <p>平面只用等高线灰阶线条(峰顶一圈用主色标出),旁边配一片「抽出来的蛋糕」垂直剖面胶囊,按海拔分层用简洁色带(岩石灰→植被绿→雪顶白)。参照 AllTrails 风格等高线地图,用线条替代写实晕渲。</p>
+      </div>
+    </div>
+
+    <!-- 等高线 · 方向乙 等高层叠 -->
+    <div class="card">
+      <div class="stage">
+        <div class="svgwrap">
+          <svg width="440" height="336" viewBox="0 0 460 460" style="display:block">
+            <text x="14" y="30" font-family="var(--serif)" font-size="13" fill="#16181d" font-weight="600">等高层叠 · 千层切片模型</text>
+
+            <g transform="translate(6,190)">
+              <ellipse cx="210" cy="228" rx="200" ry="34" fill="#000000" opacity=".06"/>
+              <path d="M375.1,205.0 L371.8,231.4 L360.1,256.0 L340.6,276.6 L315.2,291.3 L287.1,299.6 L259.4,302.8 L233.8,303.3 L210.0,303.6 L185.7,305.1 L158.5,306.9 L127.5,306.2 L94.4,299.8 L63.6,285.2 L40.6,262.5 L29.9,234.4 L33.0,205.0 L48.0,178.6 L70.5,157.6 L95.4,142.2 L119.4,130.7 L141.2,120.6 L162.2,110.4 L184.6,100.4 L210.0,92.2 L238.4,88.0 L268.2,89.8 L297.1,98.2 L322.8,112.5 L344.2,131.5 L360.4,153.9 L371.0,178.7 Z" fill="#d7ecd2" stroke="#a9cf9f" stroke-width="1.6"/>
+              <text x="20" y="216" font-size="10.5" fill="#4a7a3f" font-weight="600">300m</text>
+            </g>
+
+            <g transform="translate(22,128)">
+              <ellipse cx="210" cy="228" rx="160" ry="30" fill="#000000" opacity=".06"/>
+              <path d="M353.3,197.0 L350.6,218.5 L341.1,238.5 L325.2,255.2 L304.6,267.2 L281.7,274.0 L259.2,276.6 L238.4,277.0 L219.0,277.2 L199.3,278.4 L177.2,279.8 L151.9,279.3 L125.0,274.1 L100.0,262.2 L81.3,243.8 L72.5,220.9 L75.0,197.0 L87.2,175.5 L105.5,158.5 L125.8,146.0 L145.3,136.6 L163.1,128.3 L180.2,120.1 L198.4,111.9 L219.0,105.2 L242.1,101.9 L266.3,103.3 L289.8,110.1 L310.8,121.7 L328.1,137.2 L341.3,155.5 L349.9,175.6 Z" fill="#a9d8a0" stroke="#7ab56d" stroke-width="1.6"/>
+              <text x="88" y="222" font-size="10.5" fill="#3f7d63" font-weight="600">400m</text>
+            </g>
+
+            <g transform="translate(38,66)">
+              <ellipse cx="210" cy="228" rx="120" ry="26" fill="#000000" opacity=".07"/>
+              <path d="M331.5,189.0 L329.4,205.5 L322.1,221.0 L309.9,233.8 L293.9,243.1 L276.3,248.3 L259.0,250.3 L242.9,250.6 L228.0,250.8 L212.8,251.7 L195.8,252.8 L176.3,252.4 L155.6,248.4 L136.3,239.3 L121.9,225.0 L115.2,207.4 L117.1,189.0 L126.5,172.4 L140.6,159.3 L156.2,149.7 L171.2,142.4 L184.9,136.1 L198.1,129.7 L212.1,123.5 L228.0,118.3 L245.8,115.7 L264.5,116.8 L282.6,122.1 L298.7,131.0 L312.1,142.9 L322.2,157.0 L328.9,172.5 Z" fill="#e3d190" stroke="#c2a94f" stroke-width="1.6"/>
+              <text x="150" y="228" font-size="10.5" fill="#8a6f1e" font-weight="600">500m</text>
+            </g>
+
+            <g transform="translate(46,4)" style="filter:drop-shadow(0 10px 14px rgba(181,135,47,.35))">
+              <ellipse cx="210" cy="228" rx="90" ry="22" fill="#000000" opacity=".08"/>
+              <path d="M309.7,181.0 L308.2,192.6 L303.1,203.4 L294.5,212.5 L283.3,219.0 L270.9,222.6 L258.7,224.0 L247.5,224.3 L237.0,224.4 L226.3,225.0 L214.4,225.8 L200.7,225.5 L186.1,222.7 L172.6,216.3 L162.5,206.3 L157.8,193.9 L159.1,181.0 L165.7,169.4 L175.6,160.1 L186.6,153.4 L197.1,148.3 L206.7,143.9 L216.0,139.4 L225.8,135.0 L237.0,131.4 L249.5,129.5 L262.6,130.3 L275.3,134.0 L286.6,140.3 L296.0,148.7 L303.2,158.5 L307.8,169.4 Z" fill="#f3ede0" stroke="#b5872f" stroke-width="2"/>
+              <text x="185" y="222" font-size="10.5" fill="#b5872f" font-weight="700">600m ↑可单独升起</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-gold">方向乙 · 等高层叠 Stack Reveal</span>
+        <h3>结构真异质:切片即结构</h3>
+        <p>把地形直接画成千层堆叠卡:每层代表一个等高线闭合形状,层间轻微错位堆叠(像素材库里激光切割的等高线模型),点击某层可单独升起看清走向。等高线的本质就是「同一高度的水平切片集合」,直接做成可操作的结构。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bands-label">学段四档 · 等高线与地形</div>
+  <div class="bands">
+    <div class="band">
+      <div class="g">低小 1–2</div>
+      <h4>积木山</h4>
+      <div class="demo" style="background:#f4f2ec;gap:4px">
+        <span style="width:52px;height:16px;border-radius:3px;background:#d7ecd2"></span>
+      </div>
+      <ul><li>颜色分层像<b>积木玩具</b></li><li>等高线简化成几条彩色轮廓</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高小 3–6</div>
+      <h4>山地探险地图</h4>
+      <div class="demo" style="background:linear-gradient(180deg,#eef5ec,#dcefd2)">
+        <span style="font-size:11px;color:#3f7d63;font-weight:600">▲ 850m</span>
+      </div>
+      <ul><li>标注海拔数字</li><li>坡度陡缓用<b>线条疏密+箭头</b>游戏化提示</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">初中 7–9</div>
+      <h4>等高线 + 剖面对照</h4>
+      <div class="demo" style="background:var(--bg);gap:8px">
+        <span style="width:30px;height:30px;border:2px solid #3f7d63;border-radius:50%;position:relative"><i style="position:absolute;inset:7px;border:1.4px solid #3f7d63;border-radius:50%;display:block"></i></span>
+      </div>
+      <ul><li>「闭合圈内侧数值升高=山峰」判读规则</li><li>标准等高线图+剖面对照训练</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高中 10–12</div>
+      <h4>等高线 + 坡度计算</h4>
+      <div class="demo" style="background:var(--bg)">
+        <span style="font-family:var(--mono);font-size:11px;color:var(--sub)">Δh/L = 坡度</span>
+      </div>
+      <ul><li>等高距、示坡线<b>专业符号规范</b></li><li>坡度计算+剖面精密叠加</li></ul>
+    </div>
+  </div>
+
+  <!-- ============ 03 气候图 ============ -->
+  <section class="sec">
+    <div class="sec-k">03 / 气候图</div>
+    <h2>周期性现象 —— 气温曲线 + 降水柱</h2>
+    <p>气温年变化曲线与降水年分布柱状图叠加对照,读出气候类型的判定特征(如季风气候的「雨热同期」)。核心是「两条数据在同一时间轴上的相位关系」,且气候年复一年,不是一条孤立折线。</p>
+  </section>
+
+  <div class="grid2">
+    <!-- 气候图 · 方向甲 气象仪表卡 -->
+    <div class="card">
+      <div class="stage">
+        <div class="svgwrap">
+          <svg width="520" height="330" viewBox="0 0 520 300" style="display:block">
+            <defs>
+              <linearGradient id="tempGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#3b6fa0"/>
+                <stop offset="20%" stop-color="#4f8fae"/>
+                <stop offset="45%" stop-color="#e0a83f"/>
+                <stop offset="58%" stop-color="#c25d4b"/>
+                <stop offset="75%" stop-color="#e0a83f"/>
+                <stop offset="100%" stop-color="#3b6fa0"/>
+              </linearGradient>
+              <linearGradient id="barGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#a9c9ea"/>
+                <stop offset="100%" stop-color="#6f9fd8"/>
+              </linearGradient>
+            </defs>
+
+            <text x="14" y="22" font-family="var(--serif)" font-size="13" fill="#16181d" font-weight="600">武汉市 · 年气候图(亚热带季风气候)</text>
+
+            <!-- 雨热同期高亮带 -->
+            <rect x="230" y="34" width="120" height="206" fill="#c25d4b" opacity=".08"/>
+            <text x="290" y="46" font-size="10.5" fill="#c25d4b" font-weight="700" text-anchor="middle">雨热同期 · 6–8月</text>
+
+            <!-- 降水柱(背景层) -->
+            <g fill="url(#barGrad)" opacity=".62">
+              <rect x="38" y="199.5" width="24" height="40.5" rx="2"/>
+              <rect x="78" y="186" width="24" height="54" rx="2"/>
+              <rect x="118" y="154.5" width="24" height="85.5" rx="2"/>
+              <rect x="158" y="114" width="24" height="126" rx="2"/>
+              <rect x="198" y="96" width="24" height="144" rx="2"/>
+              <rect x="238" y="69" width="24" height="171" rx="2"/>
+              <rect x="278" y="78" width="24" height="162" rx="2"/>
+              <rect x="318" y="132" width="24" height="108" rx="2"/>
+              <rect x="358" y="168" width="24" height="72" rx="2"/>
+              <rect x="398" y="186" width="24" height="54" rx="2"/>
+              <rect x="438" y="199.5" width="24" height="40.5" rx="2"/>
+              <rect x="478" y="213" width="24" height="27" rx="2"/>
+            </g>
+
+            <!-- 气温折线(前景) -->
+            <path d="M50,215 L90,202.5 L130,171.25 L170,133.75 L210,102.5 L250,77.5 L290,58.75 L330,65 L370,90 L410,127.5 L450,165 L490,202.5"
+                  fill="none" stroke="url(#tempGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <g fill="#16181d">
+              <circle cx="50" cy="215" r="3"/><circle cx="290" cy="58.75" r="3.4"/><circle cx="490" cy="202.5" r="3"/>
+            </g>
+            <text x="46" y="230" font-size="10" fill="#5b606b">4°C</text>
+            <text x="290" y="49" font-size="10" fill="#c25d4b" font-weight="700" text-anchor="middle">29°C</text>
+
+            <!-- 坐标与月份 -->
+            <line x1="30" y1="240" x2="510" y2="240" stroke="#e9e6df" stroke-width="1"/>
+            <g font-size="10" fill="#9aa0ab" text-anchor="middle">
+              <text x="50" y="256">1</text><text x="90" y="256">2</text><text x="130" y="256">3</text><text x="170" y="256">4</text>
+              <text x="210" y="256">5</text><text x="250" y="256">6</text><text x="290" y="256">7</text><text x="330" y="256">8</text>
+              <text x="370" y="256">9</text><text x="410" y="256">10</text><text x="450" y="256">11</text><text x="490" y="256">12月</text>
+            </g>
+
+            <!-- 图例 -->
+            <g font-size="10.5" fill="#5b606b">
+              <circle cx="40" cy="278" r="4" fill="#c25d4b"/><text x="50" y="282">气温(°C)</text>
+              <rect x="110" y="273" width="10" height="10" rx="2" fill="#6f9fd8" opacity=".7"/><text x="128" y="282">降水量(mm)</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-coral">方向甲 · 气象仪表卡 Weather Dashboard</span>
+        <h3>前后景分层,一眼可辨相位</h3>
+        <p>参照苹果天气/Windy 的年度仪表盘语言:气温曲线用冷暖渐变描边浮在前景,降水柱半透明置于背景;「雨热同期」月份用高亮色带整体标注,不靠图例文字硬读。</p>
+      </div>
+    </div>
+
+    <!-- 气候图 · 方向乙 十二月刻度环 -->
+    <div class="card">
+      <div class="stage">
+        <div class="svgwrap">
+          <svg width="330" height="330" viewBox="0 0 360 360" style="display:block">
+            <text x="180" y="24" font-family="var(--serif)" font-size="13" fill="#16181d" font-weight="600" text-anchor="middle">十二月刻度环 · 武汉</text>
+
+            <circle cx="180" cy="180" r="100" fill="none" stroke="#efece6" stroke-width="1" stroke-dasharray="2 4"/>
+            <text x="286" y="184" font-size="8.5" fill="#c7cac5">16°C</text>
+
+            <path d="M277.6,277.6 A138,138 0 0 1 82.4,277.6" fill="none" stroke="#c25d4b" stroke-width="11" opacity=".22" stroke-linecap="round"/>
+
+            <!-- 降水楔形(向心) -->
+            <g fill="#6f9fd8" opacity=".55">
+              <path d="M 173.7,154.8 L 169.7,138.9 A 42.4,42.4 0 0 1 190.3,138.9 L 186.3,154.8 A 26,26 0 0 0 173.7,154.8 Z"/>
+              <path d="M 187.2,155.0 L 192.8,135.3 A 46.5,46.5 0 0 1 212.3,146.6 L 198.1,161.3 A 26,26 0 0 0 187.2,155.0 Z"/>
+              <path d="M 198.7,161.9 L 220.4,141.0 A 56.1,56.1 0 0 1 234.0,164.5 L 205.0,172.8 A 26,26 0 0 0 198.7,161.9 Z"/>
+              <path d="M 205.2,173.7 L 246.5,163.4 A 68.5,68.5 0 0 1 246.5,196.6 L 205.2,186.3 A 26,26 0 0 0 205.2,173.7 Z"/>
+              <path d="M 205.0,187.2 L 251.1,200.4 A 74.0,74.0 0 0 1 233.2,231.4 L 198.7,198.1 A 26,26 0 0 0 205.0,187.2 Z"/>
+              <path d="M 198.1,198.7 L 237.1,239.2 A 82.2,82.2 0 0 1 202.7,259.1 L 187.2,205.0 A 26,26 0 0 0 198.1,198.7 Z"/>
+              <path d="M 186.3,205.2 L 199.2,257.1 A 79.5,79.5 0 0 1 160.8,257.1 L 173.7,205.2 A 26,26 0 0 0 186.3,205.2 Z"/>
+              <path d="M 172.8,205.0 L 162.6,240.6 A 63.0,63.0 0 0 1 136.2,225.3 L 161.9,198.7 A 26,26 0 0 0 172.8,205.0 Z"/>
+              <path d="M 161.3,198.1 L 142.6,216.1 A 52.0,52.0 0 0 1 130.0,194.3 L 155.0,187.2 A 26,26 0 0 0 161.3,198.1 Z"/>
+              <path d="M 154.8,186.3 L 134.9,191.2 A 46.5,46.5 0 0 1 134.9,168.8 L 154.8,173.7 A 26,26 0 0 0 154.8,186.3 Z"/>
+              <path d="M 155.0,172.8 L 139.3,168.3 A 42.4,42.4 0 0 1 149.5,150.6 L 161.3,161.9 A 26,26 0 0 0 155.0,172.8 Z"/>
+              <path d="M 161.9,161.3 L 153.4,152.5 A 38.2,38.2 0 0 1 169.5,143.2 L 172.8,155.0 A 26,26 0 0 0 161.9,161.3 Z"/>
+            </g>
+
+            <!-- 气温曲线(闭合) -->
+            <path d="M 180.0,110.0 L 217.5,115.0 L 255.8,136.2 L 282.5,180.0 L 279.6,237.5 L 242.5,288.3 L 180.0,312.5 L 115.0,292.6 L 76.1,240.0 L 75.0,180.0 L 102.1,135.0 L 142.5,115.0 Z"
+                  fill="none" stroke="#3b4e7e" stroke-width="2.6" stroke-linejoin="round"/>
+            <g fill="#3b4e7e">
+              <circle cx="180.0" cy="312.5" r="3.6"/>
+              <circle cx="180.0" cy="110.0" r="3"/>
+            </g>
+
+            <circle cx="180" cy="180" r="26" fill="#ffffff" stroke="#e9e6df" stroke-width="1"/>
+            <text x="180" y="177" font-size="11" fill="#16181d" text-anchor="middle" font-weight="600">武汉</text>
+            <text x="180" y="189" font-size="8" fill="#9aa0ab" text-anchor="middle">12月周期</text>
+
+            <g font-size="10.5" fill="#5b606b" text-anchor="middle">
+              <text x="180.0" y="32.0">1月</text><text x="254.0" y="51.8">2</text><text x="308.2" y="106.0">3</text>
+              <text x="328.0" y="184.0">4</text><text x="308.2" y="258.0">5</text><text x="254.0" y="312.2">6</text>
+              <text x="180.0" y="332.0" font-weight="700" fill="#c25d4b">7月</text><text x="106.0" y="312.2">8</text>
+              <text x="51.8" y="258.0">9</text><text x="32.0" y="184.0">10</text><text x="51.8" y="110.0">11</text><text x="106.0" y="55.8">12</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-indigo">方向乙 · 十二月刻度环 Circular Calendar</span>
+        <h3>结构真异质:周期用闭合圆呈现</h3>
+        <p>放弃横向直角坐标,把 12 个月排成圆环:气温用外侧半径曲线表达(越热越向外凸),降水用内侧向心楔形柱表达。气候是首尾相接的周期性现象,闭合圆比线性坐标轴更贴合「周期」本质 —— 极坐标气候图的现代移植。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bands-label">学段四档 · 气候图</div>
+  <div class="bands">
+    <div class="band">
+      <div class="g">低小 1–2</div>
+      <h4>四季小卡片</h4>
+      <div class="demo" style="background:linear-gradient(90deg,#eaf5f4,#fdf3e3,#fbe6e0,#eef1ee)">
+        <span style="font-size:20px">🌱☀️🍂❄️</span>
+      </div>
+      <ul><li>春夏秋冬各一幅插画</li><li>不出现坐标图,只讲冷暖多雨</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高小 3–6</div>
+      <h4>简化组合图</h4>
+      <div class="demo" style="background:var(--bg);gap:4px;align-items:flex-end;padding-bottom:10px">
+        <span style="width:8px;height:20px;background:#6f9fd8;opacity:.6;border-radius:2px"></span>
+        <span style="width:8px;height:38px;background:#6f9fd8;opacity:.6;border-radius:2px"></span>
+        <span style="width:8px;height:52px;background:#6f9fd8;opacity:.6;border-radius:2px"></span>
+        <span style="width:8px;height:30px;background:#6f9fd8;opacity:.6;border-radius:2px"></span>
+      </div>
+      <ul><li>简化双轴条形+折线组合图</li><li>练「哪个月最热/最多雨」直觉读图</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">初中 7–9</div>
+      <h4>标准气候图</h4>
+      <div class="demo" style="background:var(--bg)">
+        <span style="font-size:11px;color:var(--coral);font-weight:600">雨热同期 → 季风气候</span>
+      </div>
+      <ul><li>气温曲线+降水柱<b>规范图例</b>上线</li><li>训练气候类型判断</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高中 10–12</div>
+      <h4>多气候类型对比图组</h4>
+      <div class="demo" style="background:var(--bg);gap:6px">
+        <span style="width:24px;height:24px;border-radius:50%;border:2px solid #3b4e7e"></span>
+        <span style="width:24px;height:24px;border-radius:50%;border:2px solid #c25d4b"></span>
+      </div>
+      <ul><li>多曲线/多组柱<b>并置对比</b></li><li>训练气候类型判读推理</li></ul>
+    </div>
+  </div>
+
+  <!-- ============ 04 经纬网 ============ -->
+  <section class="sec">
+    <div class="sec-k">04 / 经纬网</div>
+    <h2>球面坐标被展平 —— 定位</h2>
+    <p>经纬线如何唯一确定地表一点的位置,以及东西经、南北纬的判断规则、经纬网密度与实际距离的换算关系。经线在球面上收敛于两极,纬线圈周长随纬度变化 —— 平面网格只是一种展开方式。</p>
+  </section>
+
+  <div class="grid2">
+    <!-- 经纬网 · 方向甲 定位大头针 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0">
+          <svg width="100%" height="100%" viewBox="0 0 400 300" style="display:block">
+            <g stroke="#efece6" stroke-width="1">
+              <line x1="40" y1="30" x2="40" y2="270"/><line x1="146.7" y1="30" x2="146.7" y2="270"/>
+              <line x1="253.3" y1="30" x2="253.3" y2="270"/><line x1="360" y1="30" x2="360" y2="270"/>
+              <line x1="40" y1="270" x2="360" y2="270"/><line x1="40" y1="190" x2="360" y2="190"/>
+              <line x1="40" y1="110" x2="360" y2="110"/><line x1="40" y1="30" x2="360" y2="30"/>
+            </g>
+            <g font-size="10" fill="#9aa0ab" text-anchor="middle">
+              <text x="40" y="286">114°E</text><text x="146.7" y="286">116°E</text><text x="253.3" y="286">118°E</text><text x="360" y="286">120°E</text>
+            </g>
+            <g font-size="10" fill="#9aa0ab" text-anchor="end">
+              <text x="34" y="273">36°N</text><text x="34" y="193">38°N</text><text x="34" y="113">40°N</text><text x="34" y="33">42°N</text>
+            </g>
+            <g transform="translate(168,90)">
+              <path d="M0,-24 C10,-24 18,-16 18,-6 C18,6 0,24 0,24 C0,24 -18,6 -18,-6 C-18,-16 -10,-24 0,-24 Z" fill="#0e7c7b"/>
+              <circle cx="0" cy="-7" r="6" fill="#ffffff"/>
+            </g>
+          </svg>
+        </div>
+        <div style="position:absolute;left:56%;top:14%;background:#ffffff;border:1px solid var(--line);border-radius:11px;box-shadow:0 14px 30px -16px rgba(20,22,28,.3);padding:11px 14px">
+          <div style="font-family:var(--serif);font-size:13.5px;color:#16181d;font-weight:600;margin-bottom:6px">北京</div>
+          <div style="display:flex;gap:8px;font-size:11px">
+            <span style="color:#0e7c7b;font-weight:600">39.9°N</span>
+            <span style="color:#5b606b">北纬</span>
+          </div>
+          <div style="display:flex;gap:8px;font-size:11px;margin-top:2px">
+            <span style="color:#3b4e7e;font-weight:600">116.4°E</span>
+            <span style="color:#5b606b">东经</span>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-teal">方向甲 · 定位大头针 Coordinate Pin</span>
+        <h3>网格是背景,点才是主角</h3>
+        <p>经纬网做成极淡的浅灰背景网格(近乎不可见,只作参照系),被选中的点用醒目大头针标出,配一张浮出的坐标信息卡。直接借用 Google Maps/Apple Maps「大头针+信息卡」的定位语言,纠正教材图「网格喧宾夺主」的问题。</p>
+      </div>
+    </div>
+
+    <!-- 经纬网 · 方向乙 球面展平 -->
+    <div class="card">
+      <div class="stage" style="display:flex;align-items:center;justify-content:space-around;padding:0 4px">
+        <div style="text-align:center">
+          <svg width="150" height="180" viewBox="0 0 180 200" style="display:block">
+            <circle cx="90" cy="90" r="70" fill="#fafbfa" stroke="#9aa0ab" stroke-width="1.4"/>
+            <line x1="90" y1="20" x2="90" y2="160" stroke="#3b4e7e" stroke-width="1.3"/>
+            <ellipse cx="90" cy="90" rx="35" ry="70" fill="none" stroke="#3b4e7e" stroke-width="1" opacity=".7"/>
+            <ellipse cx="90" cy="90" rx="60.6" ry="70" fill="none" stroke="#3b4e7e" stroke-width="1" opacity=".45"/>
+            <line x1="20" y1="90" x2="160" y2="90" stroke="#0e7c7b" stroke-width="1.3"/>
+            <line x1="29.4" y1="55" x2="150.6" y2="55" stroke="#0e7c7b" stroke-width="1" opacity=".7"/>
+            <line x1="29.4" y1="125" x2="150.6" y2="125" stroke="#0e7c7b" stroke-width="1" opacity=".7"/>
+            <line x1="55" y1="29.4" x2="125" y2="29.4" stroke="#0e7c7b" stroke-width="1" opacity=".45"/>
+            <line x1="55" y1="150.6" x2="125" y2="150.6" stroke="#0e7c7b" stroke-width="1" opacity=".45"/>
+            <text x="90" y="188" font-size="11" fill="#5b606b" text-anchor="middle">① 球面</text>
+          </svg>
+        </div>
+        <div style="text-align:center">
+          <svg width="150" height="180" viewBox="0 0 180 200" style="display:block">
+            <path d="M20,40 Q90,15 160,40" fill="none" stroke="#0e7c7b" stroke-width="1" opacity=".6"/>
+            <path d="M14,90 Q90,72 166,90" fill="none" stroke="#0e7c7b" stroke-width="1.3"/>
+            <path d="M20,140 Q90,163 160,140" fill="none" stroke="#0e7c7b" stroke-width="1" opacity=".6"/>
+            <path d="M45,15 Q35,90 45,165" fill="none" stroke="#3b4e7e" stroke-width="1" opacity=".55"/>
+            <path d="M90,10 Q90,90 90,170" fill="none" stroke="#3b4e7e" stroke-width="1.3"/>
+            <path d="M135,15 Q145,90 135,165" fill="none" stroke="#3b4e7e" stroke-width="1" opacity=".55"/>
+            <text x="90" y="188" font-size="11" fill="#5b606b" text-anchor="middle">② 展开中</text>
+          </svg>
+        </div>
+        <div style="text-align:center">
+          <svg width="150" height="180" viewBox="0 0 180 200" style="display:block">
+            <g stroke="#0e7c7b" stroke-width="1.2">
+              <line x1="20" y1="40" x2="160" y2="40"/><line x1="20" y1="90" x2="160" y2="90"/><line x1="20" y1="140" x2="160" y2="140"/>
+            </g>
+            <g stroke="#3b4e7e" stroke-width="1.2">
+              <line x1="45" y1="20" x2="45" y2="160"/><line x1="90" y1="20" x2="90" y2="160"/><line x1="135" y1="20" x2="135" y2="160"/>
+            </g>
+            <rect x="20" y="20" width="140" height="140" fill="none" stroke="#c7cac5" stroke-width="1"/>
+            <text x="90" y="188" font-size="11" fill="#5b606b" text-anchor="middle">③ 平面</text>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-gold">方向乙 · 球面展平 Globe Unfold</span>
+        <h3>结构真异质:先球面,再展开</h3>
+        <p>不直接给平面网格,而是分步呈现「球面→展开中→平面」三个定格状态,直观呈现经纬网其实是球面坐标被展平这一第一性结构 —— 帮助理解经线收敛于两极、纬线圈周长随纬度变化,而不是死记一张永远均匀的平面网格。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bands-label">学段四档 · 经纬网</div>
+  <div class="bands">
+    <div class="band">
+      <div class="g">低小 1–2</div>
+      <h4>地球仪玩具</h4>
+      <div class="demo" style="background:#f4f2ec">
+        <span style="font-size:11px;color:var(--teal);font-weight:700">我在这 · N</span>
+      </div>
+      <ul><li>「地球仪玩具+我在哪」贴纸游戏</li><li>只认南北纬/东西经<b>方位色标</b>,不涉数值</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高小 3–6</div>
+      <h4>简化经纬网+定位卡</h4>
+      <div class="demo" style="background:var(--bg)">
+        <span style="font-size:11px;color:var(--sub)">39°N, 116°E</span>
+      </div>
+      <ul><li>简化经纬网+城市定位卡片</li><li>练习读<b>整数经纬度</b></li></ul>
+    </div>
+    <div class="band">
+      <div class="g">初中 7–9</div>
+      <h4>经纬网判断计算</h4>
+      <div class="demo" style="background:var(--bg)">
+        <span style="font-size:11px;color:var(--sub)">39°N / 20°W</span>
+      </div>
+      <ul><li>东西经/南北纬判断,<b>°/′符号规范</b>上线</li><li>经纬网间隔计算</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高中 10–12</div>
+      <h4>投影变形讨论</h4>
+      <div class="demo" style="background:var(--bg);gap:8px">
+        <span style="width:16px;height:16px;border-radius:50%;border:1.4px solid var(--gold)"></span>
+        <span style="width:16px;height:10px;border:1.4px solid var(--gold)"></span>
+      </div>
+      <ul><li>经纬网+投影变形讨论</li><li>结合比例尺/方向做<b>定位与距离估算</b></li></ul>
+    </div>
+  </div>
+
+  <!-- ============ 05 地理剖面 ============ -->
+  <section class="sec">
+    <div class="sec-k">05 / 地理剖面</div>
+    <h2>一次垂直切割 —— 垂直结构</h2>
+    <p>地形剖面、地质剖面、大气垂直分层等「垂直方向结构」,是把一条切割线转化为侧视图后才能看清的关系(断层、岩层叠置、圈层厚度)。核心是理解「剖面从何而来」,以及垂直比例常被夸大这件事。</p>
+  </section>
+
+  <div class="grid2">
+    <!-- 地理剖面 · 方向甲 垂直分层条 -->
+    <div class="card">
+      <div class="stage">
+        <div class="svgwrap">
+          <svg width="300" height="336" viewBox="0 0 300 336" style="display:block">
+            <text x="150" y="22" font-family="var(--serif)" font-size="12.5" fill="#16181d" font-weight="600" text-anchor="middle">大气垂直分层</text>
+
+            <g>
+              <rect x="40" y="253.3" width="90" height="36.7" fill="#cfe3f2" stroke="#9ab8d0" stroke-width="1"/>
+              <rect x="40" y="137.1" width="90" height="116.2" fill="#dcdaea" stroke="#b6aed0" stroke-width="1"/>
+              <rect x="40" y="30" width="90" height="107.1" fill="#e7e6e2" stroke="#c7cac5" stroke-width="1"/>
+            </g>
+
+            <g font-size="10" fill="#16181d" font-weight="600">
+              <text x="85" y="275" text-anchor="middle">对流层</text>
+              <text x="85" y="198" text-anchor="middle">平流层</text>
+              <text x="85" y="86" text-anchor="middle">中间层</text>
+            </g>
+            <g font-size="8" fill="#5b606b">
+              <text x="85" y="286" text-anchor="middle">天气现象</text>
+              <text x="85" y="210" text-anchor="middle">臭氧层</text>
+              <text x="85" y="98" text-anchor="middle">最冷层</text>
+            </g>
+
+            <g font-size="9.5" fill="#5b606b" text-anchor="end">
+              <text x="34" y="293">0km</text>
+              <text x="34" y="257">12km</text>
+              <text x="34" y="141">50km</text>
+              <text x="34" y="34">85km</text>
+            </g>
+            <g stroke="#c7cac5" stroke-width="1">
+              <line x1="36" y1="290" x2="40" y2="290"/><line x1="36" y1="253.3" x2="40" y2="253.3"/>
+              <line x1="36" y1="137.1" x2="40" y2="137.1"/><line x1="36" y1="30" x2="40" y2="30"/>
+            </g>
+
+            <path d="M255.9,290 L197.8,253.3 L242.0,137.1 L170,30" fill="none" stroke="#3f7d63" stroke-width="2" stroke-linejoin="round"/>
+            <g fill="#3f7d63">
+              <circle cx="255.9" cy="290" r="3"/><circle cx="197.8" cy="253.3" r="3"/>
+              <circle cx="242.0" cy="137.1" r="3"/><circle cx="170" cy="30" r="3"/>
+            </g>
+            <g font-size="8.5" fill="#3f7d63">
+              <text x="259" y="293">15°C</text><text x="150" y="250">-56°C</text>
+              <text x="245" y="133">-2°C</text><text x="140" y="26">-90°C</text>
+            </g>
+            <text x="215" y="315" font-size="8.5" fill="#9aa0ab" text-anchor="middle">← 气温(左冷右暖)</text>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-jade">方向甲 · 垂直分层条 Vertical Strip</span>
+        <h3>把垂直结构抽象成可扫读的信息条</h3>
+        <p>参照地铁线路图的克制感,整个剖面收缩为一条竖直分层条:每层简洁色块+高度刻度标注,旁配一条折线示意实际气温随高度变化(对流层降温→平流层因臭氧升温→中间层再降温,真实的三段式廓线)。</p>
+      </div>
+    </div>
+
+    <!-- 地理剖面 · 方向乙 切割透视 -->
+    <div class="card">
+      <div class="stage">
+        <div class="svgwrap">
+          <svg width="460" height="340" viewBox="0 0 460 340" style="display:block">
+            <text x="14" y="20" font-family="var(--serif)" font-size="12" fill="#16181d" font-weight="600">俯视图 · 切割线 A—B</text>
+            <ellipse cx="200" cy="65" rx="150" ry="45" fill="none" stroke="#c7cac5" stroke-width="1.4"/>
+            <ellipse cx="225" cy="58" rx="88" ry="28" fill="none" stroke="#c7cac5" stroke-width="1.4"/>
+            <line x1="60" y1="98" x2="360" y2="24" stroke="#c25d4b" stroke-width="1.6" stroke-dasharray="5 4"/>
+            <circle cx="60" cy="98" r="10" fill="#ffffff" stroke="#c25d4b" stroke-width="1.6"/>
+            <text x="60" y="102" font-size="10" fill="#c25d4b" font-weight="700" text-anchor="middle">A</text>
+            <circle cx="360" cy="24" r="10" fill="#ffffff" stroke="#c25d4b" stroke-width="1.6"/>
+            <text x="360" y="28" font-size="10" fill="#c25d4b" font-weight="700" text-anchor="middle">B</text>
+
+            <line x1="14" y1="122" x2="446" y2="122" stroke="#e9e6df" stroke-width="1" stroke-dasharray="2 4"/>
+            <text x="14" y="136" font-size="9.5" fill="#9aa0ab">侧视剖面(从平面「抽拉」出来)</text>
+
+            <!-- 左侧地块 -->
+            <path d="M20,230 L160,160 L260,200 L260,230 L260,260 L260,290 L260,320 L20,320 Z" fill="none"/>
+            <path d="M20,230 L160,160 L260,200" fill="none" stroke="#16181d" stroke-width="2.2"/>
+            <path d="M20,260 L160,190 L260,230" fill="#e8dcc0" stroke="none"/>
+            <path d="M20,290 L160,220 L260,260" fill="#dcc78f" stroke="none"/>
+            <path d="M20,320 L160,250 L260,290" fill="#b7c3cc" stroke="none"/>
+            <path d="M20,230 L160,160 L260,200 L260,320 L20,320 Z" fill="#f3ede0" opacity=".001"/>
+
+            <!-- 右侧地块(断层下降盘,整体下移18) -->
+            <path d="M260,218 L340,190 L440,220" fill="none" stroke="#16181d" stroke-width="2.2"/>
+            <path d="M260,248 L340,220 L440,250" fill="#e8dcc0" stroke="none"/>
+            <path d="M260,278 L340,250 L440,280" fill="#dcc78f" stroke="none"/>
+            <path d="M260,308 L340,280 L440,310" fill="#b7c3cc" stroke="none"/>
+
+            <!-- 填色多边形(左块三层) -->
+            <polygon points="20,230 160,160 260,200 260,248 160,190 20,260" fill="#e8dcc0"/>
+            <polygon points="20,260 160,190 260,230 260,278 160,220 20,290" fill="#dcc78f"/>
+            <polygon points="20,290 160,220 260,260 260,308 160,250 20,320" fill="#b7c3cc"/>
+            <!-- 填色多边形(右块三层) -->
+            <polygon points="260,218 340,190 440,220 440,250 340,220 260,248" fill="#e8dcc0"/>
+            <polygon points="260,248 340,220 440,250 440,280 340,250 260,278" fill="#dcc78f"/>
+            <polygon points="260,278 340,250 440,280 440,310 340,280 260,308" fill="#b7c3cc"/>
+
+            <path d="M20,230 L160,160 L260,200" fill="none" stroke="#16181d" stroke-width="2.4"/>
+            <path d="M260,218 L340,190 L440,220" fill="none" stroke="#16181d" stroke-width="2.4"/>
+            <line x1="260" y1="200" x2="260" y2="218" stroke="#c25d4b" stroke-width="2.4" stroke-dasharray="4 3"/>
+            <line x1="260" y1="230" x2="260" y2="248" stroke="#c25d4b" stroke-width="1.6" stroke-dasharray="4 3"/>
+            <line x1="260" y1="260" x2="260" y2="278" stroke="#c25d4b" stroke-width="1.6" stroke-dasharray="4 3"/>
+            <line x1="260" y1="290" x2="260" y2="308" stroke="#c25d4b" stroke-width="1.6" stroke-dasharray="4 3"/>
+            <text x="266" y="185" font-size="9" fill="#c25d4b" font-weight="700">断层</text>
+
+            <g font-size="9" fill="#5b606b">
+              <rect x="14" y="228" width="9" height="9" fill="#e8dcc0"/><text x="27" y="236">风化层</text>
+              <rect x="14" y="240" width="9" height="9" fill="#dcc78f"/><text x="27" y="248">砂岩层</text>
+              <rect x="14" y="252" width="9" height="9" fill="#b7c3cc"/><text x="27" y="260">页岩层</text>
+            </g>
+            <text x="446" y="332" font-size="9" fill="#9aa0ab" text-anchor="end">垂直比例被放大(约 ×3),与水平比例不同</text>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag tag-coral">方向乙 · 切割透视 Cutaway Section</span>
+        <h3>结构真异质:剖面是切出来的</h3>
+        <p>先在俯视地图上画一条剖切线 A—B,再配一个从图上「抽拉出来」的侧视剖面(建筑制图/游戏地形切片的语言),并显式标出断层与垂直夸大比例。强调剖面与平面图的对应关系,而不是孤立记一张剖面画。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bands-label">学段四档 · 地理剖面</div>
+  <div class="bands">
+    <div class="band">
+      <div class="g">低小 1–2</div>
+      <h4>千层蛋糕山</h4>
+      <div class="demo" style="background:#f4f2ec;gap:0;flex-direction:column">
+        <span style="width:56px;height:9px;background:#cfe0b8;border-radius:2px"></span>
+        <span style="width:44px;height:9px;background:#e3d190;border-radius:2px;margin-top:2px"></span>
+        <span style="width:32px;height:9px;background:#f3ede0;border-radius:2px;margin-top:2px"></span>
+      </div>
+      <ul><li>与「等高线」呼应,只认<b>上面/下面</b>层次</li><li>玩具剖面,不涉数值</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高小 3–6</div>
+      <h4>河谷简化剖面</h4>
+      <div class="demo" style="background:var(--bg)">
+        <span style="font-size:11px;color:var(--sub)">高的地方 ／ 低的地方</span>
+      </div>
+      <ul><li>河流/山谷简化剖面</li><li><b>图标化</b>呈现高低</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">初中 7–9</div>
+      <h4>标准地形剖面图</h4>
+      <div class="demo" style="background:var(--bg)">
+        <span style="font-size:11px;color:var(--jade);font-weight:600">由等高线转绘</span>
+      </div>
+      <ul><li>由等高线转绘而来</li><li><b>垂直比例夸大</b>标注规范上线</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高中 10–12</div>
+      <h4>地质剖面 / 大气分层</h4>
+      <div class="demo" style="background:var(--bg);gap:5px">
+        <span style="width:12px;height:30px;background:#e8dcc0"></span>
+        <span style="width:12px;height:30px;background:#dcc78f"></span>
+        <span style="width:12px;height:30px;background:#b7c3cc"></span>
+      </div>
+      <ul><li>岩层/断层/褶皱<b>专业符号规范</b></li><li>强调剖面与平面图对应关系</li></ul>
+    </div>
+  </div>
+
+  <footer>
+    maolab · 地理 · 特殊内容呈现画廊 · 2026-07-23 &nbsp;|&nbsp; 白为主 · 颜色只在物件层 &nbsp;|&nbsp; 图例/比例尺/指北针/经纬度/等高距一律规范可核验,不因「好看」让步
+  </footer>
+</div>

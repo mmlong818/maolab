@@ -1,0 +1,715 @@
+<title>物理 · 特殊内容呈现画廊</title>
+<style>
+  :root{
+    --bg:#fcfbf9;--surface:#ffffff;--ink:#16181d;--sub:#5b606b;--faint:#9aa0ab;
+    --line:#e9e6df;--hair:#efece6;
+    --indigo:#3b4e7e;--teal:#0e7c7b;--gold:#b5872f;--jade:#3f7d63;--coral:#c25d4b;--plum:#7a5c8e;
+    --serif:"Songti SC","STSong","Noto Serif CJK SC",serif;
+    --sans:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+    --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,monospace;
+    --shadow:0 22px 55px -30px rgba(20,22,28,.30);--radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  header{padding:76px 0 30px}
+  .eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--indigo);font-weight:600;margin:0 0 18px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,4.6vw,54px);line-height:1.16;margin:0;text-wrap:balance;letter-spacing:.005em}
+  .lede{max-width:720px;color:var(--sub);font-size:17px;margin:22px 0 0}
+  .lede b{color:var(--ink);font-weight:600}
+  .rule{height:1px;background:var(--line);margin:38px 0 0}
+
+  .sec{padding:52px 0 6px}
+  .sec-k{font-family:var(--serif);font-size:13px;letter-spacing:.12em;color:var(--faint)}
+  .sec h2{font-family:var(--serif);font-weight:600;font-size:25px;margin:8px 0 6px}
+  .sec p{color:var(--sub);max-width:760px;margin:0;font-size:14.5px}
+  .redline{display:inline-block;margin-top:10px;font-size:12.5px;color:var(--coral);background:rgba(194,93,75,.08);border:1px solid rgba(194,93,75,.3);border-radius:8px;padding:5px 11px}
+
+  .grid2{display:grid;grid-template-columns:1fr;gap:26px;padding:26px 0 10px}
+  @media(min-width:900px){.grid2{grid-template-columns:repeat(2,1fr)}}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .cap{padding:15px 19px 17px;border-top:1px solid var(--hair);background:var(--surface)}
+  .cap .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+  .cap h3{font-family:var(--serif);font-size:18px;margin:7px 0 5px}
+  .cap p{font-size:13px;color:var(--sub);margin:0}
+  .t-indigo{color:var(--indigo)} .t-teal{color:var(--teal)} .t-gold{color:var(--gold)} .t-jade{color:var(--jade)} .t-coral{color:var(--coral)}
+
+  .stage{position:relative;height:362px;background:#fff}
+  .stage.tall{height:392px}
+  .stagebox{position:absolute;inset:0;display:flex;flex-direction:column;padding:18px 20px 14px}
+  .stagebox .given{font-size:11px;color:var(--faint);letter-spacing:.03em;margin-bottom:4px;flex:none}
+  .stagebox .figwrap{flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-height:0}
+  .stagebox .legend{flex:none;display:flex;gap:14px;flex-wrap:wrap;padding-top:9px;margin-top:8px;border-top:1px dashed var(--line);font-size:10.5px;color:var(--sub)}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+  /* bands (学段四档) */
+  .bands{display:grid;grid-template-columns:1fr;gap:14px;padding:22px 0 6px}
+  @media(min-width:820px){.bands{grid-template-columns:repeat(4,1fr)}}
+  .band{border:1px solid var(--line);border-radius:14px;padding:15px 15px 17px;background:var(--surface)}
+  .band .g{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  .band h4{font-family:var(--serif);font-size:15.5px;margin:7px 0 8px}
+  .band .demo{height:78px;border-radius:9px;margin:0 0 11px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--bg);border:1px solid var(--hair)}
+  .band ul{margin:0;padding-left:15px;color:var(--sub);font-size:12px;line-height:1.65}
+  .band ul b{color:var(--ink);font-weight:600}
+
+  footer{padding:40px 0 84px;color:var(--faint);font-size:13px;border-top:1px solid var(--line);margin-top:40px}
+  footer b{color:var(--sub);font-weight:600}
+
+  /* ---- formula section (div-built) ---- */
+  .eq-big{font-family:var(--serif);font-size:34px;font-style:italic;color:var(--ink);text-align:center}
+  .eq-big .op{font-style:normal;color:var(--faint);margin:0 10px}
+  .pillrow{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:22px;flex-wrap:wrap}
+  .pillrow .op{color:var(--faint);font-family:var(--mono);font-size:15px}
+  .pill{border-radius:999px;padding:7px 14px;font-family:var(--mono);font-size:13px;display:flex;flex-direction:column;align-items:center;line-height:1.3;min-width:64px}
+  .pill.given{background:rgba(59,78,126,.07);border:1px solid rgba(59,78,126,.35);color:var(--indigo)}
+  .pill.unknown{background:transparent;border:1.5px dashed var(--faint);color:var(--sub)}
+  .pill b{font-size:15px}
+  .pill small{font-size:9.5px;color:var(--faint);letter-spacing:.04em}
+  .ruler{height:14px;margin-top:20px;background-image:repeating-linear-gradient(90deg,var(--hair) 0 1px,transparent 1px 24px);opacity:.9}
+
+  .rail{display:flex;align-items:stretch;gap:0;width:100%}
+  .rail .node{flex:1;border:1px solid var(--line);border-radius:12px;padding:14px 12px;background:#fdfcfa;position:relative}
+  .rail .node .k{font-size:10.5px;color:var(--indigo);letter-spacing:.1em;font-weight:700;margin-bottom:8px}
+  .rail .node .expr{font-family:var(--mono);font-size:15px;color:var(--ink);margin-bottom:8px;min-height:20px}
+  .rail .node .hint{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--sub);background:var(--hair);border-radius:6px;padding:3px 7px}
+  .rail .node.result{background:rgba(59,78,126,.06);border-color:rgba(59,78,126,.35)}
+  .rail .arrow{flex:none;width:34px;display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:18px}
+
+  /* ---- experiment section ---- */
+  .exp-scene{width:100%;max-width:420px}
+  .lb-title{font-size:11px;color:var(--faint);text-align:center;margin-bottom:10px}
+  .callout{position:absolute;background:#fff;border:1px solid var(--coral);border-radius:8px;padding:4px 9px;font-size:11px;color:var(--coral);font-weight:600;box-shadow:0 6px 16px -10px rgba(0,0,0,.3)}
+
+  .vcb{display:flex;gap:12px;width:100%;height:100%}
+  .vcb .col{flex:1;border:1px solid var(--line);border-radius:12px;padding:12px 12px 14px;display:flex;flex-direction:column;background:#fdfcfa}
+  .vcb .col .ic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;font-size:13px;font-weight:700}
+  .vcb .col h5{font-family:var(--serif);font-size:12.5px;margin:0 0 6px;letter-spacing:.02em}
+  .vcb .col ul{margin:0;padding-left:14px;font-size:11px;color:var(--sub);line-height:1.55;flex:1}
+  .vcb .banner{position:absolute;left:20px;right:20px;bottom:14px;background:rgba(59,78,126,.07);border:1px solid rgba(59,78,126,.3);border-radius:9px;padding:8px 12px;font-size:11.5px;color:var(--indigo);text-align:center}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="a-gray" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#4a4d55"/></marker>
+    <marker id="a-indigo" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#3b4e7e"/></marker>
+    <marker id="a-coral" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#c25d4b"/></marker>
+    <marker id="a-jade" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#3f7d63"/></marker>
+    <marker id="a-teal" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#0e7c7b"/></marker>
+    <marker id="a-gold" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b5872f"/></marker>
+    <marker id="a-blue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2e86de"/></marker>
+    <marker id="a-line" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#5b606b"/></marker>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">特殊内容呈现 · 物理画廊</p>
+    <h1>力、电流、光线、运动趋势——<br>看不见的东西，画得看得见，还经得起核验。</h1>
+    <p class="lede">物理内容的专属命题：受力分析教<b>矢量代数</b>，电路图教<b>拓扑关系</b>，光路图教<b>可计算的几何光学</b>，运动图像教<b>函数图像的物理意义</b>。六类内容各给两个结构真异质的现代方向——错一个矢量方向、错一个电路符号、错一条光路，教学价值就归零，所以每张图都按真实物理量精确画出。</p>
+    <p class="redline">电路红线：中国教材电阻符号是<b>国标长方形</b>，不是欧美锯齿形；光路红线：反射角=入射角、折射角由 Snell 定律算出，均非自由绘图。</p>
+    <div class="rule"></div>
+  </header>
+
+  <!-- ============ 1 公式+物理量+单位 ============ -->
+  <section class="sec">
+    <div class="sec-k">01 / 公式 · 物理量 · 单位</div>
+    <h2>定量关系卡——公式不是背的符号串，是量与量的对应</h2>
+    <p>符号、单位、数值三者能否对上号，决定学生是否建立了"量"的概念。示例：<b>v = s / t</b>，位移 s=100m，时间 t=20s，求速度 v。</p>
+  </section>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="stagebox">
+          <div class="given">量纲仪表读数带 · dimension ledger</div>
+          <div class="figwrap">
+            <div style="width:100%">
+              <div class="eq-big"><i>v</i><span class="op">=</span><span style="display:inline-block;border-bottom:1.5px solid var(--ink);padding:0 6px 3px"><i>s</i></span><span class="op" style="margin:0 2px">/</span><i>t</i></div>
+              <div class="pillrow">
+                <div class="pill unknown"><b>v = ?</b><small>速度 · m/s</small></div>
+                <span class="op">=</span>
+                <div class="pill given"><b>s = 100</b><small>位移 · m</small></div>
+                <span class="op">/</span>
+                <div class="pill given"><b>t = 20</b><small>时间 · s</small></div>
+              </div>
+              <div class="ruler"></div>
+            </div>
+          </div>
+          <div class="legend">
+            <span><i style="background:rgba(59,78,126,.5)"></i>已知量 given</span>
+            <span><i style="background:transparent;border:1.5px dashed var(--faint)"></i>待求量 unknown（虚线边框留白）</span>
+          </div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-indigo">方向甲 · 量纲仪表读数带</span><h3>公式变成一块可读的仪表面板</h3><p>挪用工程制图尺寸标注线与仪表盘"数值即状态"隐喻；胶囊按角色配色，未知量虚线待求，不再是抄黑板。</p></div>
+    </div>
+
+    <div class="card">
+      <div class="stage">
+        <div class="stagebox">
+          <div class="given">推导轨道 · derivation rail</div>
+          <div class="figwrap">
+            <div class="rail">
+              <div class="node">
+                <div class="k">01 定义式</div>
+                <div class="expr"><i>v</i> = <i>s</i>/<i>t</i></div>
+                <span class="hint">v:m/s s:m t:s</span>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node">
+                <div class="k">02 代入已知量</div>
+                <div class="expr">v = 100/20</div>
+                <span class="hint">s=100m t=20s</span>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node result">
+                <div class="k" style="color:var(--jade)">03 化简得结果</div>
+                <div class="expr" style="color:var(--jade);font-weight:600">v = 5 m/s</div>
+                <span class="hint" style="background:rgba(63,125,99,.12);color:var(--jade)">✓ 已核验</span>
+              </div>
+            </div>
+          </div>
+          <div class="legend"><span>每个节点旁挂"内联类型提示"（借代码编辑器 inline type hint 语言）</span></div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-indigo">方向乙 · 推导轨道</span><h3>公式呈现为过程，不是答案</h3><p>横向节点轨道：定义 → 代入 → 化简，节点间箭头连接，回应"公式怎么来的"这个常年痛点。</p></div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>实物对照，不出现符号</h4>
+      <div class="demo"><svg width="150" height="60" viewBox="0 0 150 60" style="display:block">
+        <line x1="20" y1="15" x2="20" y2="45" stroke="#9aa0ab" stroke-width="1.5"/><line x1="70" y1="15" x2="70" y2="45" stroke="#9aa0ab" stroke-width="1.5"/>
+        <line x1="20" y1="30" x2="70" y2="30" stroke="#b5872f" stroke-width="2"/>
+        <text x="45" y="24" font-size="11" fill="#b5872f" text-anchor="middle" font-family="serif">1 米</text>
+        <text x="105" y="34" font-size="20" fill="#5b606b">≈ 两步</text>
+      </svg></div>
+      <ul><li>"1 米有多长"式插画</li><li>不出现字母符号</li></ul>
+    </div>
+    <div class="band"><div class="g">高小 3–6</div><h4>甲简化版，1–2 个物理量</h4>
+      <div class="demo"><div class="pill given" style="font-size:11px">s = 5<small>米</small></div></div>
+      <ul><li>建立"符号=某个量"联结感</li><li>刻度纹理卡通化</li></ul>
+    </div>
+    <div class="band"><div class="g">初中 7–9</div><h4>甲/乙皆可，2–3 步推导</h4>
+      <div class="demo"><span style="font-family:var(--mono);font-size:13px;color:var(--ink)">v=s/t → v=5m/s</span></div>
+      <ul><li>符号规范全面上线</li><li>推导步数 2–3 步</li></ul>
+    </div>
+    <div class="band"><div class="g">高中 10–12</div><h4>乙为主力，示波器读数质感</h4>
+      <div class="demo" style="background:#14171c"><span style="font-family:var(--mono);font-size:11px;color:#4fd1c5">v=Δs/Δt · a=Δv/Δt</span></div>
+      <ul><li>多步推导 + 多量同屏</li><li>去插画装饰</li></ul>
+    </div>
+  </div>
+
+  <!-- ============ 2 受力分析图 ============ -->
+  <section class="sec">
+    <div class="sec-k">02 / 受力分析图 · 矢量的合成</div>
+    <h2>力是矢量——方向、大小、合成规则必须精确</h2>
+    <p>示例：木块静止于水平面，受力 mg=50N(270°)、N=50N(90°)、f=10N(180°)、F=20N(30°)。角度约定：物体右侧水平方向为 0°，逆时针为正。</p>
+  </section>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="stage tall">
+        <div class="stagebox">
+          <div class="given">木块静止于水平面 · 四力共同作用</div>
+          <div class="figwrap">
+            <svg width="300" height="300" viewBox="0 0 300 300" style="display:block">
+              <g stroke="#eef0f3" stroke-width="1">
+                <line x1="0" y1="30" x2="300" y2="30"/><line x1="0" y1="65" x2="300" y2="65"/><line x1="0" y1="100" x2="300" y2="100"/><line x1="0" y1="135" x2="300" y2="135"/><line x1="0" y1="170" x2="300" y2="170"/><line x1="0" y1="205" x2="300" y2="205"/><line x1="0" y1="240" x2="300" y2="240"/><line x1="0" y1="275" x2="300" y2="275"/>
+                <line x1="30" y1="0" x2="30" y2="300"/><line x1="65" y1="0" x2="65" y2="300"/><line x1="100" y1="0" x2="100" y2="300"/><line x1="135" y1="0" x2="135" y2="300"/><line x1="170" y1="0" x2="170" y2="300"/><line x1="205" y1="0" x2="205" y2="300"/><line x1="240" y1="0" x2="240" y2="300"/><line x1="275" y1="0" x2="275" y2="300"/>
+              </g>
+              <rect x="122" y="126" width="56" height="28" rx="4" fill="#e9e6df" stroke="#16181d" stroke-width="1.5"/>
+              <text x="150" y="145" font-size="11" fill="#16181d" text-anchor="middle" font-family="sans-serif">木块</text>
+
+              <line x1="150" y1="140" x2="150" y2="250" stroke="#4a4d55" stroke-width="2.5" marker-end="url(#a-gray)"/>
+              <line x1="150" y1="140" x2="150" y2="30" stroke="#3b4e7e" stroke-width="2.5" marker-end="url(#a-indigo)"/>
+              <line x1="150" y1="140" x2="128" y2="140" stroke="#c25d4b" stroke-width="2.5" marker-end="url(#a-coral)"/>
+              <line x1="150" y1="140" x2="188.1" y2="118" stroke="#3f7d63" stroke-width="2.5" marker-end="url(#a-jade)"/>
+
+              <g font-family="var(--mono),monospace" font-size="12" font-weight="600">
+                <rect x="119" y="256" width="62" height="20" rx="10" fill="#fff" stroke="#4a4d55"/><text x="150" y="270" text-anchor="middle" fill="#4a4d55">mg 50N</text>
+                <rect x="119" y="10" width="62" height="20" rx="10" fill="#fff" stroke="#3b4e7e"/><text x="150" y="24" text-anchor="middle" fill="#3b4e7e">N 50N</text>
+                <rect x="20" y="130" width="60" height="20" rx="10" fill="#fff" stroke="#c25d4b"/><text x="50" y="144" text-anchor="middle" fill="#c25d4b">f 10N</text>
+                <rect x="192" y="98" width="62" height="20" rx="10" fill="#fff" stroke="#3f7d63"/><text x="223" y="112" text-anchor="middle" fill="#3f7d63">F 20N,30°</text>
+              </g>
+            </svg>
+          </div>
+          <div class="legend">
+            <span><i style="background:#4a4d55"></i>重力</span><span><i style="background:#3b4e7e"></i>支持力</span><span><i style="background:#c25d4b"></i>摩擦力</span><span><i style="background:#3f7d63"></i>拉力</span><span>箭头=矢量本身，长度严格按比例，实心三角箭头（工程制图标准）</span>
+          </div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-coral">方向甲 · 工程受力蓝图</span><h3>箭头是矢量本身，不是简笔画</h3><p>起点在作用点、方向按角度、长度按比例；淡 CAD 网格纸质感，挪用工程力学制图 + 游戏引擎 Debug Draw。</p></div>
+    </div>
+
+    <div class="card">
+      <div class="stage tall">
+        <div class="stagebox">
+          <div class="given">合成分镜 · F1=30N(0°) 与 F2=40N(90°) 的合成</div>
+          <div class="figwrap">
+            <svg width="480" height="260" viewBox="0 0 520 280" style="display:block">
+              <line x1="173" y1="0" x2="173" y2="280" stroke="#e9e6df" stroke-dasharray="3 4"/>
+              <line x1="346" y1="0" x2="346" y2="280" stroke="#e9e6df" stroke-dasharray="3 4"/>
+
+              <!-- panel 1 -->
+              <g>
+                <circle cx="24" cy="24" r="11" fill="#e9e6df"/><text x="24" y="28" font-size="11" text-anchor="middle" fill="#16181d" font-weight="700">1</text>
+                <line x1="45" y1="235" x2="135" y2="235" stroke="#3b4e7e" stroke-width="2.5" marker-end="url(#a-indigo)"/>
+                <text x="90" y="252" font-size="10.5" fill="#3b4e7e" text-anchor="middle" font-family="monospace">F1=30N</text>
+                <line x1="45" y1="235" x2="45" y2="115" stroke="#c25d4b" stroke-width="2.5" marker-end="url(#a-coral)"/>
+                <text x="32" y="105" font-size="10.5" fill="#c25d4b" text-anchor="middle" font-family="monospace">F2=40N</text>
+                <circle cx="45" cy="235" r="2.5" fill="#16181d"/>
+                <text x="90" y="270" font-size="10" fill="#9aa0ab" text-anchor="middle">分力独立展示</text>
+              </g>
+              <!-- panel 2 -->
+              <g transform="translate(173,0)">
+                <circle cx="24" cy="24" r="11" fill="#e9e6df"/><text x="24" y="28" font-size="11" text-anchor="middle" fill="#16181d" font-weight="700">2</text>
+                <line x1="45" y1="235" x2="135" y2="235" stroke="#3b4e7e" stroke-width="2.5" marker-end="url(#a-indigo)"/>
+                <line x1="45" y1="235" x2="45" y2="115" stroke="#c25d4b" stroke-width="2.5" marker-end="url(#a-jade)" opacity=".35"/>
+                <line x1="135" y1="235" x2="135" y2="115" stroke="#c25d4b" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#a-coral)"/>
+                <line x1="45" y1="115" x2="135" y2="115" stroke="#3b4e7e" stroke-width="2" stroke-dasharray="4 3"/>
+                <circle cx="45" cy="235" r="2.5" fill="#16181d"/>
+                <text x="90" y="270" font-size="10" fill="#9aa0ab" text-anchor="middle">首尾相接 · 平行四边形</text>
+              </g>
+              <!-- panel 3 -->
+              <g transform="translate(346,0)">
+                <circle cx="24" cy="24" r="11" fill="#e9e6df"/><text x="24" y="28" font-size="11" text-anchor="middle" fill="#16181d" font-weight="700">3</text>
+                <path d="M 65 235 A 20 20 0 0 1 60 216" fill="none" stroke="#9aa0ab" stroke-width="1"/>
+                <text x="72" y="222" font-size="10" fill="#9aa0ab">53°</text>
+                <line x1="45" y1="235" x2="60" y2="235" stroke="#e9e6df" stroke-width="2"/>
+                <line x1="45" y1="235" x2="135" y2="115" stroke="#3f7d63" stroke-width="3.5" marker-end="url(#a-jade)"/>
+                <text x="100" y="150" font-size="11.5" fill="#3f7d63" text-anchor="middle" font-family="monospace" font-weight="700">R=50N</text>
+                <circle cx="45" cy="235" r="2.5" fill="#16181d"/>
+                <text x="90" y="270" font-size="10" fill="#9aa0ab" text-anchor="middle">合力箭头加粗强调</text>
+              </g>
+            </svg>
+          </div>
+          <div class="legend"><span><i style="background:#3b4e7e"></i>F1</span><span><i style="background:#c25d4b"></i>F2</span><span><i style="background:#3f7d63"></i>合力 R</span><span>经典 3-4-5-50，∠=53°</span></div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-coral">方向乙 · 合成分镜</span><h3>矢量合成是过程，不是终图</h3><p>三格分镜：分力 → 平移作图 → 合力强调，借漫画分镜叙事语言呈现几何操作的过程性。</p></div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>推/拉方向感，具象插画</h4>
+      <div class="demo" style="background:linear-gradient(180deg,#fff7ec,#fdf0df)"><svg width="80" height="34" viewBox="0 0 80 34" style="display:block"><circle cx="14" cy="10" r="5" fill="#4a4d55"/><path d="M14,16 L14,26 M8,20 L20,20 M14,26 L9,33 M14,26 L19,33" stroke="#4a4d55" stroke-width="2.2" stroke-linecap="round" fill="none"/><rect x="42" y="12" width="22" height="18" rx="3" fill="rgba(194,93,75,.16)" stroke="#c25d4b" stroke-width="2"/><line x1="24" y1="21" x2="40" y2="21" stroke="#c25d4b" stroke-width="2.6" stroke-linecap="round" marker-end="url(#a-coral)"/></svg></div>
+      <ul><li>不做严格矢量合成（超纲）</li><li>箭头卡通粗描边暖色</li></ul>
+    </div>
+    <div class="band"><div class="g">高小 3–6</div><h4>甲简化版，单力或两力</h4>
+      <div class="demo"><svg width="80" height="50" viewBox="0 0 80 50"><line x1="20" y1="40" x2="60" y2="40" stroke="#c25d4b" stroke-width="4" stroke-linecap="round" marker-end="url(#a-coral)"/></svg></div>
+      <ul><li>箭头保留圆角友好度</li><li>不强制严格比例</li></ul>
+    </div>
+    <div class="band"><div class="g">初中 7–9</div><h4>严格比例角度，3–4 力同屏</h4>
+      <div class="demo"><svg width="90" height="60" viewBox="0 0 90 60"><rect x="35" y="25" width="20" height="12" fill="#e9e6df"/><line x1="45" y1="31" x2="45" y2="10" stroke="#3b4e7e" stroke-width="2" marker-end="url(#a-indigo)"/><line x1="45" y1="31" x2="45" y2="50" stroke="#4a4d55" stroke-width="2" marker-end="url(#a-gray)"/><line x1="45" y1="31" x2="70" y2="20" stroke="#3f7d63" stroke-width="2" marker-end="url(#a-jade)"/></svg></div>
+      <ul><li>首次引入图例</li><li>分类配色规范上线</li></ul>
+    </div>
+    <div class="band"><div class="g">高中 10–12</div><h4>合成分镜为主力，37°/53°精确</h4>
+      <div class="demo" style="background:linear-gradient(135deg,#fff,#f4f5f9)"><span style="font-family:monospace;font-size:12px;color:var(--indigo)">滑轮组 · 斜面</span></div>
+      <ul><li>角度标注精确数值</li><li>多物体多级受力</li></ul>
+    </div>
+  </div>
+
+  <!-- ============ 3 电路图 ============ -->
+  <section class="sec">
+    <div class="sec-k">03 / 电路图 · 元件符号与拓扑</div>
+    <h2>看懂连接关系——串并联判断是电学计算的先导语言</h2>
+    <p>示例：电池 B1=6V，电阻 R1=5Ω 与 R2=10Ω 并联后与开关 S1 串联，开关闭合。<b>电阻用国标长方形，不用锯齿形。</b></p>
+  </section>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="stagebox">
+          <div class="given">发光电路板 · S1 闭合，电流通路高亮</div>
+          <div class="figwrap">
+            <svg width="360" height="230" viewBox="0 0 380 260" style="display:block">
+              <g fill="none" stroke="#3fa9ff" stroke-width="2.5" stroke-linejoin="round" style="filter:drop-shadow(0 0 3px rgba(63,169,255,.75))">
+                <path d="M90,70 H270"/>
+                <path d="M90,150 H270"/>
+                <path d="M130,70 V94 M130,126 V150"/>
+                <path d="M230,70 V94 M230,126 V150"/>
+                <path d="M90,70 H40 V190"/>
+                <path d="M270,150 H330 V190"/>
+                <path d="M40,190 H90"/>
+                <path d="M120,190 H200"/>
+                <path d="M230,190 H330"/>
+              </g>
+              <rect x="121" y="94" width="18" height="32" fill="#fff" stroke="#16181d" stroke-width="1.6"/>
+              <rect x="221" y="94" width="18" height="32" fill="#fff" stroke="#16181d" stroke-width="1.6"/>
+              <text x="150" y="112" font-size="11" fill="#16181d" font-family="monospace">R1 5Ω</text>
+              <text x="250" y="112" font-size="11" fill="#16181d" font-family="monospace">R2 10Ω</text>
+
+              <circle cx="90" cy="190" r="3" fill="#16181d"/><circle cx="120" cy="190" r="3" fill="#16181d"/>
+              <text x="105" y="178" font-size="10.5" fill="#16181d" text-anchor="middle">S1（闭合）</text>
+
+              <line x1="205" y1="178" x2="205" y2="202" stroke="#16181d" stroke-width="1.6"/>
+              <line x1="215" y1="184" x2="215" y2="196" stroke="#16181d" stroke-width="4.5"/>
+              <text x="215" y="171" font-size="11" fill="#16181d" text-anchor="middle" font-family="monospace">B1 6V</text>
+
+              <path d="M100,66 L108,70 L100,74 Z" fill="#2e86de"/>
+              <path d="M250,146 L258,150 L250,154 Z" fill="#2e86de"/>
+              <path d="M170,186 L178,190 L170,194 Z" fill="#2e86de"/>
+            </svg>
+          </div>
+          <div class="legend"><span><i style="background:#3fa9ff"></i>通路高亮（S1 闭合）</span><span>电阻 = 国标长方形</span><span>直角规范布线</span></div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-teal">方向甲 · 发光电路板</span><h3>电流方向被看见，符号分毫不让</h3><p>挪用 PCB/智能家居"通电即高亮"的视觉隐喻；断路部分会转灰虚化，通路发光，符号规范不让步。</p></div>
+    </div>
+
+    <div class="card">
+      <div class="stage">
+        <div class="stagebox">
+          <div class="given">模块拓扑网格 · 纵向=串联，同行=并联</div>
+          <div class="figwrap">
+            <svg width="440" height="240" viewBox="0 0 480 280" style="display:block">
+              <g fill="none" stroke="#9aa0ab" stroke-width="1.8">
+                <path d="M240,70 V95"/>
+                <path d="M240,95 H155 V110"/>
+                <path d="M240,95 H325 V110"/>
+                <path d="M155,165 V190 H240"/>
+                <path d="M325,165 V190 H240"/>
+                <path d="M240,190 V205"/>
+              </g>
+              <circle cx="240" cy="95" r="3" fill="#0e7c7b"/><circle cx="240" cy="190" r="3" fill="#0e7c7b"/>
+
+              <rect x="170" y="15" width="140" height="55" rx="10" fill="#fdfcfa" stroke="#16181d" stroke-width="1.4"/>
+              <line x1="222" y1="30" x2="222" y2="55" stroke="#16181d" stroke-width="1.4"/><line x1="232" y1="36" x2="232" y2="49" stroke="#16181d" stroke-width="3.5"/>
+              <text x="252" y="47" font-size="11.5" fill="#16181d" font-family="monospace" font-weight="700">B1</text>
+              <text x="240" y="90" font-size="10" fill="#5b606b" text-anchor="middle" font-family="monospace">电池 6V</text>
+
+              <rect x="90" y="110" width="130" height="55" rx="10" fill="#fdfcfa" stroke="#0e7c7b" stroke-width="1.4"/>
+              <rect x="140" y="128" width="14" height="24" fill="none" stroke="#16181d" stroke-width="1.4"/>
+              <text x="175" y="144" font-size="11.5" fill="#0e7c7b" font-family="monospace" font-weight="700">R1</text>
+              <text x="155" y="130" font-size="10" fill="#5b606b" text-anchor="middle" font-family="monospace">5Ω</text>
+
+              <rect x="260" y="110" width="130" height="55" rx="10" fill="#fdfcfa" stroke="#0e7c7b" stroke-width="1.4"/>
+              <rect x="310" y="128" width="14" height="24" fill="none" stroke="#16181d" stroke-width="1.4"/>
+              <text x="345" y="144" font-size="11.5" fill="#0e7c7b" font-family="monospace" font-weight="700">R2</text>
+              <text x="325" y="130" font-size="10" fill="#5b606b" text-anchor="middle" font-family="monospace">10Ω</text>
+
+              <rect x="170" y="205" width="140" height="55" rx="10" fill="#fdfcfa" stroke="#16181d" stroke-width="1.4"/>
+              <circle cx="215" cy="232" r="2.5" fill="#16181d"/><circle cx="245" cy="232" r="2.5" fill="#16181d"/><line x1="215" y1="232" x2="245" y2="232" stroke="#16181d" stroke-width="1.4"/>
+              <text x="272" y="237" font-size="11.5" fill="#16181d" font-family="monospace" font-weight="700">S1</text>
+              <text x="240" y="252" font-size="10" fill="#5b606b" text-anchor="middle" font-family="monospace">开关 · 闭合</text>
+            </svg>
+          </div>
+          <div class="legend"><span>R1/R2 同行并排 → 读出并联</span><span>B1→[R1‖R2]→S1 纵向 → 读出串联</span></div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-teal">方向乙 · 模块拓扑网格</span><h3>结构本身说话，不靠文字标注</h3><p>借电路网表(netlist)/Node-RED 的模块化连线语言；不画连续导线，每个元件是独立模块卡。</p></div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>拟物插画，"通了/断了"</h4>
+      <div class="demo" style="background:linear-gradient(180deg,#fffef8,#fdf6e5)"><svg width="80" height="34" viewBox="0 0 80 34" style="display:block"><line x1="8" y1="9" x2="8" y2="25" stroke="#16181d" stroke-width="1.6"/><line x1="16" y1="13" x2="16" y2="21" stroke="#16181d" stroke-width="4"/><line x1="24" y1="17" x2="42" y2="17" stroke="#16181d" stroke-width="1.6"/><circle cx="54" cy="17" r="10" fill="none" stroke="#b5872f" stroke-width="1.8"/><line x1="47" y1="10" x2="61" y2="24" stroke="#b5872f" stroke-width="1.5"/><line x1="47" y1="24" x2="61" y2="10" stroke="#b5872f" stroke-width="1.5"/></svg></div>
+      <ul><li>不出现规范符号（超纲）</li><li>强调闭合回路的直觉</li></ul>
+    </div>
+    <div class="band"><div class="g">高小 3–6</div><h4>规范符号+圆角化，模块卡友好</h4>
+      <div class="demo"><svg width="70" height="34" viewBox="0 0 70 34"><rect x="5" y="8" width="16" height="18" rx="4" fill="none" stroke="#16181d" stroke-width="1.6"/><line x1="30" y1="17" x2="65" y2="17" stroke="#16181d" stroke-width="1.6"/></svg></div>
+      <ul><li>数值标注可选</li><li>容错率高</li></ul>
+    </div>
+    <div class="band"><div class="g">初中 7–9</div><h4>国标符号全面上线</h4>
+      <div class="demo"><svg width="80" height="30" viewBox="0 0 80 30"><rect x="30" y="9" width="20" height="12" fill="none" stroke="#16181d" stroke-width="1.6"/><line x1="5" y1="15" x2="30" y2="15" stroke="#3fa9ff" stroke-width="2"/><line x1="50" y1="15" x2="75" y2="15" stroke="#3fa9ff" stroke-width="2"/></svg></div>
+      <ul><li>电流高亮强化"看得见"</li><li>数值标注必须完整</li></ul>
+    </div>
+    <div class="band"><div class="g">高中 10–12</div><h4>拓扑网格为主，极简黑白</h4>
+      <div class="demo" style="background:#fff"><span style="font-family:monospace;font-size:11px;color:var(--ink)">桥式电路 · 多回路</span></div>
+      <ul><li>含电容/多回路</li><li>去发光效果，克制强调色</li></ul>
+    </div>
+  </div>
+
+  <!-- ============ 4 光路图 ============ -->
+  <section class="sec">
+    <div class="sec-k">04 / 光路图 · 反射折射与成像</div>
+    <h2>光线怎么走，决定像在哪——渲染器算，LLM 只给取值</h2>
+    <p>折射示例：光从空气(n₁=1.00)射入玻璃(n₂=1.50)，入射角 θ₁=40°；由 Snell 定律 n₁sinθ₁=n₂sinθ₂ 算出 θ₂≈25°。凸透镜示例：物距 u=30cm，焦距 f=10cm（物在 2F 外），由 1/f=1/u+1/v 算出像距 v=15cm——像为<b>倒立、缩小、实像</b>，成在 F′与 2F′之间。</p>
+  </section>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="stagebox">
+          <div class="given">几何证明作图仪 · 折射（θ₁=40° → θ₂≈25°）</div>
+          <div class="figwrap">
+            <svg width="320" height="230" viewBox="0 0 340 260" style="display:block">
+              <rect x="0" y="0" width="340" height="110" fill="#ffffff"/>
+              <rect x="0" y="110" width="340" height="150" fill="rgba(59,78,126,.06)"/>
+              <line x1="30" y1="110" x2="310" y2="110" stroke="#16181d" stroke-width="1.6"/>
+              <line x1="170" y1="30" x2="170" y2="200" stroke="#9aa0ab" stroke-width="1.2" stroke-dasharray="3 3"/>
+              <rect x="164" y="104" width="8" height="8" fill="none" stroke="#9aa0ab" stroke-width="1"/>
+
+              <line x1="106" y1="33" x2="170" y2="110" stroke="#5b606b" stroke-width="2" marker-end="url(#a-line)"/>
+              <line x1="170" y1="110" x2="228" y2="41" stroke="#2e86de" stroke-width="2" marker-end="url(#a-blue)"/>
+              <line x1="170" y1="110" x2="217" y2="210" stroke="#c25d4b" stroke-width="2.2" marker-end="url(#a-coral)"/>
+
+              <path d="M 170 76 A 34 34 0 0 1 148 84" fill="none" stroke="#5b606b" stroke-width="1"/>
+              <text x="140" y="70" font-size="11" fill="#5b606b">θ₁=40°</text>
+              <path d="M 170 144 A 34 34 0 0 0 184 141" fill="none" stroke="#c25d4b" stroke-width="1"/>
+              <text x="186" y="160" font-size="11" fill="#c25d4b">θ₂≈25°</text>
+
+              <text x="20" y="24" font-size="11" fill="#5b606b">空气 n₁=1.00</text>
+              <text x="20" y="248" font-size="11" fill="#3b4e7e">玻璃 n₂=1.50</text>
+            </svg>
+          </div>
+          <div class="legend"><span><i style="background:#5b606b"></i>入射</span><span><i style="background:#2e86de"></i>反射(θ=40°)</span><span><i style="background:#c25d4b"></i>折射(Snell 定律计算)</span></div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-gold">方向甲 · 几何证明作图仪</span><h3>可以被复核的几何证明</h3><p>法线短虚线+直角标记，关键角标精确数值；挪用精密仪器制图/GeoGebra 的作图美学，不是课本简笔画。</p></div>
+    </div>
+
+    <div class="card">
+      <div class="stage">
+        <div class="stagebox">
+          <div class="given">光线追踪剧场 · 凸透镜成像（u=30cm f=10cm → v=15cm）</div>
+          <div class="figwrap">
+            <svg width="360" height="240" viewBox="0 0 380 280" style="display:block">
+              <line x1="20" y1="150" x2="360" y2="150" stroke="#c9cdd6" stroke-width="1" stroke-dasharray="2 4"/>
+              <path d="M190,60 Q206,150 190,240 Q174,150 190,60 Z" fill="rgba(59,78,126,.14)" stroke="#3b4e7e" stroke-width="1.4"/>
+
+              <circle cx="160" cy="150" r="2.6" fill="#16181d"/><text x="160" y="168" font-size="10.5" text-anchor="middle" fill="#16181d">F</text>
+              <circle cx="220" cy="150" r="2.6" fill="#16181d"/><text x="220" y="168" font-size="10.5" text-anchor="middle" fill="#16181d">F′</text>
+              <circle cx="130" cy="150" r="2.2" fill="#9aa0ab"/><text x="130" y="168" font-size="9.5" text-anchor="middle" fill="#9aa0ab">2F</text>
+              <circle cx="250" cy="150" r="2.2" fill="#9aa0ab"/><text x="250" y="168" font-size="9.5" text-anchor="middle" fill="#9aa0ab">2F′</text>
+
+              <g stroke="#e8b13a" stroke-width="2" fill="none" style="filter:drop-shadow(0 0 3px rgba(232,177,58,.7))">
+                <path d="M100,118 H190"/>
+                <path d="M190,118 L235,166"/>
+                <path d="M100,118 L235,166"/>
+                <path d="M100,118 L190,166"/>
+                <path d="M190,166 H235"/>
+              </g>
+
+              <line x1="100" y1="150" x2="100" y2="118" stroke="#0e7c7b" stroke-width="2.5" marker-end="url(#a-teal)"/>
+              <text x="100" y="108" font-size="10.5" fill="#0e7c7b" text-anchor="middle">物 h=4</text>
+              <line x1="235" y1="150" x2="235" y2="166" stroke="#c25d4b" stroke-width="2.5" marker-end="url(#a-coral)"/>
+              <text x="235" y="182" font-size="10.5" fill="#c25d4b" text-anchor="middle">像 h′=-2</text>
+
+              <text x="90" y="264" font-size="10.5" fill="#5b606b">u=30cm</text>
+              <text x="220" y="264" font-size="10.5" fill="#5b606b">v=15cm（倒立·缩小·实像）</text>
+            </svg>
+          </div>
+          <div class="legend"><span>玻璃半透明蓝色渐变材质</span><span>三条特殊光线在像点精确汇聚</span></div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-gold">方向乙 · 光线追踪剧场</span><h3>这东西真的在模拟光</h3><p>挪用 CG 光线追踪调试可视化，发光光束+半透明玻璃材质，成像由薄透镜公式算出，架构上不会画错。</p></div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>类比插画，不出现术语</h4>
+      <div class="demo" style="background:linear-gradient(180deg,#f4f6fb,#fff)"><svg width="80" height="40" viewBox="0 0 80 40" style="display:block"><rect x="38" y="4" width="4" height="32" fill="#9aa0ab"/><circle cx="18" cy="20" r="7" fill="#3b4e7e"/><circle cx="62" cy="20" r="7" fill="none" stroke="#9aa0ab" stroke-width="1.6" stroke-dasharray="2 2"/></svg></div>
+      <ul><li>"影子游戏/镜子里的我"</li><li>不出现法线/入射角</li></ul>
+    </div>
+    <div class="band"><div class="g">高小 3–6</div><h4>光沿直线传播直觉</h4>
+      <div class="demo"><svg width="80" height="40" viewBox="0 0 80 40"><line x1="10" y1="30" x2="60" y2="10" stroke="#e8b13a" stroke-width="3" stroke-linecap="round" marker-end="url(#a-gold)"/></svg></div>
+      <ul><li>乙简化版：光束+镜面</li><li>不标注角度数值</li></ul>
+    </div>
+    <div class="band"><div class="g">初中 7–9</div><h4>法线角度规范标注</h4>
+      <div class="demo"><svg width="80" height="50" viewBox="0 0 80 50"><line x1="40" y1="5" x2="40" y2="45" stroke="#9aa0ab" stroke-dasharray="2 3"/><line x1="15" y1="10" x2="40" y2="25" stroke="#5b606b" stroke-width="1.6" marker-end="url(#a-line)"/><line x1="40" y1="25" x2="65" y2="10" stroke="#2e86de" stroke-width="1.6" marker-end="url(#a-blue)"/></svg></div>
+      <ul><li>反射+平面镜/凸透镜成像</li><li>虚像虚线、实像实线</li></ul>
+    </div>
+    <div class="band"><div class="g">高中 10–12</div><h4>甲为主，多光线多界面</h4>
+      <div class="demo" style="background:#fff"><span style="font-family:monospace;font-size:11px;color:var(--gold)">三棱镜色散 · 全反射</span></div>
+      <ul><li>结合折射率/临界角计算</li><li>角度精确到数值</li></ul>
+    </div>
+  </div>
+
+  <!-- ============ 5 运动图像 ============ -->
+  <section class="sec">
+    <div class="sec-k">05 / 运动图像 · v-t / s-t</div>
+    <h2>图像形状=运动性质——斜率、截距、面积都是物理量</h2>
+    <p>示例运动：0–2s 匀加速 0→6m/s，2–5s 匀速 6m/s，5–8s 匀减速 6→0m/s。由此推出 s-t：(0,0)→(2,6m)→(5,24m)→(8,33m)。</p>
+  </section>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="stagebox">
+          <div class="given">运动仪表流 · v-t 图 + 事件锚点</div>
+          <div class="figwrap">
+            <svg width="320" height="230" viewBox="0 0 340 280" style="display:block">
+              <line x1="40" y1="210" x2="310" y2="210" stroke="#16181d" stroke-width="1.4" marker-end="url(#a-line)"/>
+              <line x1="55" y1="230" x2="55" y2="45" stroke="#16181d" stroke-width="1.4" marker-end="url(#a-line)"/>
+              <text x="315" y="214" font-size="10.5" fill="#5b606b">t/s</text>
+              <text x="55" y="38" font-size="10.5" fill="#5b606b">v/(m/s)</text>
+
+              <line x1="55" y1="72" x2="295" y2="72" stroke="#e9e6df" stroke-dasharray="3 3"/><text x="45" y="76" font-size="10" fill="#9aa0ab" text-anchor="end">6</text>
+              <line x1="115" y1="210" x2="115" y2="225" stroke="#9aa0ab"/><text x="115" y="238" font-size="10" fill="#9aa0ab" text-anchor="middle">2</text>
+              <line x1="205" y1="210" x2="205" y2="225" stroke="#9aa0ab"/><text x="205" y="238" font-size="10" fill="#9aa0ab" text-anchor="middle">5</text>
+              <line x1="295" y1="210" x2="295" y2="225" stroke="#9aa0ab"/><text x="295" y="238" font-size="10" fill="#9aa0ab" text-anchor="middle">8</text>
+
+              <rect x="115" y="72" width="90" height="138" fill="rgba(14,124,123,.08)"/>
+              <line x1="115" y1="210" x2="115" y2="72" stroke="#c9cdd6" stroke-dasharray="2 3"/>
+              <line x1="205" y1="210" x2="205" y2="72" stroke="#c9cdd6" stroke-dasharray="2 3"/>
+
+              <path d="M55,210 L115,72" stroke="#c25d4b" stroke-width="2.6" fill="none"/>
+              <path d="M115,72 L205,72" stroke="#0e7c7b" stroke-width="2.6" fill="none"/>
+              <path d="M205,72 L295,210" stroke="#3b4e7e" stroke-width="2.6" fill="none"/>
+
+              <g font-family="monospace" font-size="9.5">
+                <rect x="60" y="120" width="72" height="30" rx="7" fill="#fff" stroke="#c25d4b"/><text x="96" y="133" text-anchor="middle" fill="#c25d4b">加速</text><text x="96" y="145" text-anchor="middle" fill="#c25d4b">a=3m/s²</text>
+                <rect x="128" y="46" width="88" height="20" rx="7" fill="#fff" stroke="#0e7c7b"/><text x="172" y="60" text-anchor="middle" fill="#0e7c7b">匀速 v=6m/s</text>
+                <rect x="222" y="120" width="80" height="30" rx="7" fill="#fff" stroke="#3b4e7e"/><text x="262" y="133" text-anchor="middle" fill="#3b4e7e">减速</text><text x="262" y="145" text-anchor="middle" fill="#3b4e7e">a=-2m/s²</text>
+              </g>
+              <text x="160" y="196" font-size="9.5" fill="#0e7c7b" text-anchor="middle">阴影=位移 18m</text>
+            </svg>
+          </div>
+          <div class="legend"><span><i style="background:#c25d4b"></i>加速</span><span><i style="background:#0e7c7b"></i>匀速</span><span><i style="background:#3b4e7e"></i>减速</span><span>拐点=事件锚点标注（借 K 线图语言）</span></div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-jade">方向甲 · 运动仪表流</span><h3>像读心电图一样读运动</h3><p>转折点加"事件锚点"悬浮标注，阴影区域强调面积=位移；挪用金融图表/健康监测的图像叙事化手法。</p></div>
+    </div>
+
+    <div class="card">
+      <div class="stage tall">
+        <div class="stagebox">
+          <div class="given">多轨叠合乐谱 · v-t 与 s-t 同一时间轴对齐</div>
+          <div class="figwrap">
+            <svg width="360" height="270" viewBox="0 0 380 300" style="display:block">
+              <text x="18" y="112" font-size="10.5" fill="#5b606b" transform="rotate(-90 18 112)">速度 v</text>
+              <text x="18" y="222" font-size="10.5" fill="#5b606b" transform="rotate(-90 18 222)">位移 s</text>
+
+              <line x1="100" y1="140" x2="340" y2="140" stroke="#e9e6df"/>
+              <path d="M100,140 L160,80 L250,80 L340,140" stroke="#3b4e7e" stroke-width="2.4" fill="none"/>
+              <text x="345" y="144" font-size="9.5" fill="#9aa0ab">0</text><text x="345" y="84" font-size="9.5" fill="#9aa0ab">6</text>
+
+              <line x1="100" y1="270" x2="340" y2="270" stroke="#e9e6df"/>
+              <path d="M100,270 Q130,270 160,248.2 L250,182.7 Q300,150 340,150" stroke="#0e7c7b" stroke-width="2.4" fill="none"/>
+              <text x="345" y="274" font-size="9.5" fill="#9aa0ab">0</text><text x="345" y="154" font-size="9.5" fill="#9aa0ab">33</text>
+
+              <line x1="250" y1="40" x2="250" y2="290" stroke="#c25d4b" stroke-width="1.4" stroke-dasharray="4 3"/>
+              <circle cx="250" cy="80" r="3" fill="#c25d4b"/><circle cx="250" cy="182.7" r="3" fill="#c25d4b"/>
+              <rect x="228" y="42" width="46" height="18" rx="6" fill="#fff" stroke="#c25d4b"/><text x="251" y="55" font-size="10" fill="#c25d4b" text-anchor="middle" font-family="monospace">t=5s</text>
+
+              <text x="90" y="144" font-size="9" fill="#3b4e7e" text-anchor="end">v</text>
+              <text x="90" y="274" font-size="9" fill="#0e7c7b" text-anchor="end">s</text>
+            </svg>
+          </div>
+          <div class="legend"><span><i style="background:#3b4e7e"></i>v-t 轨</span><span><i style="background:#0e7c7b"></i>s-t 轨</span><span>竖向参考线=播放头，贯穿全部轨道</span></div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-jade">方向乙 · 多轨叠合乐谱</span><h3>同一时刻，不同物理量的对应</h3><p>借 DAW 多轨时间线语言，v-t 与 s-t 纵向堆叠对齐，精确传达运动学图像家族的微积分关系。</p></div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>具象比较插画，不画坐标轴</h4>
+      <div class="demo" style="background:linear-gradient(180deg,#f4f6fb,#fff)"><svg width="90" height="34" viewBox="0 0 90 34" style="display:block"><line x1="6" y1="27" x2="82" y2="27" stroke="#e9e6df" stroke-width="2"/><circle cx="30" cy="27" r="5.5" fill="#3f7d63"/><circle cx="58" cy="27" r="5.5" fill="#c25d4b"/><line x1="82" y1="8" x2="82" y2="30" stroke="#9aa0ab" stroke-width="2"/></svg></div>
+      <ul><li>龟兔赛跑式"运动快慢"</li><li>不引入坐标图</li></ul>
+    </div>
+    <div class="band"><div class="g">高小 3–6</div><h4>极简坐标图，友好事件锚点</h4>
+      <div class="demo"><svg width="90" height="50" viewBox="0 0 90 50"><line x1="10" y1="40" x2="10" y2="10" stroke="#9aa0ab"/><line x1="10" y1="40" x2="80" y2="40" stroke="#9aa0ab"/><path d="M10,40 L50,15 L80,15" stroke="#3b4e7e" stroke-width="2" fill="none"/></svg></div>
+      <ul><li>事件锚点用友好图标 ⏸</li><li>不引入加速度概念</li></ul>
+    </div>
+    <div class="band"><div class="g">初中 7–9</div><h4>甲为主，匀速/变速是重点</h4>
+      <div class="demo" style="background:rgba(14,124,123,.06)"><span style="font-family:monospace;font-size:11px;color:var(--teal)">面积=位移</span></div>
+      <ul><li>事件锚点标注规范化</li><li>v-t 面积定性强调</li></ul>
+    </div>
+    <div class="band"><div class="g">高中 10–12</div><h4>乙多轨叠合为主，学术级规范</h4>
+      <div class="demo" style="background:#fff"><span style="font-family:monospace;font-size:10.5px;color:var(--indigo)">v-t / s-t / a-t 互推</span></div>
+      <ul><li>坐标轴学术级规范</li><li>去插画装饰</li></ul>
+    </div>
+  </div>
+
+  <!-- ============ 6 实验装置图 ============ -->
+  <section class="sec">
+    <div class="sec-k">06 / 实验装置图 · 控制变量的空间化</div>
+    <h2>不是"这是个什么仪器"，是自变量→因变量的因果动线</h2>
+    <p>示例：探究"弹簧测力计读数与钩码总重力"的关系——钩码通过定滑轮牵引测力计，理想情况下绳的张力（读数）等于钩码总重力。</p>
+  </section>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="stage">
+        <div class="stagebox">
+          <div class="given">实验台标注剖面 · 自变量(左) → 因变量(右)</div>
+          <div class="figwrap">
+            <div class="exp-scene" style="position:relative">
+              <svg width="100%" height="200" viewBox="0 0 400 220" style="display:block">
+                <line x1="60" y1="40" x2="60" y2="260" stroke="#9aa0ab" stroke-width="3"/>
+                <line x1="60" y1="48" x2="170" y2="48" stroke="#9aa0ab" stroke-width="3"/>
+                <circle cx="170" cy="60" r="13" fill="#fff" stroke="#5b606b" stroke-width="2"/>
+                <path d="M160,60 A10 10 0 0 0 160,72" fill="none" stroke="#5b606b" stroke-width="1.4"/>
+
+                <path d="M162,68 Q90,80 90,90" stroke="#16181d" stroke-width="1.4" fill="none"/>
+                <path d="M178,68 Q250,80 250,90" stroke="#16181d" stroke-width="1.4" fill="none"/>
+
+                <rect x="75" y="90" width="30" height="14" rx="2" fill="rgba(194,93,75,.18)" stroke="#c25d4b" stroke-width="1.4"/>
+                <rect x="75" y="106" width="30" height="14" rx="2" fill="rgba(194,93,75,.18)" stroke="#c25d4b" stroke-width="1.4"/>
+                <rect x="75" y="122" width="30" height="14" rx="2" fill="rgba(194,93,75,.18)" stroke="#c25d4b" stroke-width="1.4"/>
+                <text x="90" y="150" font-size="10.5" fill="#c25d4b" text-anchor="middle">钩码×3</text>
+                <text x="90" y="163" font-size="10" fill="#c25d4b" text-anchor="middle">1N/个 = 3N</text>
+
+                <rect x="225" y="90" width="50" height="70" rx="6" fill="rgba(14,124,123,.08)" stroke="#0e7c7b" stroke-width="1.6"/>
+                <path d="M235,98 l4,6 l-8,6 l8,6 l-8,6 l4,6" stroke="#0e7c7b" stroke-width="1.2" fill="none"/>
+                <rect x="228" y="140" width="44" height="16" fill="#fff" stroke="#0e7c7b" stroke-width="1.2"/>
+                <text x="250" y="152" font-size="10" fill="#0e7c7b" text-anchor="middle" font-family="monospace">3.0N</text>
+                <text x="250" y="176" font-size="10.5" fill="#0e7c7b" text-anchor="middle">弹簧测力计</text>
+              </svg>
+              <div class="callout" style="top:6px;right:8px">读数 = 钩码总重力</div>
+            </div>
+          </div>
+          <div class="legend"><span><i style="background:#c25d4b"></i>自变量·钩码重力</span><span><i style="background:#0e7c7b"></i>因变量·测力计读数</span><span>图标化插画，非写实素描</span></div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-indigo">方向甲 · 实验台标注剖面</span><h3>空间位置暗示因果关系</h3><p>左侧强调色=自变量器材，右侧强调色=因变量读数器材；挪用 PhET 一类现代科学模拟应用的图标化拆解语言。</p></div>
+    </div>
+
+    <div class="card">
+      <div class="stage">
+        <div class="stagebox">
+          <div class="given">变量控制看板 · 三栏结构，图退为点缀</div>
+          <div class="figwrap" style="position:relative;width:100%;height:100%">
+            <div class="vcb" style="position:absolute;inset:0;padding-bottom:44px">
+              <div class="col">
+                <div class="ic" style="background:rgba(91,96,107,.12)"><svg width="13" height="13" viewBox="0 0 13 13"><rect x="2" y="6" width="9" height="6" rx="1.2" fill="none" stroke="#5b606b" stroke-width="1.3"/><path d="M4,6 V4 a2.5,2.5 0 0 1 5,0 V6" fill="none" stroke="#5b606b" stroke-width="1.3"/></svg></div>
+                <h5>控制变量</h5>
+                <ul><li>滑轮组数量、绕线方式不变</li><li>测力计使用前已校零</li><li>绳与滑轮间摩擦不计</li></ul>
+              </div>
+              <div class="col" style="border-color:rgba(194,93,75,.35)">
+                <div class="ic" style="background:rgba(194,93,75,.14);color:#c25d4b">↕</div>
+                <h5 style="color:#c25d4b">操纵变量（自变量）</h5>
+                <ul><li>钩码个数：1 → 2 → 3 个</li><li>对应总重力：1N / 2N / 3N</li></ul>
+              </div>
+              <div class="col" style="border-color:rgba(14,124,123,.35)">
+                <div class="ic" style="background:rgba(14,124,123,.14)"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2,10 A5,5 0 0 1 12,10" fill="none" stroke="#0e7c7b" stroke-width="1.4"/><line x1="7" y1="10" x2="10" y2="6" stroke="#0e7c7b" stroke-width="1.4" stroke-linecap="round"/><circle cx="7" cy="10" r="1" fill="#0e7c7b"/></svg></div>
+                <h5 style="color:#0e7c7b">观测变量（因变量）</h5>
+                <ul><li>弹簧测力计读数</li><li>对应记录：1.0N / 2.0N / 3.0N</li></ul>
+              </div>
+            </div>
+            <div class="banner">结论：绳的张力（测力计读数）与所挂钩码的总重力大小相等</div>
+          </div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag t-indigo">方向乙 · 变量控制看板</span><h3>设计逻辑清楚，不是画得像不像</h3><p>文字结构占主体、图退为点缀——刻意越界"图辅文主"的合理例外，因为教育内核本就是变量逻辑。</p></div>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band"><div class="g">低小 1–2</div><h4>大圆角卡通器材</h4>
+      <div class="demo" style="background:linear-gradient(180deg,#fff7ec,#fdf0df)"><svg width="80" height="34" viewBox="0 0 80 34" style="display:block"><circle cx="18" cy="14" r="9" fill="none" stroke="#b5872f" stroke-width="2"/><line x1="24" y1="20" x2="32" y2="28" stroke="#b5872f" stroke-width="2.4" stroke-linecap="round"/><path d="M50,8 L50,24 Q50,30 56,30 L64,30 Q70,30 70,24 L70,8 Z" fill="rgba(59,78,126,.1)" stroke="#3b4e7e" stroke-width="1.6"/><line x1="50" y1="16" x2="70" y2="16" stroke="#3b4e7e" stroke-width="1.2"/></svg></div>
+      <ul><li>"我们改变了什么/看到了什么"</li><li>生活化器材</li></ul>
+    </div>
+    <div class="band"><div class="g">高小 3–6</div><h4>甲为主，图标化程度提升</h4>
+      <div class="demo"><span style="font-family:monospace;font-size:11px;color:var(--indigo)">要改变的 / 要测量的</span></div>
+      <ul><li>接近教育 App 质感</li><li>画面仍以图示为主导</li></ul>
+    </div>
+    <div class="band"><div class="g">初中 7–9</div><h4>乙三栏看板首次上线</h4>
+      <div class="demo"><div style="display:flex;gap:4px"><div style="width:20px;height:34px;background:var(--hair);border-radius:3px"></div><div style="width:20px;height:34px;background:rgba(194,93,75,.18);border-radius:3px"></div><div style="width:20px;height:34px;background:rgba(14,124,123,.18);border-radius:3px"></div></div></div>
+      <ul><li>规范使用"自变量/因变量"术语</li><li>成为教学重点呈现</li></ul>
+    </div>
+    <div class="band"><div class="g">高中 10–12</div><h4>看板为主，信息密度提高</h4>
+      <div class="demo" style="background:#fff"><span style="font-family:monospace;font-size:10.5px;color:var(--ink)">多组对照 + 数据记录表</span></div>
+      <ul><li>装置图标转极简线条</li><li>去卡通化</li></ul>
+    </div>
+  </div>
+
+  <footer>
+    maolab · 物理特殊内容呈现画廊 · 2026-07-23 &nbsp;|&nbsp; 白为主 · 颜色只在物件层 &nbsp;|&nbsp; <b>渲染器管定律，LLM 管取值</b>——光路/受力/电路的正确性红线不依赖事后审核，而是架构上不可能出错
+  </footer>
+</div>

@@ -1,0 +1,54 @@
+node_modules/
+.next/
+app/.next-dev/
+dist/
+*.local
+.env
+.env.local
+data/
+.DS_Store
+*.db
+*.db-journal
+
+# textbook trees cache (可重新跑 pnpm textbook:sync:trees 生成)
+packages/textbook-index/data/textbook-trees/
+coverage/
+.turbo/
+
+# TS 增量编译缓存（不应入库；2026-05-26 retro 发现 churn 23 次）
+*.tsbuildinfo
+
+# gstack 本地工作产物
+.context/retros/
+app/public/source-documents/*
+!app/public/source-documents/.gitkeep
+app/public/generated-images/*.png
+app/public/generated-images/*.jpg
+!app/public/generated-images/.gitkeep
+app/public/generated-images/*.png
+app/public/generated-images/*.jpg
+!app/public/generated-images/.gitkeep
+
+# 运行时日志/浏览器产物/批处理断点(本地保留, 不入库)
+*.log
+app/.next-dev-logs/
+app/logs/
+.playwright-mcp/
+# 真检浏览器 profile 绝不入库：含 Login Data/Cookies/Vpn Tokens 等凭证存储。
+# 2026-07-20 round13 曾误提交 675 个文件 62MB，已用 filter-repo 从历史剔除
+docs/real-check/**/edge-profile/
+docs/real-check/**/*-profile/
+# .claude/ 整体不入库，但 settings.json 是双 Agent 协作的 SessionStart hook 配置，需要入库
+# （写成 .claude/* 而非 .claude/，否则 git 不会下探目录，下面的 ! 例外不生效）
+.claude/*
+!.claude/settings.json
+.kp-batch-progress.json
+app/.video-jobs/
+app/public/generated-videos/
+
+# Cowart/调试工具的本地状态与一次性输出，不属于项目源码
+canvas/
+scratch-*.json
+
+# Next.js 生成文件(dev/build 互相改写 reference path,不入库)
+app/next-env.d.ts

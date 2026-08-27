@@ -1,0 +1,32 @@
+{
+  "name": "@maolab/presgen",
+  "version": "0.0.1",
+  "private": true,
+  "description": "演讲幻灯片生成/编辑/导出引擎(集成自 presentation-generator AGPL-3.0)",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.ts",
+    "./types": "./lib/types.ts",
+    "./themes": "./lib/themes.ts",
+    "./layouts": "./lib/layouts/registry.ts",
+    "./prompts": "./lib/prompts.ts",
+    "./brandkit": "./lib/brandkit.ts",
+    "./markdown-deck": "./lib/markdown-deck.ts",
+    "./adapt-from-maolab": "./lib/adapt-from-maolab.ts",
+    "./adapt-from-mainline": "./lib/adapt-from-mainline.ts",
+    "./render-pptx": "./lib/render-pptx.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1",
+    "jspdf": "^4.2.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "vitest": "^2.0.0"
+  }
+}
