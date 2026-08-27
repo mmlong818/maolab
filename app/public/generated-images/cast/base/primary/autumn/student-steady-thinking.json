@@ -1,0 +1,41 @@
+{
+  "kind": "base",
+  "characterId": "student-steady",
+  "legacyFile": "student-mei",
+  "role": "student",
+  "schoolStage": "primary",
+  "season": "autumn",
+  "expression": "thinking",
+  "subject": null,
+  "model": "gpt-image-2",
+  "quality": "medium",
+  "finalFile": "/generated-images/cast/base/primary/autumn/student-steady-thinking.png",
+  "rawFile": "app/logs/cast-generation/raw/base-primary-autumn-student-steady-thinking.png",
+  "keyColor": "#00ff00",
+  "references": [
+    "app/public/generated-images/cast/cutouts/student-mei.png",
+    "app/public/generated-images/cast/student-mei.png"
+  ],
+  "alpha": {
+    "size": [
+      1024,
+      1536
+    ],
+    "corners": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "bbox": [
+      236,
+      94,
+      820,
+      1536
+    ],
+    "transparentRatio": 0.5966529846191406,
+    "partialRatio": 0.003825505574544271
+  },
+  "prompt": "Use case: illustration-story\nAsset type: recurring transparent half-body RPG visual-novel portrait for a 1920x1080 education course dialogue layer.\nPrimary request: create exactly one student character portrait for Xiao Mei.\nCharacter identity: a steady student, calm and organized, good at summarizing steps and restating the key point in simple words.\nSchool stage adaptation: primary-school; looks like a primary-school student; smaller body proportion, softer rounder features, innocent curiosity, age-appropriate clothing.\nSeason outfit: autumn outfit: layered cardigan, light jacket, vest, scarf, or warmer fabric; still neat and not bulky.\nSubject theme: none; this is a reusable base dialogue portrait, not a course-cover illustration.\nExpression requirement: thinking expression, slightly narrowed focus, one hand near chin or holding a pen, guiding a careful rethink.\nContinuity: if reference images are provided, preserve the same face silhouette, hairstyle direction, body type, personality, and character role; adapt only age-read, outfit, prop, and expression requested here.\nStyle/medium: polished Chinese K-12 educational RPG dialogue portrait, refined anime-adjacent illustration, clean linework, soft watercolor texture, professional classroom taste, not chibi, not photorealistic.\nComposition/framing: waist-up to upper-thigh half-body portrait, full head visible, shoulders and torso readable, character uses roughly 72-82% of canvas height, centered with generous padding, no cropped head, no tiny full-body figure.\nBackground-removal requirement: place the character on a perfectly flat solid chroma-key background.\nThe entire background must be exactly #00ff00, uniform edge to edge, with no shadow, gradient, paper texture, floor plane, reflection, scenery, or lighting variation.\nDo not use #00ff00 anywhere in the character, clothing, props, hair, eyes, or line art.\nConstraints: one character only, transparent-cutout friendly edges, no speech bubble, no dialogue box, no classroom UI, no readable text, no Chinese characters, no English letters, no numbers, no watermark, no logo, no black border.",
+  "generatedAt": "2026-07-03T11:38:52.361Z"
+}

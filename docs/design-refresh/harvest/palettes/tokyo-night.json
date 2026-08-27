@@ -1,0 +1,570 @@
+{
+  "source": {
+    "repo": "https://github.com/folke/tokyonight.nvim",
+    "license": "Apache-2.0",
+    "fetchedAt": "2026-07-21",
+    "sourceUrls": [
+      "https://raw.githubusercontent.com/folke/tokyonight.nvim/main/lua/tokyonight/colors/night.lua",
+      "https://raw.githubusercontent.com/folke/tokyonight.nvim/main/lua/tokyonight/colors/storm.lua",
+      "https://raw.githubusercontent.com/folke/tokyonight.nvim/main/lua/tokyonight/colors/day.lua",
+      "https://raw.githubusercontent.com/folke/tokyonight.nvim/main/lua/tokyonight/colors/moon.lua",
+      "https://raw.githubusercontent.com/folke/tokyonight.nvim/main/lua/tokyonight/util.lua",
+      "https://raw.githubusercontent.com/folke/tokyonight.nvim/main/extras/lua/tokyonight_day.lua",
+      "https://raw.githubusercontent.com/folke/tokyonight.nvim/main/LICENSE"
+    ]
+  },
+  "flavors": [
+    {
+      "id": "night",
+      "name": "Tokyo Night",
+      "colors": [
+        {
+          "name": "bg",
+          "hex": "#1a1b26"
+        },
+        {
+          "name": "bg_dark",
+          "hex": "#16161e"
+        },
+        {
+          "name": "bg_dark1",
+          "hex": "#0C0E14"
+        },
+        {
+          "name": "bg_highlight",
+          "hex": "#292e42"
+        },
+        {
+          "name": "blue",
+          "hex": "#7aa2f7"
+        },
+        {
+          "name": "blue0",
+          "hex": "#3d59a1"
+        },
+        {
+          "name": "blue1",
+          "hex": "#2ac3de"
+        },
+        {
+          "name": "blue2",
+          "hex": "#0db9d7"
+        },
+        {
+          "name": "blue5",
+          "hex": "#89ddff"
+        },
+        {
+          "name": "blue6",
+          "hex": "#b4f9f8"
+        },
+        {
+          "name": "blue7",
+          "hex": "#394b70"
+        },
+        {
+          "name": "comment",
+          "hex": "#565f89"
+        },
+        {
+          "name": "cyan",
+          "hex": "#7dcfff"
+        },
+        {
+          "name": "dark3",
+          "hex": "#545c7e"
+        },
+        {
+          "name": "dark5",
+          "hex": "#737aa2"
+        },
+        {
+          "name": "fg",
+          "hex": "#c0caf5"
+        },
+        {
+          "name": "fg_dark",
+          "hex": "#a9b1d6"
+        },
+        {
+          "name": "fg_gutter",
+          "hex": "#3b4261"
+        },
+        {
+          "name": "green",
+          "hex": "#9ece6a"
+        },
+        {
+          "name": "green1",
+          "hex": "#73daca"
+        },
+        {
+          "name": "green2",
+          "hex": "#41a6b5"
+        },
+        {
+          "name": "magenta",
+          "hex": "#bb9af7"
+        },
+        {
+          "name": "magenta2",
+          "hex": "#ff007c"
+        },
+        {
+          "name": "orange",
+          "hex": "#ff9e64"
+        },
+        {
+          "name": "purple",
+          "hex": "#9d7cd8"
+        },
+        {
+          "name": "red",
+          "hex": "#f7768e"
+        },
+        {
+          "name": "red1",
+          "hex": "#db4b4b"
+        },
+        {
+          "name": "teal",
+          "hex": "#1abc9c"
+        },
+        {
+          "name": "terminal_black",
+          "hex": "#414868"
+        },
+        {
+          "name": "yellow",
+          "hex": "#e0af68"
+        },
+        {
+          "name": "git.add",
+          "hex": "#449dab"
+        },
+        {
+          "name": "git.change",
+          "hex": "#6183bb"
+        },
+        {
+          "name": "git.delete",
+          "hex": "#914c54"
+        }
+      ]
+    },
+    {
+      "id": "storm",
+      "name": "Tokyo Night Storm",
+      "colors": [
+        {
+          "name": "bg",
+          "hex": "#24283b"
+        },
+        {
+          "name": "bg_dark",
+          "hex": "#1f2335"
+        },
+        {
+          "name": "bg_dark1",
+          "hex": "#1b1e2d"
+        },
+        {
+          "name": "bg_highlight",
+          "hex": "#292e42"
+        },
+        {
+          "name": "blue",
+          "hex": "#7aa2f7"
+        },
+        {
+          "name": "blue0",
+          "hex": "#3d59a1"
+        },
+        {
+          "name": "blue1",
+          "hex": "#2ac3de"
+        },
+        {
+          "name": "blue2",
+          "hex": "#0db9d7"
+        },
+        {
+          "name": "blue5",
+          "hex": "#89ddff"
+        },
+        {
+          "name": "blue6",
+          "hex": "#b4f9f8"
+        },
+        {
+          "name": "blue7",
+          "hex": "#394b70"
+        },
+        {
+          "name": "comment",
+          "hex": "#565f89"
+        },
+        {
+          "name": "cyan",
+          "hex": "#7dcfff"
+        },
+        {
+          "name": "dark3",
+          "hex": "#545c7e"
+        },
+        {
+          "name": "dark5",
+          "hex": "#737aa2"
+        },
+        {
+          "name": "fg",
+          "hex": "#c0caf5"
+        },
+        {
+          "name": "fg_dark",
+          "hex": "#a9b1d6"
+        },
+        {
+          "name": "fg_gutter",
+          "hex": "#3b4261"
+        },
+        {
+          "name": "green",
+          "hex": "#9ece6a"
+        },
+        {
+          "name": "green1",
+          "hex": "#73daca"
+        },
+        {
+          "name": "green2",
+          "hex": "#41a6b5"
+        },
+        {
+          "name": "magenta",
+          "hex": "#bb9af7"
+        },
+        {
+          "name": "magenta2",
+          "hex": "#ff007c"
+        },
+        {
+          "name": "orange",
+          "hex": "#ff9e64"
+        },
+        {
+          "name": "purple",
+          "hex": "#9d7cd8"
+        },
+        {
+          "name": "red",
+          "hex": "#f7768e"
+        },
+        {
+          "name": "red1",
+          "hex": "#db4b4b"
+        },
+        {
+          "name": "teal",
+          "hex": "#1abc9c"
+        },
+        {
+          "name": "terminal_black",
+          "hex": "#414868"
+        },
+        {
+          "name": "yellow",
+          "hex": "#e0af68"
+        },
+        {
+          "name": "git.add",
+          "hex": "#449dab"
+        },
+        {
+          "name": "git.change",
+          "hex": "#6183bb"
+        },
+        {
+          "name": "git.delete",
+          "hex": "#914c54"
+        }
+      ]
+    },
+    {
+      "id": "day",
+      "name": "Tokyo Night Day",
+      "colors": [
+        {
+          "name": "bg",
+          "hex": "#e1e2e7"
+        },
+        {
+          "name": "bg_dark",
+          "hex": "#d0d5e3"
+        },
+        {
+          "name": "bg_dark1",
+          "hex": "#c1c9df"
+        },
+        {
+          "name": "bg_highlight",
+          "hex": "#c4c8da"
+        },
+        {
+          "name": "blue",
+          "hex": "#2e7de9"
+        },
+        {
+          "name": "blue0",
+          "hex": "#7890dd"
+        },
+        {
+          "name": "blue1",
+          "hex": "#188092"
+        },
+        {
+          "name": "blue2",
+          "hex": "#07879d"
+        },
+        {
+          "name": "blue5",
+          "hex": "#006a83"
+        },
+        {
+          "name": "blue6",
+          "hex": "#2e5857"
+        },
+        {
+          "name": "blue7",
+          "hex": "#92a6d5"
+        },
+        {
+          "name": "comment",
+          "hex": "#848cb5"
+        },
+        {
+          "name": "cyan",
+          "hex": "#007197"
+        },
+        {
+          "name": "dark3",
+          "hex": "#8990b3"
+        },
+        {
+          "name": "dark5",
+          "hex": "#68709a"
+        },
+        {
+          "name": "fg",
+          "hex": "#3760bf"
+        },
+        {
+          "name": "fg_dark",
+          "hex": "#6172b0"
+        },
+        {
+          "name": "fg_gutter",
+          "hex": "#a8aecb"
+        },
+        {
+          "name": "green",
+          "hex": "#587539"
+        },
+        {
+          "name": "green1",
+          "hex": "#387068"
+        },
+        {
+          "name": "green2",
+          "hex": "#38919f"
+        },
+        {
+          "name": "magenta",
+          "hex": "#9854f1"
+        },
+        {
+          "name": "magenta2",
+          "hex": "#d20065"
+        },
+        {
+          "name": "orange",
+          "hex": "#b15c00"
+        },
+        {
+          "name": "purple",
+          "hex": "#7847bd"
+        },
+        {
+          "name": "red",
+          "hex": "#f52a65"
+        },
+        {
+          "name": "red1",
+          "hex": "#c64343"
+        },
+        {
+          "name": "teal",
+          "hex": "#118c74"
+        },
+        {
+          "name": "terminal_black",
+          "hex": "#a1a6c5"
+        },
+        {
+          "name": "yellow",
+          "hex": "#8c6c3e"
+        },
+        {
+          "name": "git.add",
+          "hex": "#4197a4"
+        },
+        {
+          "name": "git.change",
+          "hex": "#506d9c"
+        },
+        {
+          "name": "git.delete",
+          "hex": "#c47981"
+        }
+      ]
+    },
+    {
+      "id": "moon",
+      "name": "Tokyo Night Moon",
+      "colors": [
+        {
+          "name": "bg",
+          "hex": "#222436"
+        },
+        {
+          "name": "bg_dark",
+          "hex": "#1e2030"
+        },
+        {
+          "name": "bg_dark1",
+          "hex": "#191B29"
+        },
+        {
+          "name": "bg_highlight",
+          "hex": "#2f334d"
+        },
+        {
+          "name": "blue",
+          "hex": "#82aaff"
+        },
+        {
+          "name": "blue0",
+          "hex": "#3e68d7"
+        },
+        {
+          "name": "blue1",
+          "hex": "#65bcff"
+        },
+        {
+          "name": "blue2",
+          "hex": "#0db9d7"
+        },
+        {
+          "name": "blue5",
+          "hex": "#89ddff"
+        },
+        {
+          "name": "blue6",
+          "hex": "#b4f9f8"
+        },
+        {
+          "name": "blue7",
+          "hex": "#394b70"
+        },
+        {
+          "name": "comment",
+          "hex": "#636da6"
+        },
+        {
+          "name": "cyan",
+          "hex": "#86e1fc"
+        },
+        {
+          "name": "dark3",
+          "hex": "#545c7e"
+        },
+        {
+          "name": "dark5",
+          "hex": "#737aa2"
+        },
+        {
+          "name": "fg",
+          "hex": "#c8d3f5"
+        },
+        {
+          "name": "fg_dark",
+          "hex": "#828bb8"
+        },
+        {
+          "name": "fg_gutter",
+          "hex": "#3b4261"
+        },
+        {
+          "name": "green",
+          "hex": "#c3e88d"
+        },
+        {
+          "name": "green1",
+          "hex": "#4fd6be"
+        },
+        {
+          "name": "green2",
+          "hex": "#41a6b5"
+        },
+        {
+          "name": "magenta",
+          "hex": "#c099ff"
+        },
+        {
+          "name": "magenta2",
+          "hex": "#ff007c"
+        },
+        {
+          "name": "orange",
+          "hex": "#ff966c"
+        },
+        {
+          "name": "purple",
+          "hex": "#fca7ea"
+        },
+        {
+          "name": "red",
+          "hex": "#ff757f"
+        },
+        {
+          "name": "red1",
+          "hex": "#c53b53"
+        },
+        {
+          "name": "teal",
+          "hex": "#4fd6be"
+        },
+        {
+          "name": "terminal_black",
+          "hex": "#444a73"
+        },
+        {
+          "name": "yellow",
+          "hex": "#ffc777"
+        },
+        {
+          "name": "git.add",
+          "hex": "#b8db87"
+        },
+        {
+          "name": "git.change",
+          "hex": "#7ca1f2"
+        },
+        {
+          "name": "git.delete",
+          "hex": "#e26a75"
+        }
+      ]
+    }
+  ]
+}

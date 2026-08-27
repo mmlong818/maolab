@@ -1,0 +1,128 @@
+<title>特殊内容呈现 · 全学科设计画廊索引</title>
+<style>
+  :root{--bg:#fcfbf9;--surface:#fff;--ink:#16181d;--sub:#5b606b;--faint:#9aa0ab;--line:#e9e6df;
+    --indigo:#3b4e7e;--teal:#0e7c7b;--gold:#b5872f;--jade:#3f7d63;--coral:#c25d4b;
+    --serif:"Songti SC","STSong","Noto Serif CJK SC",serif;--sans:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+  header{padding:70px 0 30px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--teal);font-weight:600;margin:0 0 16px}
+  h1{font-family:var(--serif);font-size:clamp(30px,4.5vw,50px);line-height:1.15;margin:0;text-wrap:balance}
+  .lede{max-width:680px;color:var(--sub);font-size:17px;margin:20px 0 0}
+  .lede b{color:var(--ink)}
+  .stat{display:flex;gap:32px;margin:28px 0 0;flex-wrap:wrap}
+  .stat div{font-size:13px;color:var(--faint)}
+  .stat b{display:block;font-family:var(--serif);font-size:26px;color:var(--ink);font-weight:600}
+  section{padding:40px 0}
+  h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:0 0 20px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+  a.card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);
+    border-radius:14px;padding:22px 22px 20px;transition:transform .15s,box-shadow .15s,border-color .15s}
+  a.card:hover{transform:translateY(-3px);box-shadow:0 18px 44px -26px rgba(20,22,28,.4);border-color:var(--teal)}
+  .card .k{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--accent,var(--indigo))}
+  .card h3{font-family:var(--serif);font-size:22px;margin:8px 0 8px}
+  .card p{font-size:13.5px;color:var(--sub);margin:0 0 14px;line-height:1.55}
+  .card .meta{font-size:12px;color:var(--faint);display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+  .card .meta span{white-space:nowrap}
+  .hero{grid-column:1/-1;background:linear-gradient(120deg,#fff, #f4f6fb);border-color:#dfe4f0}
+  .hero .k{color:var(--indigo)}
+  footer{padding:36px 0 80px;color:var(--faint);font-size:13px;border-top:1px solid var(--line)}
+  footer b{color:var(--sub)}
+  .note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:16px 20px;margin:8px 0 0;font-size:14px;color:var(--sub)}
+  .note b{color:var(--ink)}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">maolab · typed content · 2026-07-23</p>
+    <h1>特殊教育内容 · 超越教材的呈现设计</h1>
+    <p class="lede">古诗、拼音、单词音标、化学结构、几何、受力图、时间轴…… 每一类需要专属呈现的内容,都重新想象成<b>有设计感、现代、让学生想看</b>的形态。每类 ≥2 个结构异质方向 × 学段四档。点开任一学科看完整可视样例。</p>
+    <div class="stat">
+      <div><b>9</b>学科门类</div>
+      <div><b>~58</b>内容类型</div>
+      <div><b>120+</b>异质方向 mock</div>
+      <div><b>4</b>学段分档</div>
+    </div>
+  </header>
+
+  <section>
+    <h2>入口</h2>
+    <div class="grid">
+      <a class="card hero" href="gushi-calibration.html">
+        <div class="k">校准样例 · 已定档</div>
+        <h3>古诗《静夜思》· 境 / 律 / 叙</h3>
+        <p>三个异质方向:意境沉浸(电影感竖排)/ 声律解剖(平仄韵脚信息图)/ 逐句卡片流。用户已确认此为「设计感」档位锚。</p>
+        <div class="meta"><span>gushi-calibration.html</span><span>· 设计 DNA 基准</span></div>
+      </a>
+
+      <a class="card" href="yuwen-gallery.html" style="--accent:var(--coral)">
+        <div class="k">语文 · 8 类</div>
+        <h3>文言 · 拼音 · 汉字 · 修辞</h3>
+        <p>文言三栏批注、拼音调值曲线、汉字造字理据演变、成语语义星系、对联镜像轨道、病句诊断面板。</p>
+        <div class="meta"><span>yuwen-gallery.html</span><span>· yuwen.md</span></div>
+      </a>
+
+      <a class="card" href="english-gallery.html" style="--accent:var(--indigo)">
+        <div class="k">英语 · 6 类</div>
+        <h3>单词 · 音标 · 时态 · 句法</h3>
+        <p>声波单词卡、IPA 元音梯形+辅音矩阵、时态时间光轨、句子 X 光解剖、情景剧场、词素积木塔。</p>
+        <div class="meta"><span>english-gallery.html</span><span>· english.md</span></div>
+      </a>
+
+      <a class="card" href="math-gallery.html" style="--accent:var(--teal)">
+        <div class="k">数学 · 8 类</div>
+        <h3>竖式 · 数轴 · 几何 · 函数</h3>
+        <p>位值仓竖式、比例天平、地铁数轴、蓝图几何证明、函数动态描点、案件卷宗应用题、方程操作日志。</p>
+        <div class="meta"><span>math-gallery.html</span><span>· math.md</span></div>
+      </a>
+
+      <a class="card" href="physics-gallery.html" style="--accent:var(--indigo)">
+        <div class="k">物理 · 6 类</div>
+        <h3>受力 · 电路 · 光路 · 运动</h3>
+        <p>量纲仪表、工程受力蓝图、发光电路板(国标符号)、光路几何引擎、运动 v-t 双轨、实验台标注。</p>
+        <div class="meta"><span>physics-gallery.html</span><span>· physics.md</span></div>
+      </a>
+
+      <a class="card" href="chemistry-gallery.html" style="--accent:var(--jade)">
+        <div class="k">化学 · 6 类</div>
+        <h3>方程 · 结构 · 周期 · 装置</h3>
+        <p>配平天平、球棍键角、聚光周期表+电负性折线、轨道光环、模块化装置、同分异构积木。</p>
+        <div class="meta"><span>chemistry-gallery.html</span><span>· chemistry.md</span></div>
+      </a>
+
+      <a class="card" href="biology-gallery.html" style="--accent:var(--jade)">
+        <div class="k">生物 · 5 类</div>
+        <h3>结构 · 流程 · 分类 · 遗传</h3>
+        <p>眼球解剖引线、心肺循环环线、光合胶片带、分类年轮、Punnett 方格+谱系、能量金字塔+捕食网。</p>
+        <div class="meta"><span>biology-gallery.html</span><span>· biology.md</span></div>
+      </a>
+
+      <a class="card" href="geography-gallery.html" style="--accent:var(--teal)">
+        <div class="k">地理 · 5 类</div>
+        <h3>地图 · 等高线 · 气候 · 剖面</h3>
+        <p>渐变数据地图、地形千层切片、气候仪表+极坐标日历、经纬定位针/球面展平、大气剖面/断层剖切。</p>
+        <div class="meta"><span>geography-gallery.html</span><span>· geography.md</span></div>
+      </a>
+
+      <a class="card" href="humanities-arts-general-gallery.html" style="--accent:var(--gold)">
+        <div class="k">历史 · 道法 · 艺术 · 通用 · 15 类</div>
+        <h3>事件重现 · 时间轴 · 乐谱 · 思维结构</h3>
+        <p>历史事件重现(电影分镜/沉浸现场)、近代史地铁图、朝代地层柱、史料眉批、钢琴卷帘+五线谱、星夜策展、十二色相环、维恩/流程/因果链。</p>
+        <div class="meta"><span>humanities-arts-general-gallery.html</span><span>· humanities-arts-general.md</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>设计目录 & 落地</h2>
+    <div class="note">
+      <b>总纲与实现 spec</b>:上级目录 <code>../2026-07-23-typed-content-forms-spec.md</code> —— 设计总纲(超越教材定位/学段四轴/白为主整合)、现状架构基线(系统 A 显式槽键 vs 系统 B VisualSpec 复用)、全量分类、跨学科落地优先级。<br>
+      <b>落地路径</b>:走 mainline 系统 A 显式 contentSlots 槽键 + SceneTechniqueView 派发(禁正则猜);复用系统 B 数据结构、视觉全部按本画廊重做;每类内容多方向轮换(接 master-routing 同构机制)。
+    </div>
+  </section>
+
+  <footer>
+    maolab · 特殊内容呈现设计画廊 · 2026-07-23 &nbsp;|&nbsp; <b>白为主 · 颜色只在物件层 · 超越教材 · 分学段</b> &nbsp;|&nbsp; 全部未提交,等确认后进入渲染器实现
+  </footer>
+</div>

@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>英语 · 特殊内容呈现画廊</title>
+<style>
+:root{
+  --bg:#fcfbf9;--surface:#ffffff;--ink:#16181d;--sub:#5b606b;--faint:#9aa0ab;
+  --line:#e9e6df;--hair:#efece6;
+  --indigo:#3b4e7e;--teal:#0e7c7b;--gold:#b5872f;--jade:#3f7d63;--coral:#c25d4b;--plum:#7a5c8e;
+  --serif:"Songti SC","STSong","Noto Serif CJK SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 22px 55px -30px rgba(20,22,28,.30);--radius:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+header{padding:76px 0 32px}
+.eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);font-weight:600;margin:0 0 18px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,4.6vw,54px);line-height:1.16;margin:0;text-wrap:balance;letter-spacing:.01em}
+h1 em{font-style:normal;color:var(--faint)}
+.lede{max-width:720px;color:var(--sub);font-size:17px;margin:20px 0 0}
+.lede b{color:var(--ink);font-weight:600}
+.rule{height:1px;background:var(--line);margin:36px 0 0}
+
+.sec{padding:52px 0 6px}
+.sec-k{font-family:var(--serif);font-size:13px;letter-spacing:.14em;color:var(--faint)}
+.sec h2{font-family:var(--serif);font-weight:600;font-size:24px;margin:8px 0 6px}
+.sec p{color:var(--sub);max-width:760px;margin:0;font-size:14.5px}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;padding:26px 0 6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.stage{position:relative;height:340px;background:var(--surface)}
+.cap{padding:15px 20px;border-top:1px solid var(--hair);background:var(--surface)}
+.cap .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.cap h3{font-family:var(--serif);font-size:18px;margin:6px 0 5px}
+.cap p{font-size:13px;color:var(--sub);margin:0;line-height:1.55}
+.t-teal{color:var(--teal)} .t-indigo{color:var(--indigo)} .t-gold{color:var(--gold)} .t-jade{color:var(--jade)} .t-coral{color:var(--coral)}
+
+.bands{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:22px 0 8px}
+.band{border:1px solid var(--line);border-radius:14px;padding:16px 16px 18px;background:var(--surface)}
+.band .g{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.band h4{font-family:var(--serif);font-size:15px;margin:7px 0 9px}
+.band p{margin:0;color:var(--sub);font-size:12px;line-height:1.65}
+
+footer{padding:40px 0 80px;color:var(--faint);font-size:13px;border-top:1px solid var(--line);margin-top:40px}
+footer b{color:var(--sub);font-weight:600}
+
+/* ============ 01 单词卡 A 声波卡 SoundCard ============ */
+.voc-a{position:absolute;inset:0;background:linear-gradient(180deg,#ffffff,#f4faf9);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px 28px}
+.va-pos{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--teal);letter-spacing:.1em;margin-bottom:8px;font-weight:700}
+.va-pos i{width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block}
+.va-word{font-family:var(--serif);font-size:37px;font-weight:600;color:var(--ink);margin-bottom:2px;letter-spacing:.01em}
+.va-ipa{font-family:var(--mono);font-size:13.5px;color:var(--sub);margin-bottom:16px}
+.va-rhythm{display:flex;align-items:flex-end;gap:16px;height:52px;margin-bottom:14px}
+.va-syl{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;position:relative}
+.va-syl .bar{width:28px;border-radius:5px 5px 0 0;background:var(--line);display:block}
+.va-syl.big .bar{background:var(--teal)}
+.va-syl .t{font-family:var(--sans);color:var(--faint);font-size:11px}
+.va-syl.big .t{color:var(--ink);font-weight:700;font-size:15px}
+.va-syl .mark{position:absolute;top:-15px;font-size:13px;color:var(--teal);font-weight:700}
+.va-meaning{font-size:13px;color:var(--sub);margin-bottom:14px}
+.va-example{background:#f2f7f6;border-radius:10px;padding:10px 16px;font-family:var(--serif);font-size:13.5px;color:#2b2f33;text-align:center;max-width:360px}
+.va-example b{color:var(--teal);border-bottom:2px solid var(--teal)}
+.va-example .zh{font-family:var(--sans);font-size:11px;color:var(--faint);margin-top:5px}
+
+/* ============ 01 单词卡 B 词族矩阵 WordFamilyGrid ============ */
+.voc-b{position:absolute;inset:0;background:var(--surface);padding:24px 26px;display:flex;flex-direction:column}
+.vb-title{font-family:var(--serif);font-size:14px;color:var(--indigo);margin-bottom:16px}
+.vb-title span{font-family:var(--sans);font-size:11px;color:var(--faint);margin-left:8px}
+.vb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;flex:1}
+.vb-col-h{font-size:11px;color:var(--faint);letter-spacing:.14em;text-align:center;padding-bottom:6px;border-bottom:1px dashed var(--line)}
+.vb-cell{border:1px solid var(--line);border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:3px;background:#fbfbfc}
+.vb-cell b{font-family:var(--sans);font-size:13.5px;color:var(--ink);font-weight:700}
+.vb-cell i{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--faint)}
+.vb-cell span{font-size:10.5px;color:var(--sub)}
+.vb-cell.focus{border-color:var(--indigo);background:rgba(59,78,126,.06);box-shadow:0 0 0 2px rgba(59,78,126,.14)}
+.vb-cell.focus b{color:var(--indigo)}
+
+/* ============ 02 音标 A 口腔剖面卡 ============ */
+.ipa-a{position:absolute;inset:0;background:var(--surface);padding:18px 22px;display:flex;flex-direction:column}
+.ia-title{font-size:11.5px;color:var(--jade);letter-spacing:.06em;margin-bottom:4px;font-weight:700}
+.ia-vowels{display:flex;justify-content:center}
+.ia-cons{margin-top:8px}
+.cons-grid{display:grid;grid-template-columns:48px repeat(8,1fr);gap:2px;height:106px;grid-template-rows:16px repeat(5,1fr)}
+.cons-grid .h{font-size:8px;color:var(--faint);text-align:center;display:flex;align-items:center;justify-content:center}
+.cons-grid .rl{font-size:9px;color:var(--sub);display:flex;align-items:center;padding-left:2px}
+.cons-grid .c{background:var(--hair);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9.5px}
+.cons-grid .c.e{background:transparent}
+.vl{color:var(--ink)} .vd{color:var(--jade);font-weight:700} .sl{color:var(--faint);margin:0 1px;font-size:8px}
+
+/* ============ 02 音标 B 对立对卡组 MinimalPairs ============ */
+.ipa-b{position:absolute;inset:0;background:linear-gradient(180deg,#ffffff,#fdf6f4);padding:24px 28px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.ib-title{font-size:11.5px;color:var(--coral);letter-spacing:.06em;margin-bottom:6px;font-weight:700}
+.ib-pair{display:flex;align-items:center;gap:10px}
+.ib-word{display:flex;flex-direction:column;align-items:center;gap:3px;width:96px}
+.ib-word .sym{font-family:var(--mono);font-size:11px;color:var(--coral);background:rgba(194,93,75,.1);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.ib-word b{font-family:var(--sans);font-size:16px;color:var(--ink)}
+.ib-word i{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+.ib-axis{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.ib-axis .lrow{display:flex;justify-content:space-between;width:100%;font-size:9px;color:var(--faint)}
+.ib-axis .bar{width:100%;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--hair),rgba(194,93,75,.4));position:relative}
+.ib-axis .bar i{position:absolute;top:-3px;width:2px;height:12px;background:var(--coral);border-radius:2px;display:block}
+.ib-note{font-size:11px;color:var(--sub);text-align:center;margin:2px 0 6px}
+
+/* ============ 03 时态 A 时间光轨 Timeline Ray ============ */
+.ten-a{position:absolute;inset:0;background:var(--surface);padding:22px 26px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.ta-axis{display:flex;justify-content:space-between;font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;padding:0 2px}
+.ta-axis .now{color:var(--indigo);font-weight:700}
+.ta-row{display:flex;flex-direction:column;gap:6px}
+.ta-label{font-size:11.5px;color:var(--sub)}
+.ta-label i{font-style:normal;font-family:var(--mono);color:var(--faint);margin-left:6px}
+.ta-track{position:relative;height:14px;background:var(--hair);border-radius:7px}
+.ta-span{position:absolute;top:0;left:0;height:14px;border-radius:7px;background:linear-gradient(90deg,rgba(59,78,126,.12),var(--indigo))}
+.ta-dot{position:absolute;top:-3px;width:20px;height:20px;border-radius:50%;background:var(--indigo);box-shadow:0 0 0 5px rgba(59,78,126,.18);transform:translateX(-50%)}
+.ta-ring{position:absolute;top:-9px;width:32px;height:32px;border-radius:50%;border:2px solid var(--teal);transform:translateX(-50%)}
+.ta-ring::before,.ta-ring::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(14,124,123,.35)}
+.ta-ring::after{inset:-14px;border-color:rgba(14,124,123,.18)}
+.ta-sentence{font-family:var(--serif);font-size:13px;color:#2b2f33}
+.ta-sentence b{font-family:var(--sans);font-weight:700}
+.ta-sentence b.pp{color:var(--indigo)}
+.ta-sentence b.ing{color:var(--teal)}
+.ta-legend{display:flex;gap:14px;margin-top:2px;padding-top:12px;border-top:1px dashed var(--line)}
+.ta-legend span{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:999px;color:#fff}
+.ta-legend .l1{background:var(--faint)}
+.ta-legend .l2{background:var(--teal)}
+.ta-legend .l3{background:var(--indigo)}
+
+/* ============ 03 时态 B 时态积木 Tense Blocks ============ */
+.ten-b{position:absolute;inset:0;background:linear-gradient(180deg,#fffefa,#fdf8ee);padding:22px 26px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.tb-title{font-size:11.5px;color:var(--gold);letter-spacing:.04em;margin-bottom:6px;font-weight:700}
+.tb-row{display:flex;flex-direction:column;gap:8px}
+.tb-tag{font-size:11px;color:var(--sub)}
+.tb-blocks{display:flex;gap:8px;align-items:center}
+.blk{padding:9px 12px;font-family:var(--mono);font-size:12.5px;color:#fff;position:relative;text-align:center}
+.blk.subj{background:var(--faint);border-radius:8px}
+.blk.obj{background:var(--faint);border-radius:8px}
+.blk.verb{background:var(--coral);border-radius:4px}
+.blk.aux{background:var(--indigo);clip-path:polygon(22% 0%,78% 0%,100% 50%,78% 100%,22% 100%,0% 50%);padding:9px 16px}
+.blk .badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-size:8.5px;background:var(--ink);color:#fff;padding:1px 6px;border-radius:5px;white-space:nowrap}
+.blk.new .badge{background:var(--indigo)}
+.blk.changed .badge{background:var(--coral)}
+.blk.changed{outline:2px dashed var(--coral);outline-offset:2px}
+.blk.new{outline:2px dashed var(--indigo);outline-offset:2px}
+.tb-arrow{font-size:11px;color:var(--sub);padding-left:2px}
+
+/* ============ 04 句型 A 句法频谱条 Syntax Spectrum Bar ============ */
+.syn-a{position:absolute;inset:0;background:var(--surface);padding:24px 26px;display:flex;flex-direction:column;justify-content:center}
+.sa-legend{display:flex;gap:16px;margin-bottom:20px}
+.sa-legend .p{font-size:11px;color:var(--sub);display:flex;align-items:center;gap:5px}
+.sa-legend .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.dot.sub,.band.sub{background:var(--indigo)}
+.dot.pred,.band.pred{background:var(--coral)}
+.dot.obj,.band.obj{background:var(--jade)}
+.dot.mod,.band.mod{background:var(--faint)}
+.sa-row{display:flex;gap:6px;margin-bottom:24px}
+.sa-seg{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.sa-seg .w{font-family:var(--sans);font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.sa-seg .band{display:block;height:7px;border-radius:4px;width:100%}
+
+/* ============ 04 句型 B 句子解剖卡 Sentence X-Ray ============ */
+.syn-b{position:absolute;inset:0;background:linear-gradient(180deg,#ffffff,#fdf6f4);padding:24px 26px;display:flex;flex-direction:column}
+.sb-sentence{font-family:var(--serif);font-size:15.5px;color:var(--sub);line-height:1.6;margin-bottom:22px}
+.sb-sentence .hl1{color:var(--coral);font-weight:600;border-bottom:2px dotted var(--coral);padding-bottom:1px}
+.sb-tree{position:relative;flex:1;display:flex;gap:34px}
+.sb-col{display:flex;flex-direction:column;gap:8px}
+.sb-card{background:#fff;border:1px solid rgba(194,93,75,.35);border-radius:10px;padding:10px 13px;box-shadow:0 8px 18px -13px rgba(194,93,75,.5);font-size:13px;color:#2b2f33}
+.sb-card .role{display:block;font-size:9.5px;letter-spacing:.08em;color:var(--coral);text-transform:uppercase;margin-bottom:4px;font-weight:700}
+.sb-card.nested{margin-left:26px;border-color:rgba(194,93,75,.22);background:#fffaf9}
+.sb-card.nested .role{color:var(--faint)}
+.sb-link{width:2px;height:14px;background:rgba(194,93,75,.35);margin-left:26px}
+
+/* ============ 05 对话 A 情景气泡升级 Scene Strip ============ */
+.dlg-a{position:absolute;inset:0;background:linear-gradient(180deg,#fffdf6,#ffffff);padding:20px 22px;display:flex;flex-direction:column}
+.da-scene{display:flex;align-items:baseline;gap:8px;font-size:15px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+.da-scene b{font-family:var(--serif);color:var(--gold);font-weight:600}
+.da-scene span{font-size:11px;color:var(--faint)}
+.da-chat{display:flex;flex-direction:column;gap:9px;flex:1;justify-content:center}
+.da-msg{display:flex;align-items:flex-start;gap:8px}
+.da-msg.right{flex-direction:row-reverse}
+.da-msg .tagname{width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.da-msg.right .tagname{background:var(--indigo)}
+.da-msg .bubble{background:#f7f2e6;border-radius:12px;padding:8px 12px;font-size:12px;color:#2b2f33;max-width:80%}
+.da-msg.right .bubble{background:#eef0f6}
+.da-msg .func{display:block;font-style:normal;font-size:9px;color:var(--gold);margin-top:4px;letter-spacing:.02em;font-weight:700}
+.da-msg.right .func{color:var(--indigo)}
+
+/* ============ 05 对话 B 情景剧场卡 Scenario Board ============ */
+.dlg-b{position:absolute;inset:0;background:#fff;padding:22px 22px;display:flex;flex-direction:column}
+.db-title{font-family:var(--serif);font-size:13.5px;color:var(--jade);margin-bottom:14px}
+.db-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;flex:1}
+.db-card{border-radius:12px;padding:12px 10px;display:flex;flex-direction:column;background:#f4f9f7;border:1px solid rgba(63,125,99,.25);position:relative}
+.db-card:nth-child(2n){background:#f6f7fb;border-color:rgba(59,78,126,.2)}
+.db-card .av{width:22px;height:22px;border-radius:50%;background:var(--jade);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.db-card:nth-child(2n) .av{background:var(--indigo)}
+.db-card .line{font-size:11px;color:#2b2f33;line-height:1.42;flex:1}
+.db-card .func{font-style:normal;font-size:9px;color:var(--jade);margin-top:8px;letter-spacing:.02em;font-weight:700}
+.db-card:nth-child(2n) .func{color:var(--indigo)}
+.db-card:not(:last-child)::after{content:"\203A";position:absolute;right:-12px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--faint)}
+
+/* ============ 06 词根词缀 A 词素积木塔 Morpheme Stack ============ */
+.mor-a{position:absolute;inset:0;background:var(--surface);padding:22px 24px;display:flex;flex-direction:column}
+.ma-title{font-size:12.5px;color:var(--sub);margin-bottom:18px}
+.ma-title b{font-family:var(--serif);color:var(--indigo);font-size:16px;margin:0 6px}
+.ma-title span{font-size:11px;color:var(--faint)}
+.ma-stacks{display:flex;gap:14px;flex:1;align-items:flex-end;padding-bottom:6px}
+.ma-stack{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.ma-stack .blkm{width:100%;text-align:center;font-family:var(--mono);font-size:11px;padding:7px 4px;color:#fff;border-radius:6px}
+.ma-stack .blkm.pre{background:var(--indigo)}
+.ma-stack .blkm.root{background:var(--teal);font-weight:700}
+.ma-stack .blkm.suf{background:var(--gold)}
+.ma-stack .blkm.e{background:transparent;color:transparent}
+.ma-stack .word{margin-top:8px;font-size:12.5px;color:var(--ink);font-weight:700;text-align:center}
+.ma-stack .word span{display:block;font-size:10.5px;color:var(--sub);font-weight:400;margin-top:2px}
+
+/* ============ 06 词根词缀 B 词源家族树 Etymology Tree ============ */
+.mor-b{position:absolute;inset:0;background:var(--surface);padding:26px 28px;display:flex;align-items:center;gap:22px}
+.mb-root{flex:none;width:96px;height:96px;border-radius:50%;background:linear-gradient(160deg,var(--teal),#0a5f5e);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 14px 30px -14px rgba(14,124,123,.5)}
+.mb-root b{font-family:var(--serif);font-size:19px}
+.mb-root span{font-size:10px;opacity:.9;margin-top:4px}
+.mb-root i{font-style:normal;font-size:9px;opacity:.7;margin-top:2px}
+.mb-branches{flex:1;display:flex;flex-direction:column;gap:11px}
+.mb-branch{display:flex;align-items:center;gap:10px}
+.mb-branch .aff{font-family:var(--mono);font-size:11px;color:var(--sub);width:58px;text-align:right;flex:none}
+.mb-branch .line{flex:1;height:1px;background:var(--line);position:relative;min-width:20px}
+.mb-branch .line::before{content:"";position:absolute;right:0;top:50%;transform:translate(50%,-50%);width:5px;height:5px;border-radius:50%;background:var(--teal)}
+.mb-branch .leaf{flex:none;background:#f4faf9;border:1px solid rgba(14,124,123,.25);border-radius:8px;padding:6px 12px;font-size:12.5px;color:var(--ink);font-weight:700;min-width:112px}
+.mb-branch .leaf span{display:block;font-weight:400;font-size:10.5px;color:var(--sub);margin-top:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">特殊内容呈现 · 英语学科画廊</p>
+  <h1>英语,不该只是<em>背单词表</em>。<br>让语言的形式本身变成可视化的一等公民。</h1>
+  <p class="lede">发音、词形、句法结构本身就是要学的东西 —— 不是知识的容器。六类内容、每类两个<b>结构真异质</b>的方向,参照系是 Duolingo 的声音质感、语音学教材的口腔剖面图、代码 diff 高亮、地铁线路图,而不是双语词典的密排小字。</p>
+  <div class="rule"></div>
+</header>
+
+<!-- ============================================================ -->
+<!-- 01 单词卡 -->
+<!-- ============================================================ -->
+<section class="sec">
+  <div class="sec-k">01 / 单词卡</div>
+  <h2>音 · 形 · 义,三位一体的记忆单元</h2>
+  <p>音(发音)-形(拼写)-义(释义/例句)绑定成一个被认真设计过的「物件」,而不是词典条目里的一行小字。</p>
+</section>
+
+<div class="grid">
+  <div class="card">
+    <div class="stage">
+      <div class="voc-a">
+        <div class="va-pos"><i></i>adj.</div>
+        <div class="va-word">abundant</div>
+        <div class="va-ipa">/əˈbʌndənt/</div>
+        <div class="va-rhythm">
+          <div class="va-syl"><span class="bar" style="height:9px"></span><span class="t">ə</span></div>
+          <div class="va-syl big"><span class="mark">ˈ</span><span class="bar" style="height:36px"></span><span class="t">bʌn</span></div>
+          <div class="va-syl"><span class="bar" style="height:7px"></span><span class="t">dənt</span></div>
+        </div>
+        <div class="va-meaning">丰富的;充裕的</div>
+        <div class="va-example">The region has <b>abundant</b> rainfall.<div class="zh">这个地区雨水充沛</div></div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-teal">方向甲 · 声波卡 SoundCard</span>
+      <h3>音标画成重音节奏条</h3>
+      <p>IPA 不再是括号里的一串小符号,而是按音节切分的"音高波形"——重读音节更大更深,弱读音节缩小变浅。词性做成强调色小圆点,例句沉在灰卡里、目标词描边高亮。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage">
+      <div class="voc-b">
+        <div class="vb-title">词族 · 气候与环境<span>Climate &amp; Environment</span></div>
+        <div class="vb-grid">
+          <div class="vb-col-h">n.</div><div class="vb-col-h">v.</div><div class="vb-col-h">adj.</div>
+          <div class="vb-cell"><b>drought</b><i>/draʊt/</i><span>干旱</span></div>
+          <div class="vb-cell"><b>fluctuate</b><i>/ˈflʌktʃueɪt/</i><span>波动;起伏</span></div>
+          <div class="vb-cell focus"><b>abundant</b><i>/əˈbʌndənt/</i><span>丰富的</span></div>
+          <div class="vb-cell"><b>phenomenon</b><i>/fəˈnɒmɪnən/</i><span>现象</span></div>
+          <div class="vb-cell"><b>plummet</b><i>/ˈplʌmɪt/</i><span>骤降</span></div>
+          <div class="vb-cell"><b>scarce</b><i>/skeəs/</i><span>稀缺的</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-indigo">方向乙 · 词族矩阵 WordFamilyGrid</span>
+      <h3>一课时的词,同屏看见系统位置</h3>
+      <p>结构真异质——不做单卡片,把 5-8 个生词按词性/语义场铺成网格,当前词高亮聚焦,其余弱化为背景。学生看到的是"这个词在词汇系统里的位置",而非孤立卡片。</p>
+    </div>
+  </div>
+</div>
+
+<div class="bands">
+  <div class="band"><div class="g">低小 1–2</div><h4>张嘴形状 + 大插画</h4><p>不出现音标符号,用拟人化嘴型插画配大图配词,例句 3 词以内。</p></div>
+  <div class="band"><div class="g">高小 3–6</div><h4>声波卡完整 + 小组词族</h4><p>大插画仍主导视线,声波卡完整上线;词族矩阵缩到 3-4 词的小组。</p></div>
+  <div class="band"><div class="g">初中 7–9</div><h4>去插画,留节奏条</h4><p>声波卡只留抽象节奏条+重音标记;词族矩阵按词性/语义场完整分组。</p></div>
+  <div class="band"><div class="g">高中 10–12</div><h4>纯音高示意 + 搭配网络</h4><p>声波卡克制为纯音高/重音图,无装饰;词族矩阵扩展到搭配网络并标词源。</p></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 02 音标 IPA -->
+<!-- ============================================================ -->
+<section class="sec">
+  <div class="sec-k">02 / 音标 IPA</div>
+  <h2>发音器官的动作,不是一张音标表</h2>
+  <p>音位区分 + 发音器官动作(舌位、唇形、清浊),而不是记住一张学术分类的黑白方格矩阵。</p>
+</section>
+
+<div class="grid">
+  <div class="card">
+    <div class="stage">
+      <div class="ipa-a">
+        <div class="ia-title">元音舌位图 · Vowel Space</div>
+        <div class="ia-vowels">
+          <svg width="300" height="148" viewBox="0 0 300 148" style="display:block">
+            <polygon points="70,16 222,16 182,96 138,116 96,94" fill="rgba(63,125,99,.06)" stroke="var(--line)" stroke-width="1.2"/>
+            <circle cx="70" cy="16" r="3.4" fill="#3f7d63"/><text x="60" y="19" font-size="9" fill="#5b606b" text-anchor="end">iː</text>
+            <circle cx="76" cy="38" r="3.4" fill="#3f7d63"/><text x="66" y="41" font-size="9" fill="#5b606b" text-anchor="end">ɪ</text>
+            <circle cx="85" cy="64" r="3.4" fill="#3f7d63"/><text x="75" y="67" font-size="9" fill="#5b606b" text-anchor="end">e</text>
+            <circle cx="96" cy="94" r="3.4" fill="#3f7d63"/><text x="86" y="97" font-size="9" fill="#5b606b" text-anchor="end">æ</text>
+            <circle cx="222" cy="16" r="3.4" fill="#3f7d63"/><text x="232" y="19" font-size="9" fill="#5b606b" text-anchor="start">uː</text>
+            <circle cx="210" cy="38" r="3.4" fill="#3f7d63"/><text x="220" y="41" font-size="9" fill="#5b606b" text-anchor="start">ʊ</text>
+            <circle cx="196" cy="70" r="3.4" fill="#3f7d63"/><text x="206" y="73" font-size="9" fill="#5b606b" text-anchor="start">ɔː</text>
+            <circle cx="182" cy="96" r="3.4" fill="#3f7d63"/><text x="192" y="99" font-size="9" fill="#5b606b" text-anchor="start">ɒ</text>
+            <circle cx="146" cy="34" r="3.4" fill="#3f7d63"/><text x="146" y="24" font-size="9" fill="#5b606b" text-anchor="middle">ə</text>
+            <circle cx="146" cy="58" r="3.4" fill="#3f7d63"/><text x="160" y="61" font-size="9" fill="#5b606b" text-anchor="start">ɜː</text>
+            <circle cx="146" cy="82" r="3.4" fill="#3f7d63"/><text x="160" y="85" font-size="9" fill="#5b606b" text-anchor="start">ʌ</text>
+            <circle cx="138" cy="116" r="3.4" fill="#3f7d63"/><text x="138" y="130" font-size="9" fill="#5b606b" text-anchor="middle">ɑː</text>
+          </svg>
+        </div>
+        <div class="ia-cons">
+          <div class="cons-grid">
+            <div class="h"></div><div class="h">双唇</div><div class="h">唇齿</div><div class="h">齿</div><div class="h">齿龈</div><div class="h">龈腭</div><div class="h">硬腭</div><div class="h">软腭</div><div class="h">声门</div>
+            <div class="rl">塞音</div><div class="c"><span class="vl">p</span><span class="sl">/</span><span class="vd">b</span></div><div class="c e"></div><div class="c e"></div><div class="c"><span class="vl">t</span><span class="sl">/</span><span class="vd">d</span></div><div class="c e"></div><div class="c e"></div><div class="c"><span class="vl">k</span><span class="sl">/</span><span class="vd">g</span></div><div class="c e"></div>
+            <div class="rl">鼻音</div><div class="c"><span class="vd">m</span></div><div class="c e"></div><div class="c e"></div><div class="c"><span class="vd">n</span></div><div class="c e"></div><div class="c e"></div><div class="c"><span class="vd">ŋ</span></div><div class="c e"></div>
+            <div class="rl">擦音</div><div class="c e"></div><div class="c"><span class="vl">f</span><span class="sl">/</span><span class="vd">v</span></div><div class="c"><span class="vl">θ</span><span class="sl">/</span><span class="vd">ð</span></div><div class="c"><span class="vl">s</span><span class="sl">/</span><span class="vd">z</span></div><div class="c"><span class="vl">ʃ</span><span class="sl">/</span><span class="vd">ʒ</span></div><div class="c e"></div><div class="c e"></div><div class="c"><span class="vd">h</span></div>
+            <div class="rl">塞擦音</div><div class="c e"></div><div class="c e"></div><div class="c e"></div><div class="c e"></div><div class="c"><span class="vl">tʃ</span><span class="sl">/</span><span class="vd">dʒ</span></div><div class="c e"></div><div class="c e"></div><div class="c e"></div>
+            <div class="rl">近音</div><div class="c"><span class="vd">w</span></div><div class="c e"></div><div class="c e"></div><div class="c"><span class="vd">r/l</span></div><div class="c e"></div><div class="c"><span class="vd">j</span></div><div class="c e"></div><div class="c e"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-jade">方向甲 · 口腔剖面卡 Articulation Cross-Section</span>
+      <h3>舌位梯形图 + 棋盘式辅音矩阵</h3>
+      <p>元音落在标准舌位梯形图对应坐标,辅音按发音部位×方式排成棋盘,格子按清浊配对着色。参照医学解剖信息图与乐器指法图的精密质感。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage">
+      <div class="ipa-b">
+        <div class="ib-title">对立对 · Minimal Pairs</div>
+        <div class="ib-pair">
+          <div class="ib-word"><span class="sym">ɪ</span><b>ship</b><i>/ʃɪp/</i></div>
+          <div class="ib-axis">
+            <div class="lrow"><span>短·松</span><span>长·紧</span></div>
+            <div class="bar"><i style="left:30%"></i></div>
+          </div>
+          <div class="ib-word"><span class="sym">iː</span><b>sheep</b><i>/ʃiːp/</i></div>
+        </div>
+        <div class="ib-note">元音长度与紧张度不同 —— 短松 ɪ vs 长紧 iː,开口度相近</div>
+        <div class="ib-pair">
+          <div class="ib-word"><span class="sym">e</span><b>pen</b><i>/pen/</i></div>
+          <div class="ib-axis">
+            <div class="lrow"><span>闭口</span><span>开口</span></div>
+            <div class="bar"><i style="left:60%"></i></div>
+          </div>
+          <div class="ib-word"><span class="sym">æ</span><b>pan</b><i>/pæn/</i></div>
+        </div>
+        <div class="ib-note">下颌开合度不同 —— 半闭 e vs 近开 æ,舌位同为前元音</div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-coral">方向乙 · 对立对卡组 MinimalPairs Deck</span>
+      <h3>不背音标表,只听辨"差在哪"</h3>
+      <p>结构真异质——用最小对立对左右并置,中间一条"差异轴"可视化具体差异。版式像相机参数评测图,是当代听辨教学(minimal pair drills)的主流范式。</p>
+    </div>
+  </div>
+</div>
+
+<div class="bands">
+  <div class="band"><div class="g">低小 1–2</div><h4>不出现音标符号</h4><p>只用嘴巴张合程度的拟人化插画做自然拼读(phonics)启蒙。</p></div>
+  <div class="band"><div class="g">高小 3–6</div><h4>高频音标 + 大插画嘴型</h4><p>引入少量高频音标,对立对只挑最直观的几组(如长短元音)。</p></div>
+  <div class="band"><div class="g">初中 7–9</div><h4>剖面图 + 矩阵完整上线</h4><p>标准舌位梯形图+全套辅音矩阵完整呈现,对立对进入系统练习。</p></div>
+  <div class="band"><div class="g">高中 10–12</div><h4>学术精确,不做装饰</h4><p>舌位坐标对应国际语音学标准值,矩阵含清浊/送气标注,克制无插画。</p></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 03 语法与时态 -->
+<!-- ============================================================ -->
+<section class="sec">
+  <div class="sec-k">03 / 语法与时态</div>
+  <h2>时态是运动轨迹,不是背诵表格</h2>
+  <p>时态 = 动作相对说话时刻在时间轴上的位置(点/区间)+ 体(进行/完成)的结构公式,把抽象语法变成可感知的运动。</p>
+</section>
+
+<div class="grid">
+  <div class="card">
+    <div class="stage">
+      <div class="ten-a">
+        <div class="ta-axis"><span>Past</span><span class="now">Now</span><span>Future</span></div>
+        <div class="ta-row">
+          <div class="ta-label">现在完成时<i>have/has + p.p.</i></div>
+          <div class="ta-track"><div class="ta-span" style="width:62%"></div><div class="ta-dot" style="left:62%"></div></div>
+          <div class="ta-sentence">She <b class="pp">has visited</b> Paris three times.</div>
+        </div>
+        <div class="ta-row">
+          <div class="ta-label">现在进行时<i>am/is/are + V-ing</i></div>
+          <div class="ta-track"><div class="ta-ring" style="left:62%"></div></div>
+          <div class="ta-sentence">She <b class="ing">is visiting</b> Paris now.</div>
+        </div>
+        <div class="ta-legend"><span class="l1">base · visit</span><span class="l2">-ing · visiting</span><span class="l3">p.p. · visited</span></div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-indigo">方向甲 · 时间光轨 Timeline Ray</span>
+      <h3>动作画成一条会发光的轨迹</h3>
+      <p>时态是横向"时间光轨"——现在完成时是从过去延伸到现在、末端发亮的一段轨迹;进行时是"此刻正在扩散"的圆环。类比音乐播放进度条/游戏进度可视化。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage">
+      <div class="ten-b">
+        <div class="tb-title">时态积木 · Present Simple → Present Perfect</div>
+        <div class="tb-row">
+          <div class="tb-tag">一般现在时</div>
+          <div class="tb-blocks">
+            <div class="blk subj">She</div>
+            <div class="blk verb">visits</div>
+            <div class="blk obj">Paris</div>
+          </div>
+        </div>
+        <div class="tb-arrow">加入 have/has,动词变为过去分词 →</div>
+        <div class="tb-row">
+          <div class="tb-tag">现在完成时</div>
+          <div class="tb-blocks">
+            <div class="blk subj">She</div>
+            <div class="blk aux new">has<span class="badge">+ 新增</span></div>
+            <div class="blk verb changed">visited<span class="badge">变形</span></div>
+            <div class="blk obj">Paris</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-gold">方向乙 · 时态积木 Tense Blocks</span>
+      <h3>只高亮"变了的那一块"</h3>
+      <p>结构真异质——语法公式的每个成分做成固定形状+固定色的积木(助动词=六边形、动词=矩形),两个时态并排陈列,只描边标出差异。像代码 diff 高亮、乐高说明书。</p>
+    </div>
+  </div>
+</div>
+
+<div class="bands">
+  <div class="band"><div class="g">低小 1–2</div><h4>三个点,不出现公式</h4><p>时间光轨最简版——过去/现在/将来三个点,配"昨天/现在/明天"生活化插画。</p></div>
+  <div class="band"><div class="g">高小 3–6</div><h4>四种时态 + 贴纸积木</h4><p>时间光轨覆盖四种基本时态,积木隐喻以贴纸形式初现(如 help→helped)。</p></div>
+  <div class="band"><div class="g">初中 7–9</div><h4>积木 diff + 完整体貌</h4><p>时态对比用积木 diff 呈现,时间光轨标注完整体貌(进行/完成)。</p></div>
+  <div class="band"><div class="g">高中 10–12</div><h4>双轨对照,标语域差异</h4><p>积木 diff + 时间光轨双轨对照,标注正式度差异,配色学术克制。</p></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 04 句型结构 -->
+<!-- ============================================================ -->
+<section class="sec">
+  <div class="sec-k">04 / 句型结构</div>
+  <h2>成分的功能角色,而不是下划线图例</h2>
+  <p>识别主谓宾定状补的功能角色,是造句与写作的地基能力——信息密度要够高,但不需要图例才能读懂。</p>
+</section>
+
+<div class="grid">
+  <div class="card">
+    <div class="stage">
+      <div class="syn-a">
+        <div class="sa-legend">
+          <span class="p"><i class="dot sub"></i>主语</span>
+          <span class="p"><i class="dot pred"></i>谓语</span>
+          <span class="p"><i class="dot obj"></i>宾语</span>
+          <span class="p"><i class="dot mod"></i>状语</span>
+        </div>
+        <div class="sa-row">
+          <div class="sa-seg" style="flex:3"><span class="w">My best friend</span><i class="band sub"></i></div>
+          <div class="sa-seg" style="flex:1"><span class="w">gave</span><i class="band pred"></i></div>
+          <div class="sa-seg" style="flex:1"><span class="w">me</span><i class="band obj"></i></div>
+          <div class="sa-seg" style="flex:2.6"><span class="w">a beautiful gift</span><i class="band obj"></i></div>
+          <div class="sa-seg" style="flex:1"><span class="w">yesterday</span><i class="band mod"></i></div>
+        </div>
+        <div class="sa-row">
+          <div class="sa-seg" style="flex:3"><span class="w">The shy student</span><i class="band sub"></i></div>
+          <div class="sa-seg" style="flex:1.6"><span class="w">answered</span><i class="band pred"></i></div>
+          <div class="sa-seg" style="flex:2.8"><span class="w">the difficult question</span><i class="band obj"></i></div>
+          <div class="sa-seg" style="flex:1.6"><span class="w">confidently</span><i class="band mod"></i></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-teal">方向甲 · 句法频谱条 Syntax Spectrum Bar</span>
+      <h3>颜色 + 长度直接编码语法功能</h3>
+      <p>逐词像均衡器一样横排,每个词下方一条色带表示成分角色,色带长度=词数。多例句纵向左对齐,一眼看出句型模式的重复与变化。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage">
+      <div class="syn-b">
+        <div class="sb-sentence">The little girl <span class="hl1">who lives next door</span> waved at me.</div>
+        <div class="sb-tree">
+          <div class="sb-col" style="flex:1.5">
+            <div class="sb-card"><span class="role">Subject · depth 0</span>The little girl</div>
+            <div class="sb-link"></div>
+            <div class="sb-card nested"><span class="role">Attributive Clause · depth 1</span>who lives next door</div>
+          </div>
+          <div class="sb-col" style="flex:1">
+            <div class="sb-card"><span class="role">Predicate · depth 0</span>waved at me</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-coral">方向乙 · 句子解剖卡 Sentence X-Ray</span>
+      <h3>抽屉式标注,从整体到部件</h3>
+      <p>结构真异质——句子先浅色横排,再从成分下方"抽出"卡片按语法层级堆叠展开,定语从句嵌套在主语之下。模仿产品拆解信息图的展开方式,适合复合句教学。</p>
+    </div>
+  </div>
+</div>
+
+<div class="bands">
+  <div class="band"><div class="g">低小 1–2</div><h4>谁-做什么,两色+图标</h4><p>只标主语/谓语两色,用人形图标代替术语,宾语视需要出现。</p></div>
+  <div class="band"><div class="g">高小 3–6</div><h4>频谱条三色 + 一层展开</h4><p>频谱条主谓宾三色上线,解剖卡简化为一层展开。</p></div>
+  <div class="band"><div class="g">初中 7–9</div><h4>定状补上线,术语标准化</h4><p>频谱条含定语/状语/补语,解剖卡多层展开,术语标准化。</p></div>
+  <div class="band"><div class="g">高中 10–12</div><h4>复合句嵌套,对比语序</h4><p>解剖卡含从句嵌套层级展开,频谱条用于对比英汉语序差异。</p></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 05 对话与情景交际 -->
+<!-- ============================================================ -->
+<section class="sec">
+  <div class="sec-k">05 / 对话与情景交际</div>
+  <h2>识别交际功能,而不只是背台词</h2>
+  <p>真实交际中的语用功能——寒暄/请求/协商/拒绝,让学生记住台词的同时,识别这段对话"在干什么"。</p>
+</section>
+
+<div class="grid">
+  <div class="card">
+    <div class="stage">
+      <div class="dlg-a">
+        <div class="da-scene">🛒 <b>In a shop</b><span>在商店里</span></div>
+        <div class="da-chat">
+          <div class="da-msg left"><span class="tagname">A</span><div class="bubble">Excuse me, how much is this scarf?<i class="func">Asking for price</i></div></div>
+          <div class="da-msg right"><span class="tagname">B</span><div class="bubble">It's fifteen dollars.<i class="func">Giving information</i></div></div>
+          <div class="da-msg left"><span class="tagname">A</span><div class="bubble">Could I try it on?<i class="func">Asking politely</i></div></div>
+          <div class="da-msg right"><span class="tagname">B</span><div class="bubble">Of course. The fitting room is over there.<i class="func">Agreeing</i></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-gold">方向甲 · 情景气泡升级 Scene Strip</span>
+      <h3>气泡骨架 + 情景条 + 功能徽章</h3>
+      <p>保留双声道气泡骨架,顶部加情景条(emoji+场景设定),每句气泡追加语用功能徽章。改动成本最低——在既有气泡上叠加两层信息即可升级。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage">
+      <div class="dlg-b">
+        <div class="db-title">🛒 情景剧场 · In a shop</div>
+        <div class="db-flow">
+          <div class="db-card"><div class="av">A</div><div class="line">Excuse me, how much is this scarf?</div><i class="func">Asking for price</i></div>
+          <div class="db-card"><div class="av">B</div><div class="line">It's fifteen dollars.</div><i class="func">Giving information</i></div>
+          <div class="db-card"><div class="av">A</div><div class="line">Could I try it on?</div><i class="func">Asking politely</i></div>
+          <div class="db-card"><div class="av">B</div><div class="line">Of course. The fitting room is over there.</div><i class="func">Agreeing</i></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-jade">方向乙 · 情景剧场卡 Scenario Board</span>
+      <h3>分镜卡片流,叙事而非记录</h3>
+      <p>结构真异质——不用聊天气泡,改用横向分镜卡片流,卡片背景按情景轻微换色,强调"场景事件的推进"。类比专业分镜工具(如 Boords)的叙事感。</p>
+    </div>
+  </div>
+</div>
+
+<div class="bands">
+  <div class="band"><div class="g">低小 1–2</div><h4>大 emoji + 拟声词</h4><p>情景条用大 emoji+拟声词,气泡超大配角色简笔画,不出现术语。</p></div>
+  <div class="band"><div class="g">高小 3–6</div><h4>中文功能徽章</h4><p>情景条+简单功能徽章(如"打招呼"),气泡骨架保留。</p></div>
+  <div class="band"><div class="g">初中 7–9</div><h4>英文术语 + 剧场卡上线</h4><p>功能徽章用标准英文术语,情景剧场卡上线替代纯气泡。</p></div>
+  <div class="band"><div class="g">高中 10–12</div><h4>语域标注,设计克制</h4><p>标注礼貌层级(polite register),加入潜台词对比批注,设计克制。</p></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 06 词根词缀 -->
+<!-- ============================================================ -->
+<section class="sec">
+  <div class="sec-k">06 / 词根词缀</div>
+  <h2>构词理据,而不是词根词典式罗列</h2>
+  <p>语素(前缀+词根+后缀)组合规律,理解生词的构词理据,而不是把派生词横排小字挤成一行。</p>
+</section>
+
+<div class="grid">
+  <div class="card">
+    <div class="stage">
+      <div class="mor-a">
+        <div class="ma-title">词根 <b>spect</b><span>拉丁语 · "看,看见"</span></div>
+        <div class="ma-stacks">
+          <div class="ma-stack">
+            <div class="blkm pre">in-</div>
+            <div class="blkm root">spect</div>
+            <div class="blkm e">·</div>
+            <div class="word">inspect<span>检查</span></div>
+          </div>
+          <div class="ma-stack">
+            <div class="blkm pre">re-</div>
+            <div class="blkm root">spect</div>
+            <div class="blkm e">·</div>
+            <div class="word">respect<span>尊重</span></div>
+          </div>
+          <div class="ma-stack">
+            <div class="blkm e">·</div>
+            <div class="blkm root">spect</div>
+            <div class="blkm suf">-ator</div>
+            <div class="word">spectator<span>观众</span></div>
+          </div>
+          <div class="ma-stack">
+            <div class="blkm pre">pro-</div>
+            <div class="blkm root">spect</div>
+            <div class="blkm e">·</div>
+            <div class="word">prospect<span>前景</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-indigo">方向甲 · 词素积木塔 Morpheme Stack</span>
+      <h3>共用底座 + 替换配件</h3>
+      <p>一个词竖直拆解成积木层,词根层颜色与位置固定不变,前后缀层随词替换——像乐高说明书,清楚展示"变的是什么、不变的是什么"。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage">
+      <div class="mor-b">
+        <div class="mb-root"><b>spect</b><span>看,看见</span><i>Latin</i></div>
+        <div class="mb-branches">
+          <div class="mb-branch"><span class="aff">in- +</span><i class="line"></i><div class="leaf">inspect<span>检查</span></div></div>
+          <div class="mb-branch"><span class="aff">re- +</span><i class="line"></i><div class="leaf">respect<span>尊重</span></div></div>
+          <div class="mb-branch"><span class="aff">+ -ator</span><i class="line"></i><div class="leaf">spectator<span>观众</span></div></div>
+          <div class="mb-branch"><span class="aff">pro- +</span><i class="line"></i><div class="leaf">prospect<span>前景</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="tag t-teal">方向乙 · 词源家族树 Etymology Tree</span>
+      <h3>一个词根,衍生一整个词族</h3>
+      <p>结构真异质——词根放在根部,派生词向外生长,枝干标注添加的前后缀。像 commit 树/知识图谱,强调生成关系而非并列列表。</p>
+    </div>
+  </div>
+</div>
+
+<div class="bands">
+  <div class="band"><div class="g">低小 1–2</div><h4>单词变形游戏插画</h4><p>不做词素拆解,替换为具象的"单词变形游戏"(如加 -s 变复数)。</p></div>
+  <div class="band"><div class="g">高小 3–6</div><h4>两层积木 + 3-4 分支</h4><p>积木塔简化为前缀+词根两层,家族树只展开 3-4 个分支。</p></div>
+  <div class="band"><div class="g">初中 7–9</div><h4>三层积木,标准家族树</h4><p>完整积木塔(前缀-词根-后缀三层),家族树标准展开。</p></div>
+  <div class="band"><div class="g">高中 10–12</div><h4>跨语言词源,标构词能产性</h4><p>家族树扩展到拉丁/希腊词源,积木塔标注该语素的构词能产性。</p></div>
+</div>
+
+<footer>
+  maolab · 英语学科特殊内容呈现画廊 · 2026-07-23 &nbsp;|&nbsp; 白为主 · 颜色只在物件层 &nbsp;|&nbsp; <b>语言的形式本身是可视化的一等公民</b> &nbsp;|&nbsp; 六类内容 × 学段四档
+</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "source": {
+    "repo": "https://github.com/tommodore/monokai",
+    "license": "MIT",
+    "fetchedAt": "2026-07-21",
+    "sourceUrls": [
+      "https://raw.githubusercontent.com/tommodore/monokai/main/palette.json",
+      "https://raw.githubusercontent.com/tommodore/monokai/main/LICENSE"
+    ]
+  },
+  "flavors": [
+    {
+      "id": "monokai-classic",
+      "name": "Monokai Classic",
+      "colors": [
+        { "name": "Background", "hex": "#272822" },
+        { "name": "Foreground", "hex": "#f8f8f2" },
+        { "name": "Foreground Emphasis", "hex": "#f8f8f0" },
+        { "name": "Selection", "hex": "#49483e" },
+        { "name": "Line Highlight", "hex": "#3e3d31" },
+        { "name": "Comment", "hex": "#75715e" },
+        { "name": "Line Number", "hex": "#90908a" },
+        { "name": "Red", "hex": "#f92672" },
+        { "name": "Orange", "hex": "#fd971f" },
+        { "name": "Yellow", "hex": "#e6db74" },
+        { "name": "Green", "hex": "#a6e22e" },
+        { "name": "Cyan", "hex": "#a1efe4" },
+        { "name": "Blue", "hex": "#66d9ef" },
+        { "name": "Violet", "hex": "#ae81ff" },
+        { "name": "Magenta", "hex": "#fd5ff0" },
+        { "name": "Gray", "hex": "#474747" }
+      ]
+    }
+  ]
+}

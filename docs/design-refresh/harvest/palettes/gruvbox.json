@@ -1,0 +1,59 @@
+{
+  "source": {
+    "repo": "https://github.com/morhetz/gruvbox",
+    "license": "MIT",
+    "fetchedAt": "2026-07-21",
+    "sourceUrls": [
+      "https://raw.githubusercontent.com/morhetz/gruvbox/master/README.md",
+      "https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim",
+      "https://raw.githubusercontent.com/morhetz/gruvbox/master/package.json"
+    ]
+  },
+  "flavors": [
+    {
+      "id": "gruvbox",
+      "name": "Gruvbox",
+      "colors": [
+        { "name": "dark0_hard", "hex": "#1d2021" },
+        { "name": "dark0", "hex": "#282828" },
+        { "name": "dark0_soft", "hex": "#32302f" },
+        { "name": "dark1", "hex": "#3c3836" },
+        { "name": "dark2", "hex": "#504945" },
+        { "name": "dark3", "hex": "#665c54" },
+        { "name": "dark4", "hex": "#7c6f64" },
+        { "name": "dark4_256", "hex": "#7c6f64" },
+        { "name": "gray_245", "hex": "#928374" },
+        { "name": "gray_244", "hex": "#928374" },
+        { "name": "light0_hard", "hex": "#f9f5d7" },
+        { "name": "light0", "hex": "#fbf1c7" },
+        { "name": "light0_soft", "hex": "#f2e5bc" },
+        { "name": "light1", "hex": "#ebdbb2" },
+        { "name": "light2", "hex": "#d5c4a1" },
+        { "name": "light3", "hex": "#bdae93" },
+        { "name": "light4", "hex": "#a89984" },
+        { "name": "light4_256", "hex": "#a89984" },
+        { "name": "bright_red", "hex": "#fb4934" },
+        { "name": "bright_green", "hex": "#b8bb26" },
+        { "name": "bright_yellow", "hex": "#fabd2f" },
+        { "name": "bright_blue", "hex": "#83a598" },
+        { "name": "bright_purple", "hex": "#d3869b" },
+        { "name": "bright_aqua", "hex": "#8ec07c" },
+        { "name": "bright_orange", "hex": "#fe8019" },
+        { "name": "neutral_red", "hex": "#cc241d" },
+        { "name": "neutral_green", "hex": "#98971a" },
+        { "name": "neutral_yellow", "hex": "#d79921" },
+        { "name": "neutral_blue", "hex": "#458588" },
+        { "name": "neutral_purple", "hex": "#b16286" },
+        { "name": "neutral_aqua", "hex": "#689d6a" },
+        { "name": "neutral_orange", "hex": "#d65d0e" },
+        { "name": "faded_red", "hex": "#9d0006" },
+        { "name": "faded_green", "hex": "#79740e" },
+        { "name": "faded_yellow", "hex": "#b57614" },
+        { "name": "faded_blue", "hex": "#076678" },
+        { "name": "faded_purple", "hex": "#8f3f71" },
+        { "name": "faded_aqua", "hex": "#427b58" },
+        { "name": "faded_orange", "hex": "#af3a03" }
+      ]
+    }
+  ]
+}

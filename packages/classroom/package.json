@@ -1,0 +1,30 @@
+{
+  "name": "@maolab/classroom",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@maolab/db": "workspace:*",
+    "@maolab/generator": "workspace:*",
+    "@maolab/shared-types": "workspace:*",
+    "@maolab/user-profile": "workspace:*",
+    "@xapi/xapi": "^3.0.3",
+    "irt-js": "^0.2.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}

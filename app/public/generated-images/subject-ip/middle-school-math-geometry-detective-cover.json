@@ -1,0 +1,10 @@
+﻿{
+    "prompt":  "Create a generated bitmap illustration for a Chinese middle-school math geometry course cover decoration. Subject IP: a friendly junior-high geometry detective character, with compass, ruler, notebook, and abstract geometry shapes as decorative classroom props. This is a subject/year visual identity asset, not a diagram for a specific theorem. Do not include any readable text, Chinese characters, English letters, numbers, formulas, theorem labels, speech bubbles, UI, watermark, or logo. Do not show AB=AC, angle B equals angle C, congruence symbols, or any specific lesson content. Style: clean simplified editorial illustration, soft watercolor texture, precise thin linework, warm academic atmosphere, high-quality educational publishing style. Composition: 16:9 horizontal image, character and props occupy the right two-thirds, left side has calm negative space for course title overlay, no border, no poster text.",
+    "model":  "gpt-image-2",
+    "size":  "1536x1024",
+    "quality":  "medium",
+    "generatedAt":  "2026-06-26T10:56:05.0009786Z",
+    "file":  "/generated-images/subject-ip/middle-school-math-geometry-detective-cover.png",
+    "sha1":  "cf9f3f4652c5d6d4f167d427c8f14a2b75ea03da",
+    "bytes":  2834640
+}

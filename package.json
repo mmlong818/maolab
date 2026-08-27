@@ -1,0 +1,30 @@
+{
+  "name": "maolab",
+  "private": true,
+  "version": "0.0.1",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "description": "猫叔的教学研究室",
+  "scripts": {
+    "dev": "pnpm --filter app dev",
+    "build": "pnpm --filter app build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "db:generate": "pnpm --filter @maolab/db db:generate",
+    "db:migrate": "pnpm --filter @maolab/db db:migrate",
+    "db:init": "tsx scripts/init-db.ts",
+    "db:reset": "rimraf data/maolab.db && tsx scripts/init-db.ts",
+    "textbook:sync": "pnpm --filter @maolab/textbook-index sync",
+    "textbook:sync:trees": "pnpm --filter @maolab/textbook-index sync:trees"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.0",
+    "tsx": "^4.15.0"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "dependencies": {
+    "@types/ws": "^8.18.1"
+  }
+}

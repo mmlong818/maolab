@@ -1,0 +1,31 @@
+{
+  "source": {
+    "repo": "https://github.com/dracula/dracula-theme",
+    "license": "MIT",
+    "fetchedAt": "2026-07-21",
+    "sourceUrls": [
+      "https://raw.githubusercontent.com/dracula/draculatheme.com/main/content/spec.mdx",
+      "https://raw.githubusercontent.com/dracula/dracula-theme/master/LICENSE"
+    ]
+  },
+  "flavors": [
+    {
+      "id": "dracula",
+      "name": "Dracula Classic",
+      "colors": [
+        { "name": "Background", "hex": "#282a36" },
+        { "name": "Current Line", "hex": "#6272a4" },
+        { "name": "Selection", "hex": "#44475a" },
+        { "name": "Foreground", "hex": "#f8f8f2" },
+        { "name": "Comment", "hex": "#6272a4" },
+        { "name": "Red", "hex": "#ff5555" },
+        { "name": "Orange", "hex": "#ffb86c" },
+        { "name": "Yellow", "hex": "#f1fa8c" },
+        { "name": "Green", "hex": "#50fa7b" },
+        { "name": "Cyan", "hex": "#8be9fd" },
+        { "name": "Purple", "hex": "#bd93f9" },
+        { "name": "Pink", "hex": "#ff79c6" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@maolab/setup",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@maolab/shared-types": "workspace:*",
+    "@maolab/user-profile": "workspace:*",
+    "@types/toposort": "^2.0.7",
+    "ai": "^4.3.0",
+    "text-readability-ts": "^1.0.11",
+    "toposort": "^2.0.2",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}

@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>对话排版方案挑选</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #667085;
+      --line: rgba(17, 24, 39, 0.12);
+      --paper: #f7f4ed;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --amber: #d97706;
+      --box: rgba(16, 24, 39, 0.86);
+      --box-soft: rgba(16, 24, 39, 0.74);
+      font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(37, 99, 235, 0.10), transparent 28%),
+        linear-gradient(135deg, #f8fafc, #f3efe5);
+      color: var(--ink);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 18px;
+      padding: 22px 28px 28px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      font-weight: 900;
+    }
+
+    .hint {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+      color: #1f2937;
+      min-height: 38px;
+      border-radius: 10px;
+      padding: 0 14px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 850;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    button[aria-pressed="true"] {
+      background: #0f172a;
+      color: #fff;
+      border-color: #0f172a;
+    }
+
+    main {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .list {
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+    }
+
+    .editor {
+      margin-top: 4px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .editor-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 950;
+    }
+
+    .editor-badge {
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #2563eb;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .editor-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .control-row {
+      display: grid;
+      gap: 5px;
+    }
+
+    .control-row label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .control-row output {
+      color: #64748b;
+      font-variant-numeric: tabular-nums;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #0f172a;
+    }
+
+    .editor-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .editor-actions button {
+      min-height: 34px;
+      padding: 0 10px;
+      font-size: 12px;
+      box-shadow: none;
+    }
+
+    .layout-output {
+      min-height: 96px;
+      width: 100%;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.74);
+      color: #334155;
+      padding: 8px 9px;
+      font: 11px/1.45 ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    .save-status {
+      min-height: 16px;
+      color: #2563eb;
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .option-card {
+      text-align: left;
+      display: grid;
+      gap: 5px;
+      width: 100%;
+      min-height: auto;
+      border-radius: 12px;
+      padding: 13px 14px;
+      box-shadow: none;
+    }
+
+    .option-card strong {
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .option-card span {
+      color: inherit;
+      opacity: 0.78;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .preview-wrap {
+      min-height: 0;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      background: rgba(255, 255, 255, 0.42);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.10);
+      overflow: hidden;
+    }
+
+    .stage {
+      position: relative;
+      width: min(100%, calc((100vh - 142px) * 16 / 9));
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 14px;
+      background:
+        linear-gradient(115deg, rgba(226, 232, 240, 0.82), rgba(255, 255, 255, 0.68) 46%, rgba(253, 246, 232, 0.76)),
+        repeating-linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0 2px, transparent 2px 34px);
+      box-shadow: 0 28px 70px rgba(15, 23, 42, 0.14);
+    }
+
+    .dots {
+      position: absolute;
+      top: 35px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      z-index: 10;
+    }
+
+    .dots i {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--blue);
+      opacity: 0.85;
+    }
+
+    .dots i:nth-child(3n) {
+      background: #d97706;
+    }
+
+    .dots i:nth-child(4n) {
+      background: #16a34a;
+    }
+
+    .hero-note {
+      position: absolute;
+      top: 90px;
+      left: 70px;
+      right: 70px;
+      color: rgba(15, 23, 42, 0.20);
+      font-size: 36px;
+      font-weight: 950;
+      line-height: 1.18;
+      letter-spacing: 0;
+      pointer-events: none;
+    }
+
+    .portrait {
+      position: absolute;
+      z-index: 4;
+      width: 38%;
+      height: 74%;
+      bottom: 6.5%;
+      display: flex;
+      align-items: flex-end;
+      filter: drop-shadow(0 24px 42px rgba(15, 23, 42, 0.22));
+      pointer-events: none;
+    }
+
+    .editing .portrait,
+    .editing .dialogue-box {
+      cursor: grab;
+      pointer-events: auto;
+    }
+
+    .editing .portrait:active,
+    .editing .dialogue-box:active {
+      cursor: grabbing;
+    }
+
+    .editing .portrait::after,
+    .editing .dialogue-box::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border: 1px dashed rgba(37, 99, 235, 0.42);
+      border-radius: 16px;
+      opacity: 0;
+      transition: opacity 0.16s ease;
+      pointer-events: none;
+    }
+
+    .editing .portrait:hover::after,
+    .editing .dialogue-box:hover::after {
+      opacity: 1;
+    }
+
+    .portrait img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .variant-a.teacher .portrait img {
+      transform: scale(var(--a-portrait-scale, 1));
+      transform-origin: left bottom;
+    }
+
+    .variant-a.student .portrait img {
+      transform: scale(var(--a-portrait-scale, 1));
+      transform-origin: right bottom;
+    }
+
+    .teacher .portrait {
+      left: 2.7%;
+      justify-content: flex-start;
+    }
+
+    .student .portrait {
+      right: 2.2%;
+      justify-content: flex-end;
+    }
+
+    .dialogue-box {
+      position: absolute;
+      z-index: 3;
+      color: #fff;
+      background: linear-gradient(180deg, var(--box), var(--box-soft));
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      box-shadow: 0 26px 70px rgba(15, 23, 42, 0.24);
+      backdrop-filter: blur(10px);
+    }
+
+    .name {
+      position: absolute;
+      min-width: 160px;
+      min-height: 46px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      color: #fff;
+      font-size: 22px;
+      font-weight: 950;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.22);
+      z-index: 5;
+    }
+
+    .stage .portrait .name {
+      top: auto;
+      bottom: 4%;
+      left: 58%;
+      right: auto;
+      transform: translateX(-50%);
+    }
+
+    .stage.student .portrait .name {
+      left: auto;
+      right: 58%;
+      transform: translateX(50%);
+    }
+
+    .teacher .name {
+      background: var(--blue);
+    }
+
+    .student .name {
+      background: var(--amber);
+    }
+
+    .line {
+      font-size: clamp(23px, 2.15vw, 38px);
+      line-height: 1.56;
+      font-weight: 850;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.22);
+    }
+
+    .variant-a .line {
+      font-size: var(--a-line-font, clamp(23px, 2.15vw, 38px));
+    }
+
+    .variant-a .dialogue-box {
+      left: var(--a-box-left, 5%);
+      right: var(--a-box-right, 5%);
+      bottom: var(--a-box-bottom, 5.5%);
+      min-height: var(--a-box-height, 25%);
+      border-radius: 20px;
+      padding: var(--a-box-padding-y, 3.2%) var(--a-box-padding-x, 4%);
+    }
+
+    .variant-a.teacher .portrait,
+    .variant-a.student .portrait {
+      width: var(--a-portrait-width, 38%);
+      height: var(--a-portrait-height, 74%);
+      bottom: var(--a-portrait-bottom, 6.5%);
+    }
+
+    .variant-a.teacher .portrait {
+      left: var(--a-portrait-side, 2.7%);
+    }
+
+    .variant-a.student .portrait {
+      right: var(--a-portrait-side, 2.2%);
+    }
+
+    .variant-a.teacher .line {
+      padding-left: var(--a-text-reserve, 31%);
+    }
+
+    .variant-a.student .line {
+      padding-right: var(--a-text-reserve, 31%);
+    }
+
+    .stage.variant-a.teacher .portrait .name {
+      left: var(--a-name-side, 58%);
+      right: auto;
+      bottom: var(--a-name-bottom, 10px);
+      transform: translateX(-50%);
+    }
+
+    .stage.variant-a.student .portrait .name {
+      left: auto;
+      right: var(--a-name-side, 58%);
+      bottom: var(--a-name-bottom, 10px);
+      transform: translateX(50%);
+    }
+
+    .variant-b .portrait {
+      bottom: 10%;
+      height: 70%;
+      width: 34%;
+    }
+
+    .variant-b .dialogue-box {
+      bottom: 8%;
+      min-height: 24%;
+      border-radius: 20px;
+      padding: 3.2% 4%;
+    }
+
+    .variant-b.teacher .dialogue-box {
+      left: 32%;
+      right: 5%;
+    }
+
+    .variant-b.student .dialogue-box {
+      left: 5%;
+      right: 32%;
+    }
+
+    .variant-b.teacher .name {
+      left: 4%;
+      bottom: calc(8% + 24% - 20px);
+    }
+
+    .variant-b.student .name {
+      right: 4%;
+      bottom: calc(8% + 24% - 20px);
+    }
+
+    .variant-c .portrait {
+      width: 34%;
+      height: 67%;
+      bottom: 17%;
+    }
+
+    .variant-c .dialogue-box {
+      left: 4.8%;
+      right: 4.8%;
+      bottom: 6%;
+      min-height: 23%;
+      border-radius: 0 0 22px 22px;
+      padding: 3% 4.3%;
+      border-top: 5px solid rgba(255, 255, 255, 0.36);
+    }
+
+    .variant-c.teacher .line {
+      padding-left: 28%;
+    }
+
+    .variant-c.student .line {
+      padding-right: 28%;
+    }
+
+    .variant-c.teacher .name {
+      left: 5%;
+      bottom: 30%;
+    }
+
+    .variant-c.student .name {
+      right: 5%;
+      bottom: 30%;
+    }
+
+    .variant-d .portrait {
+      width: 31%;
+      height: 67%;
+      bottom: 7%;
+    }
+
+    .variant-d.teacher .portrait {
+      left: 0.8%;
+    }
+
+    .variant-d.student .portrait {
+      right: 0.8%;
+    }
+
+    .variant-d .dialogue-box {
+      left: 22%;
+      right: 22%;
+      bottom: 7%;
+      min-height: 25%;
+      border-radius: 22px;
+      padding: 3.1% 3.5%;
+      text-align: center;
+    }
+
+    .variant-d.teacher .name,
+    .variant-d.student .name {
+      left: 50%;
+      top: -24px;
+      transform: translateX(-50%);
+    }
+
+    .stage.variant-b.teacher .portrait .name,
+    .stage.variant-c.teacher .portrait .name,
+    .stage.variant-d.teacher .portrait .name {
+      top: auto;
+      left: 58%;
+      right: auto;
+      bottom: 4%;
+      transform: translateX(-50%);
+    }
+
+    .stage.variant-b.student .portrait .name,
+    .stage.variant-c.student .portrait .name,
+    .stage.variant-d.student .portrait .name {
+      top: auto;
+      left: auto;
+      right: 58%;
+      bottom: 4%;
+      transform: translateX(50%);
+    }
+
+    .caption {
+      position: absolute;
+      left: 16px;
+      bottom: 14px;
+      color: rgba(15, 23, 42, 0.34);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        padding: 16px;
+      }
+
+      header,
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .preview-wrap {
+        min-height: 58vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <h1>对话排版方案挑选</h1>
+        <div class="hint">同一段《静夜思》对白，4 种游戏化排列。A 接近当前修正版；B/C/D 是可选方向。</div>
+      </div>
+      <div class="controls" aria-label="角色切换">
+        <button type="button" data-speaker="teacher" aria-pressed="true">老师</button>
+        <button type="button" data-speaker="student" aria-pressed="false">学生</button>
+      </div>
+    </header>
+
+    <main>
+      <nav class="list" aria-label="方案列表">
+        <button class="option-card" type="button" data-variant="a" aria-pressed="true">
+          <strong>A 底部压框</strong>
+          <span>角色压在大对白框上沿，文字避让角色。最接近日式 RPG。</span>
+        </button>
+        <button class="option-card" type="button" data-variant="b" aria-pressed="false">
+          <strong>B 侧身讲解</strong>
+          <span>角色保持完整，文字框在另一侧。挡画面最少。</span>
+        </button>
+        <button class="option-card" type="button" data-variant="c" aria-pressed="false">
+          <strong>C 舞台栏</strong>
+          <span>角色更高，底栏更像演出字幕。适合视频化。</span>
+        </button>
+        <button class="option-card" type="button" data-variant="d" aria-pressed="false">
+          <strong>D 中央对白</strong>
+          <span>文字居中，角色像立绘陪衬。比较规整，遮挡适中。</span>
+        </button>
+
+        <div class="editor" id="editor">
+          <div class="editor-title">
+            <span>A 方案编辑</span>
+            <span class="editor-badge" id="editSpeaker">老师</span>
+          </div>
+          <div class="editor-note">拖动画面里的角色或对白框，也可以用滑杆微调。位置会自动保存。</div>
+          <div class="control-row">
+            <label for="portraitSide">立绘横向 <output data-output="portraitSide"></output></label>
+            <input id="portraitSide" type="range" min="0" max="12" step="0.1" data-field="portraitSide">
+          </div>
+          <div class="control-row">
+            <label for="portraitBottom">立绘底部 <output data-output="portraitBottom"></output></label>
+            <input id="portraitBottom" type="range" min="-3" max="18" step="0.1" data-field="portraitBottom">
+          </div>
+          <div class="control-row">
+            <label for="portraitWidth">立绘宽度 <output data-output="portraitWidth"></output></label>
+            <input id="portraitWidth" type="range" min="28" max="48" step="0.1" data-field="portraitWidth">
+          </div>
+          <div class="control-row">
+            <label for="portraitScale">立绘缩放 <output data-output="portraitScale"></output></label>
+            <input id="portraitScale" type="range" min="0.5" max="1.1" step="0.01" data-field="portraitScale">
+          </div>
+          <div class="control-row">
+            <label for="boxBottom">对白框底部 <output data-output="boxBottom"></output></label>
+            <input id="boxBottom" type="range" min="2" max="14" step="0.1" data-field="boxBottom">
+          </div>
+          <div class="control-row">
+            <label for="boxHeight">对白框高度 <output data-output="boxHeight"></output></label>
+            <input id="boxHeight" type="range" min="18" max="34" step="0.1" data-field="boxHeight">
+          </div>
+          <div class="control-row">
+            <label for="boxScale">文字框缩放 <output data-output="boxScale"></output></label>
+            <input id="boxScale" type="range" min="0.65" max="1.1" step="0.01" data-field="boxScale">
+          </div>
+          <div class="control-row">
+            <label for="lineScale">文字大小 <output data-output="lineScale"></output></label>
+            <input id="lineScale" type="range" min="0.65" max="1.15" step="0.01" data-field="lineScale">
+          </div>
+          <div class="control-row">
+            <label for="textReserve">文字避让 <output data-output="textReserve"></output></label>
+            <input id="textReserve" type="range" min="18" max="42" step="0.1" data-field="textReserve">
+          </div>
+          <div class="control-row">
+            <label for="nameSide">名牌横向 <output data-output="nameSide"></output></label>
+            <input id="nameSide" type="range" min="20" max="80" step="0.1" data-field="nameSide">
+          </div>
+          <div class="control-row">
+            <label for="nameTop">名牌上下 <output data-output="nameTop"></output></label>
+            <input id="nameTop" type="range" min="-20" max="80" step="1" data-field="nameTop">
+          </div>
+          <div class="editor-actions">
+            <button type="button" id="resetLayout">重置当前</button>
+            <button type="button" id="markFinal">标记满意</button>
+            <button type="button" id="copyLayout">复制参数</button>
+          </div>
+          <textarea class="layout-output" id="layoutOutput" readonly aria-label="当前布局参数"></textarea>
+          <div class="save-status" id="saveStatus"></div>
+        </div>
+      </nav>
+
+      <section class="preview-wrap">
+        <div id="stage" class="stage variant-a teacher">
+          <div class="dots" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="hero-note">床前明月光<br>疑是地上霜</div>
+          <div class="portrait">
+            <img id="portrait" src="generated-images/cast/base/middle/summer/teacher-xiaomei-neutral.png" alt="晓梅老师">
+            <div id="name" class="name">晓梅老师</div>
+          </div>
+          <div class="dialogue-box">
+            <div id="line" class="line">好问题呀～他举头望明月！一抬头，看见月亮啦！原来地上是月光呀！</div>
+          </div>
+          <div class="caption" id="caption">A / 老师</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const stage = document.getElementById('stage')
+    const portrait = document.getElementById('portrait')
+    const nameEl = document.getElementById('name')
+    const lineEl = document.getElementById('line')
+    const caption = document.getElementById('caption')
+    const editor = document.getElementById('editor')
+    const editSpeaker = document.getElementById('editSpeaker')
+    const layoutOutput = document.getElementById('layoutOutput')
+    const saveStatus = document.getElementById('saveStatus')
+    const resetLayout = document.getElementById('resetLayout')
+    const markFinal = document.getElementById('markFinal')
+    const copyLayout = document.getElementById('copyLayout')
+    const dialogueBox = document.querySelector('.dialogue-box')
+    const portraitWrap = document.querySelector('.portrait')
+    const controls = Array.from(document.querySelectorAll('[data-field]'))
+    const variants = {
+      a: 'A / 底部压框',
+      b: 'B / 侧身讲解',
+      c: 'C / 舞台栏',
+      d: 'D / 中央对白',
+    }
+    const speakers = {
+      teacher: {
+        name: '晓梅老师',
+        image: 'generated-images/cast/base/middle/summer/teacher-xiaomei-neutral.png',
+        alt: '晓梅老师',
+        line: '好问题呀～他举头望明月！一抬头，看见月亮啦！原来地上是月光呀！',
+      },
+      student: {
+        name: '段子K',
+        image: 'generated-images/cast/base/middle/summer/student-joker-neutral.png',
+        alt: '段子K',
+        line: '他以为是霜。其实是月光。他怎么知道搞错了呢？',
+      },
+    }
+    let currentVariant = 'a'
+    let currentSpeaker = 'teacher'
+    const STORAGE_KEY = 'maolab.dialogueLayoutA.v4'
+    const FINAL_KEY = 'maolab.dialogueLayoutA.final.v4'
+    const defaultEditableA = {
+      teacher: {
+        portraitSide: 3.455019556714472,
+        portraitBottom: 6.506591337099811,
+        portraitWidth: 32,
+        portraitHeight: 70,
+        portraitScale: 0.68,
+        boxLeft: 5,
+        boxRight: 5,
+        boxBottom: 5.5,
+        boxHeight: 18,
+        boxScale: 0.81,
+        lineScale: 0.7,
+        textReserve: 18,
+        nameSide: 33.4,
+        nameTop: -15,
+      },
+      student: {
+        portraitSide: 7.2,
+        portraitBottom: 6.5,
+        portraitWidth: 32,
+        portraitHeight: 70,
+        portraitScale: 0.68,
+        boxLeft: 5,
+        boxRight: 5,
+        boxBottom: 5.5,
+        boxHeight: 18,
+        boxScale: 0.81,
+        lineScale: 0.7,
+        textReserve: 18,
+        nameSide: 29.6,
+        nameTop: -15,
+      },
+    }
+    let editableA = loadEditableA()
+
+    function cloneLayout(input) {
+      return JSON.parse(JSON.stringify(input))
+    }
+
+    function loadEditableA() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null')
+        return {
+          teacher: { ...defaultEditableA.teacher, ...(saved?.teacher || {}) },
+          student: { ...defaultEditableA.student, ...(saved?.student || {}) },
+        }
+      } catch {
+        return cloneLayout(defaultEditableA)
+      }
+    }
+
+    function saveEditableA() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(editableA))
+      saveStatus.textContent = '已自动保存'
+    }
+
+    function activeLayout() {
+      return editableA[currentSpeaker]
+    }
+
+    function pct(value) {
+      return `${Number(value).toFixed(1)}%`
+    }
+
+    function applyEditableA() {
+      const layout = activeLayout()
+      const boxScale = Number(layout.boxScale ?? 1)
+      const lineScale = Number(layout.lineScale ?? 1)
+      const boxWidth = 100 - Number(layout.boxLeft) - Number(layout.boxRight)
+      const boxExtraInset = (boxWidth - boxWidth * boxScale) / 2
+      stage.style.setProperty('--a-portrait-side', pct(layout.portraitSide))
+      stage.style.setProperty('--a-portrait-bottom', pct(layout.portraitBottom))
+      stage.style.setProperty('--a-portrait-width', pct(layout.portraitWidth))
+      stage.style.setProperty('--a-portrait-height', pct(layout.portraitHeight))
+      stage.style.setProperty('--a-portrait-scale', Number(layout.portraitScale ?? 1).toFixed(2))
+      stage.style.setProperty('--a-box-left', pct(Number(layout.boxLeft) + boxExtraInset))
+      stage.style.setProperty('--a-box-right', pct(Number(layout.boxRight) + boxExtraInset))
+      stage.style.setProperty('--a-box-bottom', pct(layout.boxBottom))
+      stage.style.setProperty('--a-box-height', pct(Number(layout.boxHeight) * boxScale))
+      stage.style.setProperty('--a-box-padding-y', pct(3.2 * boxScale))
+      stage.style.setProperty('--a-box-padding-x', pct(4 * boxScale))
+      stage.style.setProperty('--a-line-font', `${Math.round(38 * lineScale)}px`)
+      stage.style.setProperty('--a-text-reserve', pct(layout.textReserve))
+      stage.style.setProperty('--a-name-side', pct(layout.nameSide))
+      stage.style.setProperty('--a-name-bottom', `${Math.round(layout.nameTop)}px`)
+    }
+
+    function updateControls() {
+      const layout = activeLayout()
+      const isEditable = currentVariant === 'a'
+      editor.style.opacity = isEditable ? '1' : '0.52'
+      editSpeaker.textContent = speakers[currentSpeaker].name
+      controls.forEach(input => {
+        const field = input.dataset.field
+        input.disabled = !isEditable
+        input.value = layout[field]
+        const output = document.querySelector(`[data-output="${field}"]`)
+        if (output) output.textContent = formatControlValue(field, layout[field])
+      })
+    }
+
+    function formatControlValue(field, value) {
+      if (field === 'nameTop') return `${Math.round(value)}px`
+      if (field === 'portraitScale') return `${Math.round(Number(value) * 100)}%`
+      if (field === 'boxScale') return `${Math.round(Number(value) * 100)}%`
+      if (field === 'lineScale') return `${Math.round(Number(value) * 100)}%`
+      return pct(value)
+    }
+
+    function updateOutput() {
+      const payload = {
+        variant: 'a',
+        speaker: currentSpeaker,
+        layout: activeLayout(),
+        all: editableA,
+      }
+      layoutOutput.value = JSON.stringify(payload, null, 2)
+    }
+
+    function updateFromControl(input) {
+      const field = input.dataset.field
+      activeLayout()[field] = Number(input.value)
+      applyEditableA()
+      updateControls()
+      updateOutput()
+      saveEditableA()
+    }
+
+    function render() {
+      stage.className = `stage variant-${currentVariant} ${currentSpeaker}${currentVariant === 'a' ? ' editing' : ''}`
+      const speaker = speakers[currentSpeaker]
+      portrait.src = speaker.image
+      portrait.alt = speaker.alt
+      nameEl.textContent = speaker.name
+      lineEl.textContent = speaker.line
+      caption.textContent = `${variants[currentVariant]} / ${speaker.name}`
+      applyEditableA()
+      updateControls()
+      updateOutput()
+      document.querySelectorAll('[data-variant]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.variant === currentVariant))
+      })
+      document.querySelectorAll('[data-speaker]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.speaker === currentSpeaker))
+      })
+    }
+
+    controls.forEach(input => {
+      input.addEventListener('input', () => updateFromControl(input))
+    })
+
+    resetLayout.addEventListener('click', () => {
+      editableA[currentSpeaker] = { ...defaultEditableA[currentSpeaker] }
+      applyEditableA()
+      updateControls()
+      updateOutput()
+      saveEditableA()
+      saveStatus.textContent = '已重置当前角色'
+    })
+
+    markFinal.addEventListener('click', () => {
+      const finalPayload = {
+        savedAt: new Date().toISOString(),
+        variant: 'a',
+        layout: editableA,
+      }
+      localStorage.setItem(FINAL_KEY, JSON.stringify(finalPayload))
+      layoutOutput.value = JSON.stringify(finalPayload, null, 2)
+      saveStatus.textContent = '已标记满意位置'
+    })
+
+    copyLayout.addEventListener('click', async () => {
+      const payload = layoutOutput.value
+      try {
+        await navigator.clipboard.writeText(payload)
+        saveStatus.textContent = '已复制参数'
+      } catch {
+        layoutOutput.focus()
+        layoutOutput.select()
+        document.execCommand('copy')
+        saveStatus.textContent = '已选中参数，可直接 Ctrl+C'
+      }
+    })
+
+    function percentFromX(clientX, rect) {
+      return ((clientX - rect.left) / rect.width) * 100
+    }
+
+    function percentFromBottom(clientY, rect) {
+      return ((rect.bottom - clientY) / rect.height) * 100
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value))
+    }
+
+    function startDrag(event, target) {
+      if (currentVariant !== 'a') return
+      event.preventDefault()
+      const stageRect = stage.getBoundingClientRect()
+      const layout = activeLayout()
+      const start = {
+        x: event.clientX,
+        y: event.clientY,
+        portraitSide: layout.portraitSide,
+        portraitBottom: layout.portraitBottom,
+        boxLeft: layout.boxLeft,
+        boxRight: layout.boxRight,
+        boxBottom: layout.boxBottom,
+      }
+      function onMove(moveEvent) {
+        const dx = ((moveEvent.clientX - start.x) / stageRect.width) * 100
+        const dy = ((moveEvent.clientY - start.y) / stageRect.height) * 100
+        if (target === 'portrait') {
+          const nextSide = currentSpeaker === 'teacher' ? start.portraitSide + dx : start.portraitSide - dx
+          layout.portraitSide = clamp(nextSide, 0, 12)
+          layout.portraitBottom = clamp(start.portraitBottom - dy, -3, 18)
+        } else {
+          layout.boxBottom = clamp(start.boxBottom - dy, 2, 14)
+          const shift = dx
+          layout.boxLeft = clamp(start.boxLeft + shift, 2, 16)
+          layout.boxRight = clamp(start.boxRight - shift, 2, 16)
+        }
+        applyEditableA()
+        updateControls()
+        updateOutput()
+        saveEditableA()
+      }
+      function onUp() {
+        window.removeEventListener('pointermove', onMove)
+        window.removeEventListener('pointerup', onUp)
+        saveStatus.textContent = '已保存拖动位置'
+      }
+      window.addEventListener('pointermove', onMove)
+      window.addEventListener('pointerup', onUp)
+    }
+
+    portraitWrap.addEventListener('pointerdown', event => startDrag(event, 'portrait'))
+    dialogueBox.addEventListener('pointerdown', event => startDrag(event, 'box'))
+
+    document.querySelectorAll('[data-variant]').forEach(button => {
+      button.addEventListener('click', () => {
+        currentVariant = button.dataset.variant
+        render()
+      })
+    })
+
+    document.querySelectorAll('[data-speaker]').forEach(button => {
+      button.addEventListener('click', () => {
+        currentSpeaker = button.dataset.speaker
+        render()
+      })
+    })
+
+    document.addEventListener('keydown', event => {
+      const keys = ['a', 'b', 'c', 'd']
+      const key = event.key.toLowerCase()
+      if (keys.includes(key)) {
+        currentVariant = key
+        render()
+      }
+      if (event.key === '1') {
+        currentSpeaker = 'teacher'
+        render()
+      }
+      if (event.key === '2') {
+        currentSpeaker = 'student'
+        render()
+      }
+    })
+
+    render()
+  </script>
+</body>
+</html>

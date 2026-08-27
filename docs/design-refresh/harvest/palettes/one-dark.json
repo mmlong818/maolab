@@ -1,0 +1,31 @@
+{
+  "source": {
+    "repo": "https://github.com/joshdick/onedark.vim",
+    "license": "MIT",
+    "fetchedAt": "2026-07-21",
+    "sourceUrls": [
+      "https://raw.githubusercontent.com/joshdick/onedark.vim/main/colors/onedark.vim",
+      "https://raw.githubusercontent.com/joshdick/onedark.vim/main/LICENSE"
+    ]
+  },
+  "flavors": [
+    {
+      "id": "one-dark",
+      "name": "One Dark",
+      "colors": [
+        { "name": "Black (Background)", "hex": "#282c34" },
+        { "name": "White (Foreground)", "hex": "#abb2bf" },
+        { "name": "Light Red", "hex": "#e06c75" },
+        { "name": "Dark Red", "hex": "#be5046" },
+        { "name": "Green", "hex": "#98c379" },
+        { "name": "Light Yellow", "hex": "#e5c07b" },
+        { "name": "Dark Yellow", "hex": "#d19a66" },
+        { "name": "Blue", "hex": "#61afef" },
+        { "name": "Magenta/Purple", "hex": "#c678dd" },
+        { "name": "Cyan", "hex": "#56b6c2" },
+        { "name": "Gutter Grey", "hex": "#4b5263" },
+        { "name": "Comment Grey", "hex": "#5c6370" }
+      ]
+    }
+  ]
+}

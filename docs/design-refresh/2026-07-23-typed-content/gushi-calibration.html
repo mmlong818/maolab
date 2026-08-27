@@ -1,0 +1,280 @@
+<title>古诗呈现 · 设计校准样例</title>
+<style>
+  :root{
+    --bg:#fcfbf9; --surface:#ffffff; --ink:#16181d; --sub:#5b606b; --faint:#9aa0ab;
+    --line:#e9e6df; --hair:#efece6;
+    --indigo:#3b4e7e; --teal:#0e7c7b; --gold:#b5872f;
+    --shadow:0 24px 60px -28px rgba(20,22,28,.28);
+    --radius:18px;
+    --serif:"Songti SC","STSong","Noto Serif CJK SC",serif;
+    --sans:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#0f1013;--surface:#17191e;--ink:#f2f0ea;--sub:#a7adb8;--faint:#6b7280;
+      --line:#282b32;--hair:#22242a;--indigo:#8fa2d6;--teal:#4fbfb6;--gold:#d8ad55;
+      --shadow:0 24px 60px -28px rgba(0,0,0,.6);}
+  }
+  :root[data-theme="dark"]{--bg:#0f1013;--surface:#17191e;--ink:#f2f0ea;--sub:#a7adb8;--faint:#6b7280;
+    --line:#282b32;--hair:#22242a;--indigo:#8fa2d6;--teal:#4fbfb6;--gold:#d8ad55;
+    --shadow:0 24px 60px -28px rgba(0,0,0,.6);}
+  :root[data-theme="light"]{--bg:#fcfbf9;--surface:#ffffff;--ink:#16181d;--sub:#5b606b;--faint:#9aa0ab;
+    --line:#e9e6df;--hair:#efece6;--indigo:#3b4e7e;--teal:#0e7c7b;--gold:#b5872f;
+    --shadow:0 24px 60px -28px rgba(20,22,28,.28);}
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;line-height:1.65}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  /* ── header ── */
+  header{padding:80px 0 34px}
+  .eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);font-weight:600;margin:0 0 18px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5vw,58px);line-height:1.12;margin:0;text-wrap:balance;letter-spacing:.01em}
+  h1 em{font-style:normal;color:var(--faint)}
+  .lede{max-width:660px;color:var(--sub);font-size:18px;margin:22px 0 0}
+  .lede b{color:var(--ink);font-weight:600}
+  .rule{height:1px;background:var(--line);margin:40px 0 0}
+
+  /* ── section head ── */
+  .sec{padding:56px 0 8px}
+  .sec-k{font-family:var(--serif);font-size:13px;letter-spacing:.14em;color:var(--faint)}
+  .sec h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:8px 0 6px}
+  .sec p{color:var(--sub);max-width:720px;margin:0}
+
+  .grid{display:grid;grid-template-columns:1fr;gap:30px;padding:30px 0 8px}
+  @media(min-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .cap{padding:16px 20px;border-top:1px solid var(--hair);background:var(--surface)}
+  .cap .tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700}
+  .cap h3{font-family:var(--serif);font-size:19px;margin:7px 0 5px}
+  .cap p{font-size:13.5px;color:var(--sub);margin:0}
+
+  /* stage = the 16:10 mock slide */
+  .stage{position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--surface)}
+  .brand-A{color:var(--indigo)} .brand-B{color:var(--teal)} .brand-C{color:var(--gold)}
+
+  /* ── 方向 A 意境沉浸 ── */
+  .A{position:absolute;inset:0;
+    background:
+      radial-gradient(120% 90% at 78% 18%, rgba(59,78,126,.16), transparent 60%),
+      radial-gradient(80% 60% at 20% 96%, rgba(59,78,126,.10), transparent 70%),
+      linear-gradient(180deg,#ffffff, #f5f6fa);
+  }
+  :root[data-theme="dark"] .A,@media(prefers-color-scheme:dark){}
+  .A .moon{position:absolute;top:13%;right:14%;width:60px;height:60px;border-radius:50%;
+    background:radial-gradient(circle at 38% 38%, #ffffff, #e7ebf5 70%);box-shadow:0 0 44px 10px rgba(59,78,126,.18)}
+  .A .poem{position:absolute;top:10%;right:15%;display:flex;flex-direction:row-reverse;gap:13px;height:60%;align-items:flex-start}
+  .A .poem span{writing-mode:vertical-rl;font-family:var(--serif);font-size:23px;letter-spacing:.14em;color:#20242f;font-weight:500;white-space:nowrap}
+  .A .title{position:absolute;top:10%;right:8%;writing-mode:vertical-rl;font-family:var(--serif);font-size:13px;color:var(--indigo);letter-spacing:.2em}
+  .A .seal{position:absolute;left:9%;bottom:26%;width:30px;height:30px;border-radius:7px;background:var(--indigo);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:11px;writing-mode:vertical-rl;letter-spacing:.08em}
+  .A .whisper{position:absolute;left:9%;right:9%;bottom:10%;font-size:12px;color:var(--sub);line-height:1.7}
+
+  /* ── 方向 B 声律解剖 ── */
+  .B{position:absolute;inset:0;padding:8.5% 7% 7%;background:var(--surface);display:flex;flex-direction:column;gap:0}
+  .B .bh{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+  .B .bh .t{font-family:var(--serif);font-size:16px;font-weight:600}
+  .B .bh .m{font-size:11px;color:var(--faint);letter-spacing:.14em}
+  .B .lines{display:flex;flex-direction:column;gap:11px}
+  .B .ln{display:flex;align-items:center;gap:14px}
+  .B .chars{display:flex;gap:7px}
+  .B .ch{position:relative;width:32px;text-align:center;font-family:var(--serif);font-size:22px;color:#22252d}
+  .B .ch .p{display:block;font-family:var(--sans);font-size:8px;letter-spacing:0;color:var(--faint);margin-bottom:1px;height:9px}
+  .B .ch.rhyme{color:var(--teal)}
+  .B .ch.rhyme::after{content:"";position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);width:22px;height:22px;border:1.5px solid var(--teal);border-radius:50%;opacity:.5}
+  .B .beat{display:flex;gap:7px;margin-left:2px}
+  .B .beat span{width:32px;text-align:center;font-size:10px;color:var(--faint)}
+  .B .beat .ze{color:var(--teal);font-weight:700}
+  .B .imgs{margin-top:auto;display:flex;gap:8px;padding-top:12px;border-top:1px dashed var(--line)}
+  .B .chip{font-size:11px;color:var(--teal);border:1px solid rgba(14,124,123,.35);border-radius:999px;padding:3px 11px}
+
+  /* ── 方向 C 逐句卡片流 ── */
+  .C{position:absolute;inset:0;padding:7% 5%;background:linear-gradient(180deg,#ffffff,#fbf7ef);display:flex;flex-direction:column}
+  .C .chd{font-family:var(--serif);font-size:14px;color:var(--gold);margin-bottom:12px;letter-spacing:.12em;flex:none}
+  .C .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex:1 1 auto;min-height:0}
+  .C .qc{min-width:0;overflow:hidden;background:#fffdf7;border:1px solid rgba(181,135,47,.35);border-radius:12px;padding:12px 11px;display:flex;flex-direction:column;box-shadow:0 8px 20px -14px rgba(181,135,47,.5)}
+  .C .ic{width:28px;height:28px;border-radius:8px;background:rgba(181,135,47,.14);display:flex;align-items:center;justify-content:center;margin-bottom:9px;flex:none}
+  .C .ic svg{width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:1.7}
+  .C .qc .o{font-family:var(--serif);font-size:15px;color:#24262d;line-height:1.45;font-weight:600}
+  .C .qc .b{font-size:11px;color:var(--sub);margin-top:auto;padding-top:8px;line-height:1.45}
+  .C .dots{flex:none}
+  .C .dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
+  .C .dots i{width:6px;height:6px;border-radius:50%;background:var(--line)}
+  .C .dots i.on{background:var(--gold);width:16px;border-radius:3px}
+
+  /* ── grade strip ── */
+  .bands{display:grid;grid-template-columns:1fr;gap:16px;padding:24px 0 10px}
+  @media(min-width:820px){.bands{grid-template-columns:repeat(4,1fr)}}
+  .band{border:1px solid var(--line);border-radius:14px;padding:18px 18px 20px;background:var(--surface)}
+  .band .g{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  .band h4{font-family:var(--serif);font-size:17px;margin:8px 0 8px}
+  .band .demo{height:92px;border-radius:9px;margin:0 0 12px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);position:relative;overflow:hidden}
+  .band ul{margin:0;padding-left:16px;color:var(--sub);font-size:12.5px;line-height:1.7}
+  .band ul b{color:var(--ink);font-weight:600}
+  .d1{background:linear-gradient(180deg,#fffdf7,#fdf3e3)}
+  .d1 .big{font-size:34px;color:var(--gold);position:relative}
+  .d1 .py{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-family:var(--sans);font-size:10px;color:var(--faint);white-space:nowrap}
+  .d2{background:linear-gradient(180deg,#fffef8,#fcf6ea);color:var(--gold);font-size:15px;letter-spacing:.1em;gap:10px}
+  .d3{background:var(--bg);gap:5px}
+  .d3 b{color:var(--teal);border:1px solid rgba(14,124,123,.4);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+  .d4{writing-mode:vertical-rl;background:linear-gradient(200deg,#f6f7fb,#fff);color:var(--indigo);font-size:17px;letter-spacing:.16em;padding:10px 0}
+
+  footer{padding:44px 0 90px;color:var(--faint);font-size:13px;border-top:1px solid var(--line);margin-top:44px}
+  footer b{color:var(--sub);font-weight:600}
+  .note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:10px;padding:16px 20px;margin:30px 0 0;font-size:14px;color:var(--sub)}
+  .note b{color:var(--ink)}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">特殊内容呈现 · 设计校准</p>
+    <h1>古诗,不该只是<em>竖排的黑字</em>。<br>三种超越教材的现代呈现。</h1>
+    <p class="lede">同一首《静夜思》,三个<b>结构真异质</b>的方向 —— 沉浸的意境、可视化的声律、逐句的叙述。目的不是还原课本,是让学生<b>想看</b>。请据此校准「设计感」的档位。</p>
+    <div class="rule"></div>
+  </header>
+
+  <section class="sec">
+    <div class="sec-k">01 / 三个异质方向</div>
+    <h2>境 · 律 · 叙</h2>
+    <p>白为主地色不变,颜色只在物件层。每个方向一套专属视觉语法,而非同一张卡片套皮。</p>
+  </section>
+
+  <div class="grid">
+    <!-- A 境 -->
+    <div class="card">
+      <div class="stage">
+        <div class="A">
+          <div class="moon"></div>
+          <div class="title">静夜思 · 李白</div>
+          <div class="poem"><span>床前明月光</span><span>疑是地上霜</span><span>举头望明月</span><span>低头思故乡</span></div>
+          <div class="whisper">霜色的月光落在床前,他抬头、又低头 —— 一场关于故乡的静默。</div>
+          <div class="seal">李白</div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag brand-A">方向 A · 境</span>
+        <h3>意境沉浸</h3>
+        <p>竖排现代衬线 + 氛围光渐变 + 一枚现代印章。像一张电影海报/冥想 App,情绪先行。适合诵读、情感体会。</p>
+      </div>
+    </div>
+
+    <!-- B 律 -->
+    <div class="card">
+      <div class="stage">
+        <div class="B">
+          <div class="bh"><span class="t">静夜思</span><span class="m">五言绝句 · 平起 · 押 ang 韵</span></div>
+          <div class="lines">
+            <div class="ln">
+              <div class="chars">
+                <span class="ch"><i class="p">chuáng</i>床</span><span class="ch"><i class="p">qián</i>前</span><span class="ch"><i class="p">míng</i>明</span><span class="ch"><i class="p">yuè</i>月</span><span class="ch"><i class="p">guāng</i>光</span>
+              </div>
+            </div>
+            <div class="ln"><div class="beat"><span>○</span><span>○</span><span>●</span><span>●</span><span class="ze">○</span></div></div>
+            <div class="ln">
+              <div class="chars">
+                <span class="ch"><i class="p">yí</i>疑</span><span class="ch"><i class="p">shì</i>是</span><span class="ch"><i class="p">dì</i>地</span><span class="ch"><i class="p">shàng</i>上</span><span class="ch rhyme"><i class="p">shuāng</i>霜</span>
+              </div>
+            </div>
+            <div class="ln">
+              <div class="chars">
+                <span class="ch"><i class="p">jǔ</i>举</span><span class="ch"><i class="p">tóu</i>头</span><span class="ch"><i class="p">wàng</i>望</span><span class="ch"><i class="p">míng</i>明</span><span class="ch"><i class="p">yuè</i>月</span>
+              </div>
+            </div>
+            <div class="ln">
+              <div class="chars">
+                <span class="ch"><i class="p">dī</i>低</span><span class="ch"><i class="p">tóu</i>头</span><span class="ch"><i class="p">sī</i>思</span><span class="ch"><i class="p">gù</i>故</span><span class="ch rhyme"><i class="p">xiāng</i>乡</span>
+              </div>
+            </div>
+          </div>
+          <div class="imgs"><span class="chip">意象 · 明月</span><span class="chip">意象 · 霜</span><span class="chip">情 · 思乡</span></div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag brand-B">方向 B · 律</span>
+        <h3>声律解剖</h3>
+        <p>拼音注音 + 平仄节拍带(○平●仄)+ 韵脚高亮(霜/乡)+ 意象标签。把诗的「音乐」做成信息图。适合精读、格律教学。</p>
+      </div>
+    </div>
+
+    <!-- C 叙 -->
+    <div class="card">
+      <div class="stage">
+        <div style="position:absolute;inset:0;padding:7% 5%;background:linear-gradient(180deg,#ffffff,#fbf7ef);display:flex;flex-direction:column">
+          <div style="font-family:var(--serif);font-size:14px;color:#b5872f;letter-spacing:.12em;margin-bottom:12px">逐句展开 · 一句一景</div>
+          <div style="display:flex;gap:10px;flex:1">
+            <div style="flex:1;background:#fffdf7;border:1px solid rgba(181,135,47,.35);border-radius:12px;padding:13px 11px;display:flex;flex-direction:column;box-shadow:0 8px 20px -14px rgba(181,135,47,.5)">
+              <div style="width:26px;height:26px;border-radius:8px;background:rgba(181,135,47,.15);color:#b5872f;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-bottom:10px">1</div>
+              <div style="font-family:var(--serif);font-size:16px;color:#24262d;font-weight:600;line-height:1.45">床前明月光</div>
+              <div style="font-size:11px;color:var(--sub);margin-top:auto;padding-top:8px;line-height:1.45">月光洒在床前</div>
+            </div>
+            <div style="flex:1;background:#fffdf7;border:1px solid rgba(181,135,47,.35);border-radius:12px;padding:13px 11px;display:flex;flex-direction:column;box-shadow:0 8px 20px -14px rgba(181,135,47,.5)">
+              <div style="width:26px;height:26px;border-radius:8px;background:rgba(181,135,47,.15);color:#b5872f;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-bottom:10px">2</div>
+              <div style="font-family:var(--serif);font-size:16px;color:#24262d;font-weight:600;line-height:1.45">疑是地上霜</div>
+              <div style="font-size:11px;color:var(--sub);margin-top:auto;padding-top:8px;line-height:1.45">还以为是霜</div>
+            </div>
+            <div style="flex:1;background:#fffdf7;border:1px solid rgba(181,135,47,.35);border-radius:12px;padding:13px 11px;display:flex;flex-direction:column;box-shadow:0 8px 20px -14px rgba(181,135,47,.5)">
+              <div style="width:26px;height:26px;border-radius:8px;background:rgba(181,135,47,.15);color:#b5872f;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-bottom:10px">3</div>
+              <div style="font-family:var(--serif);font-size:16px;color:#24262d;font-weight:600;line-height:1.45">举头望明月</div>
+              <div style="font-size:11px;color:var(--sub);margin-top:auto;padding-top:8px;line-height:1.45">抬头看月亮</div>
+            </div>
+            <div style="flex:1;background:#fffdf7;border:1px solid rgba(181,135,47,.35);border-radius:12px;padding:13px 11px;display:flex;flex-direction:column;box-shadow:0 8px 20px -14px rgba(181,135,47,.5)">
+              <div style="width:26px;height:26px;border-radius:8px;background:rgba(181,135,47,.15);color:#b5872f;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-bottom:10px">4</div>
+              <div style="font-family:var(--serif);font-size:16px;color:#24262d;font-weight:600;line-height:1.45">低头思故乡</div>
+              <div style="font-size:11px;color:var(--sub);margin-top:auto;padding-top:8px;line-height:1.45">低头想家乡</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;justify-content:center;margin-top:12px">
+            <i style="width:16px;height:6px;border-radius:3px;background:#b5872f;display:block"></i>
+            <i style="width:6px;height:6px;border-radius:50%;background:var(--line);display:block"></i>
+            <i style="width:6px;height:6px;border-radius:50%;background:var(--line);display:block"></i>
+            <i style="width:6px;height:6px;border-radius:50%;background:var(--line);display:block"></i>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="tag brand-C">方向 C · 叙</span>
+        <h3>逐句卡片流</h3>
+        <p>每句一卡:原句 + 白话 + 线描意象图标,可滑动、有进度点。认知负荷最低,像学习 App。适合低龄、初读。</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="sec">
+    <div class="sec-k">02 / 同一首诗,四种说话方式</div>
+    <h2>按学年分档</h2>
+    <p>分档不是改字号,是改「说话方式」—— 脚手架、密度、抽象度、气质四轴同时移动。</p>
+  </section>
+
+  <div class="bands">
+    <div class="band">
+      <div class="g">低小 1–2</div>
+      <h4>一幅画 + 几个字</h4>
+      <div class="demo d1"><span class="big">月<span class="py">yuè</span></span></div>
+      <ul><li>方向 <b>C</b> 玩心版:大插画</li><li>全程<b>拼音</b>注音</li><li>一屏一句,可点读</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高小 3–6</div>
+      <h4>逐句 + 意象图</h4>
+      <div class="demo d2">床前明月光</div>
+      <ul><li>方向 <b>C→B</b> 过渡</li><li>去拼音,留意象标签</li><li>白话对照分步出</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">初中 7–9</div>
+      <h4>声律解剖</h4>
+      <div class="demo d3"><b>平</b><b>仄</b></div>
+      <ul><li>方向 <b>B</b> 信息图</li><li>平仄/韵脚/意象上线</li><li>结构化精读</li></ul>
+    </div>
+    <div class="band">
+      <div class="g">高中 10–12</div>
+      <h4>意境 + 声律 + 情感弧</h4>
+      <div class="demo d4">思故乡</div>
+      <ul><li>方向 <b>A+B</b> 融合</li><li>意象结构 + 情感曲线</li><li>高密度、学术克制</li></ul>
+    </div>
+  </div>
+
+  <div class="note"><b>这只是校准样例。</b>确认「设计感/现代审美」到不到位、哪个方向对味后,我再把这套方法规模化到全部内容类型(拼音/单词音标/化学结构/几何/受力图/时间轴…),每类都给 ≥2 异质方向 × 学段四档,汇总成实现 spec。</div>
+
+  <footer>
+    maolab · 特殊内容呈现设计校准 · 2026-07-23 &nbsp;|&nbsp; 白为主 · 颜色只在物件层 · 避开 cream+宋体+朱砂 的陈词滥调 &nbsp;|&nbsp; <b>《静夜思》李白</b>(唐)
+  </footer>
+</div>
