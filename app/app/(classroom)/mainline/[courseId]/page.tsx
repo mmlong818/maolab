@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
-import { IMAGE_SCENE_TYPES, auditCourseReleaseReadiness, chromeColorsFor, coursePaletteFor, courseReleaseReason } from '@/lib/mainline'
+import { auditCourseReleaseReadiness, chromeColorsFor, coursePaletteFor, courseReleaseReason } from '@/lib/mainline'
+import { courseHasCompleteTeachingVisuals } from '@/lib/mainline/presentation/visual-readiness'
 import { withClassTimeMainlineCastAssets } from '@/lib/mainline/cast-asset-runtime'
 import { findMainlineCourse, saveMainlineCourse } from '@/lib/mainline/store'
 import { StageCanvas } from '@/components/mainline/StageCanvas'
@@ -28,16 +29,24 @@ export default async function MainlineCoursePage({
   }
   const pendingFactAuditIds = course.factAudit?.pendingSceneIds ?? []
 
-  // 配图幕型若都已有 imageUrl → 图完备(白名单单一事实源在 domain)
-  const imageTargetsInCourse = course.scenes.filter(s => IMAGE_SCENE_TYPES.includes(s.sceneType))
-  const hasImages = imageTargetsInCourse.length > 0 && imageTargetsInCourse.every(s => s.imageUrl)
+  const hasTeachingVisuals = course.pageContent
+    ? !readiness.blockers.some(blocker => blocker.source === 'page-visual')
+    : courseHasCompleteTeachingVisuals(course)
 
   if (!readiness.ready) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#fcfbf9] px-6 text-[#16181d]">
         <div className="max-w-2xl rounded-[16px] border border-[#e9e6df] border-l-[3px] border-l-[#b23b2e] bg-white p-8 shadow-[0_24px_60px_-34px_rgba(20,22,28,0.35)]">
           <h1 className="text-[28px] font-semibold">
-            {readiness.status === 'draft' ? '这节课还是骨架草稿' : `这节课还不能上(${readiness.blockingCount} 个阻断问题)`}
+            {readiness.workflowStatus === 'planning'
+              ? '这节课的结构还没有确认'
+              : readiness.workflowStatus === 'plan-approved' || readiness.workflowStatus === 'generating'
+                ? '这节课的投影片还没有生成完成'
+                : readiness.workflowStatus === 'review'
+                  ? '这节课还在备课检查中'
+                  : readiness.status === 'draft'
+                    ? '这节课还是骨架草稿'
+                    : `这节课还不能上(${readiness.blockingCount} 个阻断问题)`}
           </h1>
           <p className="mt-3 text-[16px] leading-[1.7] text-[#5b606b]">{course.topic}</p>
           <p className="mt-3 text-[15px] leading-[1.7] text-[#5b606b]">{courseReleaseReason(readiness)}</p>
@@ -54,7 +63,7 @@ export default async function MainlineCoursePage({
               courseId={courseId}
               qualityStatus={course.qualityStatus}
               hasBlockingIssues={true}
-              hasImages={hasImages}
+              hasTeachingVisuals={hasTeachingVisuals}
               factAuditPendingCount={pendingFactAuditIds.length}
             />
           </div>
@@ -74,7 +83,7 @@ export default async function MainlineCoursePage({
           courseId={courseId}
           qualityStatus={course.qualityStatus}
           hasBlockingIssues={false}
-          hasImages={hasImages}
+          hasTeachingVisuals={hasTeachingVisuals}
           factAuditPendingCount={pendingFactAuditIds.length}
         />
       </div>

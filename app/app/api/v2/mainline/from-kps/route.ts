@@ -13,6 +13,7 @@ import type { GradeBand, SubjectId } from '../../../../lib/mainline/domain.js'
 import { pickCastPreset } from '../../../../lib/mainline/generation/cast-preset.js'
 import { compileLessonFromKps } from '../../../../lib/mainline/generation/compile-lesson.js'
 import { resolveCourseGroundings, type KpGroundingSourceRow } from '../../../../lib/mainline/generation/course-grounding.js'
+import { parseKpDimensions } from '../../../../lib/mainline/generation/kp-dimensions.js'
 import { saveMainlineCourse } from '../../../../lib/mainline/store.js'
 import { nextEpisodeNo } from '../../../../lib/mainline/season.js'
 import { findSeason } from '../../../../lib/mainline/season-store.js'
@@ -37,40 +38,6 @@ interface KpRow {
   annotations: string | null
 }
 
-const KP_KNOWLEDGE_TYPES = ['factual', 'conceptual', 'procedural', 'metacognitive'] as const
-type KpKnowledgeType = (typeof KP_KNOWLEDGE_TYPES)[number]
-
-interface KpDimensions {
-  knowledgeType?: KpKnowledgeType
-  misconceptions?: string[]
-  learningObjectives?: string[]
-}
-
-/** annotations JSON 每维是 Annotation<T> 容器({ value, source, ... });只取 value,坏数据一律忽略。 */
-function parseKpDimensions(raw: string | null): KpDimensions {
-  if (!raw) return {}
-  let parsed: unknown
-  try { parsed = JSON.parse(raw) } catch { return {} }
-  if (!parsed || typeof parsed !== 'object') return {}
-  const dims = parsed as Record<string, { value?: unknown } | undefined>
-  const out: KpDimensions = {}
-  const kt = dims.knowledgeType?.value
-  if (typeof kt === 'string' && (KP_KNOWLEDGE_TYPES as readonly string[]).includes(kt)) {
-    out.knowledgeType = kt as KpKnowledgeType
-  }
-  const mis = dims.misconceptions?.value
-  if (Array.isArray(mis)) {
-    const items = mis.filter((m): m is string => typeof m === 'string' && m.trim().length > 0)
-    if (items.length > 0) out.misconceptions = items
-  }
-  const objectives = dims.learningObjectives?.value
-  if (Array.isArray(objectives)) {
-    const items = objectives.filter((o): o is string => typeof o === 'string' && o.trim().length > 0)
-    if (items.length > 0) out.learningObjectives = items
-  }
-  return out
-}
-
 let _db: ReturnType<typeof openSqliteRaw> | null = null
 function getDb() {
   if (_db) return _db
@@ -87,6 +54,7 @@ const SUBJECT_MAP: Record<string, SubjectId> = {
   biology: 'biology', 生物: 'biology',
   english: 'english', 英语: 'english',
   history: 'history', 历史: 'history',
+  politics: 'politics', 思政: 'politics', 道德与法治: 'politics',
   geography: 'geography', 地理: 'geography',
   science: 'science', 科学: 'science',
 }
@@ -182,6 +150,7 @@ export async function POST(req: NextRequest) {
   })
   const course = {
     ...compiled,
+    revision: { familyId: compiled.id, revisionNo: 1 },
     ...(seasonRef ? { season: seasonRef } : {}),
   }
 
@@ -196,6 +165,9 @@ export async function POST(req: NextRequest) {
     ...(seasonRef ? { season: seasonRef } : {}),
     ...(reinforcedKpIds.length > 0 ? { reinforcedKpIds } : {}),
     qualityStatus: course.qualityStatus,
+    planRevisionId: course.planning?.planRevisionId,
+    planStatus: course.planning?.status,
+    plannedPages: course.planning?.pages.length,
     scenes: course.scenes.length,
     beats: course.beats.length,
     sourceCoverage: grounding.coverage,

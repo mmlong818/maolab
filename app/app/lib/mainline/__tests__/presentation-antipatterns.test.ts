@@ -192,6 +192,36 @@ describe('R5 · 单知识点开场命中低密度母版', () => {
   it('多知识点开场不按此规则报空间空置', () => {
     expect(auditPresentationAntipatterns(multiKpCourse()).filter(f => f.ruleId === 'sparse-intro-master')).toEqual([])
   })
+
+  it('page-first 课程按实际新页面审查，不使用未渲染的旧开场母版', () => {
+    const course = baseCourse()
+    const pageFirst: MainlineCourse = {
+      ...course,
+      pageContent: {
+        schemaVersion: 'mainline-page-content-v1',
+        courseId: course.id,
+        planRevisionId: 'plan-1',
+        contentRevisionId: 'content-1',
+        status: 'review',
+        pages: [{
+          pageId: 'page-1',
+          order: 1,
+          purpose: 'orient',
+          planRevisionId: 'plan-1',
+          sourceRefs: [],
+          content: {
+            kind: 'course-orientation',
+            title: '二力平衡',
+            learningQuestion: '怎样判断两个力是否平衡？',
+            goals: ['根据图示逐项核对四个条件。'],
+          },
+          teacherCompanion: { script: '请学生先观察图示。', notes: [], pace: 'normal' },
+        }],
+      },
+    }
+
+    expect(auditPresentationAntipatterns(pageFirst).filter(f => f.ruleId === 'sparse-intro-master')).toEqual([])
+  })
 })
 
 describe('目录整体', () => {

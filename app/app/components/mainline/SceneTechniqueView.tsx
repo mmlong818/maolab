@@ -1,7 +1,7 @@
 'use client'
 
 import type { LessonScene, MainlineCourse } from '@/lib/mainline'
-import { COURSE_STRUCTURE_VARIANT, courseDisplayTitle, IMAGE_SCENE_TYPES, PRESENTATION_VARIANT_SLOT, RECAP_TRANSFER_VARIANT, presentationFor, stagedPromptEvidenceKind } from '@/lib/mainline'
+import { COURSE_STRUCTURE_VARIANT, courseDisplayTitle, IMAGE_SCENE_TYPES, isPageContentScene, PRESENTATION_VARIANT_SLOT, RECAP_TRANSFER_VARIANT, presentationFor, stagedPromptEvidenceKind } from '@/lib/mainline'
 import { AiCollabView } from './scene-views/ai-collab'
 import { AiVerifyView } from './scene-views/ai-scenes'
 import { ConceptBuildView } from './scene-views/concept-build'
@@ -11,7 +11,7 @@ import { usesGeneratedSceneImage } from '@/lib/mainline/presentation/scene-rende
 import { biologyVisualFor, chemistryVisualFor, chineseVisualFor, circuitVisualFor, englishVisualFor, geometryVisualFor } from '@/lib/mainline/presentation/subject-content'
 import { CoordinatePlotView, DialogueScriptView, ForceDiagramView, GeometryView, OpticsDiagramView, TimelineEventsView } from './scene-views/content-forms'
 import { BiologyStructureView, ChemistryContentView, ChineseContentView, CircuitDiagramView, EnglishContentView } from './scene-views/subject-content'
-import { ContrastImageView } from './scene-views/contrast-scenes'
+import { ContrastImageView, ContrastSequenceView } from './scene-views/contrast-scenes'
 import { CoreWithSpecializedVisual } from './scene-views/core-content'
 import {
   ComparisonView,
@@ -26,6 +26,7 @@ import {
   TriptychView,
 } from './scene-views/legacy-techniques'
 import { PracticeSequenceView, PracticeView } from './scene-views/practice'
+import { PageContentSlideView } from './scene-views/page-content'
 import { RecapFocusView, RecapImageView, RecapTransferSlideView } from './scene-views/recap'
 import { CompositionScene, ImagePendingScene, isFilled } from './scene-views/shared'
 import { SourceReadingView } from './scene-views/source-reading'
@@ -56,6 +57,10 @@ interface SceneTechniqueViewProps {
 export function SceneTechniqueView({ course, scene, sceneNumber: pageNumber, stagedFeedbackRevealed = true }: SceneTechniqueViewProps) {
   const sceneNumber = pageNumber ?? (course.scenes.findIndex(item => item.id === scene.id) + 1 || 1)
 
+  if (isPageContentScene(scene)) {
+    return <PageContentSlideView course={course} scene={scene} sceneNumber={sceneNumber} />
+  }
+
   if (scene.contentSlots[PRESENTATION_VARIANT_SLOT] === RECAP_TRANSFER_VARIANT) {
     return <RecapTransferSlideView scene={scene} pres={presentationFor(scene, course)} sceneNumber={sceneNumber} />
   }
@@ -68,6 +73,12 @@ export function SceneTechniqueView({ course, scene, sceneNumber: pageNumber, sta
   // 有题图或专业图表的练习继续走证据优先分支，避免为了统一版式丢掉学生必须看的图。
   if (scene.sceneType === 'practice' && stagedPromptEvidenceKind(scene) === null) {
     return <PracticeSequenceView scene={scene} pres={presentationFor(scene, course)} sceneNumber={sceneNumber} feedbackRevealed={stagedFeedbackRevealed} />
+  }
+
+  // 纯文字辨析与纯文字练习一样，提问和揭晓共用同一骨架。否则已通过课程会在
+  // 揭晓页被“contrast 需要配图”的通用规则截走，错误显示“配图生成中”。
+  if (scene.sceneType === 'contrast' && !scene.imageUrl && specializedContentKind(scene) === null) {
+    return <ContrastSequenceView scene={scene} pres={presentationFor(scene, course)} sceneNumber={sceneNumber} feedbackRevealed={stagedFeedbackRevealed} />
   }
 
   // AI 找茬的提问与核查必须留在同一母版中：初始态只把结论槽留为“等待判断”，
@@ -159,6 +170,11 @@ function SpecializedSceneView({ kind, scene, course, sceneNumber }: { kind: Spec
     case 'biology': visual = <BiologyStructureView scene={scene} course={course} pres={pres} sceneNumber={sceneNumber} model={biologyVisualFor(scene.contentSlots)!} />; break
     case 'optics': visual = <OpticsDiagramView scene={scene} course={course} pres={pres} sceneNumber={sceneNumber} />; break
   }
+
+  // The Chinese observation renderer already presents the full source text,
+  // translation, and gloss. Repeating its contract slots in a side rail wastes
+  // projection space and exposes planning labels to students.
+  if (kind === 'chinese' && scene.sceneType === 'visual-observation') return visual
 
   return <CoreWithSpecializedVisual scene={scene} pres={pres}>{visual}</CoreWithSpecializedVisual>
 }

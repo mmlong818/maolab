@@ -25,7 +25,7 @@ const GRADE_LABELS: Record<GradeBand, string> = {
 }
 
 const SUBJECT_LABELS: Record<SubjectId, string> = {
-  chinese: '语文', math: '数学', science: '科学', english: '英语', history: '历史',
+  chinese: '语文', math: '数学', science: '科学', english: '英语', history: '历史', politics: '道德与法治',
   geography: '地理', physics: '物理', chemistry: '化学', biology: '生物', general: '通识',
 }
 

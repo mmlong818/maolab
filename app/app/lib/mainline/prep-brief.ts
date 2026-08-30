@@ -35,6 +35,7 @@ import {
   type QualitySeverity,
   type QualitySummary,
 } from './quality-gates.js'
+import { auditCourseReleaseReadiness } from './readiness.js'
 import { DEFAULT_KP_KNOWLEDGE_TYPE, fragmentSkeletonFor, type FragmentSkeletonStep } from './generation/skeleton-library.js'
 import { findMainlineCourse } from './store.js'
 import { auditPresentationAntipatterns, type AntipatternFinding } from './presentation-antipatterns.js'
@@ -549,6 +550,21 @@ function buildSkeletonRationale(
 }
 
 function buildQualitySummary(course: MainlineCourse): PrepBriefQualitySummary {
+  if (course.planning && course.pageContent) {
+    const readiness = auditCourseReleaseReadiness(course)
+    return {
+      status: readiness.blockingCount > 0
+        ? 'blocked'
+        : readiness.warningCount > 0
+          ? 'passed-with-warnings'
+          : 'passed',
+      blocking: readiness.blockingCount,
+      warning: readiness.warningCount,
+      info: readiness.deterministicSummary.info,
+      source: '质量闸门',
+    }
+  }
+
   const issues = auditMainlineCourse(course)
   return { ...summarizeQuality(issues), source: '质量闸门' }
 }
@@ -596,10 +612,18 @@ function buildExecutorBreakdown(course: MainlineCourse): PrepBriefExecutorBreakd
     EXECUTOR_BREAKDOWN_ORDER.map(executor => [executor, { sceneCount: 0, durationSec: 0 }]),
   )
 
-  for (const scene of course.scenes) {
-    const entry = totals.get(sceneExecutor(scene))!
-    entry.sceneCount += 1
-    entry.durationSec += sceneDurationEstimate(course, scene.id)
+  if (course.pageContent) {
+    const teacher = totals.get('teacher')!
+    teacher.sceneCount = course.pageContent.pages.length
+    teacher.durationSec = course.pageContent.pages.reduce((sum, page) => (
+      sum + (page.teacherCompanion.pace === 'deliberate' ? 90 : page.teacherCompanion.pace === 'brief' ? 40 : 60)
+    ), 0)
+  } else {
+    for (const scene of course.scenes) {
+      const entry = totals.get(sceneExecutor(scene))!
+      entry.sceneCount += 1
+      entry.durationSec += sceneDurationEstimate(course, scene.id)
+    }
   }
 
   const byExecutor = EXECUTOR_BREAKDOWN_ORDER.map(executor => {

@@ -5,6 +5,16 @@ export interface ContentBalance {
   columns: string
 }
 
+/** 页面优先课程的题面按真实配图与回答区需求分栏。 */
+export function pagePromptLayout(hasImage: boolean, hasResponse: boolean): ContentBalance {
+  if (!hasImage) {
+    return { mode: 'balanced', columns: 'minmax(0, 1.02fr) minmax(0, 0.98fr)' }
+  }
+  return hasResponse
+    ? { mode: 'visual-heavy', columns: 'minmax(0, 1.12fr) minmax(0, 0.88fr)' }
+    : { mode: 'visual-heavy', columns: 'minmax(0, 1.28fr) minmax(0, 0.72fr)' }
+}
+
 /** 题面页按学生实际要读的文字量分配空间，配图不再使用全课统一栏宽。 */
 export function promptEvidenceLayout(
   evidenceKind: string | null,

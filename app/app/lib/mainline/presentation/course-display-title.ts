@@ -12,6 +12,7 @@ export function courseDisplayTitle(course: Pick<MainlineCourse, 'topic' | 'sourc
     .map(source => source.title.trim())
     .filter(Boolean))]
 
+  if (names.length === 1 && course.topic.trim()) return course.topic.trim()
   return names.length > 0 ? names.join('、') : course.topic.trim()
 }
 

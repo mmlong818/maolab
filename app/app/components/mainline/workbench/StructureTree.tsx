@@ -15,8 +15,8 @@ interface StructureTreeProps {
 }
 
 export function StructureTree({ course, issues, fragmentLabels, selectedPageId, onSelectOverview, onSelectPage }: StructureTreeProps) {
-  const imageCount = course.scenes.filter(scene => scene.imageUrl).length
   const presentationPages = lessonPresentationPages(course)
+  const imageCount = presentationPages.filter(page => presentationScene(page).imageUrl).length
   const pageNumberById = useMemo(
     () => new Map(presentationPages.map((page, index) => [page.id, index + 1])),
     [presentationPages],

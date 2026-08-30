@@ -25,7 +25,7 @@ import {
 const ROUTED: readonly RoutedSceneType[] = ['source-reading', 'concept-build', 'worked-example', 'practice', 'recap', 'contrast', 'ai-collab', 'visual-observation']
 const ALL_BANDS: readonly GradeBand[] = ['lower-primary', 'upper-primary', 'middle-school', 'high-school']
 const ALL_FAMILIES: readonly SubjectFamily[] = ['reasoning', 'literary', 'nature', 'language', 'general']
-const ALL_SUBJECTS: readonly SubjectId[] = ['chinese', 'math', 'science', 'english', 'history', 'geography', 'physics', 'chemistry', 'biology', 'general']
+const ALL_SUBJECTS: readonly SubjectId[] = ['chinese', 'math', 'science', 'english', 'history', 'politics', 'geography', 'physics', 'chemistry', 'biology', 'general']
 
 describe('气质登记完备性', () => {
   it('五个路由幕型的登记条数与母版 id 与 layout-form-registry 的 MASTER_IDS 逐一对齐', () => {

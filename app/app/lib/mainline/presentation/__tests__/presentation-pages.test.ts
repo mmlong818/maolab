@@ -9,6 +9,15 @@ import {
   presentationPagesForScene,
   presentationScene,
 } from '../presentation-pages.js'
+import {
+  PAGE_CONTENT_DATA_SLOT,
+  PAGE_CONTENT_VARIANT_SLOT,
+  isPageContentScene,
+  pageContentFromScene,
+  pairedPromptContentFromScene,
+} from '../page-content-presentation.js'
+import { PAGE_CONTENT_SCHEMA_VERSION, type CoursePageContentState } from '../../planning/page-content-contract.js'
+import { PAGE_PLAN_SCHEMA_VERSION, type CoursePlanningState } from '../../planning/page-contract.js'
 import type { LessonScene } from '../../domain.js'
 
 function scene(overrides: Partial<LessonScene>): LessonScene {
@@ -70,6 +79,84 @@ describe('presentationPagesForScene', () => {
 })
 
 describe('lessonPresentationPages', () => {
+  it('新正文存在时严格按 pageContent 一对一返回，不再按旧场景拆页或插入派生页', () => {
+    const legacyPractice = scene({
+      id: 'legacy-practice',
+      sceneType: 'practice',
+      contentSlots: { task: '旧题面', feedback: '旧反馈' },
+    })
+    const question = {
+      kind: 'practice' as const,
+      title: '独立练习',
+      prompt: '判断下列说法是否正确，并写出一条依据。',
+      materials: ['材料一'],
+      responseInstruction: '先写结论，再写依据。',
+    }
+    const feedback = {
+      kind: 'feedback' as const,
+      title: '核对与修正',
+      successCriteria: ['结论明确', '依据可核对'],
+      conclusion: '这条说法不成立。',
+      evidence: [{ text: '材料一与该说法矛盾。' }],
+      revisionAction: '根据材料一改写原判断。',
+    }
+    const planning: CoursePlanningState = {
+      schemaVersion: PAGE_PLAN_SCHEMA_VERSION,
+      courseId: 'course-1',
+      planRevisionId: 'plan-1',
+      status: 'review',
+      learningContracts: [],
+      arc: { id: 'arc-1', courseId: 'course-1', steps: [] },
+      pages: [
+        {
+          id: 'page-1', order: 1, fragmentId: 'fragment-1', knowledgePointIds: ['kp-1'], purpose: 'practice', audience: 'student',
+          learningAction: '独立判断并写依据。', newInformation: '呈现练习题。', sourceRefs: [],
+          contentSpec: { kind: 'practice', taskGoal: '独立判断', answerPolicy: 'separate-following-page', responsePageId: 'page-2', materialRefs: [] },
+          visualSpec: { required: false, form: 'practice-space', reason: '保留作答空间。', sourceAssetPolicy: 'none' },
+          teacherCompanion: { scriptGoal: '读题。', teachingMove: '等待作答。', pace: 'normal' }, arcStepId: 'step-1', pairId: 'pair-1', pairRole: 'prompt', layoutGroupId: 'pair-1',
+        },
+        {
+          id: 'page-2', order: 2, fragmentId: 'fragment-1', knowledgePointIds: ['kp-1'], purpose: 'feedback', audience: 'student',
+          learningAction: '核对并修正。', newInformation: '增加结论和依据。', sourceRefs: [],
+          contentSpec: { kind: 'feedback', questionPageId: 'page-1', requiredElements: ['success-criteria', 'conclusion', 'evidence', 'revision-action'] },
+          visualSpec: { required: false, form: 'practice-space', reason: '沿用练习版位。', sourceAssetPolicy: 'none' },
+          teacherCompanion: { scriptGoal: '核对。', teachingMove: '完成修正。', pace: 'deliberate' }, arcStepId: 'step-1', pairId: 'pair-1', pairRole: 'response', layoutGroupId: 'pair-1', previousPageId: 'page-1',
+        },
+      ],
+    }
+    const pageContent: CoursePageContentState = {
+      schemaVersion: PAGE_CONTENT_SCHEMA_VERSION,
+      courseId: 'course-1',
+      planRevisionId: 'plan-1',
+      contentRevisionId: 'content-1',
+      status: 'review',
+      pages: [
+        { pageId: 'page-1', order: 1, purpose: 'practice', planRevisionId: 'plan-1', sourceRefs: [], content: question, imageUrl: '/generated-images/page-1.png', teacherCompanion: { script: '请先独立完成这道练习，再交流判断依据。', notes: [], pace: 'normal' }, pairId: 'pair-1', pairRole: 'prompt', layoutGroupId: 'pair-1' },
+        { pageId: 'page-2', order: 2, purpose: 'feedback', planRevisionId: 'plan-1', sourceRefs: [], content: feedback, teacherCompanion: { script: '现在逐条核对判断标准，并根据材料修正原答案。', notes: ['先核对依据'], pace: 'deliberate' }, pairId: 'pair-1', pairRole: 'response', layoutGroupId: 'pair-1' },
+      ],
+    }
+
+    const pages = lessonPresentationPages({
+      scenes: [legacyPractice],
+      learningFragments: [{ id: 'fragment-1', goalId: 'goal-1', kpId: 'kp-1', durationTargetSec: 120, sceneIds: ['legacy-practice'], successSignal: '' }],
+      sourceMaterial: [],
+      planning,
+      pageContent,
+    })
+
+    expect(pages.map(page => page.id)).toEqual(['page-1', 'page-2'])
+    expect(pages.map(page => page.feedbackRevealed)).toEqual([true, true])
+    expect(pages.every(page => page.derived)).toBe(true)
+    expect(pages.every(page => isPageContentScene(page.scene))).toBe(true)
+    expect(pages[0]!.scene.contentSlots[PAGE_CONTENT_VARIANT_SLOT]).toBeTruthy()
+    expect(pages[0]!.scene.contentSlots[PAGE_CONTENT_DATA_SLOT]).toBeTruthy()
+    expect(pageContentFromScene(pages[0]!.scene)).toEqual(question)
+    expect(pages[0]!.scene.imageUrl).toBe('/generated-images/page-1.png')
+    expect(pageContentFromScene(pages[1]!.scene)).toEqual(feedback)
+    expect(pairedPromptContentFromScene(pages[1]!.scene)).toEqual(question)
+    expect(presentationScene(pages[1]!)).toBe(pages[1]!.scene)
+  })
+
   it('在封面后插入学生可见的课程结构投影片，并按知识点完整列出学习顺序', () => {
     const opening = scene({
       id: 'opening',

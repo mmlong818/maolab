@@ -53,6 +53,26 @@ function extractJsonFromText(text: string): string {
   return trimmed.slice(start, end + 1)
 }
 
+function retryPrompt(user: string, feedback: string): string {
+  if (!feedback) return user
+  return [
+    user,
+    '',
+    '上一版输出未通过 JSON 结构校验。',
+    `校验结果：${feedback}`,
+    '请重新输出完整对象并严格匹配要求。不要解释错误，不要沿用错误字段，不要省略必填字段。',
+  ].join('\n')
+}
+
+function schemaFeedback(error: unknown): string {
+  if (!(error instanceof z.ZodError)) return '输出不是合法 JSON，请检查字符串引号、转义符、逗号和括号。'
+  return error.issues
+    .slice(0, 6)
+    .map(issue => `${issue.path.join('.') || 'output'}：${issue.message}`)
+    .join('；')
+    .slice(0, 800)
+}
+
 export interface CallLLMOptions {
   /** 系统提示（可选） */
   system?: string
@@ -78,18 +98,21 @@ export async function callLLMJson<T>(opts: CallLLMOptions): Promise<T> {
     const systemSuffix = '\n\n严格只输出一个合法 JSON 对象,不要使用 markdown 代码块,不要任何解释文字。'
     const system = (opts.system ?? '') + systemSuffix
     let lastErr: unknown
+    let validationFeedback = ''
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
-        const raw = await runClaudeCli({ system, user: opts.user, model, timeoutMs })
+        const raw = await runClaudeCli({ system, user: retryPrompt(opts.user, validationFeedback), model, timeoutMs })
         const jsonText = extractJsonFromText(raw)
         let parsed: unknown
         try { parsed = JSON.parse(jsonText) }
         catch (e) {
           console.error('[callLLMJson:cli] JSON.parse failed, raw (first 500):', raw.slice(0, 500))
+          validationFeedback = schemaFeedback(e)
           throw e
         }
         try { return opts.schema.parse(parsed) as T }
         catch (e) {
+          validationFeedback = schemaFeedback(e)
           if (attempt === maxAttempts) {
             console.error('[callLLMJson:cli] schema parse failed, raw (first 800):', raw.slice(0, 800))
           }
@@ -111,6 +134,7 @@ export async function callLLMJson<T>(opts: CallLLMOptions): Promise<T> {
   const temperature = opts.temperature ?? 0.4
 
   let lastErr: unknown
+  let validationFeedback = ''
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), timeoutMs)
@@ -125,7 +149,7 @@ export async function callLLMJson<T>(opts: CallLLMOptions): Promise<T> {
           model: cfg.model,
           messages: [
             ...(opts.system ? [{ role: 'system', content: opts.system }] : []),
-            { role: 'user', content: opts.user },
+            { role: 'user', content: retryPrompt(opts.user, validationFeedback) },
           ],
           temperature,
           response_format: { type: 'json_object' },
@@ -153,10 +177,12 @@ export async function callLLMJson<T>(opts: CallLLMOptions): Promise<T> {
       try { parsed = JSON.parse(content) }
       catch (e) {
         console.error('[callLLMJson] JSON.parse failed, raw content (first 500):', content.slice(0, 500))
+        validationFeedback = schemaFeedback(e)
         throw e
       }
       try { return opts.schema.parse(parsed) as T }
       catch (e) {
+        validationFeedback = schemaFeedback(e)
         if (attempt === maxAttempts) {
           console.error('[callLLMJson] schema parse failed, raw content (first 800):', content.slice(0, 800))
           // 调试落盘: server console 不可见时从文件取原始输出

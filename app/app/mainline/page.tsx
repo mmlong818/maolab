@@ -1,24 +1,22 @@
 import Link from 'next/link'
-import { ClipboardPenLine, Download, Play } from 'lucide-react'
+import { ClipboardPenLine, Download, FileCheck2, Play } from 'lucide-react'
 import { listMainlineCourses } from '../lib/mainline/store.js'
 import { listWeakKps } from '../lib/mainline/mastery-store.js'
-import { auditCourseReleaseReadiness, courseDisplayTitle, type SceneType } from '../lib/mainline/index.js'
+import { auditCourseReleaseReadiness, courseDisplayTitle } from '../lib/mainline/index.js'
+import { courseHasCompleteTeachingVisuals } from '../lib/mainline/presentation/visual-readiness.js'
 import { ReviewSuggestion } from './ReviewSuggestion.js'
 
 export const dynamic = 'force-dynamic'
-
-const IMAGE_TARGETS: readonly SceneType[] = ['visual-observation', 'contrast', 'recap']
 
 export default async function MainlineCoursesPage() {
   const listed = await listMainlineCourses()
   const weakKps = await listWeakKps()
 
   // 课程库首先服务于进入和备课，不把内部审计状态当作课程价值排序。
-  const enriched = listed.map(({ course: c, createdAt }) => {
+  const enriched = listed.filter(({ course }) => !course.revision?.supersededByCourseId).map(({ course: c, createdAt }) => {
     const readiness = auditCourseReleaseReadiness(c)
-    const targets = c.scenes.filter(s => IMAGE_TARGETS.includes(s.sceneType))
-    const hasImages = targets.length > 0 && targets.every(s => s.imageUrl)
-    return { c, readiness, hasImages, createdAt }
+    const hasTeachingVisuals = courseHasCompleteTeachingVisuals(c)
+    return { c, readiness, hasTeachingVisuals, createdAt }
   })
   enriched.sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0))
 
@@ -44,11 +42,13 @@ export default async function MainlineCoursesPage() {
         </div>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, marginBottom: 22, color: '#6b7280', fontSize: 13 }}>
-          <WorkflowStep index="1" label="生成课程" />
+          <WorkflowStep index="1" label="选择内容" />
           <span aria-hidden="true" style={{ color: '#c6c2b9' }}>→</span>
-          <WorkflowStep index="2" label="备课修正" active />
+          <WorkflowStep index="2" label="确认结构" active />
           <span aria-hidden="true" style={{ color: '#c6c2b9' }}>→</span>
-          <WorkflowStep index="3" label="开始上课" />
+          <WorkflowStep index="3" label="备课检查" />
+          <span aria-hidden="true" style={{ color: '#c6c2b9' }}>→</span>
+          <WorkflowStep index="4" label="开始上课" />
         </div>
 
         <ReviewSuggestion weakKps={weakKps} />
@@ -59,7 +59,10 @@ export default async function MainlineCoursesPage() {
           </div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 12 }}>
-            {enriched.map(({ c, readiness, hasImages, createdAt }) => (
+            {enriched.map(({ c, readiness, hasTeachingVisuals, createdAt }) => {
+              const planPending = c.planning && ['planning', 'plan-approved', 'generating'].includes(c.planning.status)
+              const primaryHref = planPending ? `/mainline/${c.id}/plan` : `/mainline/${c.id}/prep`
+              return (
               <div
                 key={c.id}
                 style={{
@@ -72,7 +75,7 @@ export default async function MainlineCoursesPage() {
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, marginBottom: 8, alignItems: 'flex-start' }}>
-                  <Link href={`/mainline/${c.id}/prep`} style={{ minWidth: 0, color: '#111827', textDecoration: 'none' }}>
+                  <Link href={primaryHref} style={{ minWidth: 0, color: '#111827', textDecoration: 'none' }}>
                     <div style={{ fontSize: 17, fontWeight: 700, lineHeight: 1.4 }}>
                       {c.season && (
                         <span style={{ marginRight: 8, fontSize: 12, fontWeight: 800, padding: '3px 8px', borderRadius: 6, background: '#eef2ff', color: '#3730a3', verticalAlign: '2px', letterSpacing: '0.04em' }}>
@@ -80,14 +83,15 @@ export default async function MainlineCoursesPage() {
                         </span>
                       )}
                       {courseDisplayTitle(c)}
+                      {c.revision && <span style={{ marginLeft: 8, color: '#8a8176', fontSize: 12, fontWeight: 650 }}>第 {c.revision.revisionNo} 版</span>}
                     </div>
                   </Link>
-                  <StatusBadge readiness={readiness} hasImages={hasImages} />
+                  <StatusBadge readiness={readiness} hasTeachingVisuals={hasTeachingVisuals} />
                 </div>
                 <div style={{ display: 'flex', gap: 12, fontSize: 13, color: '#6b7280', flexWrap: 'wrap' }}>
                     <span>{gradeBandLabel(c.gradeBand)} · {subjectLabel(c.subject)}</span>
                     <span>·</span>
-                    <span>{c.scenes.length} 幕 / {c.beats.length} 节拍</span>
+                    <span>{c.planning ? `${c.planning.pages.length} 张投影片` : `${c.scenes.length} 幕 / ${c.beats.length} 节拍`}</span>
                     {createdAt && (
                       <>
                         <span>·</span>
@@ -98,10 +102,17 @@ export default async function MainlineCoursesPage() {
                     {readiness.status === 'passed' && readiness.warningCount > 0 && <span>· 有备课建议</span>}
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginTop: 16, paddingTop: 14, borderTop: '1px solid #f0eee9' }}>
-                  <Link href={`/mainline/${c.id}/prep`} style={courseActionStyle('prep')}>
-                    <ClipboardPenLine size={15} aria-hidden="true" />
-                    备课修正
-                  </Link>
+                  {planPending ? (
+                    <Link href={primaryHref} style={courseActionStyle('prep')}>
+                      <FileCheck2 size={15} aria-hidden="true" />
+                      {c.planning?.status === 'planning' ? '确认结构' : c.planning?.status === 'generating' ? '查看生成状态' : '继续生成'}
+                    </Link>
+                  ) : (
+                    <Link href={primaryHref} style={courseActionStyle('prep')}>
+                      <ClipboardPenLine size={15} aria-hidden="true" />
+                      备课检查
+                    </Link>
+                  )}
                   {readiness.ready ? (
                     <Link href={`/mainline/${c.id}`} style={courseActionStyle('classroom')}>
                       <Play size={15} fill="currentColor" aria-hidden="true" />
@@ -121,7 +132,8 @@ export default async function MainlineCoursesPage() {
                   )}
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </section>
@@ -156,15 +168,26 @@ function courseActionStyle(kind: 'prep' | 'classroom' | 'disabled' | 'export'): 
 }
 
 function StatusBadge({
-  readiness, hasImages,
-}: { readiness: ReturnType<typeof auditCourseReleaseReadiness>; hasImages: boolean }) {
-  const [label, bg, fg] = readiness.status === 'blocked'
+  readiness, hasTeachingVisuals,
+}: { readiness: ReturnType<typeof auditCourseReleaseReadiness>; hasTeachingVisuals: boolean }) {
+  const workflowLabel = readiness.workflowStatus === 'planning'
+    ? '待确认结构'
+    : readiness.workflowStatus === 'plan-approved'
+      ? '待生成投影片'
+      : readiness.workflowStatus === 'generating'
+        ? '正在生成'
+        : readiness.workflowStatus === 'review'
+          ? '待备课检查'
+          : undefined
+  const [label, bg, fg] = workflowLabel
+    ? [workflowLabel, '#eef2ff', '#3730a3']
+    : readiness.status === 'blocked'
     ? ['待备课检查', '#fff7ed', '#9a3412']
     : readiness.status === 'draft'
       ? ['骨架 · 待填内容', '#fff7ed', '#9a3412']
-      : hasImages
-        ? ['就绪 · 有图', '#ecfdf5', '#065f46']
-        : ['就绪 · 缺图', '#fef9c3', '#854d0e']
+      : readiness.workflowStatus === 'ready' || hasTeachingVisuals
+        ? ['就绪 · 画面完整', '#ecfdf5', '#065f46']
+        : ['就绪 · 缺少画面', '#fef9c3', '#854d0e']
   return (
     <span style={{ fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: bg, color: fg, whiteSpace: 'nowrap' }}>
       {label}
@@ -189,7 +212,7 @@ function gradeBandLabel(g: string): string {
 function subjectLabel(s: string): string {
   const map: Record<string, string> = {
     chinese: '语文', math: '数学', english: '英语', physics: '物理', chemistry: '化学',
-    biology: '生物', history: '历史', geography: '地理', science: '科学', general: '通识',
+    biology: '生物', history: '历史', politics: '道德与法治', geography: '地理', science: '科学', general: '通识',
   }
   return map[s] ?? s
 }

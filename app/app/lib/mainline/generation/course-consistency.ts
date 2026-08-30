@@ -47,7 +47,7 @@ const MNEMONIC_SLOT_PATTERN = /^(?:mnemonic|口诀|助记)$/i
 const TERM_SLOT_PATTERN = /^(?:definition|term|meaning|定义|术语|含义)$/i
 const VERDICT_SLOT_PATTERN = /^(?:verdict|judgment|decision|正误|判定|判断)$/i
 const GENERIC_LABEL_PATTERN = /^(?:feedback|answer|result|solution|correction|formula|equation|rule|definition|term|meaning|verdict|judgment|mnemonic|答案|反馈|结果|解答|订正|公式|方程|法则|定义|术语|含义|正误|判定|判断|口诀|助记)$/i
-const CONTEXT_BOUND_LABEL_PATTERN = /(?:答案|结果|交点|坐标|定义域|取值|向量|顶点|本题|示例|函数|图象|表达式)|^(?:重力|支持力|压力|拉力|摩擦力|弹力|浮力|合力|牵引力|阻力|质量|速度|加速度|长度|面积|角度|数量|温度|时间|距离|高度|半径|直径|周长|体积)$/i
+const CONTEXT_BOUND_LABEL_PATTERN = /(?:答案|结果|交点|坐标|描点|定义域|取值|向量|顶点|本题|示例|函数|图象|表达式)|^(?:重力|支持力|压力|拉力|摩擦力|弹力|浮力|合力|牵引力|阻力|质量|速度|加速度|长度|面积|角度|数量|温度|时间|距离|高度|半径|直径|周长|体积)$/i
 const LABELLED_VALUE_PATTERN = /(?:^|[\n；;])\s*([^：:=\n；;]{2,24})\s*[:：=]\s*([^\n；;]{1,160})/g
 const NUMBER_WITH_UNIT_PATTERN = /[+-]?\d+(?:\.\d+)?(?:%|‰|℃|°|千米|公里|厘米|毫米|千克|克|米|秒|分钟|小时|年|世纪|年代|n|v|a|ω)?/gi
 const FORMULA_SIGNAL_PATTERN = /[=≈<>±×÷+*/^]|\b(?:sin|cos|tan|log)\b/i

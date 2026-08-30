@@ -86,6 +86,73 @@ function slotsOf(scene: LessonScene): { misconception: string; correction: strin
   }
 }
 
+/** 纯文字辨析：前后两页保持同一版式，只在原位置补入结论与依据。 */
+export function ContrastSequenceView({
+  scene,
+  pres,
+  sceneNumber,
+  feedbackRevealed,
+}: {
+  scene: LessonScene
+  pres: ScenePresentation
+  sceneNumber: number
+  feedbackRevealed: boolean
+}) {
+  const theme = pres.palette
+  const { misconception, correction } = slotsOf(scene)
+
+  return (
+    <section
+      data-response-hidden={feedbackRevealed ? 'false' : 'true'}
+      className="scene-safe-bottom flex h-full flex-col gap-7 px-[8%] pb-[8%] pt-[5%]"
+      style={{ background: theme.paper, color: theme.ink }}
+    >
+      <div className="flex items-end justify-between gap-8">
+        <div className="min-w-0">
+          <SceneBadge number={sceneNumber} label={SCENE_TYPE_LABEL.contrast} theme={theme} />
+          <h2 className="mt-5" style={fitType('heading', scene.visualFocus.length)}>
+            <MathText>{scene.visualFocus}</MathText>
+          </h2>
+        </div>
+        <span style={{ ...TYPE_SCALE.caption, color: theme.accent }}>
+          {feedbackRevealed ? '核对结论' : '先判断'}
+        </span>
+      </div>
+
+      <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] gap-6">
+        <div className="border border-dashed px-7 py-6" style={{ borderColor: toRgba(theme.ink, 0.28), background: toRgba(theme.ink, 0.035) }}>
+          <div style={{ ...TYPE_SCALE.caption, color: toRgba(theme.ink, 0.58) }}>待判断说法</div>
+          <div className="mt-3" style={fitType('body', misconception.length)}>
+            <MathText>{misconception}</MathText>
+          </div>
+        </div>
+
+        <div className="border-l-4 px-7 py-6" style={{ borderColor: theme.accent, background: toRgba(theme.accent, feedbackRevealed ? 0.1 : 0.045) }}>
+          {feedbackRevealed ? (
+            <>
+              <div style={{ ...TYPE_SCALE.caption, color: theme.accent }}>结论与依据</div>
+              <div className="mt-3" style={fitType('heading', correction.length)}>
+                <MathText>{correction}</MathText>
+              </div>
+            </>
+          ) : (
+            <div className="grid h-full grid-cols-[0.42fr_1fr] items-center gap-8" style={{ color: toRgba(theme.ink, 0.55) }}>
+              <div>
+                <div style={TYPE_SCALE.caption}>判断</div>
+                <div className="mt-4 h-px" style={{ background: toRgba(theme.ink, 0.28) }} />
+              </div>
+              <div>
+                <div style={TYPE_SCALE.caption}>原文依据</div>
+                <div className="mt-4 h-px" style={{ background: toRgba(theme.ink, 0.28) }} />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /** 母版①对照双栏(既有骨架,原样保留):待观察 vs 已定论的半屏 Focus 落差。 */
 function ContrastPanelsMaster({ scene, pres }: { scene: LessonScene; pres: ScenePresentation }) {
   const theme = pres.palette

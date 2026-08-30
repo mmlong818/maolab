@@ -9,9 +9,11 @@
  */
 import { useMemo, useState } from 'react'
 import type { KnowledgeType } from '@maolab/shared-types'
-import { IMAGE_SCENE_TYPES, courseReleaseReadinessFromIssues, lessonPresentationPages, type MainlineCourse, type QualityIssue, type QualitySummary, type SceneType } from '@/lib/mainline'
+import { courseReleaseReadinessFromIssues, lessonPresentationPages, type MainlineCourse, type QualityIssue, type QualitySummary, type SceneType } from '@/lib/mainline'
+import { courseHasCompleteTeachingVisuals } from '@/lib/mainline/presentation/visual-readiness'
 import type { PrepBrief } from '@/lib/mainline/prep-brief'
 import { FillBanner } from '../FillBanner'
+import { PageWorkflowBanner } from '../PageWorkflowBanner'
 import { TopBar } from './TopBar'
 import { StructureTree } from './StructureTree'
 import { CenterColumn } from './CenterColumn'
@@ -65,10 +67,7 @@ export function PrepWorkbench({
     ? initialRequestedMisconception
     : undefined
 
-  const hasImages = useMemo(() => {
-    const targets = course.scenes.filter(s => IMAGE_SCENE_TYPES.includes(s.sceneType))
-    return targets.length > 0 && targets.every(s => s.imageUrl)
-  }, [course.scenes])
+  const hasTeachingVisuals = useMemo(() => courseHasCompleteTeachingVisuals(course), [course])
   const pendingFactAuditCount = course.factAudit?.pendingSceneIds?.length ?? 0
   const readiness = courseReleaseReadinessFromIssues(course, issues)
   const liveFactCounts = course.factAudit
@@ -85,14 +84,26 @@ export function PrepWorkbench({
 
   return (
     <div className={styles.root} style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#fafaf7' }}>
-      <FillBanner
-        courseId={course.id}
-        qualityStatus={course.qualityStatus}
-        hasBlockingIssues={summary.blocking > 0}
-        hasImages={hasImages}
-        factAuditPendingCount={pendingFactAuditCount}
-        surface="prep"
-      />
+      {course.planning && course.pageContent ? (
+        <PageWorkflowBanner
+          courseId={course.id}
+          status={course.planning.status}
+          revisionNo={course.revision?.revisionNo ?? 1}
+          pageCount={course.pageContent.pages.length}
+          {...(selectedPage && course.pageContent.pages.some(page => page.pageId === selectedPage.id)
+            ? { selectedPageId: selectedPage.id }
+            : {})}
+        />
+      ) : (
+        <FillBanner
+          courseId={course.id}
+          qualityStatus={course.qualityStatus}
+          hasBlockingIssues={summary.blocking > 0}
+          hasTeachingVisuals={hasTeachingVisuals}
+          factAuditPendingCount={pendingFactAuditCount}
+          surface="prep"
+        />
+      )}
 
       <TopBar course={course} readiness={readiness} />
 

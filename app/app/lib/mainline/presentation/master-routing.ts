@@ -36,6 +36,7 @@ const SUBJECT_FAMILY: Record<SubjectId, SubjectFamily> = {
   chemistry: 'reasoning',
   chinese: 'literary',
   history: 'literary',
+  politics: 'general',
   biology: 'nature',
   geography: 'nature',
   science: 'nature',

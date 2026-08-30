@@ -36,6 +36,8 @@ import { lessonOpeningCopy } from '../lesson-phase.js'
 import { conceptSeedContentSlots, selectConceptBuildTemplate } from '../concept-template.js'
 import { recapSeedContentSlots, selectRecapTemplate } from '../recap-template.js'
 import { selectObservableObjective, successSignalFromObjective } from '../learning-goal-contract.js'
+import { assertValidCoursePlanningState } from '../planning/page-audit.js'
+import { buildCoursePlanningState } from '../planning/page-first-planner.js'
 import { subjectMode, type CastPreset } from './cast-preset.js'
 import { planSkeleton, type FragmentSkeleton, type FragmentSkeletonStep, type SkeletonKpInput } from './skeleton-library.js'
 
@@ -58,7 +60,6 @@ export function compileLessonFromKps(input: CompileLessonInput): MainlineCourse 
   const courseId = input.courseId ?? randomUUID()
   const kpNames = kps.map(k => k.canonicalName)
   const kpTextBlock = kpNames.join('、')
-  const topic = kpTextBlock
   const studentCastId = preset.peerRoleProfile.peerId
   const teacherCastId = preset.selectedTeacher
 
@@ -79,6 +80,17 @@ export function compileLessonFromKps(input: CompileLessonInput): MainlineCourse 
       nonGoals: ['不要求扩展相邻概念'],
     }
   })
+  const topic = lessonTopic(kps, goals, kpTextBlock)
+  const planning = buildCoursePlanningState({
+    courseId,
+    topic,
+    subject,
+    goals,
+    kps,
+    sourceMaterial,
+  })
+  assertValidCoursePlanningState(planning)
+
   const base: SceneBaseInput = {
     topic,
     kpTextBlock,
@@ -135,7 +147,6 @@ export function compileLessonFromKps(input: CompileLessonInput): MainlineCourse 
     sceneIds: [recapScene.id],
     successSignal: recapTemplate.successSignal,
   })
-
   const beats: LessonBeat[] = buildBeats(scenes)
 
   return {
@@ -146,7 +157,7 @@ export function compileLessonFromKps(input: CompileLessonInput): MainlineCourse 
     subject,
     sourceMaterial,
     goals,
-    boundary: `本课只解决 ${kpTextBlock} 的初步理解;不做刷题拓展,不引入相邻单元。`,
+    boundary: `本课只解决${topic}的初步理解；不做刷题拓展，不引入相邻单元。`,
     selectedTeacher: preset.selectedTeacher,
     teacherSubjectProfile: preset.teacherSubjectProfile,
     peerRoleProfile: preset.peerRoleProfile,
@@ -157,9 +168,38 @@ export function compileLessonFromKps(input: CompileLessonInput): MainlineCourse 
     learningFragments,
     scenes,
     beats,
+    planning,
     qualityStatus: 'draft',
     ...(input.lessonPhase ? { lessonPhase: input.lessonPhase } : {}),
   }
+}
+
+function lessonTopic(
+  kps: readonly SkeletonKpInput[],
+  goals: readonly LessonGoal[],
+  fallback: string,
+): string {
+  if (kps.length !== 1 || goals.length !== 1 || !selectObservableObjective(kps[0]?.learningObjectives)) {
+    return fallback
+  }
+  const title = goals[0]!.statement
+    .trim()
+    .replace(/^(?:能|会|能够|可以)\s*/, '')
+    .replace(/[。；;]+$/, '')
+  if (!title) return fallback
+  return title.includes(fallback) || sharesSpecificTopicPhrase(fallback, title)
+    ? title
+    : `${fallback}：${title}`
+}
+
+function sharesSpecificTopicPhrase(topic: string, title: string): boolean {
+  const compactTopic = topic.replace(/[^\p{Script=Han}A-Za-z0-9]/gu, '')
+  const compactTitle = title.replace(/[^\p{Script=Han}A-Za-z0-9]/gu, '')
+  if (compactTopic.length < 4 || compactTitle.length < 4) return false
+  for (let index = 0; index <= compactTopic.length - 4; index += 1) {
+    if (compactTitle.includes(compactTopic.slice(index, index + 4))) return true
+  }
+  return false
 }
 
 function defaultGoal(kp: SkeletonKpInput, skeleton: FragmentSkeleton): Pick<LessonGoal, 'statement' | 'successSignal'> {
@@ -174,12 +214,12 @@ function defaultGoal(kp: SkeletonKpInput, skeleton: FragmentSkeleton): Pick<Less
   let statement: string
   switch (skeleton.knowledgeType) {
     case 'conceptual': statement = skeleton.steps.some(step => step.sceneType === 'contrast')
-      ? `能解释 ${kp.canonicalName} 的核心含义,并辨析一个教研确认的典型误区。`
-      : `能解释 ${kp.canonicalName} 的核心含义,并在一个新例中指出关键特征。`
+      ? `能解释${kp.canonicalName}的核心含义，并辨析一个教研确认的典型误区。`
+      : `能解释${kp.canonicalName}的核心含义，并在一个新例中指出关键特征。`
       break
-    case 'procedural': statement = `能按步骤完成一道 ${kp.canonicalName} 的同型任务,并说明关键依据。`; break
-    case 'factual': statement = `能准确说出 ${kp.canonicalName} 的关键事实,并通过一次检核。`; break
-    case 'metacognitive': statement = `能说出 ${kp.canonicalName} 的使用时机,并在新情境中应用。`; break
+    case 'procedural': statement = `能按步骤完成一道${kp.canonicalName}的同型任务，并说明关键依据。`; break
+    case 'factual': statement = `能准确说出${kp.canonicalName}的关键事实，并通过一次检核。`; break
+    case 'metacognitive': statement = `能说出${kp.canonicalName}的使用时机，并在新情境中应用。`; break
   }
   return { statement, successSignal: skeleton.successSignalTemplate(kp.canonicalName) }
 }

@@ -8,6 +8,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { findMainlineCourse, saveMainlineCourse } from '../../../../../lib/mainline/store.js'
 import { fillImages } from '../../../../../lib/mainline/generation/fill-images.js'
+import { factAuditPageContentCourse } from '../../../../../lib/mainline/planning/page-content-fact-audit.js'
 
 export const runtime = 'nodejs'
 export const maxDuration = 300
@@ -21,12 +22,19 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ courseId: 
 
   try {
     const { course: filled, filledSceneIds, failedSceneIds } = await fillImages(course, { force })
-    await saveMainlineCourse(filled)
+    const reviewed = filled.planning && filled.pageContent
+      ? await factAuditPageContentCourse(filled)
+      : undefined
+    await saveMainlineCourse(reviewed?.course ?? filled)
     return NextResponse.json({
       ok: true,
       courseId,
       filledSceneIds,
       failedSceneIds,
+      ...(reviewed ? {
+        factBlockingCount: reviewed.record.fatalCount,
+        factUnverifiedCount: reviewed.record.unverifiedSceneIds?.length ?? 0,
+      } : {}),
     })
   } catch (err) {
     return NextResponse.json({ error: `fill-images failed: ${String(err)}` }, { status: 500 })

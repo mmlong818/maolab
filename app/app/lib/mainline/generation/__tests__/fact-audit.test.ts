@@ -486,6 +486,17 @@ describe('factAuditCourse · 本地跨幕一致性', () => {
     expect(result.conflictCount).toBe(0)
   })
 
+  it('同一知识点的不同函数例题不把描点坐标误报为跨页冲突', () => {
+    const course = twoScenes(
+      { problem: '用两点法画函数 y=2x+4 的图象。', board: '描点：(0,4)、(2,8)' },
+      { task: '用两点法画函数 y=3x+3 的图象。', board: '描点：(0,3)、(1,6)' },
+    )
+
+    const result = auditLocalCourseConsistency(course)
+
+    expect(result.conflictCount).toBe(0)
+  })
+
   it('同一道题使用 answer 与 feedback 两种槽名时仍能发现答案冲突', () => {
     const course = twoScenes(
       { task: '标准大气压下，水的沸点是多少？', answer: '100℃' },

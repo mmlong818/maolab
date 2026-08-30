@@ -14,12 +14,19 @@
  * `llmImage` 可注入,便于测试 mock 不真调 API。
  */
 
+import { createHash } from 'node:crypto'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { IMAGE_SCENE_TYPES, type ImageFidelity, type LessonScene, type MainlineCourse } from '../domain.js'
 import { imageDirectives } from './image-fidelity.js'
 import { imageSlotFor } from '../presentation/composition.js'
 import { hexToOklch } from '../presentation/color.js'
 import { presentationFor } from '../presentation/presentation.js'
 import { generateImage } from '../../v2/image-gen.js'
+import { visiblePageText } from '../planning/page-content-audit.js'
+import type { GeneratedLessonPage } from '../planning/page-content-contract.js'
+import type { LessonPagePlan } from '../planning/page-contract.js'
+import { sourceMaterialByReference } from '../planning/source-reference.js'
 
 /** size 为 `WxH`(均 16 倍数,宽高比 ≤3:1),由版式槽位(imageSlotFor)算出。 */
 export interface ImageCallOpts { prompt: string; size?: string }
@@ -89,8 +96,9 @@ function buildPrompt(course: MainlineCourse, scene: LessonScene): string {
     return [
       `Educational side-by-side comparison illustration for a ${grade} ${subject} class teaching "${kp}".`,
       `Visual focus: ${focus}.`,
-      `Two panels with a subtle vertical divider. LEFT: illustrate the misconception visually (a wrong-looking diagram, crossed-out symbol, etc). RIGHT: illustrate the correct understanding.`,
-      `Use color/shape/spatial contrast, NOT text explanations, to convey the difference.`,
+      `Two equally weighted panels with a subtle vertical divider. Show the misconception and the correct conceptual alternative as two neutral visual options for the student to compare.`,
+      `DO NOT reveal which option is correct. Never use checkmarks, crosses, red-versus-green correctness coding, happy-versus-sad characters, or any other answer cue.`,
+      `Use matching visual style, scale, and emphasis in both panels. The following UI page will reveal and explain the answer after the student has judged the options.`,
       HARD_TEXT_RULE,
       SAFE_ZONE_RULE,
       STYLE_BASE,
@@ -120,6 +128,10 @@ export async function fillImages(
 ): Promise<FillImagesResult> {
   const imageCall = opts?.imageCall ?? defaultImageCall
   const force = opts?.force ?? false
+
+  if (course.planning && course.pageContent) {
+    return fillPlannedPageImages(course, imageCall, force, !opts?.imageCall)
+  }
 
   const targets = course.scenes.filter(s =>
     NEEDS_IMAGE.includes(s.sceneType) && (force || !s.imageUrl),
@@ -183,4 +195,186 @@ export async function fillImages(
     filledSceneIds,
     failedSceneIds,
   }
+}
+
+async function fillPlannedPageImages(
+  course: MainlineCourse,
+  imageCall: ImageCall,
+  force: boolean,
+  useDeterministicDiagrams: boolean,
+): Promise<FillImagesResult> {
+  const planning = course.planning!
+  const pageContent = course.pageContent!
+  const generatedById = new Map(pageContent.pages.map(page => [page.pageId, page]))
+  const planById = new Map(planning.pages.map(page => [page.id, page]))
+  const targets = planning.pages.flatMap(planPage => {
+    if (!planPage.visualSpec.required || planPage.visualSpec.form !== 'instructional-image') return []
+    const page = generatedById.get(planPage.id)
+    if (!page) return []
+    if (pairedPromptPageId(planPage)) return []
+    if (!force && pageHasTeachingImage(course, page, planPage)) return []
+    return [{ planPage, page }]
+  })
+  const results = await Promise.all(targets.map(async ({ planPage, page }) => {
+    const prompt = buildPlannedPageImagePrompt(course, page, planPage)
+    try {
+      const url = useDeterministicDiagrams && isCoordinateGridTask(course, page)
+        ? await writeCoordinateGridSvg(course.id, page.pageId, buildCoordinateGridSvg(visiblePageText(page.content)))
+        : await imageCall({ prompt, size: '1024x768' })
+      return { pageId: page.pageId, url, prompt, ok: true as const }
+    } catch (error) {
+      return { pageId: page.pageId, error: String(error), ok: false as const }
+    }
+  }))
+  const filled = new Map<string, { url: string; prompt: string }>()
+  const filledSceneIds: string[] = []
+  const failedSceneIds: string[] = []
+  for (const result of results) {
+    if (result.ok) {
+      filled.set(result.pageId, { url: result.url, prompt: result.prompt })
+      filledSceneIds.push(result.pageId)
+    } else {
+      failedSceneIds.push(result.pageId)
+    }
+  }
+  return {
+    course: {
+      ...course,
+      pageContent: {
+        ...pageContent,
+        pages: pageContent.pages.map(page => {
+          const planPage = planById.get(page.pageId)
+          const promptPageId = planPage ? pairedPromptPageId(planPage) : undefined
+          const promptPage = promptPageId ? generatedById.get(promptPageId) : undefined
+          const inherited = planPage?.visualSpec.required && planPage.visualSpec.form === 'instructional-image'
+            ? (promptPageId ? filled.get(promptPageId) : undefined)
+              ?? (promptPage?.imageUrl?.trim() ? {
+                url: promptPage.imageUrl,
+                prompt: promptPage.imagePrompt ?? '沿用问题页教学图。',
+              } : undefined)
+            : undefined
+          const image = filled.get(page.pageId) ?? inherited
+          return image
+            ? { ...page, imageUrl: image.url, imagePrompt: image.prompt, imageAspect: '4:3' }
+            : page
+        }),
+      },
+    },
+    filledSceneIds,
+    failedSceneIds,
+  }
+}
+
+function pairedPromptPageId(page: LessonPagePlan): string | undefined {
+  switch (page.contentSpec.kind) {
+    case 'answer':
+    case 'worked-step':
+    case 'feedback':
+      return page.contentSpec.questionPageId
+    default:
+      return undefined
+  }
+}
+
+function isCoordinateGridTask(course: MainlineCourse, page: GeneratedLessonPage): boolean {
+  return course.subject === 'geography'
+    && /经纬网|经纬度/.test(`${course.topic}\n${visiblePageText(page.content)}`)
+}
+
+async function writeCoordinateGridSvg(courseId: string, pageId: string, svg: string): Promise<string> {
+  const hash = createHash('sha256').update(svg).digest('hex').slice(0, 12)
+  const safeCourseId = courseId.replace(/[^a-zA-Z0-9_-]/g, '-')
+  const safePageId = pageId.replace(/[^a-zA-Z0-9_-]/g, '-')
+  const filename = `coordinate-grid-${safeCourseId}-${safePageId}-${hash}.svg`
+  const directory = join(process.cwd(), 'public', 'generated-images')
+  await mkdir(directory, { recursive: true })
+  await writeFile(join(directory, filename), svg, 'utf8')
+  return `/generated-images/${filename}`
+}
+
+export function buildCoordinateGridSvg(text: string): string {
+  const longitudes = extractCoordinates(text, /(?:东经|西经)\s*(\d+(?:\.\d+)?)\s*°/g, '东经')
+  const latitudes = extractCoordinates(text, /(?:北纬|南纬)\s*(\d+(?:\.\d+)?)\s*°/g, '北纬')
+  const lonDomain = coordinateDomain(longitudes, -180, 180, 30)
+  const latDomain = coordinateDomain(latitudes, -90, 90, 15)
+  const lonTicks = coordinateTicks(longitudes, lonDomain)
+  const latTicks = coordinateTicks(latitudes, latDomain)
+  const left = 112
+  const top = 76
+  const width = 760
+  const height = 520
+  const x = (value: number) => left + ((value - lonDomain[0]) / (lonDomain[1] - lonDomain[0])) * width
+  const y = (value: number) => top + height - ((value - latDomain[0]) / (latDomain[1] - latDomain[0])) * height
+  const verticals = lonTicks.map(value => {
+    const px = x(value).toFixed(1)
+    const strong = value === 0
+    return `<line x1="${px}" y1="${top}" x2="${px}" y2="${top + height}" stroke="${strong ? '#334155' : '#94a3b8'}" stroke-width="${strong ? 3 : 2}"/><text x="${px}" y="${top + height + 34}" text-anchor="middle">${longitudeLabel(value)}</text>`
+  }).join('')
+  const horizontals = latTicks.map(value => {
+    const py = y(value).toFixed(1)
+    const strong = value === 0
+    return `<line x1="${left}" y1="${py}" x2="${left + width}" y2="${py}" stroke="${strong ? '#334155' : '#94a3b8'}" stroke-width="${strong ? 3 : 2}"/><text x="${left - 18}" y="${Number(py) + 8}" text-anchor="end">${latitudeLabel(value)}</text>`
+  }).join('')
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720"><rect width="960" height="720" fill="#f8fafc"/><style>text{font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;font-size:22px;fill:#0f172a}</style><text x="480" y="44" text-anchor="middle" style="font-size:28px;font-weight:700">经纬网定位练习</text><rect x="${left}" y="${top}" width="${width}" height="${height}" rx="4" fill="#ffffff" stroke="#475569" stroke-width="3"/>${verticals}${horizontals}<text x="900" y="${top + height + 34}" text-anchor="end" style="font-size:20px;fill:#475569">经度</text><text x="${left - 18}" y="54" text-anchor="end" style="font-size:20px;fill:#475569">纬度</text></svg>`
+}
+
+function extractCoordinates(text: string, pattern: RegExp, positivePrefix: string): number[] {
+  return Array.from(text.matchAll(pattern), match => {
+    const value = Number(match[1])
+    return match[0].trimStart().startsWith(positivePrefix) ? value : -value
+  }).filter(value => Number.isFinite(value))
+}
+
+function coordinateDomain(values: readonly number[], minLimit: number, maxLimit: number, padding: number): [number, number] {
+  if (values.length === 0) return [minLimit / 3, maxLimit / 3]
+  const low = Math.max(minLimit, Math.floor((Math.min(...values, 0) - padding) / padding) * padding)
+  const high = Math.min(maxLimit, Math.ceil((Math.max(...values, 0) + padding) / padding) * padding)
+  return low === high ? [Math.max(minLimit, low - padding), Math.min(maxLimit, high + padding)] : [low, high]
+}
+
+function coordinateTicks(values: readonly number[], domain: readonly [number, number]): number[] {
+  return [...new Set([domain[0], ...values, ...(domain[0] < 0 && domain[1] > 0 ? [0] : []), domain[1]])]
+    .filter(value => value >= domain[0] && value <= domain[1])
+    .sort((a, b) => a - b)
+}
+
+function longitudeLabel(value: number): string {
+  if (value === 0) return '0°'
+  return `${Math.abs(value)}°${value > 0 ? 'E' : 'W'}`
+}
+
+function latitudeLabel(value: number): string {
+  if (value === 0) return '0°'
+  return `${Math.abs(value)}°${value > 0 ? 'N' : 'S'}`
+}
+
+function pageHasTeachingImage(
+  course: MainlineCourse,
+  page: GeneratedLessonPage,
+  planPage: LessonPagePlan,
+): boolean {
+  if (page.imageUrl?.trim()) return true
+  return planPage.sourceRefs.some(reference => {
+    const source = sourceMaterialByReference(course.sourceMaterial, reference)
+    return source?.candidateResources?.some(resource => resource.assetUrl.trim()) ?? false
+  })
+}
+
+function buildPlannedPageImagePrompt(
+  course: MainlineCourse,
+  page: GeneratedLessonPage,
+  planPage: LessonPagePlan,
+): string {
+  const observableContent = visiblePageText(page.content).slice(0, 700)
+  return [
+    `Create one original educational observation illustration for a ${course.gradeBand} ${course.subject} lesson about "${course.topic}".`,
+    `The student task is: ${planPage.learningAction}`,
+    `Observable content on the accompanying slide: ${observableContent}`,
+    'Show only the concrete object, process, spatial relation, or phenomenon that students must inspect before the explanation.',
+    'Do not reveal the answer, conclusion, correct choice, causal explanation, or assessment result.',
+    'Do not use checkmarks, crosses, red-versus-green correctness coding, answer labels, decorative characters, or unrelated scenery.',
+    'Use one coherent 4:3 composition with a light neutral background and large clear teaching objects.',
+    'Do not render paragraphs, sentences, legends, formulas, numbers, place names, or other readable text inside the image. The application renders all precise labels separately.',
+    'For maps, timelines, scientific diagrams, and geometric figures, prioritize structural clarity and avoid invented precise boundaries, routes, measurements, or labels.',
+  ].join('\n')
 }

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { coreVisualLayout, forceDiagramLayout, promptEvidenceLayout } from '../../../lib/mainline/presentation/content-aware-layout'
+import { coreVisualLayout, forceDiagramLayout, pagePromptLayout, promptEvidenceLayout } from '../../../lib/mainline/presentation/content-aware-layout'
 
 const contentForms = readFileSync(
   resolve(process.cwd(), 'app/components/mainline/scene-views/content-forms.tsx'),
@@ -9,6 +9,10 @@ const contentForms = readFileSync(
 )
 const stagedLearning = readFileSync(
   resolve(process.cwd(), 'app/components/mainline/scene-views/staged-learning.tsx'),
+  'utf8',
+)
+const pageContent = readFileSync(
+  resolve(process.cwd(), 'app/components/mainline/scene-views/page-content.tsx'),
   'utf8',
 )
 
@@ -43,9 +47,20 @@ describe('force diagram layout', () => {
     expect(promptEvidenceLayout('force-diagram', 180).mode).toBe('text-heavy')
     expect(coreVisualLayout(['短结论']).mode).toBe('visual-heavy')
     expect(coreVisualLayout(Array.from({ length: 5 }, (_, index) => `步骤 ${index + 1}：逐项说明判断依据`)).mode).toBe('text-heavy')
+    expect(pagePromptLayout(true, false)).toEqual({ mode: 'visual-heavy', columns: 'minmax(0, 1.28fr) minmax(0, 0.72fr)' })
+    expect(pagePromptLayout(true, true)).toEqual({ mode: 'visual-heavy', columns: 'minmax(0, 1.12fr) minmax(0, 0.88fr)' })
+    expect(pagePromptLayout(false, false).mode).toBe('balanced')
     expect(stagedLearning).toContain('data-content-balance={hasEvidenceVisual ? evidenceLayout.mode : undefined}')
     expect(stagedLearning).toContain('gridTemplateColumns: hasEvidenceVisual ? evidenceLayout.columns : undefined')
     expect(stagedLearning).toContain('<ForceDiagramGraphic scene={scene} theme={theme} width="94%" forces={stagedPromptForceVectors(scene)} />')
+    expect(pageContent).toContain('data-content-balance={layout.mode}')
+    expect(pageContent).toContain('className="scene-safe-bottom flex h-full w-full flex-col')
+    expect(pageContent).toContain('!imageUrl && content.materialCaption')
+    expect(pageContent).toContain('data-prompt-image-layout="side-by-side"')
+    expect(pageContent).toContain('data-explanation-image-layout="side-by-side"')
+    expect(pageContent).toContain('<TeachingImage src={imageUrl} alt={content.title} />')
+    expect(pageContent).toContain('flex min-h-0 min-w-0 flex-1 items-center justify-center overflow-hidden')
+    expect(pageContent).toContain('h-full w-full object-contain')
   })
 
   it('separates displayed values from arrow length on question pages', () => {

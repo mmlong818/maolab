@@ -188,6 +188,19 @@ describe('FillOutputSchema', () => {
     )
   })
 
+  it('忽略模型附带的空占位槽，不让无关空键阻断整页修复', () => {
+    const parsed = FillOutputSchema.parse({
+      ...validOutput,
+      contentSlots: {
+        ...validOutput.contentSlots,
+        classicalText: '   ',
+        optionalNotes: ['', '  '],
+      },
+    })
+
+    expect(parsed.contentSlots).toEqual(validOutput.contentSlots)
+  })
+
   it('结构层只拒绝畸形超长文本，真实课堂负荷交给逐页口播验收', () => {
     expect(FillOutputSchema.safeParse({
       ...validOutput,

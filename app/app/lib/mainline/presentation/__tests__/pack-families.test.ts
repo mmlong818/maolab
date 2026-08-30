@@ -15,7 +15,7 @@ import { stylePackFor } from '../style-packs.js'
 import { presentationFor } from '../presentation.js'
 import type { SubjectId, GradeBand, LessonScene } from '../../domain.js'
 
-const SUBJECTS: readonly SubjectId[] = ['chinese', 'math', 'science', 'english', 'history', 'geography', 'physics', 'chemistry', 'biology', 'general']
+const SUBJECTS: readonly SubjectId[] = ['chinese', 'math', 'science', 'english', 'history', 'politics', 'geography', 'physics', 'chemistry', 'biology', 'general']
 const GRADE_BANDS: readonly GradeBand[] = ['lower-primary', 'upper-primary', 'middle-school', 'high-school']
 
 describe('anchors 策展质量(明亮令:现代锚默认池)', () => {
