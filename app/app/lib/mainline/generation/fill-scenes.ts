@@ -174,10 +174,21 @@ const ContentSlotValueSchema = z.preprocess(value => {
   return value.map(item => item.trim()).filter(Boolean).join('\n')
 }, z.string().min(1))
 
+const ContentSlotsSchema = z.preprocess(value => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value
+  return Object.fromEntries(Object.entries(value).filter(([, slot]) => {
+    if (typeof slot === 'string') return slot.trim().length > 0
+    if (Array.isArray(slot) && slot.every(item => typeof item === 'string')) {
+      return slot.some(item => item.trim().length > 0)
+    }
+    return true
+  }))
+}, z.record(ContentSlotValueSchema).refine(o => Object.keys(o).length >= 2, {
+  message: 'contentSlots 至少 2 键',
+}))
+
 export const FillOutputSchema = z.object({
-  contentSlots: z.record(ContentSlotValueSchema).refine(o => Object.keys(o).length >= 2, {
-    message: 'contentSlots 至少 2 键',
-  }),
+  contentSlots: ContentSlotsSchema,
   visualFocus: z.string().min(2),
   narrationAnchor: z.string().min(2),
   boardText: z.array(z.string().min(2)).min(2).max(5),

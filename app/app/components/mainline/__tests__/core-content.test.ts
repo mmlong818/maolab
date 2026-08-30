@@ -16,4 +16,10 @@ describe('专业图表与例题文字组合', () => {
     expect(source).toContain('String(index + 1).padStart(2, \'0\')')
     expect(source).not.toContain('>本页核心<')
   })
+
+  it('语文原文观察页直接使用全文版式，不重复显示内部核心槽侧栏', () => {
+    const source = readFileSync(resolve(process.cwd(), 'app/components/mainline/SceneTechniqueView.tsx'), 'utf8')
+
+    expect(source).toContain("if (kind === 'chinese' && scene.sceneType === 'visual-observation') return visual")
+  })
 })

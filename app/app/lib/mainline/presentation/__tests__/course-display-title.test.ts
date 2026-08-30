@@ -16,6 +16,17 @@ describe('courseDisplayTitle', () => {
     expect(courseDisplayTitle({ topic: '二力平衡', sourceMaterial: [] })).toBe('二力平衡')
   })
 
+  it('单知识点课程显示按学习目标收窄后的实际教学主题', () => {
+    expect(courseDisplayTitle({
+      topic: '显微镜总放大倍数的计算',
+      sourceMaterial: [{
+        kind: 'textbook',
+        title: '显微镜成像特征（倒像与放大倍数计算）',
+        kpId: 'kp-microscope',
+      }],
+    })).toBe('显微镜总放大倍数的计算')
+  })
+
   it('让旧课的课程级开场页跟随完整课程标题', () => {
     const course = {
       topic: '二力平衡的四个条件 等 2 个知识点',

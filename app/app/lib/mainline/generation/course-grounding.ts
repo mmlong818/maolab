@@ -77,6 +77,9 @@ function provenanceOf(row: KpGroundingSourceRow): SourceProvenance {
 
 function sourceCitation(row: KpGroundingSourceRow, status: SourceEvidenceStatus): string {
   const location = row.externalId ? `，节点 ${row.externalId}` : ''
+  if (/^manual-verified(?:$|[-_:])/i.test(row.source.trim())) {
+    return row.externalId?.trim() || '课堂核验材料'
+  }
   if (status === 'authoritative-excerpt') return `权威来源 ${row.source}${location}`
   if (status === 'ai-extracted') return `AI 提取线索 ${row.source}${location}（待人工复核）`
   if (status === 'unverified-excerpt') return `未核验摘录 ${row.source}${location}（待人工复核）`

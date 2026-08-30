@@ -45,7 +45,11 @@ function gradeRank(g: string): number {
 }
 
 function sortGrades(grades: readonly string[]): string[] {
-  return [...grades].sort((a, b) => gradeRank(a) - gradeRank(b))
+  return cleanFacetOptions(grades).sort((a, b) => gradeRank(a) - gradeRank(b))
+}
+
+function cleanFacetOptions(options: readonly string[]): string[] {
+  return [...new Set(options.map(option => option.trim()).filter(Boolean))]
 }
 
 /**
@@ -85,11 +89,11 @@ export function TextbookPicker({ onChange, value }: {
   }, [])
 
   const subjectOptions = useMemo(
-    () => (stage && facets?.subjects[stage]) || [],
+    () => cleanFacetOptions((stage && facets?.subjects[stage]) || []),
     [stage, facets],
   )
   const versionOptions = useMemo(
-    () => (stage && subject && facets?.versions[`${stage}|${subject}`]) || [],
+    () => cleanFacetOptions((stage && subject && facets?.versions[`${stage}|${subject}`]) || []),
     [stage, subject, facets],
   )
   const gradeOptions = useMemo(
@@ -100,7 +104,7 @@ export function TextbookPicker({ onChange, value }: {
     [stage, subject, version, facets],
   )
   const volumeOptions = useMemo(
-    () => (stage && subject && version && grade && facets?.volumes[`${stage}|${subject}|${version}|${grade}`]) || [],
+    () => cleanFacetOptions((stage && subject && version && grade && facets?.volumes[`${stage}|${subject}|${version}|${grade}`]) || []),
     [stage, subject, version, grade, facets],
   )
 

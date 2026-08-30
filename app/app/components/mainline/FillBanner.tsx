@@ -8,7 +8,7 @@ interface FillBannerProps {
   courseId: string
   qualityStatus: 'draft' | 'blocked' | 'passed'
   hasBlockingIssues: boolean
-  hasImages: boolean
+  hasTeachingVisuals: boolean
   factAuditPendingCount?: number
   surface?: 'classroom' | 'prep'
 }
@@ -27,7 +27,7 @@ export function FillBanner({
   courseId,
   qualityStatus,
   hasBlockingIssues,
-  hasImages,
+  hasTeachingVisuals,
   factAuditPendingCount = 0,
   surface = 'classroom',
 }: FillBannerProps) {
@@ -36,7 +36,7 @@ export function FillBanner({
   const [error, setError] = useState<FillError | null>(null)
 
   // 只有当前实时检查也无阻断时才算就绪；旧 passed 可能被后来新增的质量规则降级。
-  if (qualityStatus === 'passed' && !hasBlockingIssues && hasImages && factAuditPendingCount === 0) return null
+  if (qualityStatus === 'passed' && !hasBlockingIssues && hasTeachingVisuals && factAuditPendingCount === 0) return null
 
   async function callApi(endpoint: string, action: 'text' | 'images') {
     setBusy(action)
@@ -65,7 +65,7 @@ export function FillBanner({
 
   const isFactAuditPending = factAuditPendingCount > 0
   const showText = qualityStatus !== 'passed' && !isFactAuditPending
-  const showImages = qualityStatus === 'passed' && !hasImages
+  const showVisuals = qualityStatus === 'passed' && !hasTeachingVisuals
   // round13 真检发现:qualityStatus='blocked' 也可能来自 fill 之后的事实核查 FATAL
   // (一票否决,与调用方传入的结构闸门 hasBlockingIssues 是两条独立判定路径)——
   // 只看 hasBlockingIssues 会在"内容已真实生成但被 FATAL 拦下"时误报成"还是占位模板",
@@ -79,7 +79,7 @@ export function FillBanner({
       ? '这门课有阻断问题,现在不能上课'
     : showText
       ? '当前是骨架占位内容,各幕文字都是模板;让 AI 填成针对本课的真实教学内容'
-      : '文字已生成,教学画面幕(观察/辨析/收束)还是纯文字;让 AI 补上配图'
+      : '文字已生成，但仍有页面缺少可授课的教学画面；让 AI 补上配图'
 
   const classroomLabel = isFactAuditPending
     ? `教师修改的 ${factAuditPendingCount} 页内容尚未重新核查，请回到备课逐页核查。`
@@ -87,7 +87,7 @@ export function FillBanner({
       ? '上课前还有阻断问题，请先回到备课修正。'
     : showText
       ? '课程文字内容还未完成，请先进入备课修正。'
-      : '文字内容已通过检查，但教学配图尚未生成；请先回到备课补图。'
+      : '文字内容已通过检查，但仍有页面缺少可授课的教学画面；请先回到备课补图。'
   const isClassroomSurface = surface === 'classroom'
 
   return (
@@ -123,7 +123,7 @@ export function FillBanner({
           {busy === 'text' ? 'AI 填文字中…(~1 分钟)' : '让 AI 填内容'}
         </button>
       )}
-      {surface === 'prep' && showImages && (
+      {surface === 'prep' && showVisuals && (
         <button
           type="button"
           onClick={() => callApi(`/api/v2/mainline/fill-images/${courseId}`, 'images')}

@@ -8,22 +8,13 @@
  */
 import { useMemo } from 'react'
 import { courseDisplayScene, lessonPresentationPages, presentationScene, sceneDisplayTitle, type MainlineCourse, type QualityIssue } from '@/lib/mainline'
+import { PreviewStage } from './PreviewStage'
 
 interface FilmstripProps {
   course: MainlineCourse
   issues: QualityIssue[]
   selectedPageId: string | undefined
   onSelect: (pageId: string) => void
-}
-
-const PLACEHOLDER_COLOR: Record<string, string> = {
-  'source-reading': '#93c5fd',
-  'concept-build': '#a7f3d0',
-  'worked-example': '#fde68a',
-  'visual-observation': '#c4b5fd',
-  contrast: '#fca5a5',
-  practice: '#fdba74',
-  recap: '#a5b4fc',
 }
 
 export function Filmstrip({ course, issues, selectedPageId, onSelect }: FilmstripProps) {
@@ -53,28 +44,18 @@ export function Filmstrip({ course, issues, selectedPageId, onSelect }: Filmstri
             onClick={() => onSelect(page.id)}
             title={`${index + 1}. ${title}${page.stageLabel && page.stageLabel !== title ? ` · ${page.stageLabel}` : ''}`}
             style={{
-              flex: 'none', width: 96, height: 64, borderRadius: 8, cursor: 'pointer',
+              flex: 'none', width: 112, height: 64, borderRadius: 8, cursor: 'pointer',
               border: selected ? '2px solid #111827' : blocked ? '2px solid #fca5a5' : '1px solid #e5e7eb',
               padding: 0, overflow: 'hidden', position: 'relative', background: '#f3f4f6',
             }}
           >
-            {scene.imageUrl ? (
-              <img
-                src={scene.imageUrl}
-                alt={scene.visualFocus}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: PLACEHOLDER_COLOR[scene.sceneType] ?? '#e5e7eb', color: '#1f2937',
-                  fontSize: 11, fontWeight: 700, textAlign: 'center', padding: 4,
-                }}
-              >
-                {title}
-              </div>
-            )}
+            <PreviewStage
+              course={course}
+              scene={scene}
+              pageNumber={index + 1}
+              showAnnotations={false}
+              forceFeedbackRevealed={page.feedbackRevealed}
+            />
             <span
               style={{
                 position: 'absolute', left: 4, top: 3, fontSize: 10, fontWeight: 700,

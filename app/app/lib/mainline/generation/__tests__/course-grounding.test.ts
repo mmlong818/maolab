@@ -51,6 +51,23 @@ function bundle(items: readonly EducationResourceItem[]): EducationResourceBundl
 }
 
 describe('resolveCourseGroundings', () => {
+  it('把人工核验来源显示为可读作品名', async () => {
+    const result = await resolveCourseGroundings(
+      [{ id: 'kp-poem', canonicalName: '《芣苢》表达效果' }],
+      [{
+        knowledgePointId: 'kp-poem',
+        source: 'manual-verified',
+        externalId: '《诗经·周南·芣苢》',
+        evidenceSnippet: '采采芣苢，薄言采之。',
+        confidence: 1,
+      }],
+      { loadBundle: async () => bundle([]) },
+    )
+
+    expect(result.byKp['kp-poem']?.citation).toBe('《诗经·周南·芣苢》')
+    expect(result.byKp['kp-poem']?.provenance?.evidenceStatus).toBe('authoritative-excerpt')
+  })
+
   it('优先采用非 AI 的真实摘录，并只保留知识点和标题都匹配的教材图候选', async () => {
     const rows: KpGroundingSourceRow[] = [
       {

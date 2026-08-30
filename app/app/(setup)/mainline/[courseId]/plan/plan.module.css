@@ -1,0 +1,293 @@
+.root {
+  min-height: 100vh;
+  background: #f7f6f2;
+  color: #181b20;
+  padding-bottom: 72px;
+}
+
+.topbar {
+  min-height: 62px;
+  padding: 0 48px;
+  border-bottom: 1px solid #dedbd3;
+  background: #fbfaf7;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: #666b73;
+  font-size: 13px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #4d5158;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.header {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 42px 36px 30px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: #8a4b2a;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.header h1 {
+  margin: 0;
+  max-width: 780px;
+  font-size: 30px;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.lead {
+  margin: 12px 0 0;
+  max-width: 760px;
+  color: #666b73;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.actions button {
+  min-height: 40px;
+  padding: 0 15px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.secondaryButton {
+  border: 1px solid #bcb7ac;
+  background: #fff;
+  color: #34373d;
+}
+
+.primaryButton {
+  border: 1px solid #1d2025;
+  background: #1d2025;
+  color: #fff;
+}
+
+.error {
+  max-width: 1048px;
+  margin: 0 auto 18px;
+  padding: 14px 16px;
+  border: 1px solid #d8a69d;
+  border-radius: 7px;
+  background: #fff4f1;
+  color: #8f2f24;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.error ul {
+  margin: 6px 0 0;
+  padding-left: 20px;
+}
+
+.sequence {
+  max-width: 1048px;
+  margin: 0 auto;
+  padding: 0 36px;
+  display: grid;
+  gap: 12px;
+}
+
+.pageRow {
+  border: 1px solid #dcd8cf;
+  border-radius: 8px;
+  background: #fff;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.pageNumber {
+  border-right: 1px solid #e1ded7;
+  background: #f1efe9;
+  display: grid;
+  place-items: start center;
+  padding-top: 22px;
+  color: #8a4b2a;
+  font-size: 18px;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+
+.pageBody {
+  min-width: 0;
+  padding: 20px 22px 18px;
+}
+
+.pageHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.purpose {
+  color: #8a4b2a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.pageHeading h2 {
+  margin: 5px 0 0;
+  color: #1c1f24;
+  font-size: 18px;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+.visual {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border: 1px solid #d8d4cc;
+  border-radius: 6px;
+  color: #6a6e75;
+  background: #faf9f6;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.fields {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.fields label {
+  min-width: 0;
+}
+
+.fields label > span {
+  display: block;
+  margin-bottom: 7px;
+  color: #555a62;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.fields textarea {
+  width: 100%;
+  min-height: 76px;
+  resize: vertical;
+  box-sizing: border-box;
+  border: 1px solid #cbc7bd;
+  border-radius: 6px;
+  background: #fff;
+  color: #1f2329;
+  padding: 10px 11px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.fields textarea:focus {
+  outline: 2px solid #ba7650;
+  outline-offset: 1px;
+  border-color: #ba7650;
+}
+
+.fields textarea:disabled {
+  resize: none;
+  border-color: #e0ddd6;
+  background: #f7f6f2;
+  color: #555a62;
+}
+
+.teacherInfo {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid #ece9e2;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 12px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.teacherInfo dt {
+  color: #777b82;
+  font-weight: 750;
+}
+
+.teacherInfo dd {
+  margin: 0;
+  color: #484c53;
+}
+
+.spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 780px) {
+  .topbar {
+    padding: 0 20px;
+  }
+
+  .header {
+    padding: 30px 20px 24px;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .actions button {
+    flex: 1;
+  }
+
+  .sequence {
+    padding: 0 20px;
+  }
+
+  .pageRow {
+    grid-template-columns: 50px minmax(0, 1fr);
+  }
+
+  .pageBody {
+    padding: 18px 16px;
+  }
+
+  .fields {
+    grid-template-columns: 1fr;
+  }
+}

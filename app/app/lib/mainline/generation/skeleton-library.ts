@@ -91,7 +91,7 @@ export const FRAGMENT_SKELETONS: Record<KnowledgeType, FragmentSkeleton> = {
       { sceneType: 'contrast', role: '辨析误区', executor: 'teacher', durationTargetSec: 40 },
       { sceneType: 'practice', role: '独立检核', executor: 'ai', durationTargetSec: 50 },
     ],
-    successSignalTemplate: kp => `学生能用自己的话说出 ${kp} 的核心含义,并判断一个典型误区。`,
+    successSignalTemplate: kp => `学生能用自己的话说出${kp}的核心含义，并判断一个典型误区。`,
   }),
   procedural: defineFragmentSkeleton({
     id: 'frag-procedural',
@@ -105,7 +105,7 @@ export const FRAGMENT_SKELETONS: Record<KnowledgeType, FragmentSkeleton> = {
       { sceneType: 'worked-example', role: '完整例题', executor: 'ai', durationTargetSec: 60 },
       { sceneType: 'practice', role: '同型跟做', executor: 'ai', durationTargetSec: 50 },
     ],
-    successSignalTemplate: kp => `学生能独立完成一道 ${kp} 的同型任务,并说明关键步骤的依据。`,
+    successSignalTemplate: kp => `学生能独立完成一道${kp}的同型任务，并说明关键步骤的依据。`,
   }),
   factual: defineFragmentSkeleton({
     id: 'frag-factual',
@@ -115,7 +115,7 @@ export const FRAGMENT_SKELETONS: Record<KnowledgeType, FragmentSkeleton> = {
       { sceneType: 'visual-observation', role: '观察事实', executor: 'ai', durationTargetSec: 45 },
       { sceneType: 'practice', role: '识记检核', executor: 'ai', durationTargetSec: 45 },
     ],
-    successSignalTemplate: kp => `学生能准确说出 ${kp} 的关键事实并通过一次检核。`,
+    successSignalTemplate: kp => `学生能准确说出${kp}的关键事实并通过一次检核。`,
   }),
   metacognitive: defineFragmentSkeleton({
     id: 'frag-metacognitive',

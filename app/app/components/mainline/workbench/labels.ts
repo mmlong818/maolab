@@ -101,7 +101,7 @@ export function gradeBandLabel(g: string): string {
 export function subjectLabel(s: string): string {
   const map: Record<string, string> = {
     chinese: '语文', math: '数学', english: '英语', physics: '物理', chemistry: '化学',
-    biology: '生物', history: '历史', geography: '地理', science: '科学', general: '通识',
+    biology: '生物', history: '历史', politics: '道德与法治', geography: '地理', science: '科学', general: '通识',
   }
   return map[s] ?? s
 }

@@ -9,6 +9,7 @@ import {
 } from '../staged-learning.js'
 import type { LessonScene, MainlineCourse } from '../domain.js'
 import { recapTransferTaskProblems } from '../recap-template.js'
+import { isPageContentScene, pageContentPresentationPages } from './page-content-presentation.js'
 
 export const PRESENTATION_VARIANT_SLOT = '__presentationVariant'
 export const RECAP_TRANSFER_VARIANT = 'recap-transfer'
@@ -46,8 +47,11 @@ export interface LessonPresentationPage {
 }
 
 export function lessonPresentationPages(
-  course: Pick<MainlineCourse, 'scenes' | 'learningFragments' | 'sourceMaterial'>,
+  course: Pick<MainlineCourse, 'scenes' | 'learningFragments' | 'sourceMaterial' | 'planning' | 'pageContent'>,
 ): LessonPresentationPage[] {
+  const plannedContentPages = pageContentPresentationPages(course)
+  if (plannedContentPages) return plannedContentPages
+
   const contentPages = course.scenes.flatMap(scene => presentationPagesForScene(scene))
   const structurePages = courseStructurePages(course)
   if (structurePages.length === 0) return contentPages
@@ -243,6 +247,7 @@ export function presentationPageStateKey(courseId: string, page: Pick<LessonPres
  * 提问页只保留题面，不携带答案板书；核查页才带讲解与结论。
  */
 export function presentationScene(page: LessonPresentationPage): LessonScene {
+  if (isPageContentScene(page.scene)) return page.scene
   const config = stagedLearningConfig(page.scene)
   if (!config) return page.scene
   const scene = page.feedbackRevealed ? stagedSceneForReveal(page.scene) : stagedSceneForPrompt(page.scene)
@@ -276,6 +281,7 @@ export function presentationNavigationBlocker(
   for (let pageIndex = 0; pageIndex < upperBound; pageIndex += 1) {
     const page = pages[pageIndex]
     if (!page) continue
+    if (isPageContentScene(page.scene)) continue
     const config = stagedLearningConfig(page.scene)
     if (!config) continue
     const stateKey = presentationPageStateKey(courseId, page)

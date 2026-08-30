@@ -95,6 +95,12 @@ const SUBJECT_CAST_CONTEXT: Record<SubjectId, SubjectCastContext> = {
     boardStyle: '时间、人物、事件、证据与影响分层，因果链不与时间线混写。',
     voiceNotes: '年代和转折点重读，史实与解释分开说，因果判断前留出证据核对。',
   },
+  politics: {
+    label: '道德与法治',
+    teachingIdentity: '重视真实情境、规则依据、价值判断与公共参与',
+    boardStyle: '情境事实、规则依据、观点理由和行动选择分层，避免用口号代替论证。',
+    voiceNotes: '先辨清事实和规则，再讨论价值选择；结论前留出理由比较时间。',
+  },
   geography: {
     label: '地理',
     teachingIdentity: '重视地图、尺度、空间关系与综合分析',

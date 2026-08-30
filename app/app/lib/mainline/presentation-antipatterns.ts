@@ -19,6 +19,7 @@
 
 import type { LessonScene, MainlineCourse } from './domain.js'
 import { MASTER_TRAITS, pickMasterRouted } from './presentation/master-routing.js'
+import { isPageContentScene, pageContentPresentationPages } from './presentation/page-content-presentation.js'
 
 /** 严重度。本目录一律不阻断出课,分级只用于排序。 */
 export type AntipatternSeverity = 'high' | 'medium' | 'low'
@@ -239,6 +240,9 @@ function detectIntroTitleDuplication(scene: LessonScene, course: MainlineCourse)
  * 不靠文本长度猜空间，也不把所有留白都当错误；母版密度和路由均来自渲染器同源表。
  */
 function detectSparseIntroMaster(scene: LessonScene, course: MainlineCourse): AntipatternFinding[] {
+  // Page-first courses use PageContentSlideView, so the legacy source-reading
+  // master selected below is not rendered and must not drive a warning.
+  if (isPageContentScene(scene)) return []
   if (scene.sceneType !== 'source-reading') return []
   const kpCount = course.learningFragments.filter(fragment => fragment.kpId).length
   if (kpCount !== 1) return []
@@ -266,7 +270,8 @@ const SEVERITY_ORDER: Record<AntipatternSeverity, number> = { high: 0, medium: 1
  * **只诊断不改**——与 fact-audit 的 fatal 阻断严格区分。
  */
 export function auditPresentationAntipatterns(course: MainlineCourse): AntipatternFinding[] {
-  return course.scenes
+  const renderedScenes = pageContentPresentationPages(course)?.map(page => page.scene) ?? course.scenes
+  return renderedScenes
     .flatMap((scene, sceneIndex) => [
         ...detectNearMissSlotKeys(scene),
         ...detectEmptyTypedSlots(scene),

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="768" viewBox="0 0 1024 768" role="img" aria-labelledby="title desc">
+  <title id="title">木块受到两个大小不同、方向相反且在同一直线上的力</title>
+  <desc id="desc">木块左侧是向左的F2等于5牛，右侧是向右的F1等于3牛。两个力作用在同一木块和同一直线上。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#b42318"/>
+    </marker>
+    <linearGradient id="wood" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d7a36c"/>
+      <stop offset="1" stop-color="#a96332"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="768" fill="#f8f5ef"/>
+  <rect x="72" y="570" width="880" height="38" rx="6" fill="#5f6770"/>
+  <line x1="72" y1="570" x2="952" y2="570" stroke="#232a31" stroke-width="5"/>
+  <rect x="398" y="330" width="228" height="240" rx="10" fill="url(#wood)" stroke="#70431f" stroke-width="5"/>
+  <path d="M420 382 C470 352 536 416 604 372 M420 444 C480 408 538 476 604 430 M420 510 C478 474 544 540 604 498" fill="none" stroke="#784722" stroke-width="5" opacity="0.5"/>
+  <circle cx="398" cy="450" r="8" fill="#b42318"/>
+  <circle cx="626" cy="450" r="8" fill="#b42318"/>
+  <line x1="398" y1="450" x2="112" y2="450" stroke="#b42318" stroke-width="12" marker-end="url(#arrow)"/>
+  <line x1="626" y1="450" x2="802" y2="450" stroke="#b42318" stroke-width="12" marker-end="url(#arrow)"/>
+  <text x="245" y="405" text-anchor="middle" font-family="Arial, 'Noto Sans SC', sans-serif" font-size="48" font-weight="700" fill="#841b13">F2 = 5 N</text>
+  <text x="726" y="405" text-anchor="middle" font-family="Arial, 'Noto Sans SC', sans-serif" font-size="48" font-weight="700" fill="#841b13">F1 = 3 N</text>
+  <line x1="112" y1="500" x2="802" y2="500" stroke="#7b838b" stroke-width="3" stroke-dasharray="12 12"/>
+  <text x="512" y="676" text-anchor="middle" font-family="Arial, 'Noto Sans SC', sans-serif" font-size="34" font-weight="600" fill="#303840">同一物体 · 同一直线 · 方向相反</text>
+</svg>

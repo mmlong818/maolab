@@ -1,4 +1,6 @@
 import type { CastAssetSelection } from '@maolab/shared-types'
+import type { CoursePlanningState } from './planning/page-contract.js'
+import type { CoursePageContentState } from './planning/page-content-contract.js'
 
 export type GradeBand = 'lower-primary' | 'upper-primary' | 'middle-school' | 'high-school'
 
@@ -8,6 +10,7 @@ export type SubjectId =
   | 'science'
   | 'english'
   | 'history'
+  | 'politics'
   | 'geography'
   | 'physics'
   | 'chemistry'
@@ -422,6 +425,17 @@ export interface LessonBeat {
   durationMs?: number
 }
 
+/**
+ * 一门课程的版本归属。每次“退回规划”都会创建新的课程记录，旧记录继续可用，
+ * 因此版本关系只保存引用，不把两个版本的页面正文混在同一载荷中。
+ */
+export interface MainlineCourseRevision {
+  familyId: string
+  revisionNo: number
+  basedOnCourseId?: string
+  supersededByCourseId?: string
+}
+
 export interface MainlineCourse {
   id: string
   topic: string
@@ -441,6 +455,15 @@ export interface MainlineCourse {
   learningFragments: LearningFragment[]
   scenes: LessonScene[]
   beats: LessonBeat[]
+  /**
+   * 新课的页面级规划版本。存在时，页面数量、顺序、受众、问答配对和视觉要求
+   * 已在正文填充前确定；旧课缺省并继续通过兼容读取路径工作。
+   */
+  planning?: CoursePlanningState
+  /** 阶段 B 页面正文；页面 ID、数量和顺序必须与 planning 完全一致。 */
+  pageContent?: CoursePageContentState
+  /** 页面优先课程的版本关系；旧课缺省并继续按原链路读取。 */
+  revision?: MainlineCourseRevision
   qualityStatus: 'draft' | 'blocked' | 'passed'
   /** v4 M1 事实核查留痕:fill 时核查的结论落库,上课页据此拦 FATAL(页面自身不重跑 LLM 核查)。 */
   factAudit?: FactAuditRecord
@@ -487,6 +510,8 @@ export interface FactRepairTrace {
 
 /** 事实核查记录。issue 形状与 QualityIssue 对齐,为免循环依赖在此独立声明。 */
 export interface FactAuditRecord {
+  /** 页面优先课程必须记录被核查的正文版本，防止旧核查结论套用到新正文。 */
+  contentRevisionId?: string
   /** 最近一次实际核查时间；只有待核查、尚未成功跑过核查的记录可以缺省。 */
   auditedAt?: string
   /**

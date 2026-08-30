@@ -18,6 +18,7 @@ const SUBJECTS: readonly SubjectId[] = [
   'science',
   'english',
   'history',
+  'politics',
   'geography',
   'physics',
   'chemistry',
@@ -138,7 +139,7 @@ describe('deterministic course generation matrix', () => {
       }
     }
 
-    expect(sequence).toBe(2_880)
+    expect(sequence).toBe(3_168)
     expect(failures).toEqual([])
     const expectedNonBlocking = new Set([
       'info:这节课全部幕都是「教师+AI 协同」执教,没有用到双师人机分工。',

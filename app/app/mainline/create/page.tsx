@@ -99,8 +99,8 @@ export default function MainlineCreatePage() {
         throw new Error(j.error || `HTTP ${res.status}`)
       }
       const j = (await res.json()) as { courseId: string; presetMatched: string }
-      // 做课完成先进入备课修正，不把未经教师确认的内容直接带进课堂。
-      const url = `/mainline/${j.courseId}/prep`
+      // 先确认整堂课的真实投影片顺序，再生成正文并进入备课。
+      const url = `/mainline/${j.courseId}/plan`
       router.push(url)
       window.setTimeout(() => {
         if (window.location.pathname !== url) window.location.assign(url)
@@ -143,11 +143,7 @@ export default function MainlineCreatePage() {
       <section style={{ maxWidth: 880, margin: '32px auto', padding: '0 24px' }}>
         <h1 style={{ fontSize: 30, fontWeight: 800, marginBottom: 8 }}>从知识点做课</h1>
         <p style={{ color: '#6b7280', marginBottom: 24, fontSize: 15, lineHeight: 1.7 }}>
-          选教材、勾知识点,系统按每个知识点的认知类型即时编译出低交互空骨架课程(幕数随知识点伸缩,精美立绘 + 教师讲画面显)。
-          <br />
-          <span style={{ color: '#9ca3af', fontSize: 13 }}>
-            当前是骨架层(不烧 LLM),课程内容为占位文本;下一步 fill-scenes 会用 LLM 填成真实教学讲稿。
-          </span>
+          选择教材和知识点后，系统先列出整堂课的全部投影片。你可以逐页检查和修改，确认结构后再生成学生画面与教师讲稿。
         </p>
 
         <TextbookPicker value={pick} onChange={setPick} />
@@ -163,7 +159,7 @@ export default function MainlineCreatePage() {
             />
             <LessonPhaseSelector value={lessonPhase} onChange={setLessonPhase} />
             <div style={{ fontSize: 13, color: '#374151', marginBottom: 10, fontWeight: 600 }}>
-              勾选要进这节课的知识点(mark 三态先收集,fill-scenes 时再用):
+              勾选要进入本课的知识点：
             </div>
             <KpTreeSelector treeId={pick.textbookId} selections={kpSelections} onChange={setKpSelections} />
             <SelectionCart

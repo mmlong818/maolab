@@ -14,6 +14,10 @@ const aiScenes = readFileSync(
   resolve(process.cwd(), 'app/components/mainline/scene-views/ai-scenes.tsx'),
   'utf8',
 )
+const contrastScenes = readFileSync(
+  resolve(process.cwd(), 'app/components/mainline/scene-views/contrast-scenes.tsx'),
+  'utf8',
+)
 
 describe('问答投影片渐进版式', () => {
   it('纯文字练习的提问与揭晓共用固定母版', () => {
@@ -32,5 +36,14 @@ describe('问答投影片渐进版式', () => {
     expect(aiScenes).toContain('data-testid="ai-verify-statement"')
     expect(aiScenes).toContain('data-testid="ai-verify-response"')
     expect(aiScenes).toContain("const choices = ['成立', '不成立'] as const")
+  })
+
+  it('无图辨析的提问与揭晓共用固定母版', () => {
+    expect(dispatcher).toContain("scene.sceneType === 'contrast' && !scene.imageUrl && specializedContentKind(scene) === null")
+    expect(dispatcher).toContain('<ContrastSequenceView')
+    expect(contrastScenes).toContain('data-response-hidden={feedbackRevealed')
+    expect(contrastScenes).toContain("{feedbackRevealed ? '核对结论' : '先判断'}")
+    expect(contrastScenes).toContain('结论与依据')
+    expect(contrastScenes).toContain('原文依据')
   })
 })

@@ -8,7 +8,7 @@ import { paletteOf, type Palette } from '../primitives.js'
 import { MOOD_ARC_TIERS, applyMoodArc, sceneMoodFor } from '../presentation.js'
 import type { SceneType, SubjectId } from '../../domain.js'
 
-const SUBJECTS: readonly SubjectId[] = ['chinese', 'math', 'science', 'english', 'history', 'geography', 'physics', 'chemistry', 'biology', 'general']
+const SUBJECTS: readonly SubjectId[] = ['chinese', 'math', 'science', 'english', 'history', 'politics', 'geography', 'physics', 'chemistry', 'biology', 'general']
 const PALETTE_MOODS_LOCAL = ['standard', 'deep', 'airy'] as const
 
 /**

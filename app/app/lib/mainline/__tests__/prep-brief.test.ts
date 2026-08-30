@@ -5,6 +5,7 @@ import type { FactAuditRecord, MainlineCourse } from '../domain.js'
 import type { KpMetadata } from '../kp-metadata.js'
 import type { MasteryEvidenceStatus, MasteryRecord } from '../mastery.js'
 import { assemblePrepBrief } from '../prep-brief.js'
+import { auditMainlineCourse } from '../quality-gates.js'
 
 function compile(kps: Parameters<typeof compileLessonFromKps>[0]['kps'], subject: Parameters<typeof compileLessonFromKps>[0]['subject'] = 'geography') {
   const { preset } = pickCastPreset({ gradeBand: 'middle-school', subject })
@@ -560,6 +561,78 @@ describe('assemblePrepBrief · 质量状态摘要', () => {
     expect(brief.qualitySummary.status).toBe('passed-with-warnings')
     expect(brief.qualitySummary.source).toBe('质量闸门')
   })
+
+  it('page-first 课程只汇总正式投影片，不让未渲染的旧幕占位制造假阻断', () => {
+    const base = compile([{ id: 'kp-1', canonicalName: '经纬网定位', knowledgeType: 'procedural' }])
+    const pageId = 'lp-001-orient'
+    const pageFirst: MainlineCourse = {
+      ...base,
+      qualityStatus: 'passed',
+      planning: {
+        schemaVersion: 'mainline-page-v2',
+        courseId: base.id,
+        planRevisionId: `${base.id}:plan:test`,
+        status: 'ready',
+        learningContracts: [],
+        arc: { id: `${base.id}:arc:test`, courseId: base.id, steps: [] },
+        pages: [{
+          id: pageId,
+          order: 1,
+          fragmentId: 'opening',
+          knowledgePointIds: [],
+          purpose: 'orient',
+          audience: 'student',
+          learningAction: '先形成判断。',
+          newInformation: '呈现学习问题。',
+          sourceRefs: [],
+          contentSpec: { kind: 'course-orientation', topic: '经纬网定位', goalIds: [] },
+          visualSpec: { required: false, form: 'none', reason: '开场不使用配图。', sourceAssetPolicy: 'none' },
+          teacherCompanion: { scriptGoal: '说明问题。', teachingMove: '收集判断。', pace: 'brief' },
+          arcStepId: 'arc-001-orient',
+        }],
+      },
+      pageContent: {
+        schemaVersion: 'mainline-page-content-v1',
+        courseId: base.id,
+        planRevisionId: `${base.id}:plan:test`,
+        contentRevisionId: `${base.id}:content:test`,
+        status: 'review',
+        pages: [{
+          pageId,
+          order: 1,
+          purpose: 'orient',
+          planRevisionId: `${base.id}:plan:test`,
+          sourceRefs: [],
+          content: {
+            kind: 'course-orientation',
+            title: '经纬网定位',
+            learningQuestion: '怎样在经纬网上定位？',
+            goals: ['能根据经度和纬度确定位置。'],
+          },
+          teacherCompanion: { script: '先观察经纬网，再说出定位所需的两个条件。', notes: [], pace: 'brief' },
+        }],
+      },
+      factAudit: {
+        contentRevisionId: `${base.id}:content:test`,
+        auditedAt: '2026-08-30T00:00:00.000Z',
+        auditedSceneCount: 1,
+        auditedSceneIds: [pageId],
+        requiredSceneIds: [pageId],
+        unverifiedSceneIds: [],
+        fatalCount: 0,
+        issues: [],
+      },
+    }
+
+    expect(auditMainlineCourse(pageFirst).some(issue => issue.severity === 'blocking')).toBe(true)
+    expect(assemblePrepBrief(pageFirst, NO_META, NO_MASTERY).qualitySummary).toEqual({
+      status: 'passed',
+      blocking: 0,
+      warning: 0,
+      info: 0,
+      source: '质量闸门',
+    })
+  })
 })
 
 describe('assemblePrepBrief · 真检呈现诊断', () => {
@@ -643,5 +716,34 @@ describe('assemblePrepBrief · 人机分工简报(executorBreakdown,v5 M2 WP8)',
     const byExecutor = new Map(brief.executorBreakdown.byExecutor.map(e => [e.executor, e]))
     expect(byExecutor.get('teacher')!.sceneCount).toBe(1)
     expect(byExecutor.get('ai')!.sceneCount).toBe(2) // concept-build 与 worked-example 仍是 ai,practice 已改走
+  })
+
+  it('page-first 课程按最终投影片与讲稿节奏统计，不沿用未渲染的旧幕分工', () => {
+    const course = compile([{ id: 'kp-1', canonicalName: '经纬网定位', knowledgeType: 'procedural' }])
+    const pageFirst: MainlineCourse = {
+      ...course,
+      pageContent: {
+        schemaVersion: 'mainline-page-content-v1',
+        courseId: course.id,
+        planRevisionId: 'plan-1',
+        contentRevisionId: 'content-1',
+        status: 'review',
+        pages: [{
+          pageId: 'page-1', order: 1, purpose: 'orient', planRevisionId: 'plan-1', sourceRefs: [],
+          content: { kind: 'course-orientation', title: '经纬网定位', learningQuestion: '怎样在经纬网上定位？', goals: ['按经线与纬线定位。'] },
+          teacherCompanion: { script: '提出问题。', notes: [], pace: 'brief' },
+        }, {
+          pageId: 'page-2', order: 2, purpose: 'explain', planRevisionId: 'plan-1', sourceRefs: [],
+          content: { kind: 'explanation', title: '定位方法', coreStatement: '先找经线，再找纬线。', evidence: [{ text: '经线和纬线的交点确定位置。' }], boundary: '先分清东西经和南北纬。' },
+          teacherCompanion: { script: '讲解定位方法。', notes: [], pace: 'normal' },
+        }],
+      },
+    }
+
+    const brief = assemblePrepBrief(pageFirst, NO_META, NO_MASTERY)
+    const byExecutor = new Map(brief.executorBreakdown.byExecutor.map(entry => [entry.executor, entry]))
+    expect(byExecutor.get('teacher')).toEqual({ executor: 'teacher', sceneCount: 2, estimatedDurationSec: 100 })
+    expect(byExecutor.get('co')).toEqual({ executor: 'co', sceneCount: 0, estimatedDurationSec: 0 })
+    expect(byExecutor.get('ai')).toEqual({ executor: 'ai', sceneCount: 0, estimatedDurationSec: 0 })
   })
 })

@@ -112,6 +112,7 @@ describe('compileLessonFromKps', () => {
       statement: '会用三角形面积公式解决实际问题',
       successSignal: expect.stringContaining('学生会用三角形面积公式解决实际问题'),
     })
+    expect(course.topic).toBe('用三角形面积公式解决实际问题')
     expect(blockingQualityIssues(auditMainlineCourse(course))).toEqual([])
   })
 
@@ -125,9 +126,46 @@ describe('compileLessonFromKps', () => {
       }],
     })
 
-    expect(course.goals[0]?.statement).toContain('完成一道 三角形面积公式 的同型任务')
+    expect(course.goals[0]?.statement).toContain('完成一道三角形面积公式的同型任务')
     expect(course.goals[0]?.successSignal).toContain('说明关键步骤的依据')
+    expect(course.boundary).toBe('本课只解决三角形面积公式的初步理解；不做刷题拓展，不引入相邻单元。')
     expect(blockingQualityIssues(auditMainlineCourse(course))).toEqual([])
+  })
+
+  it('学习目标已经包含明确知识短语时，课程标题按实际教学范围收窄', () => {
+    const { preset } = pickCastPreset({ gradeBand: 'middle-school', subject: 'biology' })
+    const course = compileLessonFromKps({
+      kps: [{
+        id: 'kp-microscope',
+        canonicalName: '显微镜成像特征（倒像与放大倍数计算）',
+        knowledgeType: 'procedural',
+        learningObjectives: ['能用公式计算任意组合的总放大倍数'],
+      }],
+      gradeBand: 'middle-school',
+      subject: 'biology',
+      preset,
+    })
+
+    expect(course.topic).toBe('用公式计算任意组合的总放大倍数')
+    expect(course.boundary).toContain('用公式计算任意组合的总放大倍数')
+    expect(course.boundary).not.toContain('倒像')
+  })
+
+  it('具体目标缺少概念名时课程标题保留知识领域锚点', () => {
+    const { preset } = pickCastPreset({ gradeBand: 'middle-school', subject: 'physics' })
+    const course = compileLessonFromKps({
+      kps: [{
+        id: 'kp-balance',
+        canonicalName: '二力平衡的四个判定条件',
+        knowledgeType: 'conceptual',
+        learningObjectives: ['能在图示情境中指出缺失哪个条件导致不平衡'],
+      }],
+      gradeBand: 'middle-school',
+      subject: 'physics',
+      preset,
+    })
+
+    expect(course.topic).toBe('二力平衡的四个判定条件：在图示情境中指出缺失哪个条件导致不平衡')
   })
 
   it('复习课把学习时期写入课程，并从闭卷提取而不是预测新知开始', () => {
@@ -612,7 +650,7 @@ describe('compileLessonFromKps', () => {
 
   it('全部学段与学科组合都得到身份匹配的老师和同学', () => {
     const gradeBands = ['lower-primary', 'upper-primary', 'middle-school', 'high-school'] as const
-    const subjects = ['chinese', 'math', 'science', 'english', 'history', 'geography', 'physics', 'chemistry', 'biology', 'general'] as const
+    const subjects = ['chinese', 'math', 'science', 'english', 'history', 'politics', 'geography', 'physics', 'chemistry', 'biology', 'general'] as const
 
     for (const gradeBand of gradeBands) {
       for (const subject of subjects) {

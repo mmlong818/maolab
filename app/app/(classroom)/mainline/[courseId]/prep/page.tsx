@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { auditMainlineCourse, summarizeQuality, type MainlineCourse } from '@/lib/mainline'
 import { findMainlineCourse } from '@/lib/mainline/store'
 import { buildPrepBriefForCourse, type PrepBrief } from '@/lib/mainline/prep-brief'
@@ -29,7 +29,12 @@ export default async function MainlinePrepPage({
   const course = await findMainlineCourse(courseId)
   if (!course) return notFound()
 
-  const issues = auditMainlineCourse(course)
+  if (course.planning && (!course.pageContent || ['planning', 'plan-approved', 'generating'].includes(course.planning.status))) {
+    redirect(`/mainline/${courseId}/plan`)
+  }
+
+  // 新版课程由页面正文门禁负责，不能再拿旧 scenes 的骨架槽位给教师制造无关阻断。
+  const issues = course.pageContent ? [] : auditMainlineCourse(course)
   const summary = summarizeQuality(issues)
   const factAuditIssues = course.factAudit?.issues ?? []
   const factAuditFatalCount = factAuditIssues.filter(i => i.severity === 'blocking').length
