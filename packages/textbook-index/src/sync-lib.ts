@@ -39,8 +39,12 @@ interface DataVersion {
  * 只收 A 版不收 B 版(其标签为 `人教版（B版）（主编：高存明）`):A 版是多数省份
  * 主用本,两版讲同一批知识点,一起入库会在 KP 索引里造出成对的重复概念。
  * 若日后要支持 B 版,应先想清楚同一概念的双来源如何归并到一个 cluster。
+ *
+ * `人教版（PEP）（主编：吴欣）` 是 2026-09-04 补的,同一模式的漏网:**小学英语此前
+ * 整个学段零入库**。PEP(三年级起点)是全国最主流的小学英语教材,与其余同名支系
+ * (一年级起点/精通版,主编不同)讲的不是同一批知识点,不取,理由同上——避免重复概念。
  */
-const ALLOWED_VERSIONS = new Set(['统编版', '人教版', '人教A版'])
+const ALLOWED_VERSIONS = new Set(['统编版', '人教版', '人教A版', '人教版（PEP）（主编：吴欣）'])
 const STAGE_TAGS: Record<string, K12Stage> = { 小学: '小学', 初中: '初中', 高中: '高中' }
 
 interface ExtractedTags {
