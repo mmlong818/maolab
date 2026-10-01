@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { generationInputHash } from '../generation-session.js'
 import { pickCastPreset } from '../generation/cast-preset.js'
 import { compileLessonFromKps } from '../generation/compile-lesson.js'
 import type { FactAuditRecord, MainlineCourse } from '../domain.js'
@@ -6,6 +7,7 @@ import type { KpMetadata } from '../kp-metadata.js'
 import type { MasteryEvidenceStatus, MasteryRecord } from '../mastery.js'
 import { assemblePrepBrief } from '../prep-brief.js'
 import { auditMainlineCourse } from '../quality-gates.js'
+import { teachingQualityInputHash, teachingQualityStandards } from '../teaching-quality-audit.js'
 
 function compile(kps: Parameters<typeof compileLessonFromKps>[0]['kps'], subject: Parameters<typeof compileLessonFromKps>[0]['subject'] = 'geography') {
   const { preset } = pickCastPreset({ gradeBand: 'middle-school', subject })
@@ -651,6 +653,19 @@ describe('assemblePrepBrief · 质量状态摘要', () => {
         pages: [{ pageId, contentRevisionId: `${base.id}:content:test`, renderEvidenceId: `${base.id}:render:test`, acceptedAt: '2026-08-30T00:03:00.000Z' }],
       },
     }
+    pageFirst.teachingQualityAudit = {
+      schemaVersion: 'mainline-teaching-quality-audit-v1', id: `${base.id}:teaching:test`, courseId: base.id,
+      planRevisionId: `${base.id}:plan:test`, contentRevisionId: `${base.id}:content:test`,
+      generationCourseAuditId: `${base.id}:audit:test`, inputHash: '', standards: teachingQualityStandards(pageFirst),
+      findings: [], status: 'passed', auditedAt: '2026-08-30T00:02:30.000Z',
+    }
+    pageFirst.teachingQualityAudit.inputHash = teachingQualityInputHash(pageFirst)
+    pageFirst.teacherAcceptance!.finalSignature = generationInputHash({
+      courseId: base.id,
+      planRevisionId: `${base.id}:plan:test`,
+      courseAuditId: `${base.id}:audit:test`,
+      pages: [{ pageId, contentRevisionId: `${base.id}:content:test`, renderEvidenceId: `${base.id}:render:test` }],
+    })
 
     expect(auditMainlineCourse(pageFirst).some(issue => issue.severity === 'blocking')).toBe(true)
     expect(assemblePrepBrief(pageFirst, NO_META, NO_MASTERY).qualitySummary).toEqual({
