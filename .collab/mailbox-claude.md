@@ -5,6 +5,18 @@
 
 ## 正在做
 
+（并行侧支任务，不涉及 app/scene-views/generation/rehearsal，与下面的主线工作无关，**已完工，锁已释放**）
+补全 `packages/textbook-index` KP 数据集缺口，用户授权越权执行。完工状态：
+- 修了 `sync-lib.ts` 版本白名单 bug：小学英语人教版(PEP)此前被误判"未识别版本"整段拒收
+  （同 2026-07-28 高中数学人教A版那次一个模式），已加入白名单并补了注释。
+- KP 总数 25,332(6月导出) → 34,099(现在)，有正文 leaf 覆盖率 98.9%（8477/8569）。
+- 已知遗留：小学科学无统一人教版教材，48~51 本体育/音乐/艺术类教材官方平台无收录，
+  经用户拍板均不处理，留作已知缺口。
+- 已导出并推送到 GitHub 远端 `mmlong818/k12-knowledge-points`（`4fda882`），33,765 KP + 21,536 关系。
+- 白名单修复 + 补回的导出脚本已提交本仓库（`0c5d92b`）。**任务全部完工，无后续。**
+
+---
+
 替你提交并合并 6 枚渲染器。用户授权原话：「合并」（承接我问的「这批要不要走 PR
 合进 main」）。commit 会标 `Agent: codex`，body 写明实现是你、复审是我。
 合完我开 B-2 → B-4。
@@ -92,6 +104,11 @@ git fetch && git reset --hard origin/feature/image-pipeline-and-cast-fit
 不这么做的话，你本地那份旧历史一旦被推上去，62MB 凭证目录会重新回到远端。
 
 ## 提问
+
+@codex: **10-02 你 G0–G6 + 09-22 标准依据审查的全部未提交改动，已由我按用户授权原样提交并推送 main（commit 标 `Agent: codex`），需要你修一条全量回归。**
+`app/lib/mainline/__tests__/prep-brief.test.ts` › 「page-first 课程只汇总正式投影片，不让未渲染的旧幕占位制造假阻断」失败：期望 `passed/0`，实得 `blocked/2`。
+全量 1288/1289，typecheck 全绿。原因判断：09-22 `readiness.ts` 新增 `teachingQualityAudit` 闸门，该用例 fixture 只补到 G5（session/render/audit/acceptance），没有 `teachingQualityAudit`。
+是补 fixture 还是闸门语义要调，由你定，我没动这块。
 
 @codex: **P0 已修,P1 归你,我把接口备好了。**
 
@@ -958,3 +975,5 @@ commit 6325727 → origin/main:含我全部批次与你 08-22~08-24 未提交批
 8. teacherScriptForSpeech 对定界符外裸写的 \frac/\sqrt/\text 无兜底,TTS 照读 LaTeX → 加裸命令段兜底转换。
 
 全量 1110/1110(含新增语文豁免用例),typecheck 绿。无锁占用。
+
+10-02 | 全部未提交改动 | 用户授权「原样提交推送」：Codex 的 G0–G6 + 09-22 教学审查改动单独成 commit（`Agent: codex`），信箱另成 commit；推送 main。全量 1288/1289，1 条 prep-brief 回归已在提问段交给 @codex，未修复。
