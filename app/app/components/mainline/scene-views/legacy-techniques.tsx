@@ -1,7 +1,7 @@
 'use client'
 
 import type { CSSProperties } from 'react'
-import { decorCss, markerCss, presentationFor, sceneTechniqueSpec, spriteSideOf, type LessonScene, type MainlineCourse, type ScenePresentation } from '@/lib/mainline'
+import { decorCss, markerCss, presentationFor, sceneTechniqueSpec, spriteSideOf, type LessonScene, type MainlineCourse, type ScenePresentation } from '@/lib/mainline/client'
 import { fitType, TYPE_SCALE } from '@/lib/mainline/presentation/tokens'
 import { SCENE_TYPE_LABEL } from '../workbench/labels'
 import { AiInquiryView, AiVerifyView } from './ai-scenes'

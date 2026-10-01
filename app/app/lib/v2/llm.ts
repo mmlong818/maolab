@@ -15,6 +15,11 @@ interface LLMConfig {
   baseURL: string
 }
 
+const OPENAI_DEFAULT_MODEL = 'gpt-4o-mini'
+const OPENAI_DEFAULT_BASE_URL = 'https://api.openai.com/v1'
+const DASHSCOPE_DEFAULT_MODEL = 'qwen-plus'
+const DASHSCOPE_DEFAULT_BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+
 function isClaudeCliMode(): boolean {
   if (process.env.LLM_PROVIDER === 'claude-cli') return true
   const model = process.env.LLM_MODEL ?? process.env.OPENAI_MODEL ?? ''
@@ -22,17 +27,47 @@ function isClaudeCliMode(): boolean {
 }
 
 function loadConfig(): LLMConfig {
-  // LLM_API_KEY 优先(与 LLM_MODEL/LLM_BASE_URL 配套, 便于整体切 provider, 如智谱 GLM)
-  const apiKey = process.env.LLM_API_KEY ?? process.env.DASHSCOPE_API_KEY ?? process.env.OPENAI_API_KEY
-  if (!apiKey?.trim()) {
-    throw new Error('[v2 llm] Missing LLM_API_KEY / DASHSCOPE_API_KEY / OPENAI_API_KEY')
+  const hasExplicitConfig = ['LLM_API_KEY', 'LLM_MODEL', 'LLM_BASE_URL'].some(key => Boolean(process.env[key]?.trim()))
+  if (hasExplicitConfig) {
+    const apiKey = process.env.LLM_API_KEY?.trim()
+    const model = process.env.LLM_MODEL?.trim()
+    const baseURL = process.env.LLM_BASE_URL?.trim()
+    if (!apiKey || !model || !baseURL) {
+      throw new Error('[v2 llm] LLM_API_KEY, LLM_MODEL, and LLM_BASE_URL must be configured together')
+    }
+    return { apiKey, model, baseURL: baseURL.replace(/\/$/, '') }
   }
-  const model = process.env.LLM_MODEL ?? process.env.OPENAI_MODEL ?? 'qwen-plus'
-  const baseURL =
-    process.env.LLM_BASE_URL ??
-    process.env.OPENAI_BASE_URL ??
-    'https://dashscope.aliyuncs.com/compatible-mode/v1'
-  return { apiKey, model, baseURL }
+
+  const dashscopeConfigKeys = ['DASHSCOPE_API_KEY', 'DASHSCOPE_MODEL', 'DASHSCOPE_BASE_URL']
+  const openAIConfigKeys = ['OPENAI_API_KEY', 'OPENAI_MODEL', 'OPENAI_BASE_URL']
+  const hasDashscopeConfig = dashscopeConfigKeys.some(key => Boolean(process.env[key]?.trim()))
+  const hasOpenAIConfig = openAIConfigKeys.some(key => Boolean(process.env[key]?.trim()))
+  const dashscopeKey = process.env.DASHSCOPE_API_KEY?.trim()
+  const openAIKey = process.env.OPENAI_API_KEY?.trim()
+  if (dashscopeKey && openAIKey) {
+    throw new Error('[v2 llm] Multiple provider keys configured; use a complete LLM_* configuration to select one provider')
+  }
+  if (dashscopeKey) {
+    return {
+      apiKey: dashscopeKey,
+      model: process.env.DASHSCOPE_MODEL?.trim() || DASHSCOPE_DEFAULT_MODEL,
+      baseURL: (process.env.DASHSCOPE_BASE_URL?.trim() || DASHSCOPE_DEFAULT_BASE_URL).replace(/\/$/, ''),
+    }
+  }
+
+  if (openAIKey) {
+    return {
+      apiKey: openAIKey,
+      model: process.env.OPENAI_MODEL?.trim() || OPENAI_DEFAULT_MODEL,
+      baseURL: (process.env.OPENAI_BASE_URL?.trim() || OPENAI_DEFAULT_BASE_URL).replace(/\/$/, ''),
+    }
+  }
+
+  if (hasDashscopeConfig || hasOpenAIConfig) {
+    throw new Error('[v2 llm] Provider model or base URL is configured without its matching API key')
+  }
+
+  throw new Error('[v2 llm] Missing a complete LLM_* configuration, DASHSCOPE_API_KEY, or OPENAI_API_KEY')
 }
 
 function extractJsonFromText(text: string): string {
@@ -73,6 +108,28 @@ function schemaFeedback(error: unknown): string {
     .slice(0, 800)
 }
 
+function parseStructuredOutput<T>(schema: z.ZodSchema, parsed: unknown): T {
+  const direct = schema.safeParse(parsed)
+  if (direct.success) return direct.data as T
+
+  // Some OpenAI-compatible providers wrap JSON mode output in a single
+  // `answer` object even when the prompt asks for the schema at the top level.
+  // Only unwrap that exact shape, so schemas that legitimately contain an
+  // `answer` field keep their original semantics.
+  if (
+    parsed !== null
+    && typeof parsed === 'object'
+    && !Array.isArray(parsed)
+    && Object.keys(parsed).length === 1
+    && 'answer' in parsed
+  ) {
+    const wrapped = schema.safeParse((parsed as { answer: unknown }).answer)
+    if (wrapped.success) return wrapped.data as T
+  }
+
+  throw direct.error
+}
+
 export interface CallLLMOptions {
   /** 系统提示（可选） */
   system?: string
@@ -110,7 +167,7 @@ export async function callLLMJson<T>(opts: CallLLMOptions): Promise<T> {
           validationFeedback = schemaFeedback(e)
           throw e
         }
-        try { return opts.schema.parse(parsed) as T }
+        try { return parseStructuredOutput<T>(opts.schema, parsed) }
         catch (e) {
           validationFeedback = schemaFeedback(e)
           if (attempt === maxAttempts) {
@@ -180,7 +237,7 @@ export async function callLLMJson<T>(opts: CallLLMOptions): Promise<T> {
         validationFeedback = schemaFeedback(e)
         throw e
       }
-      try { return opts.schema.parse(parsed) as T }
+      try { return parseStructuredOutput<T>(opts.schema, parsed) }
       catch (e) {
         validationFeedback = schemaFeedback(e)
         if (attempt === maxAttempts) {

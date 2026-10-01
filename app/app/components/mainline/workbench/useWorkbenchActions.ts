@@ -14,7 +14,7 @@
  */
 import { useState } from 'react'
 import type { KnowledgeType } from '@maolab/shared-types'
-import type { Executor, FactAuditRecord, MainlineCourse, QualityIssue, QualitySummary, SceneType, VoiceCue } from '@/lib/mainline'
+import type { Executor, FactAuditRecord, MainlineCourse, QualityIssue, QualitySummary, SceneType, VoiceCue } from '@/lib/mainline/client'
 import type { PrepBrief, PrepBriefMisconception } from '@/lib/mainline/prep-brief'
 
 export interface ScenePatchInput {

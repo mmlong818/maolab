@@ -3,6 +3,7 @@ import { extname, resolve, sep } from 'node:path'
 import { type NextRequest, NextResponse } from 'next/server'
 import { isAllowedRemoteSceneImage } from '../../../../../../../lib/mainline/image-edit/cowart.js'
 import { findMainlineCourse } from '../../../../../../../lib/mainline/store.js'
+import { courseImageTarget } from '../../../../../../../lib/mainline/page-image-target.js'
 
 export const runtime = 'nodejs'
 
@@ -11,7 +12,7 @@ const MAX_SOURCE_IMAGE_BYTES = 15 * 1024 * 1024
 export async function GET(_req: NextRequest, ctx: { params: Promise<{ courseId: string; sceneId: string }> }) {
   const { courseId, sceneId } = await ctx.params
   const course = await findMainlineCourse(courseId)
-  const imageUrl = course?.scenes.find(item => item.id === sceneId)?.imageUrl
+  const imageUrl = course ? courseImageTarget(course, sceneId)?.scene.imageUrl : undefined
   if (!imageUrl) return NextResponse.json({ error: '图片不存在。' }, { status: 404 })
 
   try {

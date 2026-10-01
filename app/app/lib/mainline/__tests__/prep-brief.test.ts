@@ -622,6 +622,34 @@ describe('assemblePrepBrief · 质量状态摘要', () => {
         fatalCount: 0,
         issues: [],
       },
+      generationSession: {
+        schemaVersion: 'mainline-generation-session-v1', id: `${base.id}:session:test`, courseId: base.id,
+        planRevisionId: `${base.id}:plan:test`, status: 'ready', createdAt: '2026-08-30T00:00:00.000Z', updatedAt: '2026-08-30T00:03:00.000Z',
+        jobs: [{
+          pageId, order: 1, planRevisionId: `${base.id}:plan:test`, attempt: 1, status: 'passed', inputHash: 'input-test', diagnostics: [],
+          updatedAt: '2026-08-30T00:01:00.000Z', checkpoint: {
+            pageId, planRevisionId: `${base.id}:plan:test`, inputHash: 'input-test', contentRevisionId: `${base.id}:content:test`,
+            factAuditRevisionId: `${base.id}:fact:test`, renderEvidenceId: `${base.id}:render:test`, createdAt: '2026-08-30T00:01:00.000Z',
+          },
+        }],
+      },
+      pageRenderEvidence: [{
+        schemaVersion: 'mainline-page-render-v1', id: `${base.id}:render:test`, courseId: base.id, pageId,
+        planRevisionId: `${base.id}:plan:test`, contentRevisionId: `${base.id}:content:test`, screenshotPath: 'data/test-render.png',
+        screenshotSha256: 'a'.repeat(64), viewport: { width: 1920, height: 1080 },
+        metrics: { minimumFontPx: 32, clippedElementCount: 0, overlappingTextCount: 0, brokenImageCount: 0, visualElementCount: 0, occupiedAreaRatio: 0.4 },
+        issues: [], createdAt: '2026-08-30T00:01:00.000Z',
+      }],
+      generationCourseAudit: {
+        schemaVersion: 'mainline-course-audit-v1', id: `${base.id}:audit:test`, courseId: base.id,
+        planRevisionId: `${base.id}:plan:test`, contentRevisionId: `${base.id}:content:test`, renderEvidenceIds: [`${base.id}:render:test`],
+        pageIds: [pageId], factAuditAt: '2026-08-30T00:02:00.000Z', passedAt: '2026-08-30T00:02:00.000Z',
+      },
+      teacherAcceptance: {
+        schemaVersion: 'mainline-teacher-acceptance-v1', courseId: base.id, planRevisionId: `${base.id}:plan:test`,
+        courseAuditId: `${base.id}:audit:test`, finalSignature: 'signed-test-version', acceptedAt: '2026-08-30T00:03:00.000Z',
+        pages: [{ pageId, contentRevisionId: `${base.id}:content:test`, renderEvidenceId: `${base.id}:render:test`, acceptedAt: '2026-08-30T00:03:00.000Z' }],
+      },
     }
 
     expect(auditMainlineCourse(pageFirst).some(issue => issue.severity === 'blocking')).toBe(true)

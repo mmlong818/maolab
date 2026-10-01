@@ -6,6 +6,8 @@ import {
   regeneratePlannedPage,
 } from '../../../../../lib/mainline/planning/page-content-generator.js'
 import { factAuditPageContentCourse } from '../../../../../lib/mainline/planning/page-content-fact-audit.js'
+import { auditGeneratedPageFacts } from '../../../../../lib/mainline/planning/page-content-page-audit.js'
+import { applyGeneratedPageContentRevision } from '../../../../../lib/mainline/page-content-revision.js'
 import {
   markPageGenerationStarted,
   restoreApprovedPlanAfterGenerationFailure,
@@ -87,7 +89,9 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ courseId:
       lastResult = await regeneratePlannedPage(currentCourse, pageId, {
         ...(feedback ? { qualityFeedback: feedback } : {}),
       })
-      currentCourse = lastResult.course
+      currentCourse = await applyGeneratedPageContentRevision(lastResult.course, pageId, {
+        audit: auditGeneratedPageFacts,
+      })
     }
     if (!lastResult) throw new Error('没有需要重生成的页面。')
     const reviewed = await factAuditPageContentCourse(currentCourse)

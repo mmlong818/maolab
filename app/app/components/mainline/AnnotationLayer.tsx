@@ -2,7 +2,7 @@
 
 import { getStroke } from 'perfect-freehand'
 import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
-import type { ChromeColors } from '@/lib/mainline'
+import type { ChromeColors } from '@/lib/mainline/client'
 
 /**
  * AnnotationLayer · 教师舞台批注层(自研,受 tldraw 架构启发,零代码移植)

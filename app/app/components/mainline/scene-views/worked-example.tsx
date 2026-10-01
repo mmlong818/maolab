@@ -1,7 +1,7 @@
 'use client'
 
-import type { LessonScene, MainlineCourse, ScenePresentation } from '@/lib/mainline'
-import { markerCss } from '@/lib/mainline'
+import type { LessonScene, MainlineCourse, ScenePresentation } from '@/lib/mainline/client'
+import { markerCss } from '@/lib/mainline/client'
 import { toRgba } from '@/lib/mainline/presentation/color'
 import { fitType, TYPE_SCALE } from '@/lib/mainline/presentation/tokens'
 import { SCENE_TYPE_LABEL } from '../workbench/labels'

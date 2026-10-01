@@ -97,6 +97,43 @@
   color: #fff;
 }
 
+.approved {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #276443;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.jobStatus {
+  min-height: 28px;
+  padding: 0 8px;
+  border: 1px solid #d8d4cc;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #6a6e75;
+  background: #faf9f6;
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.jobPassed {
+  border-color: #a9c9b6;
+  color: #276443;
+  background: #f1f8f3;
+}
+
+.jobBlocked {
+  border-color: #d8a69d;
+  color: #8f2f24;
+  background: #fff4f1;
+}
+
 .error {
   max-width: 1048px;
   margin: 0 auto 18px;
@@ -112,6 +149,53 @@
 .error ul {
   margin: 6px 0 0;
   padding-left: 20px;
+}
+
+.structureEditor {
+  max-width: 976px;
+  margin: 0 auto 18px;
+  padding: 18px;
+  border: 1px solid #bcb7ac;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.structureEditorTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.structureEditorTitle button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.structureFields {
+  display: grid;
+  grid-template-columns: 90px 1fr 1fr;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 12px;
+}
+
+.structureFields label span {
+  display: block;
+  margin-bottom: 6px;
+  color: #555a62;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.structureFields input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 10px;
+  border: 1px solid #cbc7bd;
+  border-radius: 6px;
+  font-size: 14px;
 }
 
 .sequence {
@@ -178,6 +262,34 @@
   background: #faf9f6;
   font-size: 12px;
   font-weight: 700;
+}
+
+.pageTools {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pageTools button {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #d8d4cc;
+  border-radius: 6px;
+  background: #fff;
+  color: #555a62;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.pageTools button:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.pageTools .deleteButton {
+  color: #9b3328;
 }
 
 .fields {
@@ -288,6 +400,14 @@
   }
 
   .fields {
+    grid-template-columns: 1fr;
+  }
+
+  .structureEditor {
+    margin: 0 20px 18px;
+  }
+
+  .structureFields {
     grid-template-columns: 1fr;
   }
 }

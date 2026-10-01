@@ -7,7 +7,7 @@
  * 没配图的幕显示 sceneType 色块)——一眼看出这节课的画面节奏是否单一。
  */
 import { useMemo } from 'react'
-import { courseDisplayScene, lessonPresentationPages, presentationScene, sceneDisplayTitle, type MainlineCourse, type QualityIssue } from '@/lib/mainline'
+import { courseDisplayScene, lessonPresentationPages, presentationScene, sceneDisplayTitle, type MainlineCourse, type QualityIssue } from '@/lib/mainline/client'
 import { PreviewStage } from './PreviewStage'
 
 interface FilmstripProps {

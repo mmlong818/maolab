@@ -2,6 +2,22 @@ export * from './domain.js'
 export * from './ai-verify.js'
 export * from './assessment-alignment.js'
 export * from './feature-zones.js'
+export type {
+  GenerationCourseAuditRecord,
+  GenerationSession,
+  GenerationSessionStatus,
+  PageGenerationJob,
+  PageGenerationJobStatus,
+  PageRenderEvidence,
+  PageRenderIssue,
+  TeachingQualityAuditFinding,
+  TeachingQualityAuditRecord,
+  TeachingQualityAuditSeverity,
+  TeachingQualityStandard,
+  TeachingQualityStandardSource,
+  TeacherAcceptanceRecord,
+  TeacherPageAcceptance,
+} from './generation-session.js'
 export * from './player-dual-teacher.js'
 export * from './planning/page-audit.js'
 export * from './planning/page-contract.js'

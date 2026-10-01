@@ -480,6 +480,13 @@ function pageDensityMessage(content: VisiblePageContent): string | undefined {
         ? '反馈栏超过半屏版式容量。successCriteria 最多 2 条、每条不超过 18 字；conclusion 不超过 70 字；evidence 最多 3 条、每条不超过 40 字；revisionAction 不超过 35 字。'
         : undefined
     }
+    case 'worked-step': {
+      const exceedsFieldBudget = content.steps.length > 4
+        || content.steps.some(item => item.step.length > 22 || item.reason.length > 38 || item.result.length > 24)
+      return exceedsFieldBudget
+        ? '逐步讲解页超过半屏版式容量。steps 最多 4 条；每条 step 不超过 22 字、reason 不超过 38 字、result 不超过 24 字。需要更多步骤时必须在规划阶段拆成多张连续投影片。'
+        : undefined
+    }
     case 'recap': {
       const columns = [
         { label: '概念', items: content.concepts },

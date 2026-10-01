@@ -98,6 +98,11 @@ function metadata(): Record<string, KpGoalMetadata> {
 describe('逐知识点目标重建', () => {
   it('保留原总目标和全部页面，只新增目标并改绑对应片段', () => {
     const course = legacyMultiKpCourse()
+    course.factAudit = { contentRevisionId: 'old-content' } as NonNullable<MainlineCourse['factAudit']>
+    course.pageRenderEvidence = [{ id: 'old-render' }] as NonNullable<MainlineCourse['pageRenderEvidence']>
+    course.generationCourseAudit = { id: 'old-audit' } as NonNullable<MainlineCourse['generationCourseAudit']>
+    course.teachingQualityAudit = { id: 'old-teaching', status: 'passed' } as NonNullable<MainlineCourse['teachingQualityAudit']>
+    course.teacherAcceptance = { schemaVersion: 'mainline-teacher-acceptance-v1', courseId: course.id, planRevisionId: 'old-plan', courseAuditId: 'old-audit', pages: [], finalSignature: 'old-signature' }
     const originalGoal = structuredClone(course.goals[0])
     const result = refreshCourseKpGoals(course, metadata())
 
@@ -124,6 +129,11 @@ describe('逐知识点目标重建', () => {
     expect(result.course.sourceMaterial).toBe(course.sourceMaterial)
     expect(result.course.scenes).toBe(course.scenes)
     expect(result.course.beats).toBe(course.beats)
+    expect(result.course.factAudit).toBeUndefined()
+    expect(result.course.pageRenderEvidence).toBeUndefined()
+    expect(result.course.generationCourseAudit).toBeUndefined()
+    expect(result.course.teachingQualityAudit).toBeUndefined()
+    expect(result.course.teacherAcceptance).toBeUndefined()
     expect(result.issues.some(issue => issue.message === KP_GOAL_TRACE_ISSUE_MESSAGE)).toBe(false)
   })
 

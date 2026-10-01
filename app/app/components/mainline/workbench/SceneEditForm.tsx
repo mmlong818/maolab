@@ -13,7 +13,7 @@ import {
   misconceptionSourcesOf,
   type LessonScene,
   type VoiceCue,
-} from '@/lib/mainline'
+} from '@/lib/mainline/client'
 import type { ScenePatchInput } from './useWorkbenchActions'
 import { contentSlotLabel, orderedContentSlotEntries } from './labels'
 

@@ -4,7 +4,7 @@
 import { FilePenLine } from 'lucide-react'
 import type { ReactNode } from 'react'
 import MathText from '../../MathOrText'
-import { courseDisplayScene, courseDisplayTitle, lessonPresentationPages, presentationScene, sceneDisplayTitle, voicePaceLabel, type LessonPresentationPage, type LessonScene, type MainlineCourse } from '@/lib/mainline'
+import { courseDisplayScene, courseDisplayTitle, lessonPresentationPages, presentationScene, sceneDisplayTitle, voicePaceLabel, type LessonPresentationPage, type LessonScene, type MainlineCourse } from '@/lib/mainline/client'
 import { PreviewStage } from './PreviewStage'
 import styles from './PrepWorkbench.module.css'
 

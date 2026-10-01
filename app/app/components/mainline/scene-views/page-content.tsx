@@ -1,8 +1,8 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import type { LessonScene, MainlineCourse, ScenePresentation, VisiblePageContent } from '@/lib/mainline'
-import { pageContentFromScene, pairedPromptContentFromScene, presentationFor } from '@/lib/mainline'
+import type { LessonScene, MainlineCourse, ScenePresentation, VisiblePageContent } from '@/lib/mainline/client'
+import { pageContentFromScene, pairedPromptContentFromScene, presentationFor } from '@/lib/mainline/client'
 import { toRgba } from '@/lib/mainline/presentation/color'
 import { pagePromptLayout } from '@/lib/mainline/presentation/content-aware-layout'
 import { projectionFontSize, TYPE_SCALE } from '@/lib/mainline/presentation/tokens'
@@ -156,9 +156,9 @@ function PromptResponseLayout({ prompt, response, imageUrl, pres }: {
 function ResponseBody({ response, pres }: { response: ResponseContent; pres: ScenePresentation }) {
   if (response.kind === 'worked-step') {
     return (
-      <div className={`grid h-full gap-5 ${response.steps.length > 3 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+      <div className={`grid content-start gap-5 ${response.steps.length > 3 ? 'grid-cols-2' : 'grid-cols-1'}`}>
         {response.steps.map((item, index) => (
-          <div key={`${index}-${item.step}`} className="flex min-h-0 gap-5 border-b pb-4" style={{ borderColor: toRgba(pres.palette.ink, 0.14) }}>
+          <div key={`${index}-${item.step}`} className="flex gap-5 border-b pb-4" style={{ borderColor: toRgba(pres.palette.ink, 0.14) }}>
             <span className="shrink-0 font-bold" style={{ color: pres.palette.accent, fontSize: projectionFontSize('diagram', 24) }}>{index + 1}</span>
             <div className="min-w-0">
               <p style={{ ...TYPE_SCALE.body }}><MathText>{item.step}</MathText></p>
@@ -182,11 +182,15 @@ function ResponseBody({ response, pres }: { response: ResponseContent; pres: Sce
   }
 
   return (
-    <div className="flex h-full flex-col gap-6">
-      <NumberedList items={response.successCriteria} pres={pres} start={1} />
-      <StatementPanel title="核对结论" pres={pres} compact><MathText>{response.conclusion}</MathText></StatementPanel>
-      <EvidenceList evidence={response.evidence} pres={pres} compact />
-      <StatementPanel title="修正" pres={pres} compact><MathText>{response.revisionAction}</MathText></StatementPanel>
+    <div data-feedback-layout="two-column" className="grid h-full min-h-0 grid-cols-2 gap-7">
+      <div className="flex min-h-0 flex-col gap-5">
+        <NumberedList items={response.successCriteria} pres={pres} start={1} />
+        <StatementPanel title="核对结论" pres={pres} compact><MathText>{response.conclusion}</MathText></StatementPanel>
+      </div>
+      <div className="flex min-h-0 flex-col gap-5">
+        <EvidenceList evidence={response.evidence} pres={pres} compact />
+        <StatementPanel title="修正" pres={pres} compact><MathText>{response.revisionAction}</MathText></StatementPanel>
+      </div>
     </div>
   )
 }
@@ -238,7 +242,7 @@ function ObservationPage({ content, imageUrl, pres }: {
       )}
       <div className="flex min-h-0 flex-col gap-7">
         {imageUrl ? <p style={{ fontSize: projectionFontSize('heading', 42), lineHeight: 1.35, fontWeight: 700 }}><MathText>{content.prompt}</MathText></p> : null}
-        {!imageUrl && content.materialCaption ? <p style={{ ...TYPE_SCALE.body }}><MathText>{content.materialCaption}</MathText></p> : null}
+        {!imageUrl && content.materialCaption ? <p className="whitespace-pre-line" style={{ ...TYPE_SCALE.body }}><MathText>{content.materialCaption}</MathText></p> : null}
         <NumberedList items={content.evidenceLabels} pres={pres} start={1} />
       </div>
     </div>
@@ -297,7 +301,7 @@ function RecapColumn({ title, items, pres }: { title: string; items: string[]; p
 
 function StatementPanel({ title, pres, compact = false, children }: { title: string; pres: ScenePresentation; compact?: boolean; children: ReactNode }) {
   return (
-    <section className={`border-l-4 ${compact ? 'py-2 pl-5' : 'flex h-full flex-col justify-center py-6 pl-7'}`} style={{ borderColor: pres.palette.accent }}>
+    <section className={`border-l-4 ${compact ? 'shrink-0 py-2 pl-5' : 'flex h-full flex-col justify-center py-6 pl-7'}`} style={{ borderColor: pres.palette.accent }}>
       <h2 className="mb-3 font-semibold" style={{ color: pres.palette.accent, fontSize: projectionFontSize('auxiliary'), lineHeight: 1.4 }}>{title}</h2>
       <p style={{ ...TYPE_SCALE.body }}>{children}</p>
     </section>
@@ -310,7 +314,7 @@ function EvidenceList({ evidence, pres, compact = false }: {
   compact?: boolean
 }) {
   return (
-    <section className="min-h-0">
+    <section className="shrink-0">
       <h2 className="mb-3 font-semibold" style={{ color: pres.palette.accent, fontSize: projectionFontSize('auxiliary'), lineHeight: 1.4 }}>依据</h2>
       <ul className={compact ? 'space-y-2' : 'space-y-4'}>
         {evidence.map((item, index) => (

@@ -68,6 +68,19 @@ function reviewCourse(): MainlineCourse {
 }
 
 describe('页面优先课程整课事实核查', () => {
+  it('受控审查可把模型调用限制为一次尝试', async () => {
+    const llm: PageContentFactAuditLLMCall = vi.fn(async params => {
+      expect(params.maxAttempts).toBe(1)
+      return {
+        issues: [],
+        goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }],
+      }
+    })
+
+    await factAuditPageContentCourse(reviewCourse(), { llm, maxAttempts: 1 })
+    expect(llm).toHaveBeenCalledTimes(1)
+  })
+
   it('核查通过时记录精确正文版本和全部页面覆盖', async () => {
     const llm: PageContentFactAuditLLMCall = vi.fn(async ({ system, user }) => {
       expect(system).toContain('严格数学分形的精确自相似与自然形态的近似或统计自相似')
@@ -75,7 +88,7 @@ describe('页面优先课程整课事实核查', () => {
       expect(payload.pages.find(page => page.pageId === 'page-question')?.hasCheckableMaterial).toBe(true)
       return {
         issues: [],
-        goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '回答页用质量守恒和体积不变完成解释。' }],
+        goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }],
       }
     })
 
@@ -106,9 +119,9 @@ describe('页面优先课程整课事实核查', () => {
       return {
         issues: [{
           pageIds: ['page-question'], severity: 'blocking', category: 'visual-evidence',
-          claim: '页面没有提供真实图像。', evidence: '核查输入没有图像像素。', fix: '补充图像。',
+          claim: '页面没有提供真实图像。', evidence: '密闭容器中混合气体密度会变化吗？', fix: '补充图像。',
         }],
-        goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '回答页完成目标。' }],
+        goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }],
       }
     })
 
@@ -133,7 +146,7 @@ describe('页面优先课程整课事实核查', () => {
       expect(system).toContain('只统计问题页 studentContent 中承载题面的 materials 或 materialCaption')
       return {
         issues: [],
-        goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '回答页完成目标。' }],
+        goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }],
       }
     })
 
@@ -148,7 +161,7 @@ describe('页面优先课程整课事实核查', () => {
     course.qualityStatus = 'passed'
     const llm: PageContentFactAuditLLMCall = vi.fn(async () => ({
       issues: [],
-      goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '回答页完成目标。' }],
+      goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }],
     }))
 
     const result = await factAuditPageContentCourse(course, { llm })
@@ -163,12 +176,12 @@ describe('页面优先课程整课事实核查', () => {
       issues: [{
         pageIds: ['page-answer'], severity: 'blocking', category: 'factual-error',
         claim: '密闭恒容体系的总质量会随反应变化。',
-        evidence: '密闭体系遵守质量守恒，恒容时混合气体总密度不随反应进度变化。',
+        evidence: '密闭体系总质量守恒。',
         fix: '改为总质量守恒，并区分组分浓度与混合气体总密度。',
       }],
       goalCoverage: [{
-        goalId: 'goal-1', status: 'missing', pageIds: [],
-        evidence: '只有结论，没有安排学生用定义式完成检核。',
+        goalId: 'goal-1', status: 'missing', pageIds: ['page-question'],
+        evidence: '密闭容器中混合气体密度会变化吗？',
         missingElement: '缺少学生使用密度定义式完成的独立练习。',
       }],
     }))
@@ -200,19 +213,19 @@ describe('页面优先课程整课事实核查', () => {
         pageIds: ['invented-page'], severity: 'blocking', category: 'internal-contradiction',
         claim: '页面前后矛盾。', evidence: '无法定位。', fix: '重新核查。',
       }],
-      goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '回答页完成目标。' }],
+      goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }],
     }))
 
     const result = await factAuditPageContentCourse(reviewCourse(), { llm })
 
     expect(result.record.fatalCount).toBe(1)
-    expect(result.record.issues[0]?.message).toContain('不存在的页面')
+    expect(result.record.issues[0]?.message).toContain('未知、混合或重复的页面 ID')
   })
 
   it('兼容外部模型省略空 issues 并使用 pass 表示目标已覆盖', async () => {
     const llm: PageContentFactAuditLLMCall = vi.fn(async () => ({
       review: {
-        goalCoverage: [{ goalId: 'goal-1', status: 'pass', pageIds: ['page-answer'], evidence: '回答页完成目标。' }],
+        goalCoverage: [{ goalId: 'goal-1', status: 'pass', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }],
         explanation: '没有发现阻断问题。',
       },
     }))
@@ -229,12 +242,33 @@ describe('页面优先课程整课事实核查', () => {
         pageId: 'page-answer', severity: 'fatal', category: 'fact',
         message: '错误地声称总质量变化。', reason: '密闭体系总质量守恒。', recommendation: '改正质量守恒表述。',
       }],
-      goalCoverage: [{ id: 'goal-1', status: 'pass', pageId: 'page-answer', reason: '回答页完成目标。' }],
+      goalCoverage: [{ id: 'goal-1', status: 'pass', pageId: 'page-answer', reason: '密闭体系总质量守恒。' }],
     }))
 
     const result = await factAuditPageContentCourse(reviewCourse(), { llm })
 
     expect(result.record.fatalCount).toBe(1)
     expect(result.record.issues[0]).toMatchObject({ targetId: 'page-answer', severity: 'blocking' })
+  })
+
+  it('兼容外部模型用 missing-material 表示缺少可检查材料', async () => {
+    const llm: PageContentFactAuditLLMCall = vi.fn(async () => ({
+      issues: [{
+        pageIds: ['page-question'], severity: 'blocking', category: 'missing-material',
+        claim: '任务依赖图像但页面没有可检查对象。',
+        evidence: '密闭容器中混合气体密度会变化吗？',
+        fix: '补充与任务直接对应的可检查图像。',
+      }],
+      goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }],
+    }))
+
+    const result = await factAuditPageContentCourse(reviewCourse(), { llm })
+
+    expect(result.record.fatalCount).toBe(1)
+    expect(result.record.issues[0]).toMatchObject({
+      targetId: 'page-question',
+      severity: 'blocking',
+      message: expect.stringContaining('缺少可检查的图像或材料'),
+    })
   })
 })

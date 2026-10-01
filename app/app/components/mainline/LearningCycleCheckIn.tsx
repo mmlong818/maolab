@@ -20,7 +20,7 @@ import {
   type StagedLearningAttempt,
   type StagedLearningConfig,
   type StagedPostRevealRecord,
-} from '@/lib/mainline'
+} from '@/lib/mainline/client'
 import {
   normalizePracticeEvidenceText,
   PRACTICE_EVIDENCE_MAX_LENGTH,

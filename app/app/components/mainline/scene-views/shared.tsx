@@ -1,7 +1,7 @@
 'use client'
 
-import type { LessonScene, MainlineCourse, ScenePresentation, SpriteSide } from '@/lib/mainline'
-import { IMAGE_ZONE_HEIGHT, labelCss, markerCss, presentationFor, SERIAL_HOOK_SLOT } from '@/lib/mainline'
+import type { LessonScene, MainlineCourse, ScenePresentation, SpriteSide } from '@/lib/mainline/client'
+import { IMAGE_ZONE_HEIGHT, labelCss, markerCss, presentationFor, SERIAL_HOOK_SLOT } from '@/lib/mainline/client'
 import { hexToOklch, mixOklch, toRgba } from '@/lib/mainline/presentation/color'
 import type { SurfaceId } from '@/lib/mainline/presentation/primitives'
 import { pickMasterRouted } from '@/lib/mainline/presentation/master-routing'

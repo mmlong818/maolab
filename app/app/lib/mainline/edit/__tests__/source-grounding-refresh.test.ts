@@ -30,16 +30,27 @@ function locator(): SourceMaterialGrounding {
 }
 
 describe('refreshCourseSourceGroundings · 存量课程教材依据刷新', () => {
-  it('移除伪摘录并回填教材节点，但不改任何教学内容', () => {
-    const course = legacySourceCourse()
+  it('移除伪摘录并回填教材节点，撤销基于旧证据的审查和签名', () => {
+    const course = {
+      ...legacySourceCourse(),
+      generationSession: {
+        schemaVersion: 'mainline-generation-session-v1', id: 'session-1', courseId: 'course-1', planRevisionId: 'plan-1',
+        status: 'course-audit', createdAt: '2026-09-22T00:00:00.000Z', updatedAt: '2026-09-22T00:01:00.000Z',
+        jobs: [],
+      },
+      factAudit: { id: 'fact-1' },
+      generationCourseAudit: { id: 'course-audit-1' },
+      teachingQualityAudit: { id: 'teaching-audit-1', status: 'passed' },
+      teacherAcceptance: { finalSignature: 'signed' },
+    } as unknown as MainlineCourse
     const source = course.sourceMaterial[0]!
+    const oldSessionToken = course.generationSession!.updatedAt
     const teachingContent = {
       scenes: course.scenes,
       learningFragments: course.learningFragments,
       beats: course.beats,
       castProfiles: course.castProfiles,
       voiceProfiles: course.voiceProfiles,
-      factAudit: course.factAudit,
     }
 
     const result = refreshCourseSourceGroundings(course, { [source.kpId!]: locator() })
@@ -50,13 +61,19 @@ describe('refreshCourseSourceGroundings · 存量课程教材依据刷新', () =
     expect(refreshed.provenance).toEqual(locator().provenance)
     expect(result.refreshedKpIds).toEqual([source.kpId])
     expect(result.clearedPlaceholderKpIds).toEqual([source.kpId])
+    expect(result.course.qualityStatus).toBe('draft')
+    expect(result.course.factAudit).toBeUndefined()
+    expect(result.course.generationCourseAudit).toBeUndefined()
+    expect(result.course.teachingQualityAudit).toBeUndefined()
+    expect(result.course.teacherAcceptance).toBeUndefined()
+    expect(result.course.generationSession?.updatedAt).not.toBe(oldSessionToken)
+    expect(result.course.generationSession?.status).toBe('generating')
     expect({
       scenes: result.course.scenes,
       learningFragments: result.course.learningFragments,
       beats: result.course.beats,
       castProfiles: result.course.castProfiles,
       voiceProfiles: result.course.voiceProfiles,
-      factAudit: result.course.factAudit,
     }).toEqual(teachingContent)
   })
 
@@ -72,7 +89,7 @@ describe('refreshCourseSourceGroundings · 存量课程教材依据刷新', () =
     expect(result.clearedPlaceholderKpIds).toEqual([])
   })
 
-  it('事实阻断不会被来源刷新洗白', () => {
+  it('来源变更撤销旧事实阻断并要求重新审查', () => {
     const course = legacySourceCourse()
     const source = course.sourceMaterial[0]!
     course.factAudit = {
@@ -91,15 +108,27 @@ describe('refreshCourseSourceGroundings · 存量课程教材依据刷新', () =
 
     const result = refreshCourseSourceGroundings(course, { [source.kpId!]: locator() })
 
-    expect(result.course.qualityStatus).toBe('blocked')
+    expect(result.course.qualityStatus).toBe('draft')
+    expect(result.course.factAudit).toBeUndefined()
   })
 
   it('索引没有当前知识点定位时保持原课程不变', () => {
-    const course = legacySourceCourse()
+    const base = legacySourceCourse()
+    const course = {
+      ...base,
+      generationSession: {
+      schemaVersion: 'mainline-generation-session-v1', id: 'session-1', courseId: base.id, planRevisionId: 'plan-1',
+      status: 'course-audit', createdAt: '2026-09-22T00:00:00.000Z', updatedAt: '2026-09-22T00:01:00.000Z', jobs: [],
+      },
+      teachingQualityAudit: { id: 'teaching-audit-1', status: 'passed' },
+    } as unknown as MainlineCourse
+    const sessionToken = course.generationSession!.updatedAt
     const result = refreshCourseSourceGroundings(course, {})
 
     expect(result.refreshedKpIds).toEqual([])
     expect(result.course.sourceMaterial).toEqual(course.sourceMaterial)
+    expect(result.course.teachingQualityAudit).toEqual(course.teachingQualityAudit)
+    expect(result.course.generationSession?.updatedAt).toBe(sessionToken)
   })
 
   it('只有候选资源、没有教材节点时不冒充依据刷新成功', () => {

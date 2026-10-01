@@ -25,6 +25,18 @@ export async function findMainlineCourse(id: string): Promise<MainlineCourse | u
   return record ? (record.payload as MainlineCourse) : undefined
 }
 
+export interface MainlineCourseSnapshot {
+  course: MainlineCourse
+  updatedAt: number
+}
+
+export async function findMainlineCourseSnapshot(id: string): Promise<MainlineCourseSnapshot | undefined> {
+  const record = await getRepo().find(id)
+  if (!record) return undefined
+  if (record.updatedAt === undefined) throw new Error(`Mainline course ${id} is missing its persistence version`)
+  return { course: record.payload as MainlineCourse, updatedAt: record.updatedAt }
+}
+
 export async function saveMainlineCourse(course: MainlineCourse): Promise<void> {
   await getRepo().save({
     id: course.id,
@@ -32,6 +44,15 @@ export async function saveMainlineCourse(course: MainlineCourse): Promise<void> 
     status: course.qualityStatus,
     payload: course,
   })
+}
+
+export async function saveMainlineCourseIfUnchanged(course: MainlineCourse, expectedUpdatedAt: number): Promise<boolean> {
+  return getRepo().saveIfUnchanged({
+    id: course.id,
+    title: course.topic,
+    status: course.qualityStatus,
+    payload: course,
+  }, expectedUpdatedAt)
 }
 
 export interface ListedMainlineCourse {

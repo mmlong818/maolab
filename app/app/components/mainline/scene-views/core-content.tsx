@@ -1,6 +1,6 @@
 'use client'
 
-import type { LessonScene, ScenePresentation } from '@/lib/mainline'
+import type { LessonScene, ScenePresentation } from '@/lib/mainline/client'
 import { sceneCoreContentEntries } from '@/lib/mainline/presentation/scene-content-contract'
 import { coreVisualLayout } from '@/lib/mainline/presentation/content-aware-layout'
 import { toRgba } from '@/lib/mainline/presentation/color'

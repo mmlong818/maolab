@@ -1,7 +1,7 @@
 'use client'
 
-import type { LessonScene, MainlineCourse, ScenePresentation } from '@/lib/mainline'
-import { presentationFor } from '@/lib/mainline'
+import type { LessonScene, MainlineCourse, ScenePresentation } from '@/lib/mainline/client'
+import { presentationFor } from '@/lib/mainline/client'
 import { fitType, projectionFontSize, TYPE_SCALE } from '@/lib/mainline/presentation/tokens'
 import { toRgba } from '@/lib/mainline/presentation/color'
 import { observationPanels, type ObservationPanel } from '@/lib/mainline/presentation/observation-content'

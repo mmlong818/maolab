@@ -172,7 +172,7 @@ export async function regeneratePlannedPage(
   }
 }
 
-interface FillOnePlannedPageInput {
+export interface FillOnePlannedPageInput {
   course: MainlineCourse
   planPage: LessonPagePlan
   planRevisionId: string
@@ -236,6 +236,12 @@ export async function fillOnePlannedPage(input: FillOnePlannedPageInput): Promis
   )
 }
 
+export async function fillOnePlannedPageWithDefaultLLM(
+  input: Omit<FillOnePlannedPageInput, 'llm'>,
+): Promise<GeneratedLessonPage> {
+  return fillOnePlannedPage({ ...input, llm: defaultLLM })
+}
+
 function factFeedbackForPage(course: MainlineCourse, pageId: string): string[] {
   return (course.factAudit?.issues ?? [])
     .filter(issue => issue.targetId === pageId || issue.relatedTargetIds?.includes(pageId))
@@ -247,7 +253,19 @@ function sanitizeGeneratedContent(
   allowedSourceRefs: readonly string[],
 ): VisiblePageContent | undefined {
   if (!content) return content
-  const sanitized = stripVisibleReferenceTokens(content, allowedSourceRefs)
+  const stripped = stripVisibleReferenceTokens(content, allowedSourceRefs)
+  const sanitized = stripped.kind === 'observation'
+    && /每(?:一|个)行|逐行|圈出|圈画/.test(stripped.prompt)
+    && /[；;]/.test(stripped.materialCaption ?? '')
+    ? {
+        ...stripped,
+        materialCaption: stripped.materialCaption
+          ?.split(/[；;]\s*/)
+          .map(item => item.trim())
+          .filter(Boolean)
+          .join('\n'),
+      }
+    : stripped
   if (!('evidence' in sanitized)) return sanitized
   const allowed = new Set(allowedSourceRefs)
   return {
@@ -475,6 +493,8 @@ function pageLayoutBudget(kind: VisiblePageContent['kind']): string {
       return 'conclusion 不超过 60 字；evidence 最多 2 条、每条不超过 45 字；correction 不超过 50 字。'
     case 'feedback':
       return 'successCriteria 最多 2 条、每条不超过 18 字；conclusion 不超过 70 字；evidence 最多 3 条、每条不超过 40 字；revisionAction 不超过 35 字。'
+    case 'worked-step':
+      return 'steps 最多 4 条；每条 step 不超过 22 字、reason 不超过 38 字、result 不超过 24 字。需要更多步骤时必须在页面规划中拆成多张连续投影片，不能缩小字号。'
     case 'recap':
       return 'concepts、evidence、methods 每栏最多 3 条，每条不超过 35 字。'
     default:

@@ -1,6 +1,6 @@
 'use client'
 
-import { stagedLearningConfig, stagedPromptEvidenceKind, stagedPromptForceVectors, type LessonScene, type ScenePresentation } from '@/lib/mainline'
+import { stagedLearningConfig, stagedPromptEvidenceKind, stagedPromptForceVectors, type LessonScene, type ScenePresentation } from '@/lib/mainline/client'
 import { toRgba } from '@/lib/mainline/presentation/color'
 import { promptEvidenceLayout } from '@/lib/mainline/presentation/content-aware-layout'
 import { fitType, TYPE_SCALE } from '@/lib/mainline/presentation/tokens'

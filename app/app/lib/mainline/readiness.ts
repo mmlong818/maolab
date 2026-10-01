@@ -7,6 +7,7 @@
  * 不会在读取时把 draft/blocked 静默升级，也不会写数据库。
  */
 import type { MainlineCourse, QualityGateId } from './domain.js'
+import { generationInputHash } from './generation-session.js'
 import type { CourseRevisionStatus } from './planning/page-contract.js'
 import {
   auditCoursePageContentState,
@@ -20,9 +21,10 @@ import {
   type QualitySummary,
   summarizeQuality,
 } from './quality-gates.js'
+import { teachingQualityInputHash } from './teaching-quality-audit.js'
 
 export type CourseReleaseStatus = MainlineCourse['qualityStatus']
-export type CourseReleaseBlockerSource = 'quality-gate' | 'fact-audit' | 'fact-audit-unverified' | 'fact-audit-pending' | 'persisted-status' | 'page-content' | 'page-visual'
+export type CourseReleaseBlockerSource = 'quality-gate' | 'fact-audit' | 'fact-audit-unverified' | 'fact-audit-pending' | 'persisted-status' | 'page-content' | 'page-visual' | 'render-evidence' | 'teacher-acceptance'
 
 export interface CourseReleaseBlocker {
   source: CourseReleaseBlockerSource
@@ -223,6 +225,90 @@ function pageFirstCourseReadiness(course: MainlineCourse): CourseReleaseReadines
     })))
   }
 
+  const session = course.generationSession
+  if (!session || session.planRevisionId !== planning.planRevisionId) {
+    blockers.push({
+      source: 'render-evidence', gate: 'page-content', targetId: course.id,
+      message: '当前课程缺少与页面计划匹配的生成会话和真实画面检查记录。', count: 1,
+    })
+  } else {
+    const evidenceById = new Map((course.pageRenderEvidence ?? []).map(evidence => [evidence.id, evidence]))
+    for (const job of session.jobs) {
+      const checkpoint = job.checkpoint
+      const evidence = checkpoint && evidenceById.get(checkpoint.renderEvidenceId)
+      if (
+        job.status !== 'passed'
+        || !checkpoint
+        || !evidence
+        || evidence.pageId !== job.pageId
+        || evidence.contentRevisionId !== checkpoint.contentRevisionId
+        || evidence.issues.some(issue => issue.severity === 'blocking')
+      ) {
+        blockers.push({
+          source: 'render-evidence', gate: 'page-content', targetId: job.pageId,
+          message: `第 ${job.order} 页尚未通过与当前正文版本匹配的真实画面检查。`, count: 1,
+        })
+      }
+    }
+  }
+
+  if (planning.status === 'ready') {
+    const audit = course.generationCourseAudit
+    const teachingQualityAudit = course.teachingQualityAudit
+    const acceptance = course.teacherAcceptance
+    if (
+      !session
+      || session.status !== 'ready'
+      || !audit
+      || audit.courseId !== course.id
+      || audit.planRevisionId !== planning.planRevisionId
+      || audit.contentRevisionId !== course.pageContent?.contentRevisionId
+    ) {
+      blockers.push({
+        source: 'teacher-acceptance', gate: 'status', targetId: course.id,
+        message: '当前课堂版本缺少与正文和真实截图匹配的整课机器审计。', count: 1,
+      })
+    }
+    if (
+      !teachingQualityAudit
+      || teachingQualityAudit.status !== 'passed'
+      || teachingQualityAudit.courseId !== course.id
+      || teachingQualityAudit.planRevisionId !== planning.planRevisionId
+      || teachingQualityAudit.contentRevisionId !== course.pageContent?.contentRevisionId
+      || teachingQualityAudit.generationCourseAuditId !== audit?.id
+      || !teachingQualityAudit.inputHash
+      || teachingQualityAudit.inputHash !== teachingQualityInputHash(course)
+    ) {
+      blockers.push({
+        source: 'teacher-acceptance', gate: 'status', targetId: course.id,
+        message: '当前课堂版本缺少与整课机器审计匹配的 AI 教学审查通过记录。', count: 1,
+      })
+    }
+    if (
+      !acceptance?.finalSignature
+      || !acceptance.acceptedAt
+      || acceptance.courseId !== course.id
+      || acceptance.planRevisionId !== planning.planRevisionId
+      || acceptance.courseAuditId !== audit?.id
+      || !acceptanceMatchesCurrentPages(course)
+      || acceptance.finalSignature !== generationInputHash({
+        courseId: course.id,
+        planRevisionId: planning.planRevisionId,
+        courseAuditId: audit?.id,
+        pages: acceptance.pages.map(item => ({
+          pageId: item.pageId,
+          contentRevisionId: item.contentRevisionId,
+          renderEvidenceId: item.renderEvidenceId,
+        })),
+      })
+    ) {
+      blockers.push({
+        source: 'teacher-acceptance', gate: 'status', targetId: course.id,
+        message: '当前课堂版本缺少教师逐页验收后的最终发布签名。', count: 1,
+      })
+    }
+  }
+
   const blockedVisualPageIds = new Set<string>()
   for (const page of planning.pages) {
     if (!page.visualSpec.required || page.visualSpec.form !== 'instructional-image') continue
@@ -294,6 +380,21 @@ function pageFirstCourseReadiness(course: MainlineCourse): CourseReleaseReadines
     blockers,
     workflowStatus: planning.status,
   }
+}
+
+function acceptanceMatchesCurrentPages(course: MainlineCourse): boolean {
+  const jobs = course.generationSession?.jobs ?? []
+  const accepted = new Map(course.teacherAcceptance?.pages.map(page => [page.pageId, page]) ?? [])
+  return accepted.size === jobs.length && jobs.every(job => {
+    const checkpoint = job.checkpoint
+    const page = accepted.get(job.pageId)
+    return Boolean(
+      checkpoint
+      && page
+      && page.contentRevisionId === checkpoint.contentRevisionId
+      && page.renderEvidenceId === checkpoint.renderEvidenceId,
+    )
+  })
 }
 
 function referencesVisibleFigure(value: string): boolean {

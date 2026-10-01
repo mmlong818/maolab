@@ -17,8 +17,8 @@
  * 不作为对白气泡叠在页面上；同时也不引入翻页、语音和学情打卡等课堂状态。
  */
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import type { LessonScene, MainlineCourse } from '@/lib/mainline'
-import { backdropGradient, baseplateOverlay, baseplateSize, chromeColorsFor, courseDisplayScene, coursePaletteFor, presentationFor } from '@/lib/mainline'
+import type { LessonScene, MainlineCourse } from '@/lib/mainline/client'
+import { backdropGradient, baseplateOverlay, baseplateSize, chromeColorsFor, courseDisplayScene, coursePaletteFor, presentationFor } from '@/lib/mainline/client'
 import { DialogueLayer } from '../DialogueLayer'
 import { SceneTechniqueView } from '../SceneTechniqueView'
 import { AnnotationCanvas, AnnotationToolbar, useAnnotations } from '../AnnotationLayer'

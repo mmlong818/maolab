@@ -133,7 +133,7 @@ export function CowartCanvas({ courseId, sceneId, imageUrl, visualFocus }: Cowar
             <div className={styles.result}>
               <div className={styles.resultTitle}>
                 <CheckCircle2 size={18} aria-hidden="true" />
-                修改版已替换本幕图片
+                修改版已替换当前投影片图片
               </div>
               <img src={resultUrl} alt="Cowart 生成的修改版教学图片" />
               <Link href={backHref} className={styles.doneLink}>返回备课查看</Link>

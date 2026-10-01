@@ -9,6 +9,7 @@
 import type { MainlineCourse, SourceMaterialGrounding, SourceMaterialRef } from '../domain.js'
 import { auditCourseReleaseReadiness } from '../readiness.js'
 import type { QualityIssue } from '../quality-gates.js'
+import { invalidateCourseReviewArtifacts } from '../revision-invalidation.js'
 
 const SOURCE_PLACEHOLDER_PATTERN = /待\s*(?:LLM\s*)?填充|待补(?:充|录入)|TODO|TBD/i
 
@@ -48,11 +49,19 @@ export function refreshCourseSourceGroundings(
   })
 
   const candidate: MainlineCourse = { ...course, sourceMaterial }
-  const readiness = auditCourseReleaseReadiness(candidate)
+  // Source material is direct evidence for both fact and teaching-quality
+  // review. A changed grounding therefore makes every prior downstream proof
+  // stale and rotates the generation-session concurrency token.
+  const invalidated = refreshedKpIds.length > 0
+    ? invalidateCourseReviewArtifacts(candidate)
+    : candidate
+  const readiness = auditCourseReleaseReadiness(invalidated)
   return {
     course: {
-      ...candidate,
-      qualityStatus: course.qualityStatus === 'draft'
+      ...invalidated,
+      qualityStatus: refreshedKpIds.length > 0
+        ? 'draft'
+        : course.qualityStatus === 'draft'
         ? 'draft'
         : readiness.ready ? 'passed' : 'blocked',
     },

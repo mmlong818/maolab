@@ -120,6 +120,8 @@ export interface FillImagesResult {
   course: MainlineCourse
   filledSceneIds: string[]
   failedSceneIds: string[]
+  /** Page-first images whose persisted identity actually changed. */
+  changedPageIds: string[]
 }
 
 export async function fillImages(
@@ -194,6 +196,7 @@ export async function fillImages(
     course: { ...course, scenes: nextScenes },
     filledSceneIds,
     failedSceneIds,
+    changedPageIds: [],
   }
 }
 
@@ -237,32 +240,43 @@ async function fillPlannedPageImages(
       failedSceneIds.push(result.pageId)
     }
   }
+  const pages = pageContent.pages.map(page => {
+    const planPage = planById.get(page.pageId)
+    const promptPageId = planPage ? pairedPromptPageId(planPage) : undefined
+    const promptPage = promptPageId ? generatedById.get(promptPageId) : undefined
+    const inherited = planPage?.visualSpec.required && planPage.visualSpec.form === 'instructional-image'
+      ? (promptPageId ? filled.get(promptPageId) : undefined)
+        ?? (promptPage?.imageUrl?.trim() ? {
+          url: promptPage.imageUrl,
+          prompt: promptPage.imagePrompt ?? '沿用问题页教学图。',
+        } : undefined)
+      : undefined
+    const image = filled.get(page.pageId) ?? inherited
+    return image
+      ? { ...page, imageUrl: image.url, imagePrompt: image.prompt, imageAspect: '4:3' }
+      : page
+  })
+  const previousById = new Map(pageContent.pages.map(page => [page.pageId, page]))
+  const changedPageIds = pages
+    .filter(page => pageImageIdentity(page) !== pageImageIdentity(previousById.get(page.pageId)))
+    .map(page => page.pageId)
+
   return {
     course: {
       ...course,
       pageContent: {
         ...pageContent,
-        pages: pageContent.pages.map(page => {
-          const planPage = planById.get(page.pageId)
-          const promptPageId = planPage ? pairedPromptPageId(planPage) : undefined
-          const promptPage = promptPageId ? generatedById.get(promptPageId) : undefined
-          const inherited = planPage?.visualSpec.required && planPage.visualSpec.form === 'instructional-image'
-            ? (promptPageId ? filled.get(promptPageId) : undefined)
-              ?? (promptPage?.imageUrl?.trim() ? {
-                url: promptPage.imageUrl,
-                prompt: promptPage.imagePrompt ?? '沿用问题页教学图。',
-              } : undefined)
-            : undefined
-          const image = filled.get(page.pageId) ?? inherited
-          return image
-            ? { ...page, imageUrl: image.url, imagePrompt: image.prompt, imageAspect: '4:3' }
-            : page
-        }),
+        pages,
       },
     },
     filledSceneIds,
     failedSceneIds,
+    changedPageIds,
   }
+}
+
+function pageImageIdentity(page: GeneratedLessonPage | undefined): string {
+  return JSON.stringify([page?.imageUrl ?? '', page?.imagePrompt ?? '', page?.imageAspect ?? ''])
 }
 
 function pairedPromptPageId(page: LessonPagePlan): string | undefined {

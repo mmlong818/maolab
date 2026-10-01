@@ -34,12 +34,12 @@ import {
   type MainlineCourse,
   type ScenePresentation,
   type VoiceSessionState,
-} from '@/lib/mainline'
+} from '@/lib/mainline/client'
 import { backdropGradient, FONT_STACKS } from '@/lib/mainline/presentation/tokens'
 import { toRgba } from '@/lib/mainline/presentation/color'
 import { practiceObjectiveCriteria } from '@/lib/mainline/mastery'
 import type { TextureSpec } from '@/lib/mainline/presentation/primitives'
-import { baseplateOverlay, baseplateSize, chromeColorsFor, coursePaletteFor, presentationFor, type ChromeColors } from '@/lib/mainline'
+import { baseplateOverlay, baseplateSize, chromeColorsFor, coursePaletteFor, presentationFor, type ChromeColors } from '@/lib/mainline/client'
 import ScaleStage from '@/components/ScaleStage'
 import { DialogueLayer, dialogueBandVisible, dialogueCopy } from './DialogueLayer'
 import { cardSurface, MathText } from './scene-views/shared'
@@ -76,8 +76,25 @@ export function StageCanvas({ courses }: StageCanvasProps) {
   // route 端 waitForFunction 等到它才按快门。
   useEffect(() => {
     if (!exportRender) return
-    document.body.dataset.exportReady = String(sceneIndex + 1)
-    return () => { delete document.body.dataset.exportReady }
+    let cancelled = false
+    delete document.body.dataset.exportReady
+    async function markReady() {
+      await document.fonts.ready
+      const images = [...document.querySelectorAll<HTMLImageElement>('[data-projection-stage="true"] img')]
+      await Promise.all(images.map(image => image.complete
+        ? Promise.resolve()
+        : new Promise<void>(resolve => {
+            image.addEventListener('load', () => resolve(), { once: true })
+            image.addEventListener('error', () => resolve(), { once: true })
+          })))
+      await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+      if (!cancelled) document.body.dataset.exportReady = String(sceneIndex + 1)
+    }
+    void markReady()
+    return () => {
+      cancelled = true
+      delete document.body.dataset.exportReady
+    }
   }, [exportRender, sceneIndex])
   const course = courses.find(item => item.id === courseId) ?? courses[0]
   const presentationPages = useMemo(() => course ? lessonPresentationPages(course) : [], [course])

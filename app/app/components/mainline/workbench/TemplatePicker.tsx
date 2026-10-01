@@ -9,7 +9,7 @@
  * 换皮只改呈现层;想让配图跟上新模板,配合「AI 补图」重生成(fill-images?force=1)。
  */
 import { useMemo } from 'react'
-import type { MainlineCourse } from '@/lib/mainline'
+import type { MainlineCourse } from '@/lib/mainline/client'
 import { stylePackCatalogFor, type PackCatalogEntry } from '@/lib/mainline/presentation/pack-catalog'
 import { stylePackFor } from '@/lib/mainline/presentation/style-packs'
 

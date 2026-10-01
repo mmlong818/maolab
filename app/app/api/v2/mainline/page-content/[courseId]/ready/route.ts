@@ -4,14 +4,20 @@ import {
   markPageContentReady,
 } from '../../../../../../lib/mainline/planning/revision-lifecycle.js'
 import { auditCourseReleaseReadiness } from '../../../../../../lib/mainline/readiness.js'
-import { findMainlineCourse, saveMainlineCourse } from '../../../../../../lib/mainline/store.js'
+import {
+  findMainlineCourse,
+  findMainlineCourseSnapshot,
+  saveMainlineCourse,
+  saveMainlineCourseIfUnchanged,
+} from '../../../../../../lib/mainline/store.js'
 
 export const runtime = 'nodejs'
 
 export async function POST(_req: NextRequest, ctx: { params: Promise<{ courseId: string }> }) {
   const { courseId } = await ctx.params
-  const course = await findMainlineCourse(courseId)
-  if (!course) return NextResponse.json({ error: 'course not found' }, { status: 404 })
+  const snapshot = await findMainlineCourseSnapshot(courseId)
+  if (!snapshot) return NextResponse.json({ error: 'course not found' }, { status: 404 })
+  const { course, updatedAt } = snapshot
 
   try {
     const ready = markPageContentReady(course)
@@ -19,7 +25,9 @@ export async function POST(_req: NextRequest, ctx: { params: Promise<{ courseId:
     if (!readiness.ready) {
       throw new Error(readiness.blockers.slice(0, 3).map(blocker => blocker.message).join('；') || '课程尚未通过投影片检查。')
     }
-    await saveMainlineCourse(ready)
+    if (!await saveMainlineCourseIfUnchanged(ready, updatedAt)) {
+      throw new Error('发布期间课程已经变化，请刷新后重新检查。')
+    }
 
     const previousCourseId = ready.revision?.basedOnCourseId
     if (previousCourseId) {
