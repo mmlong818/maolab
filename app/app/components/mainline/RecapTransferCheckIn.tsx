@@ -16,7 +16,7 @@ import {
   type RecapTransferAttempt,
   type RecapTransferConfidence,
   type RecapTransferReviewDecision,
-} from '@/lib/mainline'
+} from '@/lib/mainline/client'
 
 interface RecapTransferCheckInProps {
   scene: LessonScene

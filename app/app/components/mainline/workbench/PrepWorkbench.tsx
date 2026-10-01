@@ -9,7 +9,10 @@
  */
 import { useMemo, useState } from 'react'
 import type { KnowledgeType } from '@maolab/shared-types'
-import { courseReleaseReadinessFromIssues, lessonPresentationPages, type MainlineCourse, type QualityIssue, type QualitySummary, type SceneType } from '@/lib/mainline'
+import type { MainlineCourse, SceneType } from '@/lib/mainline/domain'
+import type { QualityIssue, QualitySummary } from '@/lib/mainline/quality-gates'
+import type { CourseReleaseReadiness } from '@/lib/mainline/readiness'
+import { lessonPresentationPages } from '@/lib/mainline/presentation/presentation-pages'
 import { courseHasCompleteTeachingVisuals } from '@/lib/mainline/presentation/visual-readiness'
 import type { PrepBrief } from '@/lib/mainline/prep-brief'
 import { FillBanner } from '../FillBanner'
@@ -31,6 +34,8 @@ interface PrepWorkbenchProps {
   prepBrief: PrepBrief | undefined
   prepBriefError: boolean
   fragmentLabels: Record<string, string>
+  currentTeachingQualityInputHash: string
+  initialReadiness: CourseReleaseReadiness
   initialSelectedSceneId?: string
   initialRequestedMisconception?: string
 }
@@ -38,6 +43,8 @@ interface PrepWorkbenchProps {
 export function PrepWorkbench({
   course: initialCourse, issues: initialIssues, summary: initialSummary,
   factAuditFatalCount, factAuditWarningCount, factAuditInfoCount, prepBrief: initialPrepBrief, prepBriefError, fragmentLabels,
+  currentTeachingQualityInputHash,
+  initialReadiness,
   initialSelectedSceneId, initialRequestedMisconception,
 }: PrepWorkbenchProps) {
   const {
@@ -54,7 +61,7 @@ export function PrepWorkbench({
 
   const presentationPages = useMemo(() => lessonPresentationPages(course), [course])
   const firstPageId = initialSelectedSceneId
-    ? presentationPages.find(page => page.sourceSceneId === initialSelectedSceneId)?.id
+    ? presentationPages.find(page => page.id === initialSelectedSceneId || page.sourceSceneId === initialSelectedSceneId)?.id
     : undefined
   const [selectedPageId, setSelectedPageId] = useState<string | undefined>(firstPageId)
   const selectedPage = presentationPages.find(page => page.id === selectedPageId)
@@ -69,7 +76,16 @@ export function PrepWorkbench({
 
   const hasTeachingVisuals = useMemo(() => courseHasCompleteTeachingVisuals(course), [course])
   const pendingFactAuditCount = course.factAudit?.pendingSceneIds?.length ?? 0
-  const readiness = courseReleaseReadinessFromIssues(course, issues)
+  const readiness = course === initialCourse
+    ? initialReadiness
+    : {
+        ...initialReadiness,
+        ready: false,
+        status: course.planning?.status === 'ready' ? 'blocked' as const : 'draft' as const,
+        stalePassed: initialReadiness.ready || initialReadiness.stalePassed,
+        blockingCount: Math.max(1, initialReadiness.blockingCount),
+        ...(course.planning?.status ? { workflowStatus: course.planning.status } : {}),
+      }
   const liveFactCounts = course.factAudit
     ? {
         fatal: course.factAudit.issues.filter(issue => issue.severity === 'blocking').length,
@@ -84,14 +100,25 @@ export function PrepWorkbench({
 
   return (
     <div className={styles.root} style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#fafaf7' }}>
-      {course.planning && course.pageContent ? (
+      {course.planning && course.pageContent && course.generationSession ? (
         <PageWorkflowBanner
           courseId={course.id}
           status={course.planning.status}
           revisionNo={course.revision?.revisionNo ?? 1}
           pageCount={course.pageContent.pages.length}
+          generationStatus={course.generationSession.status}
+          generationUpdatedAt={course.generationSession.updatedAt}
+          acceptedPageIds={course.teacherAcceptance?.pages.map(page => page.pageId) ?? []}
+          currentPlanRevisionId={course.planning.planRevisionId}
+          currentContentRevisionId={course.pageContent.contentRevisionId}
+          currentTeachingQualityInputHash={currentTeachingQualityInputHash}
+          {...(course.generationCourseAudit ? { generationCourseAuditId: course.generationCourseAudit.id } : {})}
+          {...(course.teachingQualityAudit ? { teachingQualityAudit: course.teachingQualityAudit } : {})}
           {...(selectedPage && course.pageContent.pages.some(page => page.pageId === selectedPage.id)
-            ? { selectedPageId: selectedPage.id }
+            ? {
+                selectedPageId: selectedPage.id,
+                selectedPageHasImage: Boolean(course.pageContent.pages.find(page => page.pageId === selectedPage.id)?.imageUrl),
+              }
             : {})}
         />
       ) : (

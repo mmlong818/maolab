@@ -1,7 +1,7 @@
 'use client'
 
-import type { LessonScene, MainlineCourse, ScenePresentation } from '@/lib/mainline'
-import { spriteSideOf } from '@/lib/mainline'
+import type { LessonScene, MainlineCourse, ScenePresentation } from '@/lib/mainline/client'
+import { spriteSideOf } from '@/lib/mainline/client'
 import { pickMasterRouted } from '@/lib/mainline/presentation/master-routing'
 import { toRgba } from '@/lib/mainline/presentation/color'
 import { fitType, TYPE_SCALE } from '@/lib/mainline/presentation/tokens'

@@ -10,7 +10,7 @@
  * 老师点开某一幕想深挖时,勾选开关即过滤。
  */
 import { useMemo, useState } from 'react'
-import type { MainlineCourse, QualityIssue, QualitySummary } from '@/lib/mainline'
+import type { MainlineCourse, QualityIssue, QualitySummary } from '@/lib/mainline/client'
 import type { PrepBrief } from '@/lib/mainline/prep-brief'
 import {
   QualityPanel,

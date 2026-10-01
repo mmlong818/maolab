@@ -14,7 +14,7 @@ import {
   SkipForward,
   UsersRound,
 } from 'lucide-react'
-import { courseDisplayTitle, type MainlineCourse } from '@/lib/mainline'
+import { courseDisplayTitle, type MainlineCourse } from '@/lib/mainline/client'
 import type { MasteryEvidenceStatus } from '@/lib/mainline/mastery'
 import type { RehearsalScenario } from '@/lib/mainline/rehearsal/classmates'
 import type { RehearsalEvidence, RehearsalReport } from '@/lib/mainline/rehearsal/types'

@@ -51,6 +51,8 @@ export default function ScaleStage({
       }}
     >
       <div
+        data-projection-stage="true"
+        data-stage-design-size={`${baseWidth}x${baseHeight}`}
         style={{
           position: 'absolute',
           top: '50%',

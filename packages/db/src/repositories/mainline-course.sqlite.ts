@@ -9,7 +9,7 @@
  * 仓储保持不透明（unknown），由调用方 cast。
  */
 
-import { eq, desc } from 'drizzle-orm'
+import { eq, desc, sql } from 'drizzle-orm'
 import type { DbClient } from '../client.js'
 import { coursesV2 } from '../schema.js'
 
@@ -22,11 +22,14 @@ export interface MainlineCourseRecord {
   payload: unknown
   /** 首次生成时间(ms);save 时由仓储写入,读取时回传 */
   createdAt?: number
+  /** 每次成功写入都会单调递增，可作为整课持久化 CAS 版本。 */
+  updatedAt?: number
 }
 
 export interface MainlineCourseRepository {
   find(id: string): Promise<MainlineCourseRecord | undefined>
   save(record: MainlineCourseRecord): Promise<void>
+  saveIfUnchanged(record: MainlineCourseRecord, expectedUpdatedAt: number): Promise<boolean>
   list(): Promise<MainlineCourseRecord[]>
   delete(id: string): Promise<void>
 }
@@ -60,9 +63,31 @@ export function createMainlineCourseRepository(db: DbClient): MainlineCourseRepo
         })
         .onConflictDoUpdate({
           target: coursesV2.id,
-          set: { title: record.title, status: record.status, data, updatedAt: now },
+          set: { title: record.title, status: record.status, data, updatedAt: nextUpdatedAt(now) },
         })
         .run()
+    },
+
+    async saveIfUnchanged(record, expectedUpdatedAt): Promise<boolean> {
+      const now = Date.now()
+      const data = JSON.stringify({ schemaKind: SCHEMA_KIND, payload: record.payload } satisfies Envelope)
+      const result = db.insert(coursesV2)
+        .values({
+          id: record.id,
+          title: record.title,
+          origin: 'kp-selection',
+          status: record.status,
+          data,
+          createdAt: now,
+          updatedAt: now,
+        })
+        .onConflictDoUpdate({
+          target: coursesV2.id,
+          set: { title: record.title, status: record.status, data, updatedAt: nextUpdatedAt(now) },
+          where: eq(coursesV2.updatedAt, expectedUpdatedAt),
+        })
+        .run()
+      return result.changes === 1
     },
 
     async list(): Promise<MainlineCourseRecord[]> {
@@ -76,7 +101,11 @@ export function createMainlineCourseRepository(db: DbClient): MainlineCourseRepo
   }
 }
 
-function toRecord(row: { id: string; title: string; status: string; data: string; createdAt: number }): MainlineCourseRecord | undefined {
+function nextUpdatedAt(now: number) {
+  return sql`CASE WHEN ${coursesV2.updatedAt} >= ${now} THEN ${coursesV2.updatedAt} + 1 ELSE ${now} END`
+}
+
+function toRecord(row: { id: string; title: string; status: string; data: string; createdAt: number; updatedAt: number }): MainlineCourseRecord | undefined {
   let parsed: unknown
   try {
     parsed = JSON.parse(row.data)
@@ -84,7 +113,7 @@ function toRecord(row: { id: string; title: string; status: string; data: string
     return undefined
   }
   if (!isEnvelope(parsed)) return undefined
-  return { id: row.id, title: row.title, status: row.status, payload: parsed.payload, createdAt: row.createdAt }
+  return { id: row.id, title: row.title, status: row.status, payload: parsed.payload, createdAt: row.createdAt, updatedAt: row.updatedAt }
 }
 
 function isEnvelope(value: unknown): value is Envelope {

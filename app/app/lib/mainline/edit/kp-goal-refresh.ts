@@ -9,6 +9,7 @@
 import type { LessonGoal, MainlineCourse } from '../domain.js'
 import { selectObservableObjective, successSignalFromObjective } from '../learning-goal-contract.js'
 import { auditCourseReleaseReadiness } from '../readiness.js'
+import { invalidateCourseReviewArtifacts } from '../revision-invalidation.js'
 import type { QualityIssue } from '../quality-gates.js'
 import type { KpGoalMetadata } from './kp-goal-loader.js'
 
@@ -99,11 +100,11 @@ export function refreshCourseKpGoals(
     return { ...fragment, goalId: goalIdByKp.get(fragment.kpId)! }
   })
 
-  const candidate: MainlineCourse = {
+  const candidate: MainlineCourse = invalidateCourseReviewArtifacts({
     ...course,
     goals: [...course.goals, ...createdGoals],
     learningFragments,
-  }
+  })
   const readiness = auditCourseReleaseReadiness(candidate)
   return {
     course: {

@@ -43,6 +43,21 @@ describe('MainlineCourseRepository', () => {
     expect(found?.title).toBe('静夜思')
     expect(found?.status).toBe('passed')
     expect(found?.payload).toEqual(RECORD.payload)
+    expect(found?.updatedAt).toEqual(expect.any(Number))
+  })
+
+  it('updates only when the persisted version still matches', async () => {
+    await repo.save(RECORD)
+    const initial = await repo.find(RECORD.id)
+    const expectedUpdatedAt = initial!.updatedAt!
+
+    await expect(repo.saveIfUnchanged({ ...RECORD, title: '新标题' }, expectedUpdatedAt)).resolves.toBe(true)
+    const updated = await repo.find(RECORD.id)
+    expect(updated?.title).toBe('新标题')
+    expect(updated?.updatedAt).toBeGreaterThan(expectedUpdatedAt)
+
+    await expect(repo.saveIfUnchanged({ ...RECORD, title: '过期写入' }, expectedUpdatedAt)).resolves.toBe(false)
+    expect((await repo.find(RECORD.id))?.title).toBe('新标题')
   })
 
   it('returns undefined for unknown id', async () => {

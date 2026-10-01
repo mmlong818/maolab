@@ -1,7 +1,7 @@
 'use client'
 
-import type { LessonScene, MainlineCourse, ScenePresentation } from '@/lib/mainline'
-import { COURSE_STRUCTURE_START_SLOT, COURSE_STRUCTURE_SUMMARY_SLOT, courseStructureItemsFromScene } from '@/lib/mainline'
+import type { LessonScene, MainlineCourse, ScenePresentation } from '@/lib/mainline/client'
+import { COURSE_STRUCTURE_START_SLOT, COURSE_STRUCTURE_SUMMARY_SLOT, courseStructureItemsFromScene } from '@/lib/mainline/client'
 import { fitType, projectionFontSize, TYPE_SCALE } from '@/lib/mainline/presentation/tokens'
 import { toRgba } from '@/lib/mainline/presentation/color'
 import { subjectLabel } from '../workbench/labels'

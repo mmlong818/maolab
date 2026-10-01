@@ -1,7 +1,7 @@
 'use client'
 
-import type { LessonScene, MainlineCourse } from '@/lib/mainline'
-import { COURSE_STRUCTURE_VARIANT, courseDisplayTitle, IMAGE_SCENE_TYPES, isPageContentScene, PRESENTATION_VARIANT_SLOT, RECAP_TRANSFER_VARIANT, presentationFor, stagedPromptEvidenceKind } from '@/lib/mainline'
+import type { LessonScene, MainlineCourse } from '@/lib/mainline/client'
+import { COURSE_STRUCTURE_VARIANT, courseDisplayTitle, IMAGE_SCENE_TYPES, isPageContentScene, PRESENTATION_VARIANT_SLOT, RECAP_TRANSFER_VARIANT, presentationFor, stagedPromptEvidenceKind } from '@/lib/mainline/client'
 import { AiCollabView } from './scene-views/ai-collab'
 import { AiVerifyView } from './scene-views/ai-scenes'
 import { ConceptBuildView } from './scene-views/concept-build'

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { CheckCircle2, CircleAlert, CircleX, LocateFixed, RefreshCw, Sparkles } from 'lucide-react'
-import type { QualityIssue, QualitySummary } from '@/lib/mainline'
+import type { QualityIssue, QualitySummary } from '@/lib/mainline/client'
 import {
   EXAM_PREP_OPENING_PROGRESSION_ISSUE_MESSAGE,
   KP_GOAL_TRACE_ISSUE_MESSAGE,

@@ -4,7 +4,9 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Clapperboard, LoaderCircle, Play } from 'lucide-react'
-import { courseDisplayTitle, courseReleaseReason, type CourseReleaseReadiness, type MainlineCourse } from '@/lib/mainline'
+import type { MainlineCourse } from '@/lib/mainline/domain'
+import { courseDisplayTitle } from '@/lib/mainline/presentation/course-display-title'
+import type { CourseReleaseReadiness } from '@/lib/mainline/readiness'
 
 interface TopBarProps {
   course: MainlineCourse
@@ -12,7 +14,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ course, readiness }: TopBarProps) {
-  const reason = courseReleaseReason(readiness)
+  const reason = releaseReason(readiness)
   // 截图型导出逐页渲染真实课件,一门课约 40-90 秒——没有进行中反馈教师会以为
   // 点击失败。fetch 到 blob 再触发保存,期间按钮禁用并显示进度文案。
   const [exporting, setExporting] = useState(false)
@@ -96,6 +98,17 @@ export function TopBar({ course, readiness }: TopBarProps) {
       )}
     </header>
   )
+}
+
+function releaseReason(readiness: CourseReleaseReadiness): string | undefined {
+  if (readiness.ready) return undefined
+  if (readiness.workflowStatus === 'planning') return '课程结构还没有确认。'
+  if (readiness.workflowStatus === 'plan-approved') return '课程结构已经确认，投影片正文尚未生成。'
+  if (readiness.workflowStatus === 'generating') return '投影片正在逐页生成。'
+  if (readiness.workflowStatus === 'review') return '投影片已经生成，需先完成备课检查并设为课堂版本。'
+  if (readiness.status === 'draft') return '课程还是骨架草稿，需先完成内容填充才能进行此操作。'
+  if (readiness.stalePassed) return `课程上次记录为已通过，但当前质量规则发现 ${readiness.blockingCount} 个阻断项，请先在备课中修正。`
+  return `课程未通过当前质量检查（${readiness.blockingCount} 个阻断项），请先在备课中修正。`
 }
 
 function StatusBadge({ readiness }: { readiness: CourseReleaseReadiness }) {

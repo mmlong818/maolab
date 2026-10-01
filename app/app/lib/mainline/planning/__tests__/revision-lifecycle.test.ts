@@ -90,6 +90,8 @@ describe('page-first revision lifecycle', () => {
       pageId: page.id,
       learningAction: '  先判断，再说明依据。 ',
       newInformation: ' 呈现一个可回答的学习问题。 ',
+      visualReason: ' 不使用无教学作用的装饰图。 ',
+      teachingMove: ' 先收集判断，再追问依据。 ',
     }])
 
     expect(next.planning?.pages[0]).toMatchObject({
@@ -97,9 +99,32 @@ describe('page-first revision lifecycle', () => {
       purpose: 'orient',
       learningAction: '先判断，再说明依据。',
       newInformation: '呈现一个可回答的学习问题。',
+      visualSpec: { reason: '不使用无教学作用的装饰图。' },
+      teacherCompanion: { teachingMove: '先收集判断，再追问依据。' },
     })
     expect(original.planning?.pages[0]?.learningAction).toBe(page.learningAction)
     expect(() => saveDraftPlan(course('plan-approved'), [])).toThrow(/不能原地修改/)
+  })
+
+  it('rejects an empty visual purpose for a page that requires an image', () => {
+    const visualCourse = course('planning')
+    visualCourse.planning!.pages[0] = {
+      ...visualCourse.planning!.pages[0]!,
+      visualSpec: {
+        required: true,
+        form: 'instructional-image',
+        reason: '帮助学生观察关键差异。',
+        sourceAssetPolicy: 'grounded-or-generate',
+      },
+    }
+
+    expect(() => saveDraftPlan(visualCourse, [{
+      pageId: page.id,
+      learningAction: page.learningAction,
+      newInformation: page.newInformation,
+      visualReason: '   ',
+      teachingMove: page.teacherCompanion.teachingMove,
+    }])).toThrow(/必须说明图像的教学作用/)
   })
 
   it('approves a valid plan without generating or mutating page content', () => {
@@ -111,6 +136,10 @@ describe('page-first revision lifecycle', () => {
 
   it('creates a new planning record and leaves the classroom version unchanged', () => {
     const original = course('ready')
+    original.generationSession = { id: 'old-session' } as NonNullable<MainlineCourse['generationSession']>
+    original.pageRenderEvidence = [{ id: 'old-render' }] as NonNullable<MainlineCourse['pageRenderEvidence']>
+    original.generationCourseAudit = { id: 'old-audit' } as NonNullable<MainlineCourse['generationCourseAudit']>
+    original.teacherAcceptance = { courseId: original.id } as NonNullable<MainlineCourse['teacherAcceptance']>
     const next = forkCourseForReplanning(original, 'course-2')
 
     expect(original).toMatchObject({ id: 'course-1', qualityStatus: 'passed', planning: { status: 'ready' } })
@@ -127,15 +156,37 @@ describe('page-first revision lifecycle', () => {
     })
     expect(next.pageContent).toBeUndefined()
     expect(next.factAudit).toBeUndefined()
+    expect(next.generationSession).toBeUndefined()
+    expect(next.pageRenderEvidence).toBeUndefined()
+    expect(next.generationCourseAudit).toBeUndefined()
+    expect(next.teacherAcceptance).toBeUndefined()
   })
 
-  it('only promotes reviewed content that is still bound to the current plan', () => {
-    const next = markPageContentReady(course('review'))
-    expect(next).toMatchObject({ qualityStatus: 'passed', planning: { status: 'ready' } })
+  it('refuses to promote reviewed content without machine audit and teacher signatures', () => {
+    expect(() => markPageContentReady(course('review'))).toThrow(/机器审计和教师验收/)
 
     const stale = course('review')
     stale.pageContent = { ...stale.pageContent!, planRevisionId: 'old-plan' }
-    expect(() => markPageContentReady(stale)).toThrow(/页面正文未通过/)
+    expect(() => markPageContentReady(stale)).toThrow(/机器审计和教师验收|页面正文未通过/)
+  })
+
+  it('refuses to promote a version whose teaching-quality review is stale or absent', () => {
+    const reviewed = course('review')
+    reviewed.generationSession = { status: 'ready' } as NonNullable<MainlineCourse['generationSession']>
+    reviewed.generationCourseAudit = {
+      id: 'audit-1', courseId: reviewed.id, planRevisionId: reviewed.planning!.planRevisionId,
+      contentRevisionId: reviewed.pageContent!.contentRevisionId,
+    } as NonNullable<MainlineCourse['generationCourseAudit']>
+    reviewed.teacherAcceptance = {
+      schemaVersion: 'mainline-teacher-acceptance-v1', courseId: reviewed.id, planRevisionId: reviewed.planning!.planRevisionId, courseAuditId: 'audit-1',
+      pages: [], finalSignature: 'signature-1', acceptedAt: '2026-09-22T00:00:00.000Z',
+    } as NonNullable<MainlineCourse['teacherAcceptance']>
+    reviewed.teachingQualityAudit = {
+      status: 'passed', courseId: reviewed.id, planRevisionId: reviewed.planning!.planRevisionId,
+      contentRevisionId: 'old-content', generationCourseAuditId: 'audit-1',
+    } as NonNullable<MainlineCourse['teachingQualityAudit']>
+
+    expect(() => markPageContentReady(reviewed)).toThrow(/AI 教学审查通过记录/)
   })
 
   it('marks the replaced course without changing its teaching content', () => {

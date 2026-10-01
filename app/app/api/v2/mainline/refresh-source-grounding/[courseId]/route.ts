@@ -11,14 +11,15 @@ import {
   sourceMaterialNeedsGroundingRefresh,
 } from '../../../../../lib/mainline/edit/source-grounding-refresh.js'
 import { summarizeQuality } from '../../../../../lib/mainline/quality-gates.js'
-import { findMainlineCourse, saveMainlineCourse } from '../../../../../lib/mainline/store.js'
+import { findMainlineCourseSnapshot, saveMainlineCourseIfUnchanged } from '../../../../../lib/mainline/store.js'
 
 export const runtime = 'nodejs'
 
 export async function POST(_req: NextRequest, ctx: { params: Promise<{ courseId: string }> }) {
   const { courseId } = await ctx.params
-  const course = await findMainlineCourse(courseId)
-  if (!course) return NextResponse.json({ error: 'course not found' }, { status: 404 })
+  const snapshot = await findMainlineCourseSnapshot(courseId)
+  if (!snapshot) return NextResponse.json({ error: 'course not found' }, { status: 404 })
+  const { course, updatedAt } = snapshot
   if (!course.sourceMaterial.some(sourceMaterialNeedsGroundingRefresh)) {
     return NextResponse.json({ error: '当前课程没有需要刷新的教材依据。' }, { status: 409 })
   }
@@ -32,7 +33,9 @@ export async function POST(_req: NextRequest, ctx: { params: Promise<{ courseId:
     }, { status: 409 })
   }
 
-  await saveMainlineCourse(result.course)
+  if (!await saveMainlineCourseIfUnchanged(result.course, updatedAt)) {
+    return NextResponse.json({ error: 'course changed while source grounding was being refreshed; no changes were saved', code: 'COURSE_CONFLICT' }, { status: 409 })
+  }
   return NextResponse.json({
     ok: true,
     courseId,

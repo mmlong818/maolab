@@ -31,6 +31,6 @@ export interface CoursePageContentState {
   courseId: string
   planRevisionId: string
   contentRevisionId: string
-  status: 'review'
+  status: 'generating' | 'review'
   pages: GeneratedLessonPage[]
 }

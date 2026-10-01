@@ -2,6 +2,8 @@ import { notFound, redirect } from 'next/navigation'
 import { auditMainlineCourse, summarizeQuality, type MainlineCourse } from '@/lib/mainline'
 import { findMainlineCourse } from '@/lib/mainline/store'
 import { buildPrepBriefForCourse, type PrepBrief } from '@/lib/mainline/prep-brief'
+import { teachingQualityInputHash } from '@/lib/mainline/teaching-quality-audit'
+import { courseReleaseReadinessFromIssues } from '@/lib/mainline/readiness'
 import { PrepWorkbench } from '@/components/mainline/workbench/PrepWorkbench'
 
 export const runtime = 'nodejs'
@@ -65,6 +67,8 @@ export default async function MainlinePrepPage({
       prepBrief={prepBrief}
       prepBriefError={prepBriefError}
       fragmentLabels={fragmentLabels}
+      currentTeachingQualityInputHash={teachingQualityInputHash(course)}
+      initialReadiness={courseReleaseReadinessFromIssues(course, issues)}
       {...(requestedSceneId ? { initialSelectedSceneId: requestedSceneId } : {})}
       {...(requestedMisconception ? { initialRequestedMisconception: requestedMisconception } : {})}
     />

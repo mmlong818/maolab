@@ -1,6 +1,6 @@
 'use client'
 
-import type { LessonScene, MainlineCourse, ScenePresentation } from '@/lib/mainline'
+import type { LessonScene, MainlineCourse, ScenePresentation } from '@/lib/mainline/client'
 import { courseDisplayTitle, coverDisplayTitle } from '@/lib/mainline/presentation/course-display-title'
 import { mixOklch, toRgba } from '@/lib/mainline/presentation/color'
 import { fitType, TYPE_SCALE } from '@/lib/mainline/presentation/tokens'

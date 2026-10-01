@@ -2,7 +2,7 @@
 
 import { CheckCircle2, Library, RotateCcw, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import type { ChromeColors } from '@/lib/mainline'
+import type { ChromeColors } from '@/lib/mainline/client'
 
 interface LessonCompletionProps {
   ready: boolean

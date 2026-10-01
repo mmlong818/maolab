@@ -1,4 +1,6 @@
 import type { MainlineCourse, MainlineCourseRevision } from '../domain.js'
+import { generationInputHash } from '../generation-session.js'
+import { teachingQualityInputHash } from '../teaching-quality-audit.js'
 import { assertValidCoursePageContentState } from './page-content-audit.js'
 import { assertValidCoursePlanningState } from './page-audit.js'
 
@@ -6,6 +8,8 @@ export interface PlanPageUpdate {
   pageId: string
   learningAction: string
   newInformation: string
+  visualReason?: string | undefined
+  teachingMove?: string | undefined
 }
 
 export function saveDraftPlan(
@@ -31,7 +35,23 @@ export function saveDraftPlan(
       const learningAction = update.learningAction.trim()
       const newInformation = update.newInformation.trim()
       if (!learningAction || !newInformation) throw new Error(`第 ${page.order} 页的学习任务和新增内容不能为空。`)
-      return { ...page, learningAction, newInformation }
+      const visualReason = update.visualReason?.trim()
+      const teachingMove = update.teachingMove?.trim()
+      if (page.visualSpec.required && update.visualReason !== undefined && !visualReason) {
+        throw new Error(`第 ${page.order} 页需要图像，必须说明图像的教学作用。`)
+      }
+      if (update.teachingMove !== undefined && !teachingMove) {
+        throw new Error(`第 ${page.order} 页的讲课重点不能为空。`)
+      }
+      return {
+        ...page,
+        learningAction,
+        newInformation,
+        visualSpec: update.visualReason === undefined ? page.visualSpec : { ...page.visualSpec, reason: visualReason ?? '' },
+        teacherCompanion: update.teachingMove === undefined
+          ? page.teacherCompanion
+          : { ...page.teacherCompanion, teachingMove: teachingMove ?? '' },
+      }
     }),
   }
   assertValidCoursePlanningState(nextPlanning)
@@ -70,6 +90,52 @@ export function markPageContentReady(course: MainlineCourse): MainlineCourse {
     throw new Error(`只有完成生成并处于备课检查状态的课程可以设为课堂版本，当前状态为 ${planning.status}。`)
   }
   if (!course.pageContent) throw new Error('课程缺少已生成的投影片正文。')
+  if (course.generationSession?.status !== 'ready') {
+    throw new Error('投影片尚未完成整课机器审计和教师验收。')
+  }
+  const audit = course.generationCourseAudit
+  const teachingQualityAudit = course.teachingQualityAudit
+  const acceptance = course.teacherAcceptance
+  if (
+    !audit
+    || audit.courseId !== course.id
+    || audit.planRevisionId !== planning.planRevisionId
+    || audit.contentRevisionId !== course.pageContent.contentRevisionId
+  ) {
+    throw new Error('当前版本缺少匹配的整课机器审计签名。')
+  }
+  if (
+    !teachingQualityAudit
+    || teachingQualityAudit.status !== 'passed'
+    || teachingQualityAudit.courseId !== course.id
+    || teachingQualityAudit.planRevisionId !== audit.planRevisionId
+    || teachingQualityAudit.contentRevisionId !== audit.contentRevisionId
+    || teachingQualityAudit.generationCourseAuditId !== audit.id
+    || !teachingQualityAudit.inputHash
+    || teachingQualityAudit.inputHash !== teachingQualityInputHash(course)
+  ) {
+    throw new Error('当前版本缺少与整课机器审计匹配的 AI 教学审查通过记录。')
+  }
+  if (
+    !acceptance?.finalSignature
+    || !acceptance.acceptedAt
+    || acceptance.courseId !== course.id
+    || acceptance.planRevisionId !== audit.planRevisionId
+    || acceptance.courseAuditId !== audit.id
+    || !hasCurrentAcceptedPages(course)
+    || acceptance.finalSignature !== generationInputHash({
+      courseId: course.id,
+      planRevisionId: planning.planRevisionId,
+      courseAuditId: audit.id,
+      pages: acceptance.pages.map(item => ({
+        pageId: item.pageId,
+        contentRevisionId: item.contentRevisionId,
+        renderEvidenceId: item.renderEvidenceId,
+      })),
+    })
+  ) {
+    throw new Error('当前版本缺少教师最终验收签名。')
+  }
   assertValidCoursePageContentState(planning, course.pageContent, course.sourceMaterial)
   const nextCourse: MainlineCourse = {
     ...course,
@@ -77,6 +143,21 @@ export function markPageContentReady(course: MainlineCourse): MainlineCourse {
     qualityStatus: 'passed',
   }
   return nextCourse
+}
+
+function hasCurrentAcceptedPages(course: MainlineCourse): boolean {
+  const jobs = course.generationSession?.jobs ?? []
+  const accepted = new Map(course.teacherAcceptance?.pages.map(page => [page.pageId, page]) ?? [])
+  return accepted.size === jobs.length && jobs.every(job => {
+    const checkpoint = job.checkpoint
+    const page = accepted.get(job.pageId)
+    return Boolean(
+      checkpoint
+      && page
+      && page.contentRevisionId === checkpoint.contentRevisionId
+      && page.renderEvidenceId === checkpoint.renderEvidenceId,
+    )
+  })
 }
 
 export function forkCourseForReplanning(course: MainlineCourse, newCourseId: string): MainlineCourse {
@@ -116,6 +197,11 @@ export function forkCourseForReplanning(course: MainlineCourse, newCourseId: str
   }
   delete nextCourse.pageContent
   delete nextCourse.factAudit
+  delete nextCourse.generationSession
+  delete nextCourse.pageRenderEvidence
+  delete nextCourse.generationCourseAudit
+  delete nextCourse.teachingQualityAudit
+  delete nextCourse.teacherAcceptance
   return nextCourse
 }
 

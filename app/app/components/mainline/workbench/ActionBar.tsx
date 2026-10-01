@@ -13,7 +13,7 @@
 import { useState, type CSSProperties } from 'react'
 import type { KnowledgeType } from '@maolab/shared-types'
 import { FilePenLine, PenLine, RefreshCw, ShieldCheck } from 'lucide-react'
-import { sceneExecutor, type Executor, type LearningFragment, type LessonScene, type SceneType } from '@/lib/mainline'
+import { sceneExecutor, type Executor, type LearningFragment, type LessonScene, type SceneType } from '@/lib/mainline/client'
 import type { WorkbenchBusy } from './useWorkbenchActions'
 import { EXECUTOR_LABEL, EXECUTOR_OPTIONS, INSERTABLE_SCENE_TYPE_OPTIONS, KNOWLEDGE_TYPE_LABEL, KNOWLEDGE_TYPE_OPTIONS, SCENE_TYPE_LABEL } from './labels'
 

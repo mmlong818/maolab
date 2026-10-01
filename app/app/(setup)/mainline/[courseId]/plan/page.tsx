@@ -23,6 +23,7 @@ export default async function MainlinePlanPage({ params }: { params: Promise<{ c
       gradeBand={course.gradeBand}
       revisionNo={course.revision?.revisionNo ?? 1}
       planning={course.planning}
+      {...(course.generationSession ? { generationSession: course.generationSession } : {})}
     />
   )
 }

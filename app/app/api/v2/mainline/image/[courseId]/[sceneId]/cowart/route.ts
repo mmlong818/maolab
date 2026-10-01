@@ -10,6 +10,9 @@ import {
   parseCowartAnnotationDataUrl,
 } from '../../../../../../../lib/mainline/image-edit/cowart.js'
 import { findMainlineCourse, saveMainlineCourse } from '../../../../../../../lib/mainline/store.js'
+import { auditGeneratedPageFacts } from '../../../../../../../lib/mainline/planning/page-content-page-audit.js'
+import { applyGeneratedPageImageRevision } from '../../../../../../../lib/mainline/page-image-revision.js'
+import { courseImageTarget } from '../../../../../../../lib/mainline/page-image-target.js'
 
 export const runtime = 'nodejs'
 export const maxDuration = 180
@@ -19,8 +22,9 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ courseId: 
   const course = await findMainlineCourse(courseId)
   if (!course) return NextResponse.json({ error: '课程不存在。' }, { status: 404 })
 
-  const scene = course.scenes.find(item => item.id === sceneId)
-  if (!scene?.imageUrl) return NextResponse.json({ error: '这一幕没有可修改的图片。' }, { status: 404 })
+  const target = courseImageTarget(course, sceneId)
+  const scene = target?.scene
+  if (!target || !scene?.imageUrl) return NextResponse.json({ error: '这一页没有可修改的图片。' }, { status: 404 })
 
   const apiKey = process.env.OPENAI_IMAGE_API_KEY?.trim()
   if (!apiKey) {
@@ -55,12 +59,18 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ courseId: 
     )
 
     const nextScene = { ...scene, imageUrl: generated.url }
-    const nextCourse = {
-      ...course,
-      scenes: course.scenes.map(item => item.id === sceneId ? nextScene : item),
-    }
+    const nextCourse = target.kind === 'page'
+      ? await applyGeneratedPageImageRevision(course, target.page.pageId, {
+          imageUrl: generated.url,
+          ...(target.page.imagePrompt ? { imagePrompt: target.page.imagePrompt } : {}),
+          ...(target.page.imageAspect ? { imageAspect: target.page.imageAspect } : {}),
+        }, { audit: auditGeneratedPageFacts })
+      : {
+          ...course,
+          scenes: course.scenes.map(item => item.id === sceneId ? nextScene : item),
+        }
     await saveMainlineCourse(nextCourse)
-    return NextResponse.json({ ok: true, sceneId, imageUrl: generated.url })
+    return NextResponse.json({ ok: true, sceneId, targetKind: target.kind, imageUrl: generated.url })
   } catch (error) {
     console.error('[mainline-cowart-edit]', error)
     return NextResponse.json({ error: '修改版图片生成失败，请检查图片服务后重试。' }, { status: 500 })

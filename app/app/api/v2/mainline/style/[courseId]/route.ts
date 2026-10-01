@@ -10,6 +10,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { resolveStylePackById } from '../../../../../lib/mainline/presentation/style-packs.js'
+import { invalidateCourseReviewArtifacts } from '../../../../../lib/mainline/revision-invalidation.js'
 import { findMainlineCourse, saveMainlineCourse } from '../../../../../lib/mainline/store.js'
 import type { MainlineCourse } from '../../../../../lib/mainline/domain.js'
 
@@ -31,11 +32,23 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ courseId:
     return NextResponse.json({ error: `unknown stylePackId: ${body.stylePackId}` }, { status: 400 })
   }
 
+  const requestedStylePackId = body.stylePackId ?? undefined
+  if (course.stylePackId === requestedStylePackId) {
+    return NextResponse.json({ ok: true, courseId, stylePackId: body.stylePackId, invalidated: false })
+  }
+
   const { stylePackId: _dropped, ...rest } = course
-  const next: MainlineCourse = body.stylePackId === null
+  const styled: MainlineCourse = body.stylePackId === null
     ? rest
     : { ...rest, stylePackId: body.stylePackId }
+  const next = invalidateCourseReviewArtifacts(styled)
 
   await saveMainlineCourse(next)
-  return NextResponse.json({ ok: true, courseId, stylePackId: body.stylePackId })
+  return NextResponse.json({
+    ok: true,
+    courseId,
+    stylePackId: body.stylePackId,
+    invalidated: true,
+    generationStatus: next.generationSession?.status,
+  })
 }

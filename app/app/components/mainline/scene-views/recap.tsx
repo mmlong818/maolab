@@ -1,6 +1,6 @@
 'use client'
 
-import { spriteSideOf, type LessonScene, type MainlineCourse, type ScenePresentation } from '@/lib/mainline'
+import { spriteSideOf, type LessonScene, type MainlineCourse, type ScenePresentation } from '@/lib/mainline/client'
 import { toRgba } from '@/lib/mainline/presentation/color'
 import { recapTemplateForScene } from '@/lib/mainline/recap-template'
 import { fitType, TYPE_SCALE } from '@/lib/mainline/presentation/tokens'

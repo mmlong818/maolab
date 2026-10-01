@@ -3,7 +3,9 @@
 /** CenterColumn · 中栏:预览 + 幕/片段操作条 + 行内编辑表单 + 底部 filmstrip(v5 M1 WP2)。 */
 import { useEffect, useState } from 'react'
 import type { KnowledgeType } from '@maolab/shared-types'
-import { lessonPresentationPages, presentationScene, type Executor, type MainlineCourse, type QualityIssue, type SceneType } from '@/lib/mainline'
+import type { Executor, MainlineCourse, SceneType } from '@/lib/mainline/domain'
+import type { QualityIssue } from '@/lib/mainline/quality-gates'
+import { lessonPresentationPages, presentationScene } from '@/lib/mainline/presentation/presentation-pages'
 import type { ScenePatchInput, WorkbenchBusy } from './useWorkbenchActions'
 import { PreviewStage } from './PreviewStage'
 import { ActionBar } from './ActionBar'

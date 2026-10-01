@@ -13,7 +13,7 @@ import {
   type LessonPhase,
   type OpeningConfidence,
   type OpeningResponseMode,
-} from '@/lib/mainline'
+} from '@/lib/mainline/client'
 
 interface OpeningLearningCheckInProps {
   mode: 'capture' | 'review'

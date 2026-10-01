@@ -3,6 +3,7 @@ import type { FactAuditRecord, MainlineCourse } from '../domain.js'
 import { callLLMJson } from '../../v2/llm.js'
 import { hasCheckablePageMaterial, visiblePageText } from './page-content-audit.js'
 import { sourceReferenceFor } from './source-reference.js'
+import { TeachingQualityReviewOutputSchema, TEACHING_QUALITY_REVIEW_PROMPT, teachingQualityReviewPayload, teachingQualityStandards, type TeachingQualityReviewOutput } from '../teaching-quality-audit.js'
 
 const ReviewIssueSchema = z.object({
   pageIds: z.array(z.string().trim().min(1)).min(1).max(6),
@@ -30,7 +31,7 @@ const CoveredGoalSchema = z.object({
 const UncoveredGoalSchema = z.object({
   goalId: z.string().trim().min(1),
   status: z.enum(['missing', 'misaligned']),
-  pageIds: z.array(z.string().trim().min(1)).max(8),
+  pageIds: z.array(z.string().trim().min(1)).min(1).max(8),
   evidence: z.string().trim().min(2).max(400),
   missingElement: z.string().trim().min(2).max(240),
 }).strict()
@@ -40,6 +41,7 @@ const GoalCoverageSchema = z.discriminatedUnion('status', [CoveredGoalSchema, Un
 const StrictPageContentFactAuditOutputSchema = z.object({
   issues: z.array(ReviewIssueSchema).max(40),
   goalCoverage: z.array(GoalCoverageSchema).max(16),
+  teachingQualityReview: TeachingQualityReviewOutputSchema.optional(),
 }).strict()
 
 export const PageContentFactAuditOutputSchema = z.preprocess(
@@ -54,6 +56,7 @@ export interface PageContentFactAuditLLMParams {
   user: string
   schema: z.ZodSchema
   temperature?: number
+  maxAttempts?: number
 }
 
 export type PageContentFactAuditLLMCall = (params: PageContentFactAuditLLMParams) => Promise<unknown>
@@ -61,6 +64,8 @@ export type PageContentFactAuditLLMCall = (params: PageContentFactAuditLLMParams
 export interface PageContentFactAuditResult {
   course: MainlineCourse
   record: FactAuditRecord
+  /** 与事实核查共用同一次模型调用的教学质量审查原始结果。 */
+  teachingQualityReview?: TeachingQualityReviewOutput
 }
 
 const defaultLLM: PageContentFactAuditLLMCall = params => callLLMJson({
@@ -69,7 +74,7 @@ const defaultLLM: PageContentFactAuditLLMCall = params => callLLMJson({
   schema: params.schema,
   temperature: params.temperature ?? 0.1,
   timeoutSec: 120,
-  maxAttempts: 3,
+  maxAttempts: params.maxAttempts ?? 3,
 })
 
 const REVIEW_SYSTEM_PROMPT = [
@@ -90,15 +95,18 @@ const REVIEW_SYSTEM_PROMPT = [
   '对于自己不能可靠确认的历史、法律、地理、科学史或作品细节，不得猜测为正确，应判 blocking 并要求补权威来源。',
   '专门检查“完全相同、总是、必然、唯一、不能”等绝对化断言是否有足够依据。分形内容必须区分严格数学分形的精确自相似与自然形态的近似或统计自相似；把所有自相似都定义为局部与整体完全相同，必须判 blocking。',
   'blocking 表示不能进入课堂；warning 只用于不影响正确理解的轻微措辞问题。',
-  'pageIds 必须使用输入中真实存在的页面 ID。goalCoverage 必须逐条覆盖输入中的全部目标，不能遗漏。',
-  '固定输出格式：{"issues":[{"pageIds":["页面ID"],"severity":"blocking","category":"factual-error","claim":"问题断言","evidence":"核查依据","fix":"修正动作"}],"goalCoverage":[{"goalId":"目标ID","status":"covered","pageIds":["页面ID"],"evidence":"教学和练习覆盖证据"}]}。没有问题时 issues 仍必须输出空数组。',
+  'issues 和 goalCoverage 的 pageIds 必须使用输入中真实存在的页面 ID，且一个条目内不得重复或混入未知 ID。issues.evidence 和 goalCoverage.evidence 必须是所列学生页面 studentVisibleText 的逐字摘录；不得使用教师讲稿、权威来源摘录、概括或虚构文本充当报告证据。',
+  'goalCoverage 必须逐条且仅一次覆盖输入中的全部目标，不能遗漏、重复或编造目标 ID。每个目标的 covered 页面必须与该目标的知识点绑定；不得把所有目标压到同一张与目标无关的页面。missing 或 misaligned 也必须引用至少一张真实学生页面及其逐字 evidence。',
+  '固定输出格式：{"issues":[{"pageIds":["页面ID"],"severity":"blocking","category":"factual-error","claim":"问题断言","evidence":"学生页面原文","fix":"修正动作"}],"goalCoverage":[{"goalId":"目标ID","status":"covered","pageIds":["页面ID"],"evidence":"学生页面原文"}]}。没有问题时 issues 仍必须输出空数组。',
   '目标若判 missing 或 misaligned，必须额外输出 missingElement，明确指出缺少哪项讲解、练习或核对；evidence 不得同时声称该目标已经被讲解、练习和核对。',
+  TEACHING_QUALITY_REVIEW_PROMPT,
+  '在根对象额外输出 teachingQualityReview；它必须遵守其固定格式。',
   '只输出 schema 要求的 JSON，不要 markdown 或额外说明。',
 ].join('\n')
 
 export async function factAuditPageContentCourse(
   course: MainlineCourse,
-  options: { llm?: PageContentFactAuditLLMCall } = {},
+  options: { llm?: PageContentFactAuditLLMCall; maxAttempts?: number } = {},
 ): Promise<PageContentFactAuditResult> {
   const planning = course.planning
   const pageContent = course.pageContent
@@ -116,9 +124,10 @@ export async function factAuditPageContentCourse(
   try {
     const raw = await llm({
       system: REVIEW_SYSTEM_PROMPT,
-      user: reviewPayload(course),
+      user: combinedReviewPayload(course),
       schema: PageContentFactAuditOutputSchema,
       temperature: 0.1,
+      ...(options.maxAttempts === undefined ? {} : { maxAttempts: options.maxAttempts }),
     })
     output = PageContentFactAuditOutputSchema.parse(raw)
   } catch (error) {
@@ -144,16 +153,13 @@ export async function factAuditPageContentCourse(
 
   const issues: FactAuditRecord['issues'] = []
   for (const [index, item] of output.issues.entries()) {
-    const validPageIds = [...new Set(item.pageIds.filter(pageId => pageIdSet.has(pageId)))]
-    if (validPageIds.length === 0) {
-      issues.push({
-        id: `page-fact:${course.id}:invalid-target-${index + 1}`,
-        severity: 'blocking',
-        targetId: course.id,
-        message: `整课核查返回了不存在的页面：${item.pageIds.join('、')}`,
-        impact: '核查问题无法定位，不能确认课程已经安全。',
-        fix: '重新运行整课核查并只使用输入中的页面 ID。',
-      })
+    if (hasDuplicateIds(item.pageIds) || item.pageIds.some(pageId => !pageIdSet.has(pageId))) {
+      issues.push(auditIntegrityIssue(course.id, index, `整课核查的第 ${index + 1} 条问题含有未知、混合或重复的页面 ID。`, '重新运行整课核查并只使用一次输入中真实存在的页面 ID。'))
+      continue
+    }
+    const validPageIds = item.pageIds
+    if (!hasStudentPageEvidence(course, validPageIds, item.evidence)) {
+      issues.push(auditIntegrityIssue(course.id, index, `整课核查的第 ${index + 1} 条问题没有可在学生页面中逐字复核的 evidence。`, '重新运行整课核查，并让 evidence 只引用所列学生页面的 studentVisibleText。'))
       continue
     }
     if (
@@ -173,18 +179,45 @@ export async function factAuditPageContentCourse(
     })
   }
 
-  const coverageByGoal = new Map(output.goalCoverage.map(item => [item.goalId, item]))
+  const coverageByGoal = new Map<string, PageContentFactAuditOutput['goalCoverage'][number]>()
+  const invalidCoverageGoalIds = new Set<string>()
+  const goalIdSet = new Set(course.goals.map(goal => goal.id))
+  for (const [index, coverage] of output.goalCoverage.entries()) {
+    if (!goalIdSet.has(coverage.goalId)) {
+      issues.push(auditIntegrityIssue(course.id, output.issues.length + index, `整课核查返回了不存在的学习目标：${coverage.goalId}。`, '重新运行整课核查并只使用输入中的目标 ID。'))
+      continue
+    }
+    if (coverageByGoal.has(coverage.goalId)) {
+      invalidCoverageGoalIds.add(coverage.goalId)
+      issues.push(auditIntegrityIssue(course.id, output.issues.length + index, `整课核查重复覆盖了学习目标：${coverage.goalId}。`, '每个输入学习目标只能返回一条 goalCoverage。'))
+      continue
+    }
+    if (hasDuplicateIds(coverage.pageIds) || coverage.pageIds.some(pageId => !pageIdSet.has(pageId))) {
+      invalidCoverageGoalIds.add(coverage.goalId)
+      issues.push(auditIntegrityIssue(course.id, output.issues.length + index, `学习目标 ${coverage.goalId} 的覆盖页含有未知、混合或重复页面 ID。`, '重新运行整课核查，并只引用一次输入中真实存在的页面 ID。'))
+      continue
+    }
+    if (!hasStudentPageEvidence(course, coverage.pageIds, coverage.evidence)) {
+      invalidCoverageGoalIds.add(coverage.goalId)
+      issues.push(auditIntegrityIssue(course.id, output.issues.length + index, `学习目标 ${coverage.goalId} 没有可在学生页面中逐字复核的 coverage evidence。`, '重新运行整课核查，并让 evidence 只引用所列学生页面的 studentVisibleText。'))
+      continue
+    }
+    coverageByGoal.set(coverage.goalId, coverage)
+  }
   for (const goal of course.goals) {
     const coverage = coverageByGoal.get(goal.id)
-    if (coverage?.status === 'covered' && coverage.pageIds.some(pageId => pageIdSet.has(pageId))) continue
-    const validPageIds = coverage?.pageIds.filter(pageId => pageIdSet.has(pageId)) ?? []
+    if (invalidCoverageGoalIds.has(goal.id)) continue
+    if (coverage?.status === 'covered' && coveragePagesMatchGoal(course, goal.kpId, coverage.pageIds)) continue
+    const validPageIds = coverage?.pageIds ?? []
     issues.push({
       id: `page-fact:${goal.id}:goal-coverage`,
       severity: 'blocking',
       targetId: validPageIds[0] ?? course.id,
       ...(validPageIds.length > 1 ? { relatedTargetIds: validPageIds.slice(1) } : {}),
       message: `学习目标未被完整教学：${goal.statement}`,
-      impact: coverage?.evidence ?? '核查结果没有覆盖这一学习目标。',
+      impact: coverage?.status === 'covered'
+        ? '模型把该目标压到了与其知识点无绑定的学生页面，不能证明目标已被教学。'
+        : coverage?.evidence ?? '核查结果没有覆盖这一学习目标。',
       fix: '在正文教学页讲清该目标，并安排独立练习或核对；不能只在开场、结构页或总结页提及。',
     })
   }
@@ -208,7 +241,20 @@ export async function factAuditPageContentCourse(
       qualityStatus: fatalCount > 0 ? 'blocked' : planning.status === 'ready' ? 'passed' : 'draft',
     },
     record,
+    ...(output.teachingQualityReview ? { teachingQualityReview: output.teachingQualityReview } : {}),
   }
+}
+
+function teachingQualityStandardsForFactAudit(course: MainlineCourse) {
+  // 保持模型输入和落库审查使用同一组标准，避免模型引用未授权的标准 ID。
+  return teachingQualityStandards(course)
+}
+
+function combinedReviewPayload(course: MainlineCourse): string {
+  return JSON.stringify({
+    ...JSON.parse(reviewPayload(course)) as Record<string, unknown>,
+    teachingQualityReviewInput: JSON.parse(teachingQualityReviewPayload(course, teachingQualityStandardsForFactAudit(course))) as Record<string, unknown>,
+  })
 }
 
 function hasVisiblePageImage(course: MainlineCourse, pageId: string): boolean {
@@ -219,6 +265,34 @@ function hasVisiblePageImage(course: MainlineCourse, pageId: string): boolean {
     const source = course.sourceMaterial.find((candidate, index) => sourceReferenceFor(candidate, index) === reference)
     return source?.candidateResources?.some(resource => resource.assetUrl.trim()) ?? false
   }) ?? false
+}
+
+function hasDuplicateIds(ids: readonly string[]): boolean {
+  return new Set(ids).size !== ids.length
+}
+
+function hasStudentPageEvidence(course: MainlineCourse, pageIds: readonly string[], evidence: string): boolean {
+  const excerpt = evidence.trim()
+  return Boolean(excerpt) && pageIds.some(pageId => {
+    const page = course.pageContent?.pages.find(candidate => candidate.pageId === pageId)
+    return page ? visiblePageText(page.content).includes(excerpt) : false
+  })
+}
+
+function coveragePagesMatchGoal(course: MainlineCourse, kpId: string | undefined, pageIds: readonly string[]): boolean {
+  if (!kpId) return false
+  return pageIds.some(pageId => course.planning?.pages.find(page => page.id === pageId)?.knowledgePointIds.includes(kpId))
+}
+
+function auditIntegrityIssue(courseId: string, index: number, message: string, fix: string): FactAuditRecord['issues'][number] {
+  return {
+    id: `page-fact:${courseId}:audit-integrity-${index + 1}`,
+    severity: 'blocking',
+    targetId: courseId,
+    message: `整课核查依据不足：${message}`,
+    impact: '无法定位或复核的模型报告不能作为课程通过依据。',
+    fix,
+  }
 }
 
 function reviewPayload(course: MainlineCourse): string {
@@ -287,6 +361,9 @@ function normalizeProviderAuditOutput(value: unknown): unknown {
   return {
     issues: rawIssues.map(item => normalizeReviewIssue(item)),
     goalCoverage: rawCoverage.map(item => normalizeGoalCoverage(item)),
+    ...(source.teachingQualityReview && typeof source.teachingQualityReview === 'object' && !Array.isArray(source.teachingQualityReview)
+      ? { teachingQualityReview: source.teachingQualityReview }
+      : {}),
   }
 }
 
@@ -325,6 +402,9 @@ function normalizeReviewIssue(value: unknown): unknown {
     answer: 'prompt-answer-mismatch',
     visual: 'visual-evidence',
     image: 'visual-evidence',
+    material: 'visual-evidence',
+    'missing-material': 'visual-evidence',
+    missing_material: 'visual-evidence',
     role: 'audience',
   }
   const rawCategory = typeof item.category === 'string' ? item.category.toLowerCase() : ''

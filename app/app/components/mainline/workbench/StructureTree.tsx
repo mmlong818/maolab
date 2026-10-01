@@ -3,7 +3,10 @@
 /** StructureTree · 左栏课程结构树(v5 M1 WP2):片段分组,幕为行,点击联动中右栏。 */
 import { useMemo } from 'react'
 import { BookOpenText } from 'lucide-react'
-import { courseDisplayScene, lessonPresentationPages, presentationScene, sceneDisplayTitle, type MainlineCourse, type QualityIssue } from '@/lib/mainline'
+import type { MainlineCourse } from '@/lib/mainline/domain'
+import type { QualityIssue } from '@/lib/mainline/quality-gates'
+import { courseDisplayScene, sceneDisplayTitle } from '@/lib/mainline/presentation/course-display-title'
+import { lessonPresentationPages, presentationScene } from '@/lib/mainline/presentation/presentation-pages'
 
 interface StructureTreeProps {
   course: MainlineCourse

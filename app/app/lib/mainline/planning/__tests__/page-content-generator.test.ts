@@ -252,6 +252,51 @@ describe('强类型页面正文生成', () => {
     expect(result.audit).toEqual([])
   })
 
+  it('逐步讲解超过半屏容量时拒绝并要求拆页或压缩步骤', async () => {
+    const course = approvedCourse()
+    const responsePage = course.planning!.pages.find(page => page.contentSpec.kind === 'answer')!
+    if (responsePage.contentSpec.kind === 'answer') {
+      responsePage.contentSpec = {
+        kind: 'worked-step',
+        questionPageId: responsePage.contentSpec.questionPageId,
+        focus: course.topic,
+        requiredElements: ['step', 'reason', 'result'],
+      }
+      responsePage.purpose = 'worked-step'
+      const arcStep = course.planning!.arc.steps.find(step => step.id === responsePage.arcStepId)!
+      arcStep.pagePurposes = arcStep.pagePurposes.map(purpose => purpose === 'answer' ? 'worked-step' : purpose)
+    }
+    const base = validLLM()
+    let rejectedOnce = false
+    let sawDensityFeedback = false
+    const llm: PageContentLLMCall = vi.fn(async params => {
+      const input = JSON.parse(params.user) as { qualityFeedback?: string[] }
+      if (input.qualityFeedback?.some(reason => reason.includes('逐步讲解页超过半屏版式容量'))) sawDensityFeedback = true
+      const output = await base(params) as { content?: VisiblePageContent; teacherCompanion: unknown }
+      if (!rejectedOnce && output.content?.kind === 'worked-step') {
+        rejectedOnce = true
+        return {
+          ...output,
+          content: {
+            ...output.content,
+            steps: Array.from({ length: 5 }, (_, index) => ({
+              step: `第${index + 1}步完成一项很长的分析操作并写出全部过程`,
+              reason: '把多个判断依据和解释全部塞进同一个步骤，导致半屏区域无法正常排版。',
+              result: '得到一个同样过长且不适合投影片展示的完整结论。',
+            })),
+          },
+        }
+      }
+      return output
+    })
+
+    const result = await fillPlannedPages(course, { llm })
+
+    expect(rejectedOnce).toBe(true)
+    expect(sawDensityFeedback).toBe(true)
+    expect(result.audit).toEqual([])
+  })
+
   it('没有教材原文的语言观察页必须标明课堂自编材料', async () => {
     const course = approvedCourse()
     course.sourceMaterial = course.sourceMaterial.map(source => {

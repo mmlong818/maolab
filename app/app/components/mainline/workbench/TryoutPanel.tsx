@@ -7,7 +7,7 @@
  */
 import { GraduationCap, LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
-import { lessonPresentationPages, type MainlineCourse } from '@/lib/mainline'
+import { lessonPresentationPages, type MainlineCourse } from '@/lib/mainline/client'
 import type { TryoutReport } from '@/lib/mainline/tryout'
 
 const KIND_COLORS: Record<string, string> = {

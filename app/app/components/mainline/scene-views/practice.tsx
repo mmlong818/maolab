@@ -1,6 +1,6 @@
 'use client'
 
-import { spriteSideOf, type LessonScene, type MainlineCourse, type ScenePresentation } from '@/lib/mainline'
+import { spriteSideOf, type LessonScene, type MainlineCourse, type ScenePresentation } from '@/lib/mainline/client'
 import { toRgba } from '@/lib/mainline/presentation/color'
 import { fitType, TYPE_SCALE } from '@/lib/mainline/presentation/tokens'
 import { SCENE_TYPE_LABEL } from '../workbench/labels'

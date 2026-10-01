@@ -150,6 +150,7 @@ describe('fillImages', () => {
 
     expect(callCount).toBe(1)
     expect(result.filledSceneIds).toEqual([fixture.promptId])
+    expect(result.changedPageIds).toEqual([fixture.promptId, fixture.responseId])
     expect(prompt?.imageUrl).toBe('/generated-images/grid.png')
     expect(response?.imageUrl).toBe('/generated-images/grid.png')
   })
@@ -168,6 +169,7 @@ describe('fillImages', () => {
     const first = await fillImages(fixture.course, { imageCall: mockImage })
     expect(first.filledSceneIds).toEqual([fixture.pageId])
     expect(first.failedSceneIds).toEqual([])
+    expect(first.changedPageIds).toEqual([fixture.pageId])
     expect(first.course.pageContent?.pages[0]).toMatchObject({
       imageUrl: '/generated-images/page-1.png',
       imageAspect: '4:3',
@@ -177,12 +179,24 @@ describe('fillImages', () => {
 
     const skipped = await fillImages(first.course, { imageCall: mockImage })
     expect(skipped.filledSceneIds).toEqual([])
+    expect(skipped.changedPageIds).toEqual([])
     expect(callCount).toBe(1)
 
     const forced = await fillImages(first.course, { imageCall: mockImage, force: true })
     expect(forced.filledSceneIds).toEqual([fixture.pageId])
+    expect(forced.changedPageIds).toEqual([fixture.pageId])
     expect(forced.course.pageContent?.pages[0]?.imageUrl).toBe('/generated-images/page-2.png')
     expect(callCount).toBe(2)
+  })
+
+  it('does not report a forced page image as changed when its identity is unchanged', async () => {
+    const fixture = makePageFirstCourse()
+    const sameImage: ImageCall = async () => '/generated-images/same.png'
+    const first = await fillImages(fixture.course, { imageCall: sameImage })
+    const forced = await fillImages(first.course, { imageCall: sameImage, force: true })
+
+    expect(forced.filledSceneIds).toEqual([fixture.pageId])
+    expect(forced.changedPageIds).toEqual([])
   })
 
   it('generates images for visual-observation / contrast / recap only', async () => {

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { AlertTriangle, ArrowRight, CheckCircle2, RotateCcw } from 'lucide-react'
-import { courseDisplayTitle, type MainlineCourse } from '@/lib/mainline'
+import { courseDisplayTitle, type MainlineCourse } from '@/lib/mainline/client'
 import { repairTargetForWeakness } from '@/lib/mainline/rehearsal/repair-target'
 import type { RehearsalEvidence, RehearsalReport, RehearsalWeaknessKind } from '@/lib/mainline/rehearsal/types'
 import { rehearsalMasteryEvidenceText, type RehearsalMasteryCoverage } from './mastery-evidence'

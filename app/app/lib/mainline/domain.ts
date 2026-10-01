@@ -1,6 +1,13 @@
 import type { CastAssetSelection } from '@maolab/shared-types'
 import type { CoursePlanningState } from './planning/page-contract.js'
 import type { CoursePageContentState } from './planning/page-content-contract.js'
+import type {
+  GenerationCourseAuditRecord,
+  GenerationSession,
+  PageRenderEvidence,
+  TeachingQualityAuditRecord,
+  TeacherAcceptanceRecord,
+} from './generation-session.js'
 
 export type GradeBand = 'lower-primary' | 'upper-primary' | 'middle-school' | 'high-school'
 
@@ -464,6 +471,16 @@ export interface MainlineCourse {
   pageContent?: CoursePageContentState
   /** 页面优先课程的版本关系；旧课缺省并继续按原链路读取。 */
   revision?: MainlineCourseRevision
+  /** 页面生成编排快照；旧课程缺省，现有 JSON 仓储无需数据库迁移。 */
+  generationSession?: GenerationSession
+  /** 与页面正文版本绑定的真实 1920x1080 浏览器渲染证据；正文或图片变化后旧证据不得复用。 */
+  pageRenderEvidence?: PageRenderEvidence[]
+  /** 与当前正文和全页真实截图绑定的整课机器审计签名。 */
+  generationCourseAudit?: GenerationCourseAuditRecord
+  /** 标准依据的自动教学审查；与现实教师验收和发布签名严格分离。 */
+  teachingQualityAudit?: TeachingQualityAuditRecord
+  /** 教师逐页确认及最终课堂版本签名；任何页面版本变化后不得复用。 */
+  teacherAcceptance?: TeacherAcceptanceRecord
   qualityStatus: 'draft' | 'blocked' | 'passed'
   /** v4 M1 事实核查留痕:fill 时核查的结论落库,上课页据此拦 FATAL(页面自身不重跑 LLM 核查)。 */
   factAudit?: FactAuditRecord

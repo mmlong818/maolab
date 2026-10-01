@@ -19,7 +19,7 @@ import {
   type RecapTransferAttempt,
   type StagedLearningAttempt,
   type StagedPostRevealRecord,
-} from '@/lib/mainline'
+} from '@/lib/mainline/client'
 
 export function useClassroomSessionProgress(
   course: MainlineCourse | undefined,

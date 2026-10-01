@@ -1,6 +1,6 @@
 'use client'
 
-import { DEFAULT_CHROME, type CastProfile, type ChromeColors, type DialogueLayout, type LessonScene } from '@/lib/mainline'
+import { DEFAULT_CHROME, type CastProfile, type ChromeColors, type DialogueLayout, type LessonScene } from '@/lib/mainline/client'
 import { TYPE_SCALE } from '@/lib/mainline/presentation/tokens'
 import MathText from '../MathOrText'
 

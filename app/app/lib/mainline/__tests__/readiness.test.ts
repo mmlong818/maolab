@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import type { MainlineCourse, QualityIssue } from '../index.js'
+import { generationInputHash } from '../generation-session.js'
 import { courseReleaseReadinessFromIssues, courseReleaseReason } from '../readiness.js'
+import { teachingQualityInputHash, teachingQualityStandards } from '../teaching-quality-audit.js'
 
 function course(
   qualityStatus: MainlineCourse['qualityStatus'],
@@ -24,7 +26,7 @@ function blocker(id = 'issue-1'): QualityIssue {
 }
 
 function pageFirstCourse(status: 'review' | 'ready'): MainlineCourse {
-  return {
+  const course = {
     id: 'page-course-1',
     qualityStatus: status === 'ready' ? 'passed' : 'draft',
     sourceMaterial: [],
@@ -68,6 +70,54 @@ function pageFirstCourse(status: 'review' | 'ready'): MainlineCourse {
       issues: [],
     },
   } as unknown as MainlineCourse
+  course.generationSession = {
+    schemaVersion: 'mainline-generation-session-v1', id: 'session-1', courseId: course.id,
+    planRevisionId: course.planning!.planRevisionId, status: status === 'ready' ? 'ready' : 'course-audit',
+    jobs: [{
+      pageId: 'lp-001-orient', order: 1, planRevisionId: course.planning!.planRevisionId, attempt: 1, status: 'passed',
+      inputHash: 'a'.repeat(64), diagnostics: [], updatedAt: '2026-08-30T00:00:00.000Z',
+      checkpoint: {
+        pageId: 'lp-001-orient', planRevisionId: course.planning!.planRevisionId, inputHash: 'a'.repeat(64),
+        contentRevisionId: 'page-content-1', factAuditRevisionId: 'page-fact-1', renderEvidenceId: 'render-1', createdAt: '2026-08-30T00:00:00.000Z',
+      },
+    }], createdAt: '2026-08-30T00:00:00.000Z', updatedAt: '2026-08-30T00:00:00.000Z',
+  }
+  course.pageRenderEvidence = [{
+    schemaVersion: 'mainline-page-render-v1', id: 'render-1', courseId: course.id, pageId: 'lp-001-orient',
+    planRevisionId: course.planning!.planRevisionId, contentRevisionId: 'page-content-1', screenshotPath: 'render-1.png', screenshotSha256: 'b'.repeat(64),
+    viewport: { width: 1920, height: 1080 }, metrics: { minimumFontPx: 28, clippedElementCount: 0, overlappingTextCount: 0, brokenImageCount: 0, visualElementCount: 0, occupiedAreaRatio: 0.3 }, issues: [], createdAt: '2026-08-30T00:00:00.000Z',
+  }]
+  if (status === 'ready') {
+    course.generationCourseAudit = {
+      schemaVersion: 'mainline-course-audit-v1', id: 'audit-1', courseId: course.id, planRevisionId: course.planning!.planRevisionId,
+      contentRevisionId: course.pageContent!.contentRevisionId, renderEvidenceIds: ['render-1'], pageIds: ['lp-001-orient'],
+      factAuditAt: '2026-08-30T00:00:00.000Z', passedAt: '2026-08-30T00:00:00.000Z',
+    }
+    course.teachingQualityAudit = {
+      schemaVersion: 'mainline-teaching-quality-audit-v1', id: 'teaching-1', courseId: course.id,
+      planRevisionId: course.planning!.planRevisionId, contentRevisionId: course.pageContent!.contentRevisionId,
+      generationCourseAuditId: 'audit-1', status: 'passed', standards: [], findings: [], auditedAt: '2026-08-30T00:00:00.000Z',
+    }
+    course.teachingQualityAudit.standards = teachingQualityStandards(course)
+    course.teachingQualityAudit.inputHash = teachingQualityInputHash(course)
+    course.teacherAcceptance = {
+      schemaVersion: 'mainline-teacher-acceptance-v1', courseId: course.id, planRevisionId: course.planning!.planRevisionId,
+      courseAuditId: 'audit-1', pages: [{ pageId: 'lp-001-orient', contentRevisionId: 'page-content-1', renderEvidenceId: 'render-1', acceptedAt: '2026-08-30T00:00:00.000Z' }],
+      finalSignature: generationInputHash({
+        courseId: course.id,
+        planRevisionId: course.planning!.planRevisionId,
+        courseAuditId: 'audit-1',
+        pages: [{ pageId: 'lp-001-orient', contentRevisionId: 'page-content-1', renderEvidenceId: 'render-1' }],
+      }),
+      acceptedAt: '2026-08-30T00:00:00.000Z',
+    }
+  }
+  return course
+}
+
+function resignTeachingAudit(course: MainlineCourse): void {
+  const audit = course.teachingQualityAudit
+  if (audit) audit.inputHash = teachingQualityInputHash(course)
 }
 
 describe('course release readiness', () => {
@@ -190,6 +240,54 @@ describe('course release readiness', () => {
     ]))
   })
 
+  it('blocks a classroom version without a current passed AI teaching-quality audit', () => {
+    const stale = pageFirstCourse('ready')
+    delete stale.teachingQualityAudit
+
+    const result = courseReleaseReadinessFromIssues(stale, [])
+
+    expect(result).toMatchObject({ status: 'blocked', ready: false })
+    expect(result.blockers).toEqual(expect.arrayContaining([
+      expect.objectContaining({ source: 'teacher-acceptance', message: expect.stringContaining('AI 教学审查') }),
+    ]))
+  })
+
+  it('fails closed when teaching inputs change without revision IDs changing', () => {
+    const changedSource = pageFirstCourse('ready')
+    changedSource.sourceMaterial.push({ kind: 'textbook', title: '新增教材证据', excerpt: '新的证据。' })
+    const sourceResult = courseReleaseReadinessFromIssues(changedSource, [])
+
+    const changedPage = pageFirstCourse('ready')
+    changedPage.pageContent!.pages[0]!.content = {
+      kind: 'course-orientation', title: '测试课程', goals: ['能够根据材料说明自己的判断依据。'],
+      learningQuestion: '修改后的学生问题是什么？',
+    }
+    const pageResult = courseReleaseReadinessFromIssues(changedPage, [])
+
+    expect(sourceResult).toMatchObject({ ready: false, status: 'blocked' })
+    expect(pageResult).toMatchObject({ ready: false, status: 'blocked' })
+    expect(sourceResult.blockers).toEqual(expect.arrayContaining([
+      expect.objectContaining({ source: 'teacher-acceptance', message: expect.stringContaining('AI 教学审查') }),
+    ]))
+  })
+
+  it('fails closed for a legacy passed teaching audit without an input signature', () => {
+    const legacy = pageFirstCourse('ready')
+    delete legacy.teachingQualityAudit!.inputHash
+
+    expect(courseReleaseReadinessFromIssues(legacy, [])).toMatchObject({ ready: false, status: 'blocked' })
+  })
+
+  it('fails closed when accepted pages or the final signature do not match current render checkpoints', () => {
+    const stalePage = pageFirstCourse('ready')
+    stalePage.teacherAcceptance!.pages[0]!.renderEvidenceId = 'old-render'
+    expect(courseReleaseReadinessFromIssues(stalePage, [])).toMatchObject({ ready: false, status: 'blocked' })
+
+    const staleSignature = pageFirstCourse('ready')
+    staleSignature.teacherAcceptance!.finalSignature = 'c'.repeat(64)
+    expect(courseReleaseReadinessFromIssues(staleSignature, [])).toMatchObject({ ready: false, status: 'blocked' })
+  })
+
   it('blocks visible figure references when the actual page has no image', () => {
     const visualCourse = pageFirstCourse('ready')
     const page = visualCourse.pageContent!.pages[0]!
@@ -222,6 +320,7 @@ describe('course release readiness', () => {
     ]))
 
     visualCourse.pageContent!.pages[0]!.imageUrl = '/generated-images/observation.png'
+    resignTeachingAudit(visualCourse)
     const ready = courseReleaseReadinessFromIssues(visualCourse, [])
     expect(ready).toMatchObject({ status: 'passed', ready: true, blockingCount: 0 })
   })
@@ -250,6 +349,7 @@ describe('course release readiness', () => {
         evidenceLabels: ['反应前总质量', '反应后总质量'],
       },
     }
+    resignTeachingAudit(materialCourse)
 
     const result = courseReleaseReadinessFromIssues(materialCourse, [])
 
