@@ -2,21 +2,23 @@
 // 缺省用真实浏览器 + apps/prep-web 的静态导出（同 scripts/e2e-local.ts）；--fake-capture 时用固定合格度量、不开浏览器（同 tests-pg/worker-pg.test.ts）。
 // 只连 TEST_PG_DATABASE_URL（tests-pg/helpers.ts 的守卫），只认 course_test_ 开头的 schema。标准输出最后一行是 JSON 汇总，日志走 stderr。
 // 汇总的 truncated 为 true 表示跑满 --max-jobs 还没到 idle（仍以 0 退出，调用方据此判断是否排空）。
-// 用法：corepack pnpm --silent -C workers/render run drain --schema <course_test_…> [--fake-capture] [--max-jobs 200]
+// 用法：corepack pnpm --silent -C workers/render run drain --schema <course_test_…> [--fake-capture] [--max-jobs 200] [--kp-schema kp]
+// 假截图是 1920×1080 纯色图：课程包只收这个尺寸（S4）
 import { existsSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
-import { PgCourseArtifacts, PgCourseDocuments, PgRenderJobs } from '@maolab/domain'
+import { courseCoreVersion, loadPackageSigningKey, PgCourseArtifacts, PgCourseDocuments, PgRenderJobs } from '@maolab/domain'
 import { createBrowserPool, launchBrowser, resolveBrowserExecutable, withProjectionContext } from '../src/browser.ts'
 import { captureProjection } from '../src/capture.ts'
 import { handleRenderJob, type RenderJobDeps } from '../src/jobs.ts'
 import { runOnce } from '../src/loop.ts'
+import { createPgPackaging } from '../src/packaging-pg.ts'
 import { startStaticServer } from '../src/static-server.ts'
 import { solidPng } from '../tests/helpers/png.ts'
 import { testPool } from '../tests-pg/helpers.ts'
 
-const { values } = parseArgs({ options: { schema: { type: 'string' }, 'fake-capture': { type: 'boolean', default: false }, 'max-jobs': { type: 'string', default: '200' } } })
+const { values } = parseArgs({ options: { schema: { type: 'string' }, 'fake-capture': { type: 'boolean', default: false }, 'max-jobs': { type: 'string', default: '200' }, 'kp-schema': { type: 'string', default: 'kp' } } })
 const schema = values.schema ?? ''
 const maxJobs = Number(values['max-jobs'])
 if (!/^course_test_[a-z0-9_]+$/.test(schema) || !Number.isInteger(maxJobs) || maxJobs < 1) {
@@ -34,6 +36,8 @@ const pool = testPool()
 const documents = new PgCourseDocuments(pool, { schema })
 const artifacts = new PgCourseArtifacts(pool, { schema })
 const jobs = new PgRenderJobs(pool, { schema })
+// S4：课程包任务用 MAOLAB_PACKAGE_SIGNING_KEY（全链脚本写临时钥）；导出记录与课程同一个测试 schema
+const packaging = createPgPackaging(pool, { schema, knowledgeSchema: values['kp-schema']!, signingKey: loadPackageSigningKey(), coreVersion: courseCoreVersion() })
 let server: Awaited<ReturnType<typeof startStaticServer>> | undefined
 let browsers: ReturnType<typeof createBrowserPool> | undefined
 const goodMetrics = { stageWidth: 1920, stageHeight: 1080, minimumFontPx: 28, clippedElementCount: 0, overlappingTextCount: 0, brokenImageCount: 0, visualElementCount: 1, occupiedAreaRatio: 0.35 }
@@ -41,7 +45,8 @@ const goodMetrics = { stageWidth: 1920, stageHeight: 1080, minimumFontPx: 28, cl
 const fakeDeps = (): RenderJobDeps => ({
   documentsFor: (owner) => documents.forOwner(owner), artifacts, origin: 'http://web.test', timeoutMs: 60_000, now: Date.now,
   withContext: async (fn) => fn({} as never), routes: async () => {},
-  capture: async () => ({ screenshot: solidPng(32, 18), metrics: goodMetrics }),
+  capture: async () => ({ screenshot: solidPng(1920, 1080), metrics: goodMetrics }),
+  packaging,
 })
 
 const counts: Record<string, number> = {}
@@ -57,7 +62,7 @@ try {
     const pages = browsers
     deps = {
       documentsFor: (owner) => documents.forOwner(owner), artifacts, origin: server.origin, timeoutMs: 90_000, now: Date.now,
-      withContext: async (fn) => withProjectionContext(await pages.get(), fn), capture: captureProjection,
+      withContext: async (fn) => withProjectionContext(await pages.get(), fn), capture: captureProjection, packaging,
     }
   }
   for (let i = 0; i < maxJobs; i += 1) {

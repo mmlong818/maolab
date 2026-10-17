@@ -9,13 +9,17 @@ import { ProjectionPageError } from './capture.ts'
  * - PAGE_NOT_FOUND（终审 I1）：任务缺 pageId，或会话里没有这页（如计划修订后的旧任务）；不可重试
  * - RENDER_DATA_FAILED：采集期间拦截供数的数据源抛错（拦截层回了 500）；页面看到的是坏图或取数失败，
  *   截图与度量都不可信，不写证据，按存储异常可重试
+ * - S4 课程包：NOT_READY（包草稿不合格）、KNOWLEDGE_DATASET_MISSING、PACKAGE_*（PACKAGE_SIGNING_UNCONFIGURED、PACKAGE_INPUT、
+ *   PACKAGE_NOT_FOUND、PACKAGE_RECALLED，以及 core 的 PackageError 码加前缀，如 PACKAGE_privacy）；都不可重试
  */
+export type RenderWorkerErrorCode = 'PAGE_NOT_NEXT' | 'PAGE_NOT_FOUND' | 'RENDER_DATA_FAILED' | 'NOT_READY' | 'KNOWLEDGE_DATASET_MISSING' | `PACKAGE_${string}`
+
 export class RenderWorkerError extends Error {
-  readonly code: 'PAGE_NOT_NEXT' | 'PAGE_NOT_FOUND' | 'RENDER_DATA_FAILED'
+  readonly code: RenderWorkerErrorCode
   readonly retryable: boolean
   readonly details: unknown
 
-  constructor(code: RenderWorkerError['code'], message: string, retryable: boolean, details?: unknown) {
+  constructor(code: RenderWorkerErrorCode, message: string, retryable: boolean, details?: unknown) {
     super(message)
     this.name = 'RenderWorkerError'
     this.code = code

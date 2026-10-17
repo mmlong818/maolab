@@ -14,12 +14,26 @@
     "panel-smoke": "tsx scripts/prep-panel-smoke.ts"
   },
   "dependencies": {
+    "@maolab-core/course-package": "file:../../../maolab-core/packages/course-package",
+    "@maolab-core/knowledge": "file:../../../maolab-core/packages/knowledge",
+    "@maolab-core/types": "file:../../../maolab-core/packages/types",
     "@maolab/course": "workspace:*",
     "@maolab/domain": "workspace:*",
     "pg": "^8.16.3",
     "playwright-core": "1.51.1",
     "pptxgenjs": "4.0.1",
     "tsx": "^4.20.3"
+  },
+  "dependenciesMeta": {
+    "@maolab-core/course-package": {
+      "injected": true
+    },
+    "@maolab-core/knowledge": {
+      "injected": true
+    },
+    "@maolab-core/types": {
+      "injected": true
+    }
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
