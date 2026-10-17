@@ -7,7 +7,7 @@ import type pg from 'pg'
 
 const SCHEMA_RE = /^[a-z_][a-z0-9_]*$/
 const check = (schema: string): string => { if (!SCHEMA_RE.test(schema)) throw new Error(`invalid schema name: ${schema}`); return schema }
-const KINDS = ['render-page', 'export-pptx'] as const
+const KINDS = ['render-page', 'export-pptx', 'export-package'] as const
 
 export type RenderJobKind = (typeof KINDS)[number]
 export type RenderJobStatus = 'queued' | 'running' | 'succeeded' | 'failed'

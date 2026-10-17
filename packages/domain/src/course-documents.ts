@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 import type pg from 'pg'
 
 const SCHEMA_RE = /^[a-z_][a-z0-9_]*$/
-const MIGRATIONS = ['0000_course.sql', '0001_render.sql', '0002_prep.sql'].map((name) => resolve(dirname(fileURLToPath(import.meta.url)), '..', 'migrations', name))
+const MIGRATIONS = ['0000_course.sql', '0001_render.sql', '0002_prep.sql', '0003_export.sql'].map((name) => resolve(dirname(fileURLToPath(import.meta.url)), '..', 'migrations', name))
 const check = (schema: string): string => { if (!SCHEMA_RE.test(schema)) throw new Error(`invalid schema name: ${schema}`); return schema }
 
 export type CourseDocumentKind = 'course' | 'season'
