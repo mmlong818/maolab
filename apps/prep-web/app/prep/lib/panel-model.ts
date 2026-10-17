@@ -19,6 +19,26 @@ export function latestExport(jobs: readonly PrepJob[]): { href: string; filename
   return { failed: latest.error?.message ?? '导出没有完成。' }
 }
 
+/** S4：最近一次课程包导出任务（新的在前）。done 后以 /api/prep/packages 的列表为准 */
+export function latestPackageJob(jobs: readonly PrepJob[]): { pending: true } | { failed: string } | { done: true } | null {
+  const latest = [...jobs].filter((j) => j.kind === 'export-package').sort((a, b) => b.createdAt - a.createdAt)[0]
+  if (!latest) return null
+  if (latest.status === 'queued' || latest.status === 'running') return { pending: true }
+  if (latest.status === 'succeeded') return { done: true }
+  return { failed: latest.error?.message ?? '课程包导出没有完成。' }
+}
+
+/** 这门课的包都撤回了：再导出会得到新的课程包（新包 id） */
+export function packageExportLabel(packages: ReadonlyArray<{ status: string }>): string {
+  return packages.length > 0 && packages.every((p) => p.status === 'recalled') ? '导出为新课程包' : '导出课程包'
+}
+
+export function packageDownloadName(title: string, version: number): string {
+  return `${title.trim() || '课程包'}-v${version}.maolab-course.zip`
+}
+
+export const RECALL_CONFIRM = '撤回后，这个课程包不能再出新版本，并会生成一份撤回单。撤回单要交给云一自习室的运营执行，自习室里的课才会下架。确定撤回吗？'
+
 export const ACTION_LABELS = {
   'repair-page': '修改这一页',
   'add-source': '缺权威来源：需要补课标或教材原文，修页解决不了',
