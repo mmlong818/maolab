@@ -1,4 +1,4 @@
-// 备课全链（3d 的 prep-e2e 抽出，3e 的 compose-e2e 共用）：经"Nginx"建课 → 确认计划 → 对话逐页生成 → 截图 → 整课审查 → 逐页与整课验收 → 导出 → 下载 →
+// 备课全链：经"Nginx"检索知识点、建课 → 确认计划 → 对话逐页生成 → 截图 → 整课审查 → 逐页与整课验收 → 导出 → 下载 →
 // 渲染数据路径 404 → 浏览器面板冒烟。断言与 3d 原样；环境相关的部分（地址、排空方式、截图输出、worker 是否常驻）由 ctx 给。
 // summary 的键与写入顺序与 3d 相同（3d 的 summary.json 逐字节不变）；liveWorker 为真时才多写 renderAgain、renderedPages、blockedJobs。
 import { spawn, spawnSync } from 'node:child_process'
@@ -57,11 +57,14 @@ export async function runPrepFlow(ctx: PrepFlowContext, summary: Record<string, 
   let n = 0
   const rid = (tag: string) => `${ctx.ridPrefix}-${tag}-${String(++n).padStart(4, '0')}`
 
-  // 1. 面板：教材树桩 → 选两个知识点建课 → 确认计划
-  const books = await api('GET', '/api/v2/textbooks?stage=初中&grade=八年级')
-  const tree = await api('GET', `/api/v2/textbook-kps/${books.body.items[0].id}`)
-  const kpIds = tree.body.chapters[0].leaves[0].kps.map((k: { kpId: string }) => k.kpId)
-  check(kpIds.length >= 2, '教材树桩应给出至少两个夹具知识点')
+  // 1. 面板：学段、学科目录 → 按学科检索 → 选两个知识点建课 → 确认计划
+  const facets = await api('GET', '/api/prep/knowledge/facets')
+  const band = facets.body.gradeBands?.[0] as { gradeBand: string; subjects: string[] } | undefined
+  check(facets.status === 200 && Boolean(band?.subjects.length), `知识点目录 ${facets.status}`)
+  summary.facets = facets.body.gradeBands ?? null
+  const found = await api('GET', `/api/prep/knowledge/search?${new URLSearchParams({ q: '', gradeBand: band!.gradeBand, subject: band!.subjects[0]! })}`)
+  const kpIds = ((found.body.items ?? []) as Array<{ id: string }>).map((k) => k.id)
+  check(found.status === 200 && kpIds.length >= 2, `按学科检索应给出至少两个夹具知识点：${found.status} ${kpIds.length}`)
   summary.kpCount = kpIds.length
   const created = await api('POST', '/api/prep/courses', { kpIds })
   check(created.status === 201, `建课 ${created.status}`)
