@@ -1,0 +1,40 @@
+{
+  "fakeCapture": true,
+  "facets": [
+    {
+      "gradeBand": "初中",
+      "subjects": [
+        "语文"
+      ]
+    }
+  ],
+  "kpCount": 2,
+  "planPages": 15,
+  "planStatus": "plan-approved",
+  "pages": 15,
+  "renderDrain": {
+    "counts": {
+      "succeeded": 15,
+      "idle": 1
+    }
+  },
+  "exportDrain": {
+    "counts": {
+      "idle": 1
+    }
+  },
+  "jobs": {
+    "renderPage": {
+      "succeeded": 15
+    },
+    "exportPptx": {}
+  },
+  "problems": [
+    "整课审查 [{\"name\":\"audit_course\",\"ok\":false,\"reason\":\"audit-blocked\"}]",
+    "整课审查后待验收页 0 应为 15",
+    "整课验收 422",
+    "导出入队 422",
+    "导出任务 undefined",
+    "中断：TypeError"
+  ]
+}

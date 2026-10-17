@@ -1,4 +1,4 @@
-// 3d：本机备课全栈（假模型端到端与真实走查共用）。全部只连 TEST_PG_DATABASE_URL；`.env` 用 dotenv.parse 按名取值、显式传给子进程，不整体并进 process.env，不打印任何值。
+// 本机备课全栈（假模型端到端与真实走查共用）。知识点在 <schema>_kp（夹具），面板经 /api/prep/knowledge/* 检索。全部只连 TEST_PG_DATABASE_URL；`.env` 用 dotenv.parse 按名取值、显式传给子进程，不整体并进 process.env，不打印任何值。
 // fake：fake 模型 + 假课程网关；鉴权用测试 OIDC 配置，token 由脚本在测试库里签发。
 // real：harness 用真实云一网关（provider yunyi、glm-5.3，凭证只来自登录用户自己）；api 用 .env 的真实 OIDC 配置（只为对真实身份服务登录），回调必须是 http://127.0.0.1:3000/login-callback（2e 实测已登记），所以 webPort 固定 3000。
 // 渲染：每 3 秒看一次本 schema 有没有排队的截图或导出任务，有就起一次 workers/render 的排空子进程（worker 常驻进程只看 course schema，测试 schema 用排空脚本）。
@@ -14,7 +14,7 @@ import { PgCredentialStore } from '@maolab-core/auth'
 import { startFakeCourseLlm } from '../../prep-harness/tests/helpers/fake-course-llm.ts'
 import { startFakeOpenAI } from '../../prep-harness/tests/helpers/fake-openai.ts'
 import { INTERNAL_KEY, startHost } from '../../prep-harness/tests/helpers/host.ts'
-import { drainRenderQueue, dropPrepSchemas, loadCourseForTests, prepPgUrl, resetPrepSchemas, type PrepFixtures } from '../../prep-harness/tests/helpers/prep.ts'
+import { drainRenderQueue, dropPrepSchemas, loadCourseForTests, prepPgUrl, resetPrepSchemas } from '../../prep-harness/tests/helpers/prep.ts'
 import { nginxBlocksPrepRender, nginxNormalizedPath } from './nginx-path.ts'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..')
@@ -34,19 +34,6 @@ export interface PrepStack {
   stop(): Promise<void>
 }
 
-export function textbookStub(fixtures: PrepFixtures): { textbooks(): unknown; tree(id: string): unknown | undefined } {
-  const points = fixtures.prepFixtureKnowledge().points
-  const subject = points[0]?.subject ?? '语文'
-  const item = { id: 'tb-prep-fixture', title: '夹具教材（3d 本机）', stage: '初中', subject, version: '夹具', grade: '八年级', volume: '上册' }
-  return {
-    textbooks: () => ({ items: [item] }),
-    tree: (id: string) => id !== item.id ? undefined : {
-      treeId: item.id, treeName: item.title,
-      chapters: [{ chapterId: 'ch-1', chapterTitle: '第一单元', leaves: [{ leafId: 'leaf-1', leafTitle: '夹具课文', kps: points.map((p) => ({ kpId: p.id, canonicalName: p.canonical_name, subject: p.subject })) }] }],
-    },
-  }
-}
-
 /** 同 Nginx 的 try_files $uri $uri/index.html $uri.html =404（404 页用 404.html） */
 function serveStatic(req: IncomingMessage, res: ServerResponse): void {
   let path: string
@@ -64,7 +51,7 @@ function serveStatic(req: IncomingMessage, res: ServerResponse): void {
   createReadStream(join(OUT, '404.html')).on('error', () => res.end()).pipe(res)
 }
 
-function startWeb(apiBase: string, stub: ReturnType<typeof textbookStub>, port: number): Promise<{ base: string; close(): Promise<void> }> {
+function startWeb(apiBase: string, port: number): Promise<{ base: string; close(): Promise<void> }> {
   const api = new URL(apiBase)
   const server = createServer((req, res) => {
     const url = req.url ?? '/'
@@ -73,12 +60,6 @@ function startWeb(apiBase: string, stub: ReturnType<typeof textbookStub>, port: 
     if (path === null) { res.writeHead(400).end(); return }
     // 同 apps/prep-web/nginx 的 `location ^~ /api/prep/render`：纯前缀，一律 404，不转给 api
     if (nginxBlocksPrepRender(path)) { res.writeHead(404).end(); return }
-    if (path === '/api/v2/textbooks') { res.writeHead(200, { 'content-type': 'application/json' }).end(JSON.stringify(stub.textbooks())); return }
-    if (path.startsWith('/api/v2/textbook-kps/')) {
-      const tree = stub.tree(path.slice('/api/v2/textbook-kps/'.length))
-      res.writeHead(tree ? 200 : 404, { 'content-type': 'application/json' }).end(JSON.stringify(tree ?? { error: '教材不存在。' }))
-      return
-    }
     if (path.startsWith('/api/')) {
       // 流式转发（NDJSON 不缓冲）
       const upstream = httpRequest({ host: api.hostname, port: api.port, method: req.method, path: url, headers: { ...req.headers, host: api.host } }, (r) => { res.writeHead(r.statusCode ?? 502, r.headers); r.pipe(res) })
@@ -126,7 +107,7 @@ export async function startPrepStack(options: { mode: 'fake' | 'real'; schema: s
       : { OIDC_CLIENT_ID: pick('OIDC_CLIENT_ID'), OIDC_CLIENT_SECRET: pick('OIDC_CLIENT_SECRET'), OIDC_AUTHORITY: pick('OIDC_AUTHORITY'), OIDC_GATEWAY_BASE_URL: pick('OIDC_GATEWAY_BASE_URL'), OIDC_TOKEN_TTL: pick('OIDC_TOKEN_TTL'), SECRET_ENCRYPTION_KEY: pick('SECRET_ENCRYPTION_KEY') }
     const config = readConfig({
       ...authEnv, PG_DATABASE_URL: pgUrl, PORTAL_BASE_URL: '',
-      YUNYI_TURNS: 'off', YUNYI_PREP: 'all', YUNYI_HARNESS_URL: host.base, YUNYI_INTERNAL_KEY: INTERNAL_KEY,
+      YUNYI_PREP: 'all', YUNYI_HARNESS_URL: host.base, YUNYI_INTERNAL_KEY: INTERNAL_KEY,
       YUNYI_TURN_PROVIDER: options.mode === 'fake' ? 'fake' : 'yunyi', YUNYI_TURN_MODEL: options.mode === 'fake' ? 'fake-1' : 'glm-5.3',
       YUNYI_COURSE_SCHEMA: options.schema, YUNYI_PREP_KNOWLEDGE_SCHEMA: knowledgeSchema,
     })
@@ -134,7 +115,7 @@ export async function startPrepStack(options: { mode: 'fake' | 'real'; schema: s
     const app = await buildServer({ pool, config, store })
     cleanups.push(() => app.close())
     const apiBase = await app.listen({ port: 0, host: '127.0.0.1' })
-    const web = await startWeb(apiBase, textbookStub(course), options.webPort ?? 0)
+    const web = await startWeb(apiBase, options.webPort ?? 0)
     cleanups.push(() => web.close())
     let draining: Promise<Record<string, unknown>> | undefined
     const drain = (o: { fakeCapture?: boolean } = {}) => (draining ??= drainRenderQueue(options.schema, { fakeCapture: o.fakeCapture ?? options.fakeCapture ?? true }).finally(() => { draining = undefined }))
