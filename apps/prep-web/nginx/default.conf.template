@@ -1,0 +1,73 @@
+# 备课室前端静态文件 + /api 反代到 prep-api。
+# 由官方 nginx 镜像在启动时用 envsubst 渲染：API_UPSTREAM（例如 http://prep-api:8080）。只替换这一个变量（见 Dockerfile 的 NGINX_ENVSUBST_FILTER），$uri 等 nginx 变量保持原样。
+
+server {
+    listen 8080;
+    server_name _;
+    root /usr/share/nginx/html;
+    server_tokens off;
+    # 反代或端口映射后，重定向用相对地址，避免带出容器内端口
+    absolute_redirect off;
+    client_max_body_size 20m;
+
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml text/plain;
+
+    location = / {
+        return 302 /prep/;
+    }
+
+    # 渲染数据只由 render worker 在自己的浏览器里拦截供数，任何上游都不得真实提供；显式 404，不转发。
+    # ^~ 前缀：它是 /api/prep/render（含无尾斜杠）下最长的前缀匹配，命中后不再查正则 location，下面的 /api/prep 正则绕不过它
+    location ^~ /api/prep/render {
+        return 404;
+    }
+
+    # 备课对话是 NDJSON 流，一轮可能十几分钟（真实模型单回合最长 626 秒）：api 每 15 秒写一行 ping 保活，读超时给 900 秒余量；
+    # 课件导出（PPTX）也从这里下载
+    location ~ ^/api/prep(/|$) {
+        proxy_pass ${API_UPSTREAM};
+        proxy_http_version 1.1;
+        proxy_set_header Host $proxy_host;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_ssl_server_name on;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Connection "";
+        proxy_buffering off;
+        proxy_cache off;
+        gzip off;
+        proxy_read_timeout 900s;
+        proxy_send_timeout 900s;
+    }
+
+    # 登录、账号、计费
+    location /api/ {
+        proxy_pass ${API_UPSTREAM};
+        proxy_http_version 1.1;
+        proxy_set_header Host $proxy_host;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_ssl_server_name on;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Connection "";
+        proxy_read_timeout 60s;
+        proxy_send_timeout 60s;
+    }
+
+    location /_next/static/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        add_header X-Content-Type-Options "nosniff" always;
+        try_files $uri =404;
+    }
+
+    location / {
+        try_files $uri $uri/index.html $uri.html =404;
+    }
+
+    error_page 404 /404.html;
+}

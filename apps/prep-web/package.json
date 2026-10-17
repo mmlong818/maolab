@@ -1,0 +1,49 @@
+{
+  "name": "@maolab/prep-web",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "predev": "node scripts/sync-mathjax-assets.mjs",
+    "dev": "next dev --port 3100",
+    "prebuild": "node scripts/sync-mathjax-assets.mjs",
+    "build": "next build",
+    "typecheck": "tsc --noEmit",
+    "pretest": "node scripts/sync-mathjax-assets.mjs",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@fontsource/liu-jian-mao-cao": "5.3.0",
+    "@fontsource/long-cang": "5.3.0",
+    "@fontsource/ma-shan-zheng": "5.3.0",
+    "@fontsource/noto-sans-sc": "5.3.0",
+    "@fontsource/noto-serif-sc": "5.2.8",
+    "@fontsource/zcool-kuaile": "5.3.0",
+    "@fontsource/zcool-qingke-huangyou": "5.3.0",
+    "@fontsource/zcool-xiaowei": "5.3.0",
+    "@fontsource/zhi-mang-xing": "5.3.0",
+    "@maolab/course": "workspace:*",
+    "@maolab/pedagogy": "workspace:*",
+    "@maolab/shared-types": "workspace:*",
+    "@mathjax/mathjax-mhchem-font-extension": "4.1.3",
+    "better-react-mathjax": "^3.0.1",
+    "cn-fontsource-lxgw-wen-kai-screen": "1.0.6",
+    "geist": "^1.7.0",
+    "lucide-react": "^1.16.0",
+    "mathjax": "4.1.3",
+    "next": "^15.0.0",
+    "perfect-freehand": "^1.2.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "postcss": "^8.5.14",
+    "tailwindcss": "^4.2.4",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}

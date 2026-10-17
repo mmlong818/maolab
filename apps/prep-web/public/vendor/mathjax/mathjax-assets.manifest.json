@@ -1,0 +1,378 @@
+{
+  "resourceId": "cross.math-typesetting-local-runtime",
+  "package": "mathjax",
+  "version": "4.1.3",
+  "license": "Apache-2.0",
+  "entrypoint": "tex-svg.js",
+  "copiedFrom": [
+    "LICENSE",
+    "tex-svg.js",
+    "a11y",
+    "sre",
+    "input/tex/extensions"
+  ],
+  "fontExtension": {
+    "package": "@mathjax/mathjax-mhchem-font-extension",
+    "version": "4.1.3",
+    "license": "Apache-2.0",
+    "target": "font-extensions/mhchem",
+    "copiedFrom": [
+      "package.json",
+      "svg.js"
+    ]
+  },
+  "fileCount": 70,
+  "totalBytes": 7160368,
+  "files": [
+    {
+      "path": "LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "a11y/assistive-mml.js",
+      "bytes": 3639,
+      "sha256": "9c1166c7c2ca2e57d5d25cc3bf71dc5369d32b9a4260151f998c0bed77d55dc3"
+    },
+    {
+      "path": "a11y/complexity.js",
+      "bytes": 12664,
+      "sha256": "681f7ed89d7c4d172477fd8512b808e885e30de4949060d89dc79040af476666"
+    },
+    {
+      "path": "a11y/explorer.js",
+      "bytes": 57864,
+      "sha256": "e06b7be48f906855881339a5696d2e59f1e56b7d7c81ab4295581f34722710aa"
+    },
+    {
+      "path": "a11y/semantic-enrich.js",
+      "bytes": 4782,
+      "sha256": "b169e77fbec9323a202478ed3f476c9da3af02336a8844749d901dbd762a8c8e"
+    },
+    {
+      "path": "a11y/speech.js",
+      "bytes": 20451,
+      "sha256": "8c3e3048546e66067d47e3d929e2152e6a80aefc77b8de18879e81dac7a0cae7"
+    },
+    {
+      "path": "a11y/sre.js",
+      "bytes": 261018,
+      "sha256": "6781c695ce2e7bf98b5e54f468b9c37ae1b4dbc9065afc18078b43bfbcbd8178"
+    },
+    {
+      "path": "font-extensions/mhchem/package.json",
+      "bytes": 4385,
+      "sha256": "c61057212d281a8fda24797a939460531417dbdf904b6f33976cde8ca313c6b7"
+    },
+    {
+      "path": "font-extensions/mhchem/svg.js",
+      "bytes": 14006,
+      "sha256": "59cbf08305ddd6bac14dbf2e2a6b3c2f3f6870107ad16d381870fdb0486eea73"
+    },
+    {
+      "path": "input/tex/extensions/action.js",
+      "bytes": 1843,
+      "sha256": "7c46fc1ef8118723bf2f386d704ab289e5dd683471e0ad4e1e717244959b565b"
+    },
+    {
+      "path": "input/tex/extensions/ams.js",
+      "bytes": 21194,
+      "sha256": "6ff85ab489da04ec533a22b9b93d5d5d51f9f51ef02c723439734e65d9257d14"
+    },
+    {
+      "path": "input/tex/extensions/amscd.js",
+      "bytes": 4310,
+      "sha256": "81d6115aa4358a98da5e6d477ac4198cbc11c2c2752745b3529a8b6e2761202f"
+    },
+    {
+      "path": "input/tex/extensions/autoload.js",
+      "bytes": 3331,
+      "sha256": "8da941fdea660944fc6a4434823dce9cf369b88cb6c0ab50b00700b7a92dbf0c"
+    },
+    {
+      "path": "input/tex/extensions/bbm.js",
+      "bytes": 2143,
+      "sha256": "fb780f6e8ca565439b3c6dc78f3e42b525905fd43c5e15471994a2a1da914ca8"
+    },
+    {
+      "path": "input/tex/extensions/bboldx.js",
+      "bytes": 7397,
+      "sha256": "772503b34ac5b7c56e56c7698403bad6ff3ea3fd1882c22b4e1ef518e6ef86c5"
+    },
+    {
+      "path": "input/tex/extensions/bbox.js",
+      "bytes": 2323,
+      "sha256": "9d9ff6d1c592d2a4fe728412d2d5ec29379f4721bfa3b8356ad2045eb939b848"
+    },
+    {
+      "path": "input/tex/extensions/begingroup.js",
+      "bytes": 4266,
+      "sha256": "0f606d5a71301992e92d8697ccbf8318736110691d8a94303f3f254cd589421a"
+    },
+    {
+      "path": "input/tex/extensions/boldsymbol.js",
+      "bytes": 2460,
+      "sha256": "baaabd9fb430fe4fdbfa9db74aa60b118dd650a68239280368abfd1bc30a0e10"
+    },
+    {
+      "path": "input/tex/extensions/braket.js",
+      "bytes": 4653,
+      "sha256": "d401832d91ca89fc8f76cf1ea67ce25b21c4a2b1d9da0db605204f262c8d69ee"
+    },
+    {
+      "path": "input/tex/extensions/bussproofs.js",
+      "bytes": 12204,
+      "sha256": "87451074cc17e2c8064d630b91cc56171182cc5a46c1313006014f56c498d8d4"
+    },
+    {
+      "path": "input/tex/extensions/cancel.js",
+      "bytes": 2255,
+      "sha256": "9ff91ff84d9776606cdb66da62ffe9bb39cfdfabcf070f214d35e553689ffece"
+    },
+    {
+      "path": "input/tex/extensions/cases.js",
+      "bytes": 4277,
+      "sha256": "6805d481aaee3f78d82bb9f0b6b9ac47b0804c30f10253394724459d95d41a8c"
+    },
+    {
+      "path": "input/tex/extensions/centernot.js",
+      "bytes": 2148,
+      "sha256": "e3c08e96d11f020027a9b325e7b8661f08940babba218b786ac29d50d822dfba"
+    },
+    {
+      "path": "input/tex/extensions/color.js",
+      "bytes": 6818,
+      "sha256": "f569ebbf53726afeb3f7a7803500ac2088aada400a2000394879d0b503311b17"
+    },
+    {
+      "path": "input/tex/extensions/colortbl.js",
+      "bytes": 3185,
+      "sha256": "dff289abcff30d0e109eb51a6f6be2d09e46b7e1db5bc881719f9f1bf483ab8f"
+    },
+    {
+      "path": "input/tex/extensions/colorv2.js",
+      "bytes": 1524,
+      "sha256": "434397a8b307ee5e824b065ecf3145ce8ffae58f465e054b3d9b853f5f904baf"
+    },
+    {
+      "path": "input/tex/extensions/configmacros.js",
+      "bytes": 2588,
+      "sha256": "5a7b6e7b7980f8d3425ddbcbbe21299da5b1254d5702e91bdbb9d04f487f4664"
+    },
+    {
+      "path": "input/tex/extensions/dsfont.js",
+      "bytes": 1898,
+      "sha256": "74a9961b43c43644c28c582fc14031b7f42bac0b771140a5d80af383415ea978"
+    },
+    {
+      "path": "input/tex/extensions/empheq.js",
+      "bytes": 5946,
+      "sha256": "028e775eca9919375d3397a947d6086383ec99a501a5080b2833ffda5d578a14"
+    },
+    {
+      "path": "input/tex/extensions/enclose.js",
+      "bytes": 1731,
+      "sha256": "5301d91e2e7d6f86a29c13c1b9726b7476b9de9b1745011886c914372fab4cf3"
+    },
+    {
+      "path": "input/tex/extensions/extpfeil.js",
+      "bytes": 2445,
+      "sha256": "2d1f82bf22acefe6c358e3a3dca293cc2fda338f2db4fd147befc75122c41841"
+    },
+    {
+      "path": "input/tex/extensions/fontsizev3.js",
+      "bytes": 1637,
+      "sha256": "0e8fe554424a274d5809efc11f3a48602713bb7d2b2280ae4fcac04181f128f2"
+    },
+    {
+      "path": "input/tex/extensions/gensymb.js",
+      "bytes": 1588,
+      "sha256": "cd5cb8a68719acc0c215f4377e4d37eb35d4f49bab26c7e46efff5e4dbc7f6d3"
+    },
+    {
+      "path": "input/tex/extensions/html.js",
+      "bytes": 2813,
+      "sha256": "a647d13d009d5ecee4239cfe681ef831f2bd0f2a91033b922ae6bf3481d156e0"
+    },
+    {
+      "path": "input/tex/extensions/mathtools.js",
+      "bytes": 22389,
+      "sha256": "0a403d24ff0fbb698cb0efd1cfe8569bfb47e492165204170481e7e6619a1dcc"
+    },
+    {
+      "path": "input/tex/extensions/mhchem.js",
+      "bytes": 38920,
+      "sha256": "7447710d9804aea68b4491e8fde752d69a905e0d27a8a39705c535f64cfa7fdc"
+    },
+    {
+      "path": "input/tex/extensions/newcommand.js",
+      "bytes": 8833,
+      "sha256": "27bc6df0fc8567eaff5153e679e5de53e9cf0918aae714d8dd72fd3a40ca2293"
+    },
+    {
+      "path": "input/tex/extensions/noerrors.js",
+      "bytes": 1243,
+      "sha256": "479c00d274f7f38e25d44a13e407bf8adeb83b02dd05639a302ca7c0db3d4cc2"
+    },
+    {
+      "path": "input/tex/extensions/noundefined.js",
+      "bytes": 1384,
+      "sha256": "d29d871d8d38802cc1581f6e4f5d673c357a8bf9802114ea57f51a53d0a0fef3"
+    },
+    {
+      "path": "input/tex/extensions/physics.js",
+      "bytes": 19564,
+      "sha256": "3a1d1b0ab203b446a2c04d9f5a0bf59e6225c83a27aea0b2403f28293aadb79a"
+    },
+    {
+      "path": "input/tex/extensions/require.js",
+      "bytes": 4007,
+      "sha256": "6ccbfb7f9a6e627fabdc39ce034f99355172b9778891cce33243844501098130"
+    },
+    {
+      "path": "input/tex/extensions/setoptions.js",
+      "bytes": 3729,
+      "sha256": "756100054a264bcfd47c1b5c03b7e4dcdd7cca679b78b693a6926e887ab59c39"
+    },
+    {
+      "path": "input/tex/extensions/tagformat.js",
+      "bytes": 1975,
+      "sha256": "9da0f12949eb209f8cfa06fd88ddce12bf6b8880d29c067a7ad08f42164a3a57"
+    },
+    {
+      "path": "input/tex/extensions/texhtml.js",
+      "bytes": 2504,
+      "sha256": "6269dda09c28b4291cd4d95e880c9dc053cc95b41c644ce057bab5640cb83113"
+    },
+    {
+      "path": "input/tex/extensions/textcomp.js",
+      "bytes": 5135,
+      "sha256": "d085215c2d77df0c8dbf460b991c59efa9e69cbd7e1f6e94bf5cbb363aa1c69c"
+    },
+    {
+      "path": "input/tex/extensions/textmacros.js",
+      "bytes": 10279,
+      "sha256": "12a52659988472d8f160a96a774e970f89153a0f2e329d2a1d0e318d4ab9bdab"
+    },
+    {
+      "path": "input/tex/extensions/unicode.js",
+      "bytes": 3586,
+      "sha256": "bf1ddc9fe506f782c0e9271c0c52c4b258f9e4eac3d2905274d0c5d239e2a2b3"
+    },
+    {
+      "path": "input/tex/extensions/units.js",
+      "bytes": 2118,
+      "sha256": "25278814cbc050fcd4e8849c014c238cf6801e00405e0acaf5d98924fd1e26a7"
+    },
+    {
+      "path": "input/tex/extensions/upgreek.js",
+      "bytes": 2157,
+      "sha256": "0f4c96104699aeada37446dfb3d50438efec4e11c58982abaa2ff781d42d3667"
+    },
+    {
+      "path": "input/tex/extensions/verb.js",
+      "bytes": 1779,
+      "sha256": "b2290ff1be4d33c57dd476d87d1753d4cde0a5991612b4a24db881a15c85a250"
+    },
+    {
+      "path": "sre/mathmaps/af.json",
+      "bytes": 267392,
+      "sha256": "b906ca6e91517ac8d6f87c304223839c9998daf2d29ac8d79ce5fa967c23dc77"
+    },
+    {
+      "path": "sre/mathmaps/base.json",
+      "bytes": 217157,
+      "sha256": "72558700556d997a95e9281044e330eba9a472dda43642a9b5cc0483294d875f"
+    },
+    {
+      "path": "sre/mathmaps/ca.json",
+      "bytes": 247328,
+      "sha256": "750a034984f3b5966a2a391eb5ad0c7b50bfa02eb576a82656a0bf43ebe34ee7"
+    },
+    {
+      "path": "sre/mathmaps/da.json",
+      "bytes": 247368,
+      "sha256": "92b82e15916673ebdcbdd6927aa491a18cf4780432733e534e1071b98b176dae"
+    },
+    {
+      "path": "sre/mathmaps/de.json",
+      "bytes": 284080,
+      "sha256": "2e56ac4f5a4ce6f831a69c34a81b66d4e260bba4a019499518f356888c146fa5"
+    },
+    {
+      "path": "sre/mathmaps/en.json",
+      "bytes": 364204,
+      "sha256": "5e60d1843351966a159cc409eb73e9abc7c7e375a3311c40d35843d70fee79fb"
+    },
+    {
+      "path": "sre/mathmaps/es.json",
+      "bytes": 250921,
+      "sha256": "3f273798257eac1bb39082724ac819a0940588aefd21275c2c43a1178badb61b"
+    },
+    {
+      "path": "sre/mathmaps/euro.json",
+      "bytes": 12781,
+      "sha256": "564c10b1ecae3d161a50fbf13965b9d326d24d8c5e172152a16253f6334375ac"
+    },
+    {
+      "path": "sre/mathmaps/fr.json",
+      "bytes": 276403,
+      "sha256": "caf60a882b654ac18f5a168960aeeac014c27708c56195dd6d765aff728839df"
+    },
+    {
+      "path": "sre/mathmaps/hi.json",
+      "bytes": 394568,
+      "sha256": "debdb8fc8b1c56a7f1ac4f96bc566af9456632b58df556b3331debdf0c2c723d"
+    },
+    {
+      "path": "sre/mathmaps/it.json",
+      "bytes": 282065,
+      "sha256": "b476cbfb4a1e8f6112f69c51e6ebacf86ed4114a9c0b1fbfb419ac2944aa6cfa"
+    },
+    {
+      "path": "sre/mathmaps/ko.json",
+      "bytes": 392014,
+      "sha256": "af7fd90bcf06736f5363b752d505d4cc7782bd725c6db4184edccdf56b24a87e"
+    },
+    {
+      "path": "sre/mathmaps/nb.json",
+      "bytes": 260745,
+      "sha256": "8d1ad78f81be49b569ce0011056f70501584843b5a5da8b21b4c2d8d38cb3ae3"
+    },
+    {
+      "path": "sre/mathmaps/nemeth.json",
+      "bytes": 227472,
+      "sha256": "16f30ad5bc7db02bbcce4623b108626f1a73d65660799891f23efd76dcaa333e"
+    },
+    {
+      "path": "sre/mathmaps/nn.json",
+      "bytes": 262158,
+      "sha256": "8481c038bfbf609f53053cb26f86c1de4c6eafebe1a80f909004b3a201b07166"
+    },
+    {
+      "path": "sre/mathmaps/sv.json",
+      "bytes": 271954,
+      "sha256": "7436531c326be9449bdbb41c74fcae4235fc58ff7c6816999e571ee636fd15f1"
+    },
+    {
+      "path": "sre/require.d.mts",
+      "bytes": 44,
+      "sha256": "946701066b1225bbb539cb3b7b9dfadfea309b7dfb728dc28e59599af97c102d"
+    },
+    {
+      "path": "sre/require.mjs",
+      "bytes": 87,
+      "sha256": "399cff836df7d7cfa42bc5459d69e334074b50a9473b42bd8beac21108ac0536"
+    },
+    {
+      "path": "sre/speech-worker.js",
+      "bytes": 425256,
+      "sha256": "80bd663f2d48505291dcc256728a4fe3be1be4b73d3675b905bd51b1c431745b"
+    },
+    {
+      "path": "tex-svg.js",
+      "bytes": 1849625,
+      "sha256": "23c036deccc0f2374834a47e4032e452419f3ac027bf17e17c104e2746b19f4c"
+    }
+  ]
+}

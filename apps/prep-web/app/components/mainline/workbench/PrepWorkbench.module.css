@@ -1,0 +1,573 @@
+.root {
+  min-width: 0;
+}
+
+.workspace {
+  min-width: 0;
+}
+
+/* 备课预览必须始终就是学生看到的 16:9 画幅。右侧检查列表再长，也不能把预览容器
+ * 拉成高竖框后留下上下黑边；高度受可用视口约束时，同步收窄宽度来保持同一画幅。 */
+.previewFrame {
+  align-self: center;
+  flex: 0 0 auto;
+  width: min(100%, calc((100vh - 230px) * 1.7777778));
+  aspect-ratio: 16 / 9;
+}
+
+.overview {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding: 28px 36px 72px;
+  color: #24262b;
+}
+
+.overviewHeader {
+  padding-bottom: 24px;
+}
+
+.overviewEyebrow {
+  margin-bottom: 8px;
+  color: #8a4b2a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.overviewHeader h2 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.overviewHeader p {
+  margin: 8px 0 0;
+  color: #74777e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.overviewStats {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.overviewStats span,
+.overviewImagePage,
+.overviewTextPage {
+  padding: 3px 7px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.overviewStats span {
+  background: #f0eee9;
+  color: #555960;
+}
+
+.sourceEvidence {
+  padding: 24px 0 30px;
+  border-top: 1px solid #dedbd4;
+}
+
+.sourceEvidenceHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.sourceEvidenceTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #315f50;
+}
+
+.sourceEvidenceTitleRow h3 {
+  margin: 0;
+  color: #24262b;
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+.sourceEvidenceHeader p,
+.sourceEvidenceItemHeader p,
+.sourceCitation,
+.sourceEvidenceEmpty {
+  margin: 6px 0 0;
+  color: #6d7178;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.sourceEvidenceStats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.sourceEvidenceStats span,
+.sourceStatus {
+  padding: 4px 7px;
+  border-radius: 4px;
+  background: #f0eee9;
+  color: #555960;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.sourceEvidenceStats .sourceEvidenceVerified,
+.sourceStatusVerified {
+  background: #e7f1ec;
+  color: #315f50;
+}
+
+.sourceEvidenceStats .sourceEvidenceLocator,
+.sourceStatusLocator {
+  background: #e8eef3;
+  color: #405e73;
+}
+
+.sourceEvidenceStats .sourceEvidenceReview,
+.sourceStatusReview {
+  background: #f6ecd9;
+  color: #85551d;
+}
+
+.sourceStatusLegacy {
+  background: #f2e5e3;
+  color: #87443b;
+}
+
+.sourceEvidenceList {
+  margin-top: 18px;
+  border-bottom: 1px solid #e1ded7;
+}
+
+.sourceEvidenceItem {
+  padding: 18px 0 20px;
+  border-top: 1px solid #e1ded7;
+}
+
+.sourceEvidenceItemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.sourceEvidenceItemHeader h4 {
+  margin: 0;
+  color: #2d3036;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.sourceCitation {
+  color: #4f5963;
+}
+
+.sourceExcerpt {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-left: 3px solid #93ac9f;
+  background: #f4f7f5;
+  color: #303b36;
+  font-size: 14px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.sourceResources {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.sourceResource {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #d9d5cd;
+  border-radius: 6px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+}
+
+.sourceResource:hover,
+.sourceResource:focus-visible {
+  border-color: #718b7d;
+  outline: none;
+}
+
+.sourceResourceImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-bottom: 1px solid #e4e1da;
+  background: #f3f2ee;
+}
+
+.sourceResourceImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.sourceResourceBody {
+  padding: 10px 11px 12px;
+}
+
+.sourceResourceBody > div {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sourceResourceBody strong {
+  min-width: 0;
+  color: #30343a;
+  font-size: 13px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.sourceResourceBody p,
+.sourceResourceBody small {
+  display: block;
+  margin: 5px 0 0;
+  color: #72767d;
+  font-size: 11px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.sourceResourceBody span {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  background: #f6ecd9;
+  color: #85551d;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.overviewImagePage {
+  background: #f4e8da;
+  color: #8a4b2a;
+}
+
+.overviewTextPage {
+  background: #edf0f2;
+  color: #59616b;
+}
+
+.overviewScene {
+  padding: 28px 0 34px;
+  border-top: 1px solid #dedbd4;
+}
+
+.overviewSceneHeader {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.overviewSceneNumber {
+  color: #a6a096;
+  font-size: 13px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.overviewSceneTitle > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b6f77;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.overviewSceneTitle h3 {
+  margin: 5px 0 0;
+  font-size: 19px;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+.overviewSceneTitle .overviewPageContents {
+  margin: 5px 0 0;
+  color: #777a81;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.overviewExecutor {
+  padding-left: 8px;
+  border-left: 1px solid #d4d0c8;
+  color: #8a4b2a;
+}
+
+.overviewEditButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid #c9c6bf;
+  border-radius: 8px;
+  background: #fff;
+  color: #34373d;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.overviewEditButton:hover {
+  border-color: #8a4b2a;
+  color: #8a4b2a;
+}
+
+.overviewContent {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 28px;
+  padding-left: 56px;
+}
+
+.overviewStageSequence {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 18px;
+}
+
+.overviewStageFrame {
+  min-width: 0;
+}
+
+.overviewStageLabel {
+  margin-bottom: 8px;
+  color: #8a4b2a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.overviewStage {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+}
+
+.overviewNextPage {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border-left: 3px solid #c09062;
+  background: #f7f4ee;
+}
+
+.overviewNextPage span {
+  color: #8a4b2a;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.overviewNextPage strong {
+  color: #34373d;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.overviewNextPage p {
+  margin: 0;
+  color: #656a71;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.overviewBlock,
+.overviewBlockWide {
+  min-width: 0;
+}
+
+.overviewBlockWide {
+  grid-column: 1 / -1;
+}
+
+.overviewBlock h4,
+.overviewBlockWide h4 {
+  margin: 0 0 8px;
+  color: #777a81;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.overviewBlock p,
+.overviewBlockWide p,
+.overviewBlock li,
+.overviewBlockWide li {
+  margin: 0;
+  color: #30333a;
+  font-size: 14px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.overviewBlock ul,
+.overviewBlockWide ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.overviewSlots {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 22px;
+}
+
+.overviewSlot {
+  padding-left: 12px;
+  border-left: 2px solid #d9b993;
+}
+
+.overviewSlot > span {
+  display: block;
+  margin-bottom: 4px;
+  color: #8a4b2a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@media (max-width: 760px) {
+  .root {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .root > header {
+    flex-wrap: wrap;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+  }
+
+  .root > header > div {
+    order: 2;
+    flex: none !important;
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .root > header > :nth-child(n + 3) {
+    order: 3;
+  }
+
+  .workspace {
+    flex: none !important;
+    flex-direction: column;
+    overflow: visible !important;
+  }
+
+  .workspace > nav {
+    width: 100% !important;
+    max-height: 210px;
+    overflow-y: auto !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px !important;
+  }
+
+  .centerColumn {
+    flex: none !important;
+    padding: 12px !important;
+    overflow: visible !important;
+  }
+
+  .previewFrame {
+    flex: none !important;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .workspace > aside {
+    width: 100% !important;
+    border-left: 0 !important;
+    border-top: 1px solid #e5e7eb;
+    overflow-y: visible !important;
+  }
+
+  .overview {
+    padding: 10px 4px 48px;
+  }
+
+  .overviewHeader {
+    padding: 8px 4px 20px;
+  }
+
+  .overviewHeader h2 {
+    font-size: 20px;
+  }
+
+  .sourceEvidence {
+    padding: 20px 4px 26px;
+  }
+
+  .sourceEvidenceHeader,
+  .sourceEvidenceItemHeader {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sourceEvidenceStats {
+    justify-content: flex-start;
+  }
+
+  .sourceResources {
+    grid-template-columns: 1fr;
+  }
+
+  .overviewScene {
+    padding: 24px 4px 30px;
+  }
+
+  .overviewSceneHeader {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .overviewEditButton {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .overviewContent {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding-left: 48px;
+  }
+
+  .overviewBlockWide,
+  .overviewStageSequence {
+    grid-column: auto;
+  }
+
+  .overviewSlots {
+    grid-template-columns: 1fr;
+  }
+}

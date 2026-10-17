@@ -1,0 +1,51 @@
+/* 3b：投影舞台专用样式，只挂在 /prep/render 上（layout.tsx 引入）。
+ * 内容是 maolab 431d507 app/app/globals.css 中 apps/web/app/globals.css 没有的四段，逐字照搬。 */
+
+/* 学生投影片默认正文下限。课堂舞台和备课预览共用这个唯一根节点特征；
+ * 专用标签仍须通过 projectionFontSize() 使用 diagram/auxiliary 下限。 */
+div[lang='zh-CN'][class~='text-[#f9f1df]'] {
+  font-size: 28px;
+}
+
+/* 旧母版中残留的 13px 标签也必须在运行时被抬到辅助文字下限。
+ * 新代码仍由静态回归禁止继续写入这类任意字号。 */
+div[lang='zh-CN'][class~='text-[#f9f1df]'] [class~='text-[13px]'],
+div[lang='zh-CN'][class~='text-[#f9f1df]'] [style*='font-size: 13px'] {
+  font-size: 20px !important;
+}
+
+/* 课程母版统一安全区。正式课堂为对白浮层留位，备课预览没有对白时由容器把
+ * 变量降到更小值，避免每张母版各自硬编码 16%-23% 的空白。 */
+.scene-safe-height {
+  height: calc(100% - var(--scene-safe-bottom, 16%));
+}
+
+.scene-safe-bottom {
+  padding-bottom: var(--scene-safe-bottom, 16%);
+}
+
+/* 课堂底部页码条:保留横向滚动能力,但不渲染原生滚动条
+ * (Windows 系统滚动条压在授课控制条下沿,像界面裂缝)。 */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* 授课放映(PPT 语义):管理性浮层统一挂 .classroom-chrome。
+ * StageCanvas 在鼠标静止 3 秒后给 body 加 .stage-chrome-hidden,浮层整体淡出、
+ * 不再响应点击;鼠标移动/触屏即回。教学内容层(字幕带/立绘/板书)不属于 chrome。 */
+.classroom-chrome {
+  transition: opacity 0.25s ease;
+}
+.stage-chrome-hidden .classroom-chrome {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 放映/导出画面上不允许出现 Next dev 指示器(左下角 N 徽章)——
+ * 它既是「附加内容叠加」,也会被截进导出的 PPTX 页面图。 */
+.stage-chrome-hidden nextjs-portal {
+  display: none;
+}

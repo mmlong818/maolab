@@ -18,7 +18,7 @@ import { drainRenderQueue, dropPrepSchemas, loadCourseForTests, prepPgUrl, reset
 import { nginxBlocksPrepRender, nginxNormalizedPath } from './nginx-path.ts'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..')
-const OUT = join(ROOT, 'apps', 'web', 'out')
+const OUT = join(ROOT, 'apps', 'prep-web', 'out')
 const fileEnv = dotenv.parse(existsSync(join(ROOT, '.env')) ? readFileSync(join(ROOT, '.env')) : '')
 const TYPES: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2', '.txt': 'text/plain' }
 
