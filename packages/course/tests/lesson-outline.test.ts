@@ -8,7 +8,7 @@ import { buildReadyFixtureCourse } from '../src/testing/ready-course.js'
 test('the outline of a published snapshot has one entry per page the child sees, no teacher script, and fits the limit', async () => {
   const documents = createMemoryCourseDocuments()
   const { courseId, facade } = await buildReadyFixtureCourse(documents)
-  const draft = await facade.publicationDraft(courseId)
+  const draft = await facade.packageDraft(courseId)
   if (!draft.ok) throw new Error(draft.message)
   const outline = lessonOutlineOf(draft.draft.snapshot)
   const course = (await createMainlineCourseStore(documents).findMainlineCourse(courseId))!
@@ -43,7 +43,7 @@ test('the text form truncates at whole pages and says how many were left out', (
 test('measured: where actions and questions come from, and blanking textbook image urls keeps the page count', async () => {
   const documents = createMemoryCourseDocuments()
   const { courseId, facade } = await buildReadyFixtureCourse(documents)
-  const draft = await facade.publicationDraft(courseId)
+  const draft = await facade.packageDraft(courseId)
   if (!draft.ok) throw new Error(draft.message)
   const snapshot = draft.draft.snapshot
   const outline = lessonOutlineOf(snapshot)

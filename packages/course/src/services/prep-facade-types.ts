@@ -180,7 +180,7 @@ export interface PrepFacade {
    * 知识点、页数、family 与验收签名，以及读取时的 CAS 版本（sourceUpdatedAt）。只读，不调模型，不写课程。
    * 失败：not-found、not-ready（details { blockers }，与 exportReadiness 同形）、no-knowledge-point
    */
-  publicationDraft(courseId: string): Promise<{ ok: true; draft: PrepPublicationDraft } | PrepFailure>
+  packageDraft(courseId: string): Promise<{ ok: true; draft: PrepPackageDraft } | PrepFailure>
   /**
    * 修订（4b，Ruling [4b]；4a 需用户裁定第 18 条缺省）：已整课验收的课程不能原地再验收，给它建修订版。
    * 修订版用迁入的 forkCourseForReplanning 生成：同一修订族，revisionNo + 1，退回规划；正文、生成会话、截图证据、全部审查与验收都清空，
@@ -203,8 +203,8 @@ export interface PrepWorkbenchView {
   exportReady: { ok: true; pageCount: number; filename: string } | { ok: false; message: string; blockers: PrepJson }
 }
 
-/** 发布草稿（与 @maolab/domain 的 PublicationDraft 结构相同，snapshot 在 domain 是 unknown） */
-export interface PrepPublicationDraft {
+/** 课程包草稿：课程包导出的输入 */
+export interface PrepPackageDraft {
   sourceCourseId: string
   sourceUpdatedAt: number
   familyId: string

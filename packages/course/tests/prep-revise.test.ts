@@ -39,18 +39,18 @@ test('a draft course and someone else\'s course cannot be revised', async () => 
 test('after the revision is accepted it is publishable with a new signature and the original is not-ready', async () => {
   const documents = createMemoryCourseDocuments()
   const { courseId, facade } = await buildReadyFixtureCourse(documents)
-  const first = await facade.publicationDraft(courseId)
+  const first = await facade.packageDraft(courseId)
   if (!first.ok) throw new Error(first.message)
   const out = await facade.reviseCourse(courseId)
   if (!out.ok) throw new Error(out.message)
   const revisionId = (out.revision as { courseId: string }).courseId
   // 实测为准：夹具模型通道能把修订版再走完一遍
   await completeFixtureCourse(documents, revisionId)
-  const second = await facade.publicationDraft(revisionId)
+  const second = await facade.packageDraft(revisionId)
   if (!second.ok) throw new Error(second.message)
   expect(second.draft.familyId).toBe(first.draft.familyId)
   expect(second.draft.signature).not.toBe(first.draft.signature)
-  expect(await facade.publicationDraft(courseId)).toMatchObject({ ok: false, reason: 'not-ready' })
+  expect(await facade.packageDraft(courseId)).toMatchObject({ ok: false, reason: 'not-ready' })
 })
 
 test('M4: two courses of one family with the same revisionNo created in the same millisecond have exactly one latest (course id breaks the tie)', async () => {
@@ -61,10 +61,10 @@ test('M4: two courses of one family with the same revisionNo created in the same
   const family = course.revision?.familyId ?? courseId
   // id 比原课小的同族同号副本：原课仍是最新
   await store.saveMainlineCourse({ ...course, id: '0-tie-smaller', revision: { familyId: family, revisionNo: course.revision?.revisionNo ?? 1 } })
-  expect(await facade.publicationDraft(courseId)).toMatchObject({ ok: true })
+  expect(await facade.packageDraft(courseId)).toMatchObject({ ok: true })
   // id 比原课大的：原课不再是最新，message 点名它
   await store.saveMainlineCourse({ ...course, id: 'zzzz-tie-larger', revision: { familyId: family, revisionNo: course.revision?.revisionNo ?? 1 } })
-  expect(await facade.publicationDraft(courseId)).toMatchObject({ ok: false, reason: 'not-ready', message: expect.stringContaining('zzzz-tie-larger') })
+  expect(await facade.packageDraft(courseId)).toMatchObject({ ok: false, reason: 'not-ready', message: expect.stringContaining('zzzz-tie-larger') })
   expect(await facade.reviseCourse(courseId)).toMatchObject({ ok: true, revision: { courseId: 'zzzz-tie-larger', existing: true } })
 })
 
@@ -120,5 +120,5 @@ test('two facades (separate processes) revising the same course at once leave ex
   expect([ra.existing, rb.existing].sort()).toEqual([false, true])
   expect(await familyIds(base, courseId)).toEqual([courseId, ra.courseId].sort())
   // 留下的就是族里最新的：能被点名为"更新的版本"，原课不能再发布
-  expect(await one.publicationDraft(courseId)).toMatchObject({ ok: false, reason: 'not-ready', message: expect.stringContaining(ra.courseId) })
+  expect(await one.packageDraft(courseId)).toMatchObject({ ok: false, reason: 'not-ready', message: expect.stringContaining(ra.courseId) })
 })
