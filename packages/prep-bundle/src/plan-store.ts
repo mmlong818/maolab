@@ -3,7 +3,7 @@
 // 图示校验的来源文本不在这里存，而是每次从会话日志（agent.session.deriveMessages()）现取。
 import { stripToolChatter } from './chatter.ts'
 
-/** 与 @yunyi/kernels/visual-planner 的 VisualPlanDecision 同形（bundle 不从内核导入类型，只在运行时加载） */
+/** 与自习室内核 visual-planner 的 VisualPlanDecision 同形（迁入时保留，备课不用图示规划） */
 export interface VisualPlanDecision {
   need: 'required' | 'helpful' | 'none'
   candidates: string[]

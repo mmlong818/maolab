@@ -37,4 +37,6 @@ corepack pnpm -C apps/prep-web dev
 corepack pnpm -C workers/render start
 ```
 
+本机：PG 在自习室仓库的 docker compose（127.0.0.1:15433）；连 127.0.0.1 要设 `NO_PROXY=127.0.0.1,localhost`（有 HTTP_PROXY）；内存紧张，不要并行跑多个 Node 重任务。本机全链：先 `corepack pnpm -C apps/prep-web build`，再 `corepack pnpm -C apps/prep-api e2e:prep [--real-browser]`。
+
 pnpm 版本固定为 `package.json` 的 `packageManager`（11.18.0）。环境变量名暂沿用 `YUNYI_*`（core 读这些名字），见 docs/ISSUES.md。

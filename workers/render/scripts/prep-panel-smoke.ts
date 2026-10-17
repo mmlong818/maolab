@@ -1,5 +1,5 @@
 // 3d：用 Playwright 打开 /prep/，核对面板：课程出现在列表、计划页数、预览舞台渲染出来、质量页逐页状态、导出下载链接。
-// 只读核对，不点写操作。token 来自环境变量 PREP_SMOKE_TOKEN（测试库里临时签发的 token），写进 localStorage 的 maolab-token（与登录 SDK 同一个键）。
+// 只读核对，不点写操作。token 来自环境变量 PREP_SMOKE_TOKEN（测试库里临时签发的 token），写进 localStorage 的 maolab-prep-token（与登录 SDK 同一个键）。
 // 用法：PREP_SMOKE_TOKEN=… corepack pnpm --silent -C workers/render run panel-smoke --base <url> --course <id> --topic <课程题目> --pages <页数> --out <png>
 // 退出码 0 = 六项核对全部通过；标准输出最后一行是 JSON 汇总。
 // 终审修复（T14 review minor）：计划标题的页数、质量表的行数都要等于 --pages；预览要有课件文字（不只是有舞台根节点），且舞台不超出面板。
@@ -22,7 +22,7 @@ const browser = await launchBrowser({ executablePath: resolveBrowserExecutable(p
 try {
   const context = await browser.newContext({ viewport: { width: 1600, height: 1000 } })
   context.setDefaultTimeout(30_000)
-  await context.addInitScript((t) => { localStorage.setItem('maolab-token', t) }, token)
+  await context.addInitScript((t) => { localStorage.setItem('maolab-prep-token', t) }, token)
   const page = await context.newPage()
   const renderRequests: string[] = []
   page.on('request', (r) => { if (r.url().includes('/api/prep/render')) renderRequests.push(r.url()) })

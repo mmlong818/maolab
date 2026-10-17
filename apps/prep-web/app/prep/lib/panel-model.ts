@@ -1,6 +1,13 @@
 // 面板的视图模型（纯函数）：任务轮询、导出链接、整课审查被拦时的逐条处理建议（3c 终审后的 audit-blocked details）、单知识点提示、验收按钮是否可用。
 export interface PrepJob { jobId: string; kind: string; pageId: string | null; status: string; attempts: number; error: { code: string; message: string } | null; result: { url?: string | null; filename?: string | null; expiresAt?: number | null; blocked?: unknown; skipped?: unknown } | null; createdAt: number; finishedAt: number | null }
-export interface PrepWorkbench { course: Record<string, unknown>; summary: Record<string, unknown>; teachingAudit: { status: string; state: 'current' | 'stale'; findings: unknown } | null; unacceptedPageIds: string[]; auditBlocked: unknown; exportReady: { ok: true; pageCount: number; filename: string } | { ok: false; message: string; blockers: unknown } }
+export interface PrepWorkbench { course: Record<string, unknown>; summary: Record<string, unknown>; teachingAudit: { status: string; state: 'current' | 'stale'; findings: unknown; unverifiedSources?: string[] } | null; unacceptedPageIds: string[]; auditBlocked: unknown; exportReady: { ok: true; pageCount: number; filename: string } | { ok: false; message: string; blockers: unknown } }
+
+const SOURCE_LABELS: Record<string, string> = { 'curriculum-standard': '课标原文', textbook: '教材原文' }
+/** S3：知识点库没有课标与教材原文时，整课审查不以缺原文阻断，但要告诉老师没有核对（workbench.teachingAudit.unverifiedSources） */
+export function unverifiedSourcesText(workbench: Pick<PrepWorkbench, 'teachingAudit'>): string | null {
+  const kinds = (workbench.teachingAudit?.unverifiedSources ?? []).map((k) => SOURCE_LABELS[k]).filter(Boolean)
+  return kinds.length ? `这节课的整课审查没有核对${kinds.join('与')}：知识点库里还没有这些原文。` : null
+}
 
 export const needsPolling = (jobs: readonly PrepJob[]): boolean => jobs.some((j) => j.status === 'queued' || j.status === 'running')
 

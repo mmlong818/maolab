@@ -196,7 +196,7 @@ export interface PrepFacade {
 export interface PrepWorkbenchView {
   course: PrepJson                 // 课程文档全文（MainlineCourse），面板的页预览、结构树、简报用
   summary: PrepJson                // 与 read_course 同一份 courseSummary（含 pages：状态、诊断、截图、验收）
-  teachingAudit: { status: string; state: 'current' | 'stale'; findings: PrepJson } | null
+  teachingAudit: { status: string; state: 'current' | 'stale'; findings: PrepJson; unverifiedSources?: Array<'curriculum-standard' | 'textbook'> } | null
   unacceptedPageIds: string[]
   /** 会话停在 course-audit 且有本版本的核查或审查记录时：与 audit_course 返回的 audit-blocked details 同形（auditBlockedDetails(course, undefined)），否则 null */
   auditBlocked: PrepJson | null

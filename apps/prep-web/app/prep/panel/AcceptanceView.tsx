@@ -5,7 +5,7 @@
 // 整课验收按钮只在会话待验收时出现，逐页都验完才可点（canAcceptCourse，review M5）；万一仍回 422，用 acceptErrorText 转成老师能看懂的话。
 import React, { useState } from 'react'
 import { prepApi, type PrepPageRow } from '../lib/api'
-import { canAccept, type PrepWorkbench } from '../lib/panel-model'
+import { canAccept, unverifiedSourcesText, type PrepWorkbench } from '../lib/panel-model'
 import { errorText } from '../errors'
 import { acceptErrorText, canAcceptCourse, nextStepText, purposeLabel, sessionStatusOf } from './view-model'
 import styles from '../prep.module.css'
@@ -19,6 +19,7 @@ export default function AcceptanceView({ courseId, workbench, onChanged }: { cou
   const sessionStatus = sessionStatusOf(workbench)
   const awaiting = sessionStatus === 'awaiting-teacher-acceptance'
   const pages = (Array.isArray(workbench.summary.pages) ? workbench.summary.pages : []) as PrepPageRow[]
+  const unverified = unverifiedSourcesText(workbench)
   const label = (pageId: string) => { const p = pages.find((row) => row.pageId === pageId); return p ? `第 ${p.order} 页 · ${purposeLabel(p.purpose)}` : pageId }
 
   async function act(fn: () => Promise<unknown>, done: string, describe: (e: unknown) => string) {
@@ -39,6 +40,7 @@ export default function AcceptanceView({ courseId, workbench, onChanged }: { cou
   return (
     <div className={styles.section}>
       <strong>教师验收</strong>
+      {unverified ? <p className={styles.hint} role="note">{unverified}</p> : null}
       {accepted ? <p>整课已验收。</p> : null}
       {message ? <p className={message.ok ? styles.hint : styles.error}>{message.text}</p> : null}
       {pending.length > 0 ? (

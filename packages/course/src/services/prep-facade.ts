@@ -694,7 +694,11 @@ export function createPrepFacade(deps: PrepFacadeDeps, internals: PrepFacadeInte
             // audit.run 只在 AI 教学审查 passed 时正常返回，否则抛 AUDIT_BLOCKED（generation-course-audit.ts），成功即可验收
             acceptable: true,
             findings: teachingFindings(result.course),
-            note: '整课审查通过：可以逐页 accept_page。findings 里只剩不阻断的提醒。',
+            // S3：知识点数据集不带课标与教材原文时，审查不以缺原文阻断，但要如实告诉老师没有核对
+            ...(result.course.teachingQualityAudit?.unverifiedSources ? { unverifiedSources: result.course.teachingQualityAudit.unverifiedSources } : {}),
+            note: result.course.teachingQualityAudit?.unverifiedSources
+              ? '整课审查通过：可以逐页 accept_page。注意：知识点库里没有这节课的课标与教材原文，本次审查未核对课标与教材原文，要如实告诉老师。findings 里只剩不阻断的提醒。'
+              : '整课审查通过：可以逐页 accept_page。findings 里只剩不阻断的提醒。',
           }),
         }
       } catch (error) {
@@ -866,7 +870,7 @@ export function createPrepFacade(deps: PrepFacadeDeps, internals: PrepFacadeInte
         workbench: toPrepJson({
           course,
           summary: courseSummary(course),
-          teachingAudit: record ? { status: record.status, state: current ? 'current' : 'stale', findings: teachingFindings(course) } : null,
+          teachingAudit: record ? { status: record.status, state: current ? 'current' : 'stale', findings: teachingFindings(course), ...(record.unverifiedSources ? { unverifiedSources: record.unverifiedSources } : {}) } : null,
           // 面板显示整课审查被拦的逐条建议（3c 交接）：与工具返回同一个函数，previousTeachingAuditedAt 不传 = 当前版本的记录都算
           auditBlocked: course.generationSession?.status === 'course-audit' && (course.factAudit || course.teachingQualityAudit) ? auditBlockedDetails(course, undefined) : null,
           unacceptedPageIds: course.generationSession?.status === 'awaiting-teacher-acceptance' || course.generationSession?.status === 'ready' ? unacceptedPageIds(course) : [],

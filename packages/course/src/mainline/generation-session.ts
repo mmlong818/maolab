@@ -116,6 +116,8 @@ export interface TeachingQualityAuditRecord {
   standards: TeachingQualityStandard[]
   findings: TeachingQualityAuditFinding[]
   status: 'passed' | 'blocked' | 'insufficient-evidence'
+  /** 课程一条权威原文都没有时（k12 数据集不带课标与教材原文），缺原文不阻断，只在这里记下没有核对的来源类别（S3 用户裁决：先降级，后补数据） */
+  unverifiedSources?: Array<'curriculum-standard' | 'textbook'>
   auditedAt: string
 }
 

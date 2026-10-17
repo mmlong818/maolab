@@ -1,5 +1,5 @@
 {
-  "fakeCapture": true,
+  "fakeCapture": false,
   "facets": [
     {
       "gradeBand": "初中",
@@ -20,6 +20,7 @@
   },
   "exportDrain": {
     "counts": {
+      "succeeded": 1,
       "idle": 1
     }
   },
@@ -27,14 +28,34 @@
     "renderPage": {
       "succeeded": 15
     },
-    "exportPptx": {}
+    "exportPptx": {
+      "succeeded": 1
+    }
   },
-  "problems": [
-    "整课审查 [{\"name\":\"audit_course\",\"ok\":false,\"reason\":\"audit-blocked\"}]",
-    "整课审查后待验收页 0 应为 15",
-    "整课验收 422",
-    "导出入队 422",
-    "导出任务 undefined",
-    "中断：TypeError"
-  ]
+  "pptxIsZip": true,
+  "renderPath": {
+    "web": 404,
+    "api": 404,
+    "webVariants": [
+      404,
+      404,
+      404
+    ]
+  },
+  "panel": {
+    "courseListed": true,
+    "planShown": true,
+    "previewRendered": true,
+    "qualityRows": true,
+    "exportLink": true,
+    "noRenderPathRequests": true
+  },
+  "panelEvidence": {
+    "previewCanvas": 0,
+    "previewZhCn": 16,
+    "previewTextChars": 96,
+    "previewOverflowPx": 0,
+    "qualityRows": 15
+  },
+  "problems": []
 }
