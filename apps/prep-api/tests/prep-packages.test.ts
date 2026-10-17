@@ -58,6 +58,18 @@ test('needs a login; a course that is not accepted is refused with blockers and 
   expect((await send('POST', `/api/prep/courses/${courseId}/package`, tokens.b!, { requestId: 'req-pkg-other01' })).statusCode).toBe(404)
 })
 
+test('a course edited after acceptance is refused with blockers and nothing is queued (review focus 3)', async () => {
+  const docs = new PgCourseDocuments(env.pool, { schema: SCHEMA }).forOwner(A)
+  const { courseId: edited } = await env.course.buildReadyFixtureCourse(docs)
+  const store = env.course.createMainlineCourseStore(docs)
+  const course = (await store.findMainlineCourse(edited))!
+  await store.saveMainlineCourse({ ...course, topic: `${course.topic}（改过）` })
+  const refused = await send('POST', `/api/prep/courses/${edited}/package`, tokens.a!, { requestId: 'req-pkg-edited01' })
+  expect(refused.statusCode).toBe(422)
+  expect(refused.json()).toMatchObject({ reason: 'not-ready', details: { blockers: expect.arrayContaining([expect.anything()]) } })
+  expect((await new PgRenderJobs(env.pool, { schema: SCHEMA }).forOwner(A).listForCourse(edited)).filter((j) => j.kind === 'export-package')).toEqual([])
+}, 300_000)
+
 test('export → queued job; once done the list shows v1 with a zip download; the same course again is unchanged', async () => {
   const first = await send('POST', `/api/prep/courses/${courseId}/package`, tokens.a!, { requestId: 'req-pkg-first01' })
   expect(first.statusCode).toBe(202)

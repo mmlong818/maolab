@@ -64,6 +64,23 @@ test('two concurrent exports of the same course make one version', async () => {
   expect(listed!.versions.map((v) => v.version)).toEqual([1])
 })
 
+test('a build that is not committed (lost race) is discarded; the committed one never is (final review Minor 3)', async () => {
+  const pkg = await a.ensureActivePackage('fam-discard')
+  let n = 0
+  const discarded: string[] = []
+  const slow = () => new Promise<ExportBuild>((r) => { const id = `ar_${String(++n).padStart(40, '7')}`; setTimeout(() => r({ artifactId: id, sha256: 'c'.repeat(64), bytes: 9, pageCount: 2 }), 50) })
+  const input = { sourceCourseId: 'c-d', signature: 'sig-d', build: slow, discard: async (b: ExportBuild) => { discarded.push(b.artifactId) } }
+  const [x, y] = await Promise.all([a.appendVersion(pkg.packageId, input), a.appendVersion(pkg.packageId, input)])
+  const committed = [x, y].find((o) => o.kind === 'created')!.version.artifactId
+  expect(discarded).toHaveLength(1)
+  expect(discarded[0]).not.toBe(committed)
+  // 同字节（同一产物 id）时不丢：丢了就把已提交版本的包删了
+  const same = { sourceCourseId: 'c-e', signature: 'sig-e', build: async () => ({ artifactId: `ar_${'8'.repeat(40)}`, sha256: 'd'.repeat(64), bytes: 9, pageCount: 2 }), discard: async (b: ExportBuild) => { discarded.push(b.artifactId) } }
+  const pkg2 = await a.ensureActivePackage('fam-discard-same')
+  await Promise.all([a.appendVersion(pkg2.packageId, same), a.appendVersion(pkg2.packageId, same)])
+  expect(discarded).toHaveLength(1)
+})
+
 test('recall: the package refuses new versions, a new export gets a new package id, recall twice keeps the first', async () => {
   const pkg = await a.ensureActivePackage('fam-r')
   await a.appendVersion(pkg.packageId, { sourceCourseId: 'c-1', signature: 'sig-1', build: build() })

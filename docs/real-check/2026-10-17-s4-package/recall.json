@@ -2,13 +2,13 @@
   "recall": {
     "format": "maolab-course-recall",
     "formatVersion": "1.0.0",
-    "packageId": "pk_SzbLFRuGAYarX6AO72c1OQ",
-    "recalledAt": "2026-10-17T15:09:32.256Z",
+    "packageId": "pk_g9WIg9v7clzeSlP5h2YCxw",
+    "recalledAt": "2026-10-17T16:06:07.252Z",
     "reason": "全链走查：撤回演示"
   },
   "signature": {
     "alg": "ed25519",
-    "keyId": "8c49f765b03db509",
-    "value": "0F+AMnkgzUO881Gg39EhrC11AQ2Ja6zQjxNPbX6X5cwefk3viUzUyNZhU/Sp1GuShCyzF8yimD/L/tpgvIL2CA=="
+    "keyId": "3de770f763619220",
+    "value": "Qc9n6SokxtC3ON+W+6zXUvfHukko6t2stcs09gS0em396EOY5Z+2vFhQFjpN2digOAKdGmr4FkHS/hHVbgQtBQ=="
   }
 }
