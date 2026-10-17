@@ -13,8 +13,8 @@ coverage/
 *.tsbuildinfo
 *.log
 .playwright-mcp/
-# dsh 宿主运行时目录
-apps/prep-harness/.dsh-home/
+# dsh 宿主运行时的会话目录（profile 文件入库）
+apps/prep-harness/.dsh-home/sessions/
 # 真检浏览器 profile 不入库（含凭证存储）
 docs/real-check/**/*-profile/
 # .claude/ 本机配置不入库
