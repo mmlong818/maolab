@@ -1,6 +1,6 @@
 'use client'
 
-// 导出 PPTX（页优先课程）：导出判定来自 workbench.exportReady（服务端 planProjectionExport）；最近一次导出任务给下载链接、进度或失败原因。
+// 导出 PPTX（页优先课程）与课程包（S4，PackageView）：导出判定来自 workbench.exportReady（服务端 planProjectionExport）；最近一次导出任务给下载链接、进度或失败原因。
 // 下载只走按 owner 校验的产物地址，带 name 与 token（downloadHref）；不是产物前缀的地址不给链接、不带 token（终审 M6）。有可下载的文件时每 30 秒按时钟重判是否过期（review M7）。
 import { useEffect, useState } from 'react'
 import { withAuthToken } from '@/lib/auth/client'
@@ -8,6 +8,7 @@ import { prepApi, newRequestId } from '../lib/api'
 import { downloadHref, isArtifactUrl } from '../lib/artifact-url'
 import { latestExport, type PrepJob, type PrepWorkbench } from '../lib/panel-model'
 import { errorText } from '../errors'
+import PackageView from './PackageView'
 import { downloadState } from './view-model'
 import styles from '../prep.module.css'
 
@@ -45,6 +46,7 @@ export default function ExportView({ courseId, workbench, jobs, onChanged }: { c
           : <p className={styles.error}>导出结果的下载地址不对，请重新导出。</p>) : null}
       {pending ? <p className={styles.status}>导出中…</p> : null}
       {latest && 'failed' in latest ? <p className={styles.error}>上次导出没有完成：{latest.failed}</p> : null}
+      <PackageView courseId={courseId} title={typeof workbench.course.topic === 'string' ? workbench.course.topic : ''} ready={workbench.exportReady.ok} jobs={jobs} onChanged={onChanged} />
     </div>
   )
 }

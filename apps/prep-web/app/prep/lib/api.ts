@@ -12,6 +12,10 @@ export interface PrepPageRow { pageId: string; order: number; purpose: string; l
 export interface PrepKnowledgePoint { id: string; name: string; subject: string; gradeBand: string; summary: string }
 export interface PrepKnowledgeFacets { datasetVersion: string | null; gradeBands: Array<{ gradeBand: string; subjects: string[] }> }
 
+/** S4：课程包（/api/prep/packages）。url、recallUrl 是按 owner 校验的产物地址 */
+export interface PrepPackageVersion { version: number; sourceCourseId: string; url: string; filename: string; bytes: number; pageCount: number; createdAt: number }
+export interface PrepPackage { packageId: string; status: 'active' | 'recalled'; createdAt: number; recalledAt: number | null; recallReason: string | null; recallUrl: string | null; versions: PrepPackageVersion[] }
+
 export class PrepApiError extends Error {
   status: number
   code?: string
@@ -50,6 +54,10 @@ export const prepApi = {
   acceptCourse: (id: string) => call<{ acceptance: unknown }>('POST', `/api/prep/courses/${enc(id)}/accept`, {}),
   render: (id: string, requestId: string) => call<{ jobs: PrepJob[]; skipped: string[]; note?: string }>('POST', `/api/prep/courses/${enc(id)}/render`, { requestId }),
   exportPptx: (id: string, requestId: string) => call<{ job: PrepJob }>('POST', `/api/prep/courses/${enc(id)}/export`, { requestId }),
+  /** S4：导出课程包。当前验收版本已导出过时 unchanged（不投任务） */
+  exportPackage: (id: string, requestId: string) => call<{ job: PrepJob; packageId: string } | { unchanged: true; packageId: string; version: PrepPackageVersion }>('POST', `/api/prep/courses/${enc(id)}/package`, { requestId }),
+  packages: (courseId: string) => call<{ packages: PrepPackage[] }>('GET', `/api/prep/packages?courseId=${enc(courseId)}`),
+  recallPackage: (packageId: string, requestId: string, reason?: string) => call<{ package: PrepPackage; recallUrl: string | null }>('POST', `/api/prep/packages/${enc(packageId)}/recall`, { requestId, ...(reason ? { reason } : {}) }),
   /** 4b：建修订版；新建 201、族里已有更新的课 200（existing: true），都返回修订版（或那门更新的课）的 courseId */
   revise: (courseId: string) => call<{ revision: { courseId: string; existing: boolean; note: string } }>('POST', `/api/prep/courses/${enc(courseId)}/revise`, {}),
   knowledgeFacets: () => call<PrepKnowledgeFacets>('GET', '/api/prep/knowledge/facets'),
