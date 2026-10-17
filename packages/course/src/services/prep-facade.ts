@@ -28,7 +28,7 @@ import { CourseServiceError } from './errors.js'
 import { createCourseGenerationServices, type CourseGenerationOptions } from './generation.js'
 import { updateCoursePlan } from './plan.js'
 import { planProjectionExport } from './projection.js'
-import { publicationDraftOf } from './publication.js'
+import { packageDraftOf } from './package-draft.js'
 import type { PrepDocumentStore, PrepFacade, PrepFacadeDeps, PrepFailure, PrepFailureReason, PrepGenerateOptions, PrepJson, PrepKnowledgePort, PrepRuntime } from './prep-facade-types.js'
 
 // 编译期断言：类型文件里的结构副本与 ports.ts、runtime.ts 互相可赋值
@@ -433,7 +433,7 @@ export function createPrepFacade(deps: PrepFacadeDeps, internals: PrepFacadeInte
 
   /**
    * 修订族里的先后（4a 终审 M4 的同毫秒并列，4b 修）：revisionNo 大的新；相同时创建得晚的新；仍相同时按课程 id 的字典序，大的算新。
-   * 这是全序，同族永远恰好一门"最新"。publicationDraft 与 reviseCourse 共用
+   * 这是全序，同族永远恰好一门"最新"。packageDraft 与 reviseCourse 共用
    */
   const newerInFamily = (a: Pick<ListedMainlineCourse, 'course' | 'createdAt'>, b: Pick<ListedMainlineCourse, 'course' | 'createdAt'>): boolean => {
     const ra = revisionOf(a.course).revisionNo
@@ -795,10 +795,10 @@ export function createPrepFacade(deps: PrepFacadeDeps, internals: PrepFacadeInte
       }
     },
 
-    async publicationDraft(courseId) {
+    async packageDraft(courseId) {
       const snapshot = await store.findMainlineCourseSnapshot(courseId)
       if (!snapshot) return prepFailure('not-found', NOT_FOUND)
-      const out = publicationDraftOf(snapshot.course)
+      const out = packageDraftOf(snapshot.course)
       if (!out.ok) return prepFailure(out.reason, out.message, out.blockers ? toPrepJson({ blockers: out.blockers }) : undefined)
       // 同一修订族里有更新的课程时不能发布旧课（终审 M4）：不只看 supersededByCourseId——修订版验收时标记被替代可能失败（acceptCourse 的 note），
       // 那样旧课仍会通过上面的判定，签名不同，会把旧内容发成新的 v(n+1)。"更新"按 newerInFamily 的全序（4b 修同毫秒并列）
