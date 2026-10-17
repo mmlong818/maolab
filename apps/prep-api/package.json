@@ -10,15 +10,17 @@
     "typecheck:build": "tsc --noEmit -p tsconfig.build.json",
     "test": "vitest run",
     "e2e:prep": "tsx scripts/prep-e2e.ts",
-    "stack:prep": "tsx scripts/prep-stack.ts"
+    "stack:prep": "tsx scripts/prep-stack.ts",
+    "package:keygen": "tsx scripts/package-keygen.ts"
   },
   "dependencies": {
     "@agentia/auth-node": "file:../../../maolab-core/packages/agentia-auth-node",
-    "@maolab/course": "workspace:*",
-    "@maolab/domain": "workspace:*",
     "@maolab-core/auth": "file:../../../maolab-core/packages/auth",
+    "@maolab-core/course-package": "file:../../../maolab-core/packages/course-package",
     "@maolab-core/knowledge": "file:../../../maolab-core/packages/knowledge",
     "@maolab-core/types": "file:../../../maolab-core/packages/types",
+    "@maolab/course": "workspace:*",
+    "@maolab/domain": "workspace:*",
     "dotenv": "^16.4.5",
     "fastify": "^5.4.0",
     "pg": "^8.16.3",
@@ -31,9 +33,20 @@
     "vitest": "^3.2.4"
   },
   "dependenciesMeta": {
-    "@agentia/auth-node": { "injected": true },
-    "@maolab-core/auth": { "injected": true },
-    "@maolab-core/knowledge": { "injected": true },
-    "@maolab-core/types": { "injected": true }
+    "@agentia/auth-node": {
+      "injected": true
+    },
+    "@maolab-core/auth": {
+      "injected": true
+    },
+    "@maolab-core/course-package": {
+      "injected": true
+    },
+    "@maolab-core/knowledge": {
+      "injected": true
+    },
+    "@maolab-core/types": {
+      "injected": true
+    }
   }
 }

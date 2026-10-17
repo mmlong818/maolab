@@ -2,7 +2,7 @@
 // 按 owner 缓存门面（LRU，上限 512，同 bundle 的 yunyi-prep）；owner 只来自已鉴权的账号用户名。
 // api 与 harness 各有一个门面实例：跨进程靠 CAS；面板写操作在 owner 有进行中的对话回合时由路由先拒（PREP_TURN_RUNNING）。
 import type pg from 'pg'
-import { PgCourseArtifacts, PgCourseDocuments, PgCourseKnowledge, PgRenderJobs, type OwnerArtifacts, type OwnerRenderJobs, type RenderJob } from '@maolab/domain'
+import { PgCourseArtifacts, PgCourseDocuments, PgCourseKnowledge, PgExports, PgRenderJobs, type OwnerArtifacts, type OwnerExports, type OwnerRenderJobs, type RenderJob } from '@maolab/domain'
 import type { PrepFacade, PrepFailure, PrepFailureReason, PrepJson } from '@maolab/course/services/prep-facade-types'
 import type { PrepConfig } from './config.ts'
 import { loadCourseApi, type CourseApi } from './course-loader.ts'
@@ -49,6 +49,7 @@ export class PrepCourses {
   private readonly knowledge: PgCourseKnowledge
   private readonly renderJobs: PgRenderJobs
   private readonly artifactStore: PgCourseArtifacts
+  private readonly exportStore: PgExports
   private readonly load: () => Promise<CourseApi>
   private readonly maxOwners: number
   private readonly facades = new Map<string, PrepFacade>()
@@ -59,6 +60,7 @@ export class PrepCourses {
     this.knowledge = new PgCourseKnowledge(deps.pool, { schema: deps.prep.knowledgeSchema })
     this.renderJobs = new PgRenderJobs(deps.pool, { schema: deps.prep.courseSchema })
     this.artifactStore = new PgCourseArtifacts(deps.pool, { schema: deps.prep.courseSchema })
+    this.exportStore = new PgExports(deps.pool, { schema: deps.prep.courseSchema })
     this.load = deps.load ?? loadCourseApi
     this.maxOwners = deps.maxOwners ?? 512
   }
@@ -85,6 +87,15 @@ export class PrepCourses {
 
   jobs(owner: string): OwnerRenderJobs { return this.renderJobs.forOwner(owner) }
   artifacts(owner: string): OwnerArtifacts { return this.artifactStore.forOwner(owner) }
+  exports(owner: string): OwnerExports { return this.exportStore.forOwner(owner) }
+
+  /** S4：课程所在的修订族（同 packageDraftOf：revision.familyId，没有修订关系就是课程自己）；不是本人的课程返回 undefined。不加载课程模块 */
+  async familyOf(owner: string, courseId: string): Promise<string | undefined> {
+    const doc = await this.documents.forOwner(owner).find('course', courseId)
+    if (!doc) return undefined
+    const familyId = (doc.payload as { revision?: { familyId?: unknown } } | null)?.revision?.familyId
+    return typeof familyId === 'string' && familyId ? familyId : courseId
+  }
 
   /** 取缓存并标为最近使用 */
   private take(owner: string): PrepFacade | undefined {

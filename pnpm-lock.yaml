@@ -20,6 +20,9 @@ importers:
       '@maolab-core/auth':
         specifier: file:../../../maolab-core/packages/auth
         version: file:../maolab-core/packages/auth(@agentia/auth-node@file:../maolab-core/packages/agentia-auth-node)(pg@8.23.1)
+      '@maolab-core/course-package':
+        specifier: file:../../../maolab-core/packages/course-package
+        version: file:../maolab-core/packages/course-package
       '@maolab-core/knowledge':
         specifier: file:../../../maolab-core/packages/knowledge
         version: file:../maolab-core/packages/knowledge(@maolab-core/types@file:../maolab-core/packages/types)(pg@8.23.1)
@@ -48,6 +51,8 @@ importers:
       '@agentia/auth-node':
         injected: true
       '@maolab-core/auth':
+        injected: true
+      '@maolab-core/course-package':
         injected: true
       '@maolab-core/knowledge':
         injected: true

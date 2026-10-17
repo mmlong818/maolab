@@ -2,6 +2,8 @@
 // 回合超时按分钟计：3c T12 真实模型单回合最长 626.6 秒，缺省 30 分钟。
 // 课程与知识点 schema 与 harness profile 的 yunyi-prep 同名变量一致（YUNYI_COURSE_SCHEMA 只给测试用，生产不得设置，3c 交接）。
 // 图像是否可用与 harness 同读 YUNYI_PREP_IMAGE_MODEL（用户裁决 D3 缺省空 = 不可用）：面板的"确认计划"与对话工具对图像页的判定一致。
+import { loadPackageSigningKey } from '@maolab/domain'
+import type { SigningKey } from '@maolab-core/course-package'
 import type { HarnessConfig } from '../config.ts'
 
 export type PrepMode = 'off' | 'list' | 'all'
@@ -17,6 +19,8 @@ export interface PrepConfig {
   /** 备课会话的 agent 模型（dsh provider 与 model）：YUNYI_TURN_PROVIDER、YUNYI_TURN_MODEL，缺省 yunyi / glm-5.3 */
   provider: string
   model: string
+  /** S4：课程包签名钥（MAOLAB_PACKAGE_SIGNING_KEY，撤回单在 api 签）；没配置时导出与撤回答 503 */
+  packageSigningKey: SigningKey | undefined
 }
 export const DEFAULT_PREP_TURN_TIMEOUT_MS = 1_800_000
 export const PREP_STALE_MARGIN_MS = 15_000
@@ -49,6 +53,7 @@ export function readPrepConfig(env: NodeJS.ProcessEnv, harness: HarnessConfig): 
     imagesAvailable: Boolean((env.YUNYI_PREP_IMAGE_MODEL ?? '').trim()),
     provider: (env.YUNYI_TURN_PROVIDER ?? 'yunyi').trim() || 'yunyi',
     model: (env.YUNYI_TURN_MODEL ?? 'glm-5.3').trim() || 'glm-5.3',
+    packageSigningKey: loadPackageSigningKey(env),
   }
   if (mode !== 'off') for (const [name, value] of [['YUNYI_HARNESS_URL', harness.url], ['YUNYI_INTERNAL_KEY', harness.internalKey]] as const) {
     if (!value) throw new Error(`YUNYI_PREP=${mode} 需要 ${name}`)

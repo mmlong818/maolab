@@ -12,6 +12,7 @@ import { prepCourseRoutes } from './prep-courses.ts'
 import { prepArtifactRoutes } from './prep-artifacts.ts'
 import { prepChatRoutes } from './prep-chat.ts'
 import { prepKnowledgeRoutes } from './prep-knowledge.ts'
+import { prepPackageRoutes } from './prep-packages.ts'
 
 /** Ruling [T4] F6：渲染数据路径判定先归一再比对——重复斜杠、点段与 ..、百分号编码（含多重编码，如 %2F、%252F）、反斜杠、
  *  段内 ;参数、大小写都不能绕过。只用于决定"直接 404"，宁可多拦：归一后前三段是 api/prep/render 即算。 */
@@ -71,6 +72,7 @@ export const prepRoutes: FastifyPluginAsync = async (app) => {
     await scoped.register(prepCourseRoutes)
     await scoped.register(prepArtifactRoutes)
     await scoped.register(prepKnowledgeRoutes)
+    await scoped.register(prepPackageRoutes)
     // /api/prep 本身也进闸门：名单外的账号在任何 /api/prep 路径上都是 403
     scoped.all('/api/prep', notFound)
     scoped.all('/api/prep/*', notFound)
