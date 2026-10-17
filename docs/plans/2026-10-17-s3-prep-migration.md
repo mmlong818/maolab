@@ -118,3 +118,4 @@
 - 2026-10-17：Task 8 本机全链（假模型，固定度量与真实浏览器两种截图）通过，报告 `docs/real-check/2026-10-17-s3-prep/REPORT.md`。走查中发现 k12 无课标与教材原文会让整课审查阻断，按用户裁决降级为提示（ISSUES 7）。
 - 偏离计划：Task 4 计划里"无来源知识点建课"的测试放在 course 的 services 测试与新的 tests/prep-no-source.test.ts；浏览器里实际点选 KpPicker 留到 S6。
 
+- 2026-10-17：收尾。全仓 typecheck 通过；全仓测试 1545 通过、2 跳过（render 的 Windows 信号用例与 prep-harness 的 SIGTERM 用例）；源码扫描 `@yunyi/`、`/api/v2` 无命中，`learner`、`tutor`、`publication` 的命中见 ISSUES 15。根脚本改为 `corepack pnpm -r`（本机 PATH 上没有 pnpm）。`split-s3` 已快进合入 main。S3 完成。

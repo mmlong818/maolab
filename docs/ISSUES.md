@@ -16,3 +16,6 @@
 | 10 | 10-17 | S3 | 各镜像的 Dockerfile 构建上下文里没有 maolab-core（同 core ISSUES 10） | 开发期不构建镜像；core 远端建好、改成 git tag 依赖后再验证镜像 |
 | 11 | 10-17 | S3 | 公式朗读文本 chinese-math-speech（20 行）原在自习室的 kernels 包，投影舞台的无障碍朗读要用 | 复制到 apps/prep-web/app/lib/，不引入 kernels 包 |
 | 12 | 10-17 | S3 | prep-harness 里 chatter.ts 的工具名表是导师工具（剥离旁白与伪调用用），备课定稿另剥 prep 工具名 | 原样保留，对备课回复无害 |
+| 13 | 10-17 | S3 | S3 的改写脚本把 2 个文件误写到自习室仓库 `apps/maolab/apps/prep-web/`（nginx 模板是自习室旧版、sync-mathjax 脚本与本仓库相同），未跟踪 | 已删（10-17，权限放开后） |
+| 14 | 10-17 | S3 | 根 package.json 的 `pnpm -r` 在本机找不到 pnpm（只有 corepack） | 改成 `corepack pnpm -r`；test 顺序执行，省内存 |
+| 15 | 10-17 | S3 | 源码扫描的剩余命中：`learner` 在 shared-types 的 `LearnerGender`/`LearnerType`（课程生成的个性化参数）与 plan-store 的 `learner.gender`；`tutor` 只在测试（断言 tutor preset 被拒）与 DeepTutor 借鉴注释；`publication` 是 `publicationDraft`（S4 导出输入）与 harness 测试环境变量 | 不是学生侧代码，保留；S4 把 publication 改名为课程包导出时一起清 |
