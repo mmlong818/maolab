@@ -24,7 +24,7 @@ if (!/^course_test_[a-z0-9_]+$/.test(schema) || !Number.isInteger(maxJobs) || ma
   process.exit(2)
 }
 const fake = values['fake-capture'] === true
-const WEB_OUT = join(resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..'), 'apps', 'web', 'out')
+const WEB_OUT = join(resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..'), 'apps', 'prep-web', 'out')
 if (!fake && !existsSync(join(WEB_OUT, 'prep', 'render', 'index.html'))) {
   process.stderr.write('缺少 apps/prep-web/out/prep/render/index.html：先跑 corepack pnpm build，或加 --fake-capture\n')
   process.exit(2)

@@ -14,7 +14,7 @@ export const PPTX_CONTENT_TYPE = 'application/vnd.openxmlformats-officedocument.
 export const ARTIFACT_CONTENT_TYPES: readonly string[] = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml', PPTX_CONTENT_TYPE]
 export const ARTIFACT_MAX_BYTES = 64 * 1024 * 1024
 export const EXPORT_RETENTION_MS = 7 * 24 * 60 * 60 * 1000
-/** 浏览器与渲染页里产物的地址前缀；@yunyi/course 的 render-contract 有同值常量（浏览器侧不能引 pg），course 的测试校验两者一致 */
+/** 浏览器与渲染页里产物的地址前缀；@maolab/course 的 render-contract 有同值常量（浏览器侧不能引 pg），course 的测试校验两者一致 */
 export const COURSE_ARTIFACT_URL_PREFIX = '/api/prep/artifacts/'
 export const courseArtifactUrlOf = (id: string): string => `${COURSE_ARTIFACT_URL_PREFIX}${id}`
 
@@ -168,7 +168,7 @@ export class PgCourseArtifacts implements CourseArtifactStore {
   }
 }
 
-/** 3c 的工具在 runWithCourseRuntime({ assets }) 里用：结构上满足 @yunyi/course 的 CourseAssetSink（本包不依赖 course） */
+/** 3c 的工具在 runWithCourseRuntime({ assets }) 里用：结构上满足 @maolab/course 的 CourseAssetSink（本包不依赖 course） */
 export function courseAssetSinkFor(artifacts: OwnerArtifacts, courseId: string): { put(input: { bytes: Uint8Array; contentType: string; name: string }): Promise<string> } {
   return {
     async put(input) {

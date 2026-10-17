@@ -16,7 +16,7 @@ import { startStaticServer } from '../src/static-server.ts'
 import { testPool } from '../tests-pg/helpers.ts'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..')
-const WEB_OUT = join(ROOT, 'apps', 'web', 'out')
+const WEB_OUT = join(ROOT, 'apps', 'prep-web', 'out')
 const OUT = join(ROOT, 'docs', 'real-check', '2026-10-14-phase3b-render', 'e2e')
 const SCHEMA = 'course_test_render_e2e'
 const OWNER = 'course_test_render_e2e_teacher'

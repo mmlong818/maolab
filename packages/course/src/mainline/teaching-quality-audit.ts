@@ -214,10 +214,14 @@ export function buildTeachingQualityAudit(
   const findings: TeachingQualityAuditFinding[] = []
 
   const authority = authoritativeEvidenceCoverage(course)
-  if (!authority.curriculumStandard) {
+  // S3（用户裁决 2026-10-17：先降级，后补数据）：k12 知识点数据集不带课标与教材原文。课程一条权威原文都没有时，
+  // 缺原文不阻断，记进 unverifiedSources（面板与工具结果提示"未核对课标与教材"），审查器自己报的标准证据缺口也并进这条提示；
+  // 一旦有任何权威原文（补上资源包后），恢复原来的证据门。
+  const unverified = !authority.any
+  if (!unverified && !authority.curriculumStandard) {
     findings.push(insufficient(standards[0]!.id, fallbackPageId, fallbackEvidence, '缺少可追溯、学科和学段匹配且已绑定知识点的权威课程标准原文，不能声明课标已核对。', '挂载并绑定对应学科、学段和知识点的课程标准原文、citation 或 provenance 后重新审查。', 'curriculum-standard'))
   }
-  if (!authority.textbook) {
+  if (!unverified && !authority.textbook) {
     findings.push(insufficient(standards[0]!.id, fallbackPageId, fallbackEvidence, '缺少可追溯、学科和学段匹配且已绑定知识点的权威教材原文，不能声明教材已核对。', '挂载并绑定对应学科、学段和知识点的教材原文、citation 或 provenance 后重新审查。', 'textbook'))
   }
   const integrityProblems = output ? reviewIntegrityProblems(output, pageContent.pages.map(page => page.pageId), standards.map(standard => standard.id), pages) : ['本次自动教学审查没有返回可校验结果。']
@@ -237,18 +241,20 @@ export function buildTeachingQualityAudit(
         ))
         continue
       }
+      if (unverified && candidate.category === 'standards-evidence' && candidate.severity === 'insufficient-evidence') continue
       findings.push({ id: `teaching:${candidate.pageId}:${candidate.category}-${index + 1}`, ...candidate })
     }
   }
   const status = findings.some(item => item.severity === 'insufficient-evidence')
     ? 'insufficient-evidence'
     : findings.length > 0 ? 'blocked' : 'passed'
+  const unverifiedSources = unverified ? ['curriculum-standard', 'textbook'] as Array<'curriculum-standard' | 'textbook'> : undefined
   return {
     schemaVersion: 'mainline-teaching-quality-audit-v1',
-    id: generationInputHash({ courseId: course.id, planRevisionId: generationCourseAudit.planRevisionId, contentRevisionId: pageContent.contentRevisionId, generationCourseAuditId: generationCourseAudit.id, standards, findings }),
+    id: generationInputHash({ courseId: course.id, planRevisionId: generationCourseAudit.planRevisionId, contentRevisionId: pageContent.contentRevisionId, generationCourseAuditId: generationCourseAudit.id, standards, findings, ...(unverifiedSources ? { unverifiedSources } : {}) }),
     inputHash: teachingQualityInputHash(course, standards),
     courseId: course.id, planRevisionId: generationCourseAudit.planRevisionId, contentRevisionId: pageContent.contentRevisionId,
-    generationCourseAuditId: generationCourseAudit.id, standards, findings, status, auditedAt: now,
+    generationCourseAuditId: generationCourseAudit.id, standards, findings, status, ...(unverifiedSources ? { unverifiedSources } : {}), auditedAt: now,
   }
 }
 
@@ -320,9 +326,10 @@ function firstStudentEvidence(pageTextById: ReadonlyMap<string, string>): string
   return [...pageTextById.values()].find(text => text.trim().length > 0) ?? ''
 }
 
-function authoritativeEvidenceCoverage(course: MainlineCourse): { curriculumStandard: boolean; textbook: boolean } {
+function authoritativeEvidenceCoverage(course: MainlineCourse): { any: boolean; curriculumStandard: boolean; textbook: boolean } {
   const authoritative = course.sourceMaterial.filter(source => source.provenance?.evidenceStatus === 'authoritative-excerpt' && hasTraceableExcerpt(source))
   return {
+    any: authoritative.length > 0,
     curriculumStandard: authoritative.some(source => isCurriculumStandard(source) && sourceMatchesCourse(source, course)),
     textbook: authoritative.some(source => source.kind === 'textbook' && !isCurriculumStandard(source) && sourceMatchesCourse(source, course)),
   }

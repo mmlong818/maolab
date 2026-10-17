@@ -286,3 +286,12 @@ describe('prep api send robustness (review Minor)', () => {
     await expect(prepApi.send('s-1', { content: '建课', requestId: 'req-12345678' }, () => {})).rejects.toMatchObject({ name: 'PrepApiError', status: 503 })
   })
 })
+
+it('unverifiedSourcesText: a passed review without curriculum or textbook excerpts says so; otherwise nothing', async () => {
+  const { unverifiedSourcesText } = await import('../lib/panel-model')
+  const wb = (teachingAudit: unknown) => ({ teachingAudit }) as never
+  expect(unverifiedSourcesText(wb({ status: 'passed', state: 'current', findings: [], unverifiedSources: ['curriculum-standard', 'textbook'] }))).toBe('这节课的整课审查没有核对课标原文与教材原文：知识点库里还没有这些原文。')
+  expect(unverifiedSourcesText(wb({ status: 'passed', state: 'current', findings: [], unverifiedSources: ['textbook'] }))).toBe('这节课的整课审查没有核对教材原文：知识点库里还没有这些原文。')
+  expect(unverifiedSourcesText(wb({ status: 'passed', state: 'current', findings: [] }))).toBeNull()
+  expect(unverifiedSourcesText(wb(null))).toBeNull()
+})

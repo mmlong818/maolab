@@ -163,4 +163,40 @@ describe('standards-backed teaching quality audit', () => {
       expect.objectContaining({ severity: 'insufficient-evidence', impact: expect.stringContaining('教材原文') }),
     ]))
   })
+
+  // S3（用户裁决 2026-10-17：先降级，后补数据）：k12 数据集没有课标与教材原文。课程一条权威原文都没有时，
+  // 缺原文不再阻断，记在 unverifiedSources 里提示"未核对课标与教材"；补上任何权威原文后恢复原来的证据门。
+  it('with no authoritative source at all, missing curriculum and textbook excerpts are recorded as unverified instead of blocking', () => {
+    const course = { ...reviewCourse(), sourceMaterial: [] } as MainlineCourse
+    const record = buildTeachingQualityAudit(course, generationAudit(), passingReview(course))
+
+    expect(record.status).toBe('passed')
+    expect(record.findings).toEqual([])
+    expect(record.unverifiedSources).toEqual(['curriculum-standard', 'textbook'])
+  })
+
+  it("with no authoritative source, the reviewer's own standards-evidence gaps are folded into the unverified notice, other findings still block", () => {
+    const course = { ...reviewCourse(), sourceMaterial: [] } as MainlineCourse
+    const review = passingReview(course)
+    const standardId = review.reviewedStandardIds[0]!
+    const gap = { standardId, pageId: 'page-1', severity: 'insufficient-evidence' as const, category: 'standards-evidence' as const, evidence: '一元一次方程只有一个未知数且次数为一。', impact: '没有课标原文可核对。', fix: '挂载课程标准原文后重新审查。' }
+    const withGap = { ...review, checks: review.checks.map(check => check.dimension === 'standards-evidence' ? { ...check, status: 'insufficient-evidence' as const } : check), findings: [gap] }
+    expect(buildTeachingQualityAudit(course, generationAudit(), withGap)).toMatchObject({ status: 'passed', findings: [], unverifiedSources: ['curriculum-standard', 'textbook'] })
+
+    const blocking = { ...gap, severity: 'blocking' as const, category: 'progression' as const, impact: '推进跳步。', fix: '补一页过渡。' }
+    const withBlocking = { ...withGap, checks: withGap.checks.map(check => check.dimension === 'progression' ? { ...check, status: 'issue' as const } : check), findings: [gap, blocking] }
+    const record = buildTeachingQualityAudit(course, generationAudit(), withBlocking)
+    expect(record.status).toBe('blocked')
+    expect(record.findings.map(item => item.category)).toEqual(['progression'])
+  })
+
+  it('once any authoritative source exists the evidence gate applies again (a textbook excerpt alone still lacks the curriculum standard)', () => {
+    const course = reviewCourse()
+    course.sourceMaterial = [course.sourceMaterial[1]!]
+    const record = buildTeachingQualityAudit(course, generationAudit(), passingReview(course))
+
+    expect(record.status).toBe('insufficient-evidence')
+    expect(record.unverifiedSources).toBeUndefined()
+    expect(record.findings).toEqual([expect.objectContaining({ impact: expect.stringContaining('课程标准原文') })])
+  })
 })

@@ -111,3 +111,10 @@
 - [ ] 全仓 `typecheck`、`test`；源码扫描 `@yunyi/`、`learner`、`tutor`、`/api/v2`、`publication` 无命中（注释白名单）
 - [ ] 更新 core 的拆分 spec 进度、ISSUES；`git switch main && git merge --ff-only split-s3`
 - [ ] Commit：`docs(split S3): 全链路走查报告与进度`
+
+## 进度
+
+- 2026-10-17：Task 1–7 完成并提交；测试：course 1133（+ PG 6）、domain 41、render 43（+ PG 4、浏览器 13）、prep-harness 84、prep-api 88、prep-web 97。
+- 2026-10-17：Task 8 本机全链（假模型，固定度量与真实浏览器两种截图）通过，报告 `docs/real-check/2026-10-17-s3-prep/REPORT.md`。走查中发现 k12 无课标与教材原文会让整课审查阻断，按用户裁决降级为提示（ISSUES 7）。
+- 偏离计划：Task 4 计划里"无来源知识点建课"的测试放在 course 的 services 测试与新的 tests/prep-no-source.test.ts；浏览器里实际点选 KpPicker 留到 S6。
+
