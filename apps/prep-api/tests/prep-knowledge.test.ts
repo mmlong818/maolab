@@ -20,7 +20,7 @@ beforeAll(async () => {
     ('kn-chem-h', '化学反应速率', '化学', '高中', '', 0.7, 'k12')`)
   const rows = Array.from({ length: 130 }, (_, i) => `('kn-bulk-${i}', '批量条目${i}', '历史', '高中', '', 0.5, 'k12')`).join(',')
   await env.pool.query(`INSERT INTO ${KP}.knowledge_points (id, canonical_name, subject, grade_band, summary, confidence, dataset) VALUES ${rows}`)
-  await env.pool.query(`INSERT INTO ${KP}.datasets (name, version, kp_count, relation_count, imported_at) VALUES ('k12-knowledge-points', '2026-09-04T17:50:24.144Z', 136, 0, now())`)
+  await env.pool.query(`INSERT INTO ${KP}.datasets (name, version, kp_count, relation_count, imported_at) VALUES ('k12-knowledge-points', '2026-09-04T17:50:24.144Z', 136, 0, now()) ON CONFLICT (name) DO UPDATE SET version = excluded.version, kp_count = excluded.kp_count`)
 }, 300_000)
 afterAll(async () => { await env?.close() })
 

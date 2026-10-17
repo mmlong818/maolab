@@ -1,0 +1,14 @@
+{
+  "recall": {
+    "format": "maolab-course-recall",
+    "formatVersion": "1.0.0",
+    "packageId": "pk_SzbLFRuGAYarX6AO72c1OQ",
+    "recalledAt": "2026-10-17T15:09:32.256Z",
+    "reason": "全链走查：撤回演示"
+  },
+  "signature": {
+    "alg": "ed25519",
+    "keyId": "8c49f765b03db509",
+    "value": "0F+AMnkgzUO881Gg39EhrC11AQ2Ja6zQjxNPbX6X5cwefk3viUzUyNZhU/Sp1GuShCyzF8yimD/L/tpgvIL2CA=="
+  }
+}

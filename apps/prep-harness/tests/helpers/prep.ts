@@ -84,6 +84,8 @@ export async function resetPrepSchemas(input: { courseSchema: string; knowledgeS
     for (const point of knowledge.points) {
       await pool.query(`INSERT INTO ${input.knowledgeSchema}.knowledge_points (id, canonical_name, subject, grade_band, annotations, dataset) VALUES ($1, $2, $3, $4, $5::jsonb, 'fixture')`, [point.id, point.canonical_name, point.subject, point.grade_band ?? '', point.annotations ?? '{}'])
     }
+    // S4：课程包的 manifest 要数据集版本（PgKnowledge.datasetVersion('k12-knowledge-points')）
+    await pool.query(`INSERT INTO ${input.knowledgeSchema}.datasets (name, version, kp_count, relation_count, imported_at) VALUES ('k12-knowledge-points', 'fixture', $1, 0, now())`, [knowledge.points.length])
   } finally {
     await pool.end()
   }
@@ -143,11 +145,11 @@ function killTree(pid: number | undefined): void {
  * 3c 裁决 F21：测试库地址经 prepPgUrl()（进程环境或 dotenv.parse 取的单个变量、已过库名守卫）显式传给子进程，不合并整个 .env。
  * 排空脚本跑满 --max-jobs 还没 idle 时也以 0 退出（T10 备注）：调用方要看 counts.idle 并核对队列确实空了。
  */
-export async function drainRenderQueue(schema: string, options: { fakeCapture: boolean; timeoutMs?: number }): Promise<Record<string, unknown>> {
+export async function drainRenderQueue(schema: string, options: { fakeCapture: boolean; timeoutMs?: number; knowledgeSchema?: string; env?: Record<string, string> }): Promise<Record<string, unknown>> {
   const workerDir = resolve(import.meta.dirname, '..', '..', '..', '..', 'workers', 'render')
-  const child = spawn(process.execPath, ['--import', 'tsx', join('scripts', 'drain-queue.ts'), '--schema', schema, ...(options.fakeCapture ? ['--fake-capture'] : [])], {
+  const child = spawn(process.execPath, ['--import', 'tsx', join('scripts', 'drain-queue.ts'), '--schema', schema, ...(options.fakeCapture ? ['--fake-capture'] : []), ...(options.knowledgeSchema ? ['--kp-schema', options.knowledgeSchema] : [])], {
     cwd: workerDir,
-    env: { ...process.env, TEST_PG_DATABASE_URL: prepPgUrl(), NO_PROXY: '127.0.0.1,localhost' },
+    env: { ...process.env, ...options.env, TEST_PG_DATABASE_URL: prepPgUrl(), NO_PROXY: '127.0.0.1,localhost' },
     stdio: ['ignore', 'pipe', 'pipe'],
     windowsHide: true,
     detached: process.platform !== 'win32',
