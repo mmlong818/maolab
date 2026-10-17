@@ -19,3 +19,5 @@ apps/prep-harness/.dsh-home/sessions/
 docs/real-check/**/*-profile/
 # .claude/ 本机配置不入库
 .claude/
+# S4 全链产出的课程包（每个约 9 MB）只留本机，跨产品全链从这里读；summary、撤回单、公钥入库
+docs/real-check/**/*.zip

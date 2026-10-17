@@ -1,0 +1,83 @@
+{
+  "fakeCapture": false,
+  "facets": [
+    {
+      "gradeBand": "初中",
+      "subjects": [
+        "语文"
+      ]
+    }
+  ],
+  "kpCount": 2,
+  "planPages": 15,
+  "planStatus": "plan-approved",
+  "pages": 15,
+  "renderDrain": {
+    "counts": {
+      "succeeded": 15,
+      "idle": 1
+    }
+  },
+  "exportDrain": {
+    "counts": {
+      "succeeded": 1,
+      "idle": 1
+    }
+  },
+  "jobs": {
+    "renderPage": {
+      "succeeded": 15
+    },
+    "exportPptx": {
+      "succeeded": 1
+    }
+  },
+  "pptxIsZip": true,
+  "renderPath": {
+    "web": 404,
+    "api": 404,
+    "webVariants": [
+      404,
+      404,
+      404
+    ]
+  },
+  "panel": {
+    "courseListed": true,
+    "planShown": true,
+    "previewRendered": true,
+    "qualityRows": true,
+    "exportLink": true,
+    "noRenderPathRequests": true
+  },
+  "panelEvidence": {
+    "previewCanvas": 0,
+    "previewZhCn": 16,
+    "previewTextChars": 96,
+    "previewOverflowPx": 0,
+    "qualityRows": 15
+  },
+  "package": {
+    "v1": {
+      "version": 1,
+      "pageCount": 15,
+      "kpCount": 2,
+      "subject": "语文",
+      "gradeBand": "初中",
+      "dataset": "k12-knowledge-points",
+      "exporter": "maolab",
+      "images": 15
+    },
+    "unchanged": true,
+    "v2": {
+      "version": 2,
+      "pageCount": 15,
+      "samePackageId": true
+    },
+    "recall": {
+      "verified": true,
+      "newPackageAfterRecall": true
+    }
+  },
+  "problems": []
+}

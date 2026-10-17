@@ -19,3 +19,8 @@
 | 13 | 10-17 | S3 | S3 的改写脚本把 2 个文件误写到自习室仓库 `apps/maolab/apps/prep-web/`（nginx 模板是自习室旧版、sync-mathjax 脚本与本仓库相同），未跟踪 | 已删（10-17，权限放开后） |
 | 14 | 10-17 | S3 | 根 package.json 的 `pnpm -r` 在本机找不到 pnpm（只有 corepack） | 改成 `corepack pnpm -r`；test 顺序执行，省内存 |
 | 15 | 10-17 | S3 | 源码扫描的剩余命中：`learner` 在 shared-types 的 `LearnerGender`/`LearnerType`（课程生成的个性化参数）与 plan-store 的 `learner.gender`；`tutor` 只在测试（断言 tutor preset 被拒）与 DeepTutor 借鉴注释；`publication` 是 `publicationDraft`（S4 导出输入）与 harness 测试环境变量 | 不是学生侧代码，保留；S4 把 publication 改名为课程包导出时一起清 |
+| 16 | 10-17 | S4 | 拆分 spec 6 写 `export` schema，实际表放在 course schema（`package_exports`、`package_export_versions`），同 S3 的 render、prep | 单一迁移链、测试按 schema 整体替换；要拆时再加迁移 |
+| 17 | 10-17 | S4 | 真实截图的课程包每个约 9 MB（15 页 1920×1080 PNG） | 全链产出的 zip 不入库（.gitignore），跨产品全链读本机文件；上线前看是否要压缩或降为 JPEG（core 现只收 PNG，要改格式就是 core 的次版本变更） |
+| 18 | 10-17 | S4 | 课程包下载列表里的文件名用 `<packageId>-v<n>`（导出表不存标题），面板下载时带课程标题 | 直接用接口下载的文件名不友好，不影响导入 |
+| 19 | 10-17 | S4 | 面板的课程包区块只有逻辑与源码断言测试，没有浏览器里的点击走查 | 留到 S6 真实走查 |
+| 20 | 10-17 | S4 | 签名钥只有本机临时钥；生产的私钥保管、轮换（自习室多把公钥并存）没有落地 | 上线前定：私钥放部署平台的密钥存储，`package:keygen` 生成，公钥交自习室运营 |

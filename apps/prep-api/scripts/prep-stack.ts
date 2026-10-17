@@ -2,9 +2,10 @@
 // fake：fake 模型 + 假课程网关；鉴权用测试 OIDC 配置，token 由脚本在测试库里签发。
 // real：harness 用真实云一网关（provider yunyi、glm-5.3，凭证只来自登录用户自己）；api 用 .env 的真实 OIDC 配置（只为对真实身份服务登录），回调必须是 http://127.0.0.1:3000/login-callback（2e 实测已登记），所以 webPort 固定 3000。
 // 渲染：每 3 秒看一次本 schema 有没有排队的截图或导出任务，有就起一次 workers/render 的排空子进程（worker 常驻进程只看 course schema，测试 schema 用排空脚本）。
-import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs'
+import { createReadStream, existsSync, mkdtempSync, readFileSync, rmSync, statSync } from 'node:fs'
 import { createServer, request as httpRequest, type IncomingMessage, type ServerResponse } from 'node:http'
 import { dirname, extname, join, normalize, resolve } from 'node:path'
+import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import dotenv from 'dotenv'
 import pg from 'pg'
@@ -16,6 +17,7 @@ import { startFakeOpenAI } from '../../prep-harness/tests/helpers/fake-openai.ts
 import { INTERNAL_KEY, startHost } from '../../prep-harness/tests/helpers/host.ts'
 import { drainRenderQueue, dropPrepSchemas, loadCourseForTests, prepPgUrl, resetPrepSchemas } from '../../prep-harness/tests/helpers/prep.ts'
 import { nginxBlocksPrepRender, nginxNormalizedPath } from './nginx-path.ts'
+import { exportKeyFiles } from './package-keygen.ts'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..')
 const OUT = join(ROOT, 'apps', 'prep-web', 'out')
@@ -31,6 +33,8 @@ export interface PrepStack {
   pool: pg.Pool
   store: PgCredentialStore
   drain(options?: { fakeCapture?: boolean }): Promise<Record<string, unknown>>
+  /** S4：本次栈的课程包签名钥（临时目录，api 与排空 worker 共用）对应的公钥 */
+  packagePublicKeyPem: string
   stop(): Promise<void>
 }
 
@@ -87,6 +91,11 @@ export async function startPrepStack(options: { mode: 'fake' | 'real'; schema: s
     await resetPrepSchemas({ courseSchema: options.schema, knowledgeSchema, owners: options.owners, fixtures: course })
     cleanups.push(() => dropPrepSchemas({ courseSchema: options.schema, knowledgeSchema, owners: options.owners }))
     const pgUrl = prepPgUrl()
+    // S4：课程包签名钥每次新生成（临时目录，停栈时删）；api 签撤回单、排空 worker 签包
+    const keyDir = mkdtempSync(join(tmpdir(), 'maolab-pkg-key-'))
+    cleanups.push(async () => rmSync(keyDir, { recursive: true, force: true }))
+    const keys = exportKeyFiles(join(keyDir, 'keys'))
+    const packageEnv = { MAOLAB_PACKAGE_SIGNING_KEY: keys.privateKeyPath }
     const pool = new pg.Pool({ connectionString: pgUrl, max: 5 })
     cleanups.push(async () => { await pool.query(`DROP SCHEMA IF EXISTS ${harnessSchema} CASCADE`).catch(() => undefined); await pool.end() })
     const fake = options.mode === 'fake' ? await startFakeOpenAI() : undefined
@@ -109,7 +118,7 @@ export async function startPrepStack(options: { mode: 'fake' | 'real'; schema: s
       ...authEnv, PG_DATABASE_URL: pgUrl, PORTAL_BASE_URL: '',
       YUNYI_PREP: 'all', YUNYI_HARNESS_URL: host.base, YUNYI_INTERNAL_KEY: INTERNAL_KEY,
       YUNYI_TURN_PROVIDER: options.mode === 'fake' ? 'fake' : 'yunyi', YUNYI_TURN_MODEL: options.mode === 'fake' ? 'fake-1' : 'glm-5.3',
-      YUNYI_COURSE_SCHEMA: options.schema, YUNYI_PREP_KNOWLEDGE_SCHEMA: knowledgeSchema,
+      YUNYI_COURSE_SCHEMA: options.schema, YUNYI_PREP_KNOWLEDGE_SCHEMA: knowledgeSchema, ...packageEnv,
     })
     const store = new PgCredentialStore(pool, config.secretKey)
     const app = await buildServer({ pool, config, store })
@@ -118,13 +127,13 @@ export async function startPrepStack(options: { mode: 'fake' | 'real'; schema: s
     const web = await startWeb(apiBase, options.webPort ?? 0)
     cleanups.push(() => web.close())
     let draining: Promise<Record<string, unknown>> | undefined
-    const drain = (o: { fakeCapture?: boolean } = {}) => (draining ??= drainRenderQueue(options.schema, { fakeCapture: o.fakeCapture ?? options.fakeCapture ?? true }).finally(() => { draining = undefined }))
+    const drain = (o: { fakeCapture?: boolean } = {}) => (draining ??= drainRenderQueue(options.schema, { fakeCapture: o.fakeCapture ?? options.fakeCapture ?? true, knowledgeSchema, env: packageEnv }).finally(() => { draining = undefined }))
     const loop = setInterval(() => {
       void pool.query(`select count(*)::int as n from ${options.schema}.render_jobs where status = 'queued'`).then((r) => { if ((r.rows[0] as { n: number }).n > 0) void drain().catch(() => undefined) }).catch(() => undefined)
     }, 3_000)
     cleanups.push(async () => { clearInterval(loop); await draining?.catch(() => undefined) })
     return {
-      webBase: web.base, apiBase, schema: options.schema, knowledgeSchema, course, pool, store, drain,
+      webBase: web.base, apiBase, schema: options.schema, knowledgeSchema, course, pool, store, drain, packagePublicKeyPem: keys.publicKeyPem,
       // 逆序：停轮询并等排空 → 前端 → api → 宿主 → 假服务 → 删 harness schema 并关池 → 删测试 schema 与账号行
       stop: unwind,
     }
