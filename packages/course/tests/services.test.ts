@@ -439,3 +439,21 @@ test('the coordinate grid goes to the injected asset sink, never to the process 
   expect((await t.store.findMainlineCourse('course-grid-ok'))!.pageContent!.pages[0]).toMatchObject({ pageId: 'page-1', imageUrl: '/api/prep/artifacts/ar_grid' })
   expect(existsSync(generatedDir)).toBe(dirExisted)
 })
+
+test('k12 knowledge points carry no textbook evidence: the course is still created and coverage says so', async () => {
+  const annotations = JSON.stringify({
+    knowledgeType: { value: 'conceptual', source: 'llm', confidence: 0.95 },
+    learningObjectives: { value: ['能说出二力平衡的四个条件', '能判断物体受力是否平衡'], source: 'llm', confidence: 0.95 },
+    misconceptions: { value: ['认为物体运动就一定受力不平衡'], source: 'llm', confidence: 0.95 },
+  })
+  const store = createMainlineCourseStore(createMemoryCourseDocuments())
+  const knowledge: CourseKnowledgePort = {
+    async knowledgePoints(ids) { return ids.includes('kp-k12') ? [{ id: 'kp-k12', canonical_name: '二力平衡', subject: '物理', grade_band: '初中', annotations }] : [] },
+    async knowledgePointSources() { return [] },
+  }
+  const created = await createCourseFromKps({ kpIds: ['kp-k12'] }, { store, knowledge, newId: () => 'course-k12' })
+  expect(created).toMatchObject({ courseId: 'course-k12', subject: 'physics', gradeBand: 'middle-school', planStatus: 'planning' })
+  expect(created.plannedPages).toBeGreaterThan(0)
+  expect(created.sourceCoverage).toMatchObject({ authoritativeExcerptKps: 0, aiExtractedKps: 0, unverifiedExcerptKps: 0, unprovenancedKps: 1 })
+  expect(created.qualityStatus).toBe('draft')
+})
