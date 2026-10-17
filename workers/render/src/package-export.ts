@@ -3,7 +3,8 @@
 // 版本号由 exports.appendVersion 定（同签名 unchanged，不截图）；打包、签名、隐私扫描都在 @maolab-core/course-package。
 // 包存成永久产物（kind 'package'）：运营可能隔几天才取，老师也要能重新下载已交付的版本。
 import { courseArtifactUrl, createMainlineCourseStore, GenerationRenderRunError, packageContentOf, packageDraftOf, planProjectionExport, projectionRenderUrl } from '@maolab/course'
-import { ALLOWED_PNG_CHUNKS, buildPackage, PackageError, type GradeBand, type SigningKey } from '@maolab-core/course-package'
+import { deflateSync, crc32 } from 'node:zlib'
+import { ALLOWED_PNG_CHUNKS, buildPackage, PackageError, PAGE_HEIGHT, PAGE_WIDTH, type GradeBand, type SigningKey } from '@maolab-core/course-package'
 import { PACKAGE_CONTENT_TYPE, type OwnerExports, type RenderJob } from '@maolab/domain'
 import type { CapturedProjection } from './capture.ts'
 import { RenderWorkerError, type RenderWorkerErrorCode } from './errors.ts'
@@ -17,7 +18,7 @@ export interface PackagingDeps {
   signingKey: SigningKey | undefined
   /** @maolab-core/course-package 的版本，写进 manifest.exporter */
   coreVersion: string
-  exportsFor(owner: string): Pick<OwnerExports, 'get' | 'appendVersion'>
+  exportsFor(owner: string): Pick<OwnerExports, 'get' | 'appendVersion' | 'list'>
   /** 隐私扫描用：老师账号的用户名、外部 id、显示名、邮箱（非空的） */
   identifiersOf(owner: string): Promise<string[]>
   datasetVersion(): Promise<string | undefined>
@@ -55,6 +56,22 @@ export function stripPng(png: Uint8Array): Uint8Array {
   return Buffer.concat(parts)
 }
 
+/** 预检用的 1920×1080 纯灰度 PNG（只做一次） */
+let placeholder: Uint8Array | undefined
+function placeholderPng(): Uint8Array {
+  if (placeholder) return placeholder
+  const chunk = (type: string, data: Buffer): Buffer => {
+    const len = Buffer.alloc(4); len.writeUInt32BE(data.length)
+    const body = Buffer.concat([Buffer.from(type, 'ascii'), data])
+    const crc = Buffer.alloc(4); crc.writeUInt32BE(crc32(body) >>> 0)
+    return Buffer.concat([len, body, crc])
+  }
+  const ihdr = Buffer.alloc(13); ihdr.writeUInt32BE(PAGE_WIDTH, 0); ihdr.writeUInt32BE(PAGE_HEIGHT, 4); ihdr[8] = 8; ihdr[9] = 0
+  const row = Buffer.alloc(PAGE_WIDTH + 1, 200); row[0] = 0
+  placeholder = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chunk('IHDR', ihdr), chunk('IDAT', deflateSync(Buffer.concat(Array.from({ length: PAGE_HEIGHT }, () => row)))), chunk('IEND', Buffer.alloc(0))])
+  return placeholder
+}
+
 const filenameOf = (pptxFilename: string, version: number): string => `${pptxFilename.replace(/\.pptx$/i, '')}-v${version}.maolab-course.zip`
 
 export async function exportPackage(job: RenderJob, deps: RenderJobDeps): Promise<PackageJobResult> {
@@ -73,6 +90,14 @@ export async function exportPackage(job: RenderJob, deps: RenderJobDeps): Promis
   const pkg = await exports.get(packageId)
   if (!pkg) return fail('PACKAGE_NOT_FOUND', `课程包 ${packageId} 不存在。`)
   if (pkg.status === 'recalled') return fail('PACKAGE_RECALLED', '这个课程包已撤回，不能再出新版本；请重新导出得到新课程包。')
+  // 终审 Minor 4：任务排队期间同族更新的修订版已经导出进这个包时，不让旧修订版成为"最新版本"（自习室会把旧内容当升级导入）
+  const latest = (await exports.list({ familyId: draft.draft.familyId })).find((p) => p.packageId === packageId)?.versions.at(-1)
+  if (latest && latest.sourceCourseId !== job.courseId) {
+    const newer = await store.findMainlineCourse(latest.sourceCourseId)
+    if (newer && (newer.revision?.revisionNo ?? 1) > (course.revision?.revisionNo ?? 1)) {
+      return fail('PACKAGE_STALE_REVISION', '这个课程包里已经有更新的修订版，旧修订版不能再导出成新版本。')
+    }
+  }
 
   const plan = planProjectionExport(course, deps.now())
   const content = packageContentOf(draft.draft.snapshot)
@@ -84,6 +109,30 @@ export async function exportPackage(job: RenderJob, deps: RenderJobDeps): Promis
     const points = await packaging.knowledgePoints(draft.draft.kpIds)
     const first = points.find((p) => p.id === draft.draft.kpIds[0])
     if (!first) return fail('KNOWLEDGE_DATASET_MISSING', '课程的知识点不在知识点数据集里。', { kpIds: draft.draft.kpIds })
+    const identifiers = await packaging.identifiersOf(job.owner)
+    const assemble = (pngs: readonly Uint8Array[]): Uint8Array => {
+      try {
+        return buildPackage({
+          packageId,
+          version,
+          title: draft.draft.title,
+          subject: first.subject,
+          gradeBand: first.gradeBand,
+          kpIds: draft.draft.kpIds,
+          knowledgeDataset: { name: KNOWLEDGE_DATASET_NAME, version: datasetVersion },
+          pages: content.pages.map((page, index) => ({ ...page, png: pngs[index]! })),
+          outline: content.outline,
+          exporter: { product: 'maolab', coreVersion: packaging.coreVersion },
+          createdAt: new Date(deps.now()),
+          identifiers,
+        }, signingKey)
+      } catch (error) {
+        if (error instanceof PackageError) return fail(`PACKAGE_${error.code}`, error.message, { detail: error.detail })
+        throw error
+      }
+    }
+    // 终审 Minor 1：标题、知识点数、页面文字与大纲、隐私扫描先用占位图整包校验一遍（core 同一套规则），不合规就不开浏览器
+    assemble(content.pages.map(() => placeholderPng()))
     const routes = deps.routes ?? installProjectionRoutes
     const shots = await deps.withContext(async (context) => {
       const log = await routes(context, deps.origin, { courseId: job.courseId, course: async () => plan.renderCourse, artifact: (id) => artifacts.get(id) })
@@ -95,33 +144,14 @@ export async function exportPackage(job: RenderJob, deps: RenderJobDeps): Promis
       }
       return out
     })
-    let bytes: Uint8Array
-    try {
-      bytes = buildPackage({
-        packageId,
-        version,
-        title: draft.draft.title,
-        subject: first.subject,
-        gradeBand: first.gradeBand,
-        kpIds: draft.draft.kpIds,
-        knowledgeDataset: { name: KNOWLEDGE_DATASET_NAME, version: datasetVersion },
-        pages: content.pages.map((page, index) => ({ ...page, png: stripPng(shots[index]!) })),
-        outline: content.outline,
-        exporter: { product: 'maolab', coreVersion: packaging.coreVersion },
-        createdAt: new Date(deps.now()),
-        identifiers: await packaging.identifiersOf(job.owner),
-      }, signingKey)
-    } catch (error) {
-      if (error instanceof PackageError) return fail(`PACKAGE_${error.code}`, error.message, { detail: error.detail })
-      throw error
-    }
+    const bytes = assemble(shots.map((shot) => stripPng(shot)))
     const stored = await artifacts.put({ bytes, contentType: PACKAGE_CONTENT_TYPE, kind: 'package', courseId: job.courseId })
     return { artifactId: stored.id, sha256: stored.sha256, bytes: stored.byteSize, pageCount: plan.pageCount }
   }
 
   let out: Awaited<ReturnType<OwnerExports['appendVersion']>>
   try {
-    out = await exports.appendVersion(packageId, { sourceCourseId: job.courseId, signature: draft.draft.signature, build })
+    out = await exports.appendVersion(packageId, { sourceCourseId: job.courseId, signature: draft.draft.signature, build, discard: async (b) => { await artifacts.delete(b.artifactId) } })
   } catch (error) {
     const code = (error as { code?: unknown }).code
     if (code === 'RECALLED') return fail('PACKAGE_RECALLED', '这个课程包已撤回，不能再出新版本；请重新导出得到新课程包。')

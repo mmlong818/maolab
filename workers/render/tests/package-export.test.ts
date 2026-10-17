@@ -18,12 +18,13 @@ const publicKeys = publicKeysFromPem([keys.publicKeyPem])
 const goodMetrics = { stageWidth: 1920, stageHeight: 1080, minimumFontPx: 28, clippedElementCount: 0, overlappingTextCount: 0, brokenImageCount: 0, visualElementCount: 0, occupiedAreaRatio: 0.35 }
 
 /** PgExports 的内存版（同语义：同签名 unchanged 且不打包；撤回拒绝） */
-function memoryExports(): Pick<OwnerExports, 'get' | 'appendVersion'> & { versions: ExportVersion[]; recalled: boolean } {
+function memoryExports(): Pick<OwnerExports, 'get' | 'appendVersion' | 'list'> & { versions: ExportVersion[]; recalled: boolean } {
   const state = { versions: [] as ExportVersion[], recalled: false }
   return {
     get versions() { return state.versions },
     get recalled() { return state.recalled },
     set recalled(v: boolean) { state.recalled = v },
+    async list() { return [{ packageId: PACKAGE_ID, owner: OWNER, familyId: 'fam', status: state.recalled ? 'recalled' as const : 'active' as const, createdAt: NOW, versions: state.versions }] },
     async get(id) { return id === PACKAGE_ID ? { packageId: PACKAGE_ID, owner: OWNER, familyId: 'fam', status: state.recalled ? 'recalled' : 'active', createdAt: NOW } : undefined },
     async appendVersion(id, input) {
       if (id !== PACKAGE_ID) throw Object.assign(new Error('nf'), { code: 'NOT_FOUND' })
@@ -61,7 +62,7 @@ async function harness(options: { signing?: boolean; identifiers?: string[]; scr
     packaging,
   }
   const course = (await createMainlineCourseStore(documentsFor(OWNER)).findMainlineCourse(courseId))!
-  return { deps, artifacts, exports, urls, courseId, course }
+  return { deps, artifacts, exports, urls, courseId, course, store: createMainlineCourseStore(documentsFor(OWNER)) }
 }
 
 const job = (courseId: string, payload: Record<string, unknown> = { packageId: PACKAGE_ID }): RenderJob => ({
@@ -114,6 +115,8 @@ test("text that contains the teacher's account details is refused by the privacy
   const t = await harness({ identifiers: [leaked] })
   const out = await handleRenderJob(job(t.courseId), t.deps)
   expect(out).toMatchObject({ ok: false, error: { code: 'PACKAGE_privacy', retryable: false } })
+  // 终审 Minor 1：文字与元数据的校验在开浏览器之前做，不白截一整课
+  expect(t.urls).toEqual([])
   expect(t.exports.versions).toEqual([])
   expect(t.artifacts.all().filter((a) => a.kind === 'package')).toEqual([])
 })
@@ -133,4 +136,15 @@ test('screenshots carrying metadata chunks are re-encoded with allowed chunks on
   expect(readPng(stripped)).toMatchObject({ width: 1920, height: 1080 })
   const t = await harness({ screenshot: () => withMeta })
   expect(await handleRenderJob(job(t.courseId), t.deps)).toMatchObject({ ok: true })
+})
+
+test('a delayed job for an older revision cannot become the newest version once a newer revision is in the package (final review Minor 4)', async () => {
+  const t = await harness()
+  // 同族修订号 2 的课已导出为最新版本
+  const newer = { ...t.course, id: 'newer-revision', revision: { familyId: t.course.revision?.familyId ?? t.course.id, revisionNo: 2, basedOnCourseId: t.course.id } }
+  await t.store.saveMainlineCourse(newer as typeof t.course)
+  t.exports.versions.push({ packageId: PACKAGE_ID, version: 1, sourceCourseId: 'newer-revision', signature: 'sig-newer', artifactId: 'ar_x', sha256: 'a'.repeat(64), bytes: 1, pageCount: 1, createdAt: NOW })
+  expect(await handleRenderJob(job(t.courseId), t.deps)).toMatchObject({ ok: false, error: { code: 'PACKAGE_STALE_REVISION', retryable: false } })
+  expect(t.urls).toEqual([])
+  expect(t.exports.versions).toHaveLength(1)
 })

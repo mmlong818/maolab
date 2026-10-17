@@ -42,6 +42,9 @@ export interface AppendVersionInput {
   /** 课程的最终验收签名：同签名 = 同内容 */
   signature: string
   build: (version: number) => Promise<ExportBuild>
+  /** 打出来但没被采用（并发输了、或要按新版本号重打）的包：调用方删掉它的产物（manifest 带 createdAt，每次字节都不同，不会被去重）。
+   *  与已提交版本是同一产物时不调用 */
+  discard?: (built: ExportBuild) => Promise<void>
 }
 
 export class ExportError extends Error {
@@ -136,6 +139,7 @@ export class PgExports {
           if (before?.signature === input.signature) return { kind: 'unchanged', version: before }
           const version = (before?.version ?? 0) + 1
           const built = await input.build(version)
+          const drop = async (kept?: ExportVersion) => { if (input.discard && built.artifactId !== kept?.artifactId) await input.discard(built).catch(() => undefined) }
           const client = await pool.connect()
           try {
             await client.query('begin')
@@ -145,10 +149,12 @@ export class PgExports {
             const now_ = await latest(client, packageId)
             if (now_?.signature === input.signature) {
               await client.query('commit')
+              await drop(now_)
               return { kind: 'unchanged', version: now_ }
             }
             if ((now_?.version ?? 0) + 1 !== version) {
               await client.query('rollback')
+              await drop()
               continue
             }
             const r = await client.query<VersionRow>(
@@ -159,6 +165,7 @@ export class PgExports {
             return { kind: 'created', version: toVersion(r.rows[0]!) }
           } catch (error) {
             await client.query('rollback').catch(() => undefined)
+            await drop()
             throw error
           } finally {
             client.release()
