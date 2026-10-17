@@ -1,11 +1,14 @@
 import { fileURLToPath } from 'node:url'
 import JSZip from 'jszip'
-import { createMainlineCourseStore, createMemoryCourseDocuments, goldenExportCourse } from '@maolab/course'
+import { createMainlineCourseStore, createMemoryCourseDocuments, goldenExportCourse, planProjectionExport, projectionRenderUrl } from '@maolab/course'
+import { ALLOWED_PNG_CHUNKS, buildPackage, generateSigningKeyPair, publicKeysFromPem, readPackage, readPng, signingKeyFromPem } from '@maolab-core/course-package'
 import type { Browser } from 'playwright-core'
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import { launchBrowser, withProjectionContext } from '../src/browser.ts'
 import { captureProjection } from '../src/capture.ts'
 import { handleRenderJob } from '../src/jobs.ts'
+import { stripPng } from '../src/package-export.ts'
+import { installProjectionRoutes } from '../src/page-host.ts'
 import { pngSize } from '../src/png.ts'
 import { startStaticServer } from '../src/static-server.ts'
 import { createMemoryArtifacts } from '../tests/helpers/memory-artifacts.ts'
@@ -40,5 +43,27 @@ describe.skipIf(!executablePath)('export through a real browser', () => {
     const media = Object.keys(zip.files).filter((name) => /^ppt\/media\/.+\.png$/.test(name))
     expect(media).toHaveLength(6)
     for (const name of media) expect(pngSize(await zip.file(name)!.async('nodebuffer'))).toEqual({ width: 1920, height: 1080 })
+  })
+
+  test('a real Chromium screenshot, after stripPng, is accepted as a course-package page (S4 review focus 1)', async () => {
+    const course = goldenExportCourse('c-pkg')
+    const plan = planProjectionExport(course, Date.now())
+    const artifacts = createMemoryArtifacts()
+    const raw = await withProjectionContext(browser, async (context) => {
+      await installProjectionRoutes(context, server.origin, { courseId: 'c-pkg', course: async () => plan.renderCourse, artifact: (id) => artifacts.forOwner('teacher-a').get(id) })
+      return (await captureProjection(context, projectionRenderUrl(server.origin, 'c-pkg', 1), 1, { timeoutMs: 30_000, settle: 'export' })).screenshot
+    })
+    const chunks = readPng(raw)!.chunks
+    process.stderr.write(`chromium png chunks: ${[...new Set(chunks)].join(',')}
+`)
+    const png = stripPng(raw)
+    expect(readPng(png)!.chunks.every((c) => ALLOWED_PNG_CHUNKS.has(c))).toBe(true)
+    const keys = generateSigningKeyPair()
+    const bytes = buildPackage({
+      packageId: 'pk_browsertest01', version: 1, title: '浏览器截图', subject: '语文', gradeBand: '初中', kpIds: ['kp-1'],
+      knowledgeDataset: { name: 'k12-knowledge-points', version: 'v' }, pages: [{ title: '第一页', text: '', png }], outline: '课程：浏览器截图（共 1 页）',
+      exporter: { product: 'maolab', coreVersion: '0.1.0' }, identifiers: [],
+    }, signingKeyFromPem(keys.privateKeyPem))
+    expect(readPackage(bytes, { publicKeys: publicKeysFromPem([keys.publicKeyPem]) }).lesson.pages).toHaveLength(1)
   })
 })

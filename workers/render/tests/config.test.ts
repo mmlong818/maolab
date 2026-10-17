@@ -7,7 +7,7 @@ test('defaults are conservative and the origin is normalised', () => {
   const config = loadConfig(base)
   expect(config).toMatchObject({
     pgUrl: base.RENDER_PG_URL, pageOrigin: 'http://frontend:8080', browserPath: undefined, noSandbox: false,
-    leaseMs: 120_000, heartbeatMs: 30_000, idleMs: 2_000, navigationTimeoutMs: 45_000, purgeEveryMs: 3_600_000, drainGraceMs: 300_000, healthPort: 8080,
+    leaseMs: 120_000, heartbeatMs: 30_000, idleMs: 2_000, navigationTimeoutMs: 45_000, purgeEveryMs: 3_600_000, drainGraceMs: 300_000, healthPort: 8080, knowledgeSchema: 'kp',
   })
   expect(config.holder).toMatch(/:\d+:[0-9a-f]{8}$/)
 })
@@ -23,4 +23,9 @@ test('missing or unsafe settings refuse to start', () => {
   expect(() => loadConfig({ ...base, RENDER_PAGE_ORIGIN: 'file:///tmp' })).toThrow(/RENDER_PAGE_ORIGIN/)
   expect(() => loadConfig({ ...base, RENDER_LEASE_MS: '0' })).toThrow(/RENDER_LEASE_MS/)
   expect(() => loadConfig({ ...base, RENDER_LEASE_MS: '3000', RENDER_HEARTBEAT_MS: '3000' })).toThrow(/心跳/)
+})
+
+test('the knowledge schema follows the api setting and must be a plain schema name', () => {
+  expect(loadConfig({ ...base, YUNYI_PREP_KNOWLEDGE_SCHEMA: 'kp_test' }).knowledgeSchema).toBe('kp_test')
+  expect(() => loadConfig({ ...base, YUNYI_PREP_KNOWLEDGE_SCHEMA: 'kp; drop' })).toThrow(/YUNYI_PREP_KNOWLEDGE_SCHEMA/)
 })

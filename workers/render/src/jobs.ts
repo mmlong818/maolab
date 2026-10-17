@@ -1,6 +1,7 @@
 // 两类渲染任务（3b）。owner 只来自任务行（投递时已校验课程归属），从不来自页面或模型。
 // render-page：一次推进生成会话一页，复用 3a 迁入的 createGenerationRenderRunner（证据合并经 CAS，冲突重读重放）。
 // export-pptx：只导出通过发布判定的课程，逐页截图，讲稿进备注，导出件 7 天过期。
+// export-package（S4）：同一套截图打成签名课程包，见 package-export.ts。
 // 拦截层记下数据源抛错（InterceptLog.failed）时，本次截图不可信：不写证据、不出导出件，报可重试的 RENDER_DATA_FAILED。
 import {
   courseArtifactUrl, createCourseGenerationServices, createMainlineCourseStore, GenerationRenderRunError, planProjectionExport, projectionRenderUrl,
@@ -11,6 +12,7 @@ import type { BrowserContext } from 'playwright-core'
 import type { CaptureOptions, CapturedProjection } from './capture.ts'
 import { classifyRenderError, RenderWorkerError } from './errors.ts'
 import { installProjectionRoutes, type ProjectionDataSource } from './page-host.ts'
+import { exportPackage, type PackagingDeps } from './package-export.ts'
 import { buildProjectionPptx } from './pptx.ts'
 
 export interface RenderJobDeps {
@@ -22,13 +24,15 @@ export interface RenderJobDeps {
   withContext<T>(fn: (context: BrowserContext) => Promise<T>): Promise<T>
   capture(context: BrowserContext, url: string, pageNumber: number, options: CaptureOptions): Promise<CapturedProjection>
   routes?(context: BrowserContext, origin: string, source: ProjectionDataSource): Promise<unknown>
+  /** S4 export-package 用；main 总会给，只测别的任务时可省 */
+  packaging?: PackagingDeps
 }
 
 export type JobOutcome = { ok: true; result: unknown } | { ok: false; error: RenderJobError }
 
 export async function handleRenderJob(job: RenderJob, deps: RenderJobDeps): Promise<JobOutcome> {
   try {
-    const result = job.kind === 'render-page' ? await renderPage(job, deps) : await exportPptx(job, deps)
+    const result = job.kind === 'render-page' ? await renderPage(job, deps) : job.kind === 'export-package' ? await exportPackage(job, deps) : await exportPptx(job, deps)
     return { ok: true, result }
   } catch (error) {
     return { ok: false, error: classifyRenderError(error) }
@@ -43,7 +47,7 @@ function failedList(log: unknown): string[] | undefined {
 }
 
 /** 包一层采集：采集期间数据源新增了抛错记录，无论采集成功与否都改报 RENDER_DATA_FAILED */
-async function captureChecked(log: unknown, run: () => Promise<CapturedProjection>): Promise<CapturedProjection> {
+export async function captureChecked(log: unknown, run: () => Promise<CapturedProjection>): Promise<CapturedProjection> {
   const failed = failedList(log)
   const before = failed?.length ?? 0
   const check = () => {

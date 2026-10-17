@@ -287,6 +287,9 @@ importers:
       '@maolab-core/auth':
         specifier: file:../../../maolab-core/packages/auth
         version: file:../maolab-core/packages/auth(@agentia/auth-node@file:../maolab-core/packages/agentia-auth-node)(pg@8.23.1)
+      '@maolab-core/course-package':
+        specifier: file:../../../maolab-core/packages/course-package
+        version: file:../maolab-core/packages/course-package
       '@maolab-core/knowledge':
         specifier: file:../../../maolab-core/packages/knowledge
         version: file:../maolab-core/packages/knowledge(@maolab-core/types@file:../maolab-core/packages/types)(pg@8.23.1)
@@ -303,6 +306,8 @@ importers:
       '@agentia/auth-node':
         injected: true
       '@maolab-core/auth':
+        injected: true
+      '@maolab-core/course-package':
         injected: true
       '@maolab-core/knowledge':
         injected: true
@@ -383,6 +388,15 @@ importers:
 
   workers/render:
     dependencies:
+      '@maolab-core/course-package':
+        specifier: file:../../../maolab-core/packages/course-package
+        version: file:../maolab-core/packages/course-package
+      '@maolab-core/knowledge':
+        specifier: file:../../../maolab-core/packages/knowledge
+        version: file:../maolab-core/packages/knowledge(@maolab-core/types@file:../maolab-core/packages/types)(pg@8.23.1)
+      '@maolab-core/types':
+        specifier: file:../../../maolab-core/packages/types
+        version: file:../maolab-core/packages/types
       '@maolab/course':
         specifier: workspace:*
         version: link:../../packages/course
@@ -401,6 +415,13 @@ importers:
       tsx:
         specifier: ^4.20.3
         version: 4.23.15
+    dependenciesMeta:
+      '@maolab-core/course-package':
+        injected: true
+      '@maolab-core/knowledge':
+        injected: true
+      '@maolab-core/types':
+        injected: true
     devDependencies:
       '@types/node':
         specifier: ^24.0.0
@@ -3887,6 +3908,9 @@ packages:
     peerDependencies:
       '@agentia/auth-node': 0.2.0
       pg: ^8.16.3
+
+  '@maolab-core/course-package@file:../maolab-core/packages/course-package':
+    resolution: {directory: ../maolab-core/packages/course-package, type: directory}
 
   '@maolab-core/harness@file:../maolab-core/packages/harness':
     resolution: {directory: ../maolab-core/packages/harness, type: directory}
@@ -10027,6 +10051,11 @@ snapshots:
     dependencies:
       '@agentia/auth-node': file:../maolab-core/packages/agentia-auth-node
       pg: 8.23.1
+
+  '@maolab-core/course-package@file:../maolab-core/packages/course-package':
+    dependencies:
+      fflate: 0.8.3
+      zod: 4.6.7
 
   '@maolab-core/harness@file:../maolab-core/packages/harness(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-llm@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4))(@deepseek-ai/dsh-scope@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-invariants@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4)))(@deepseek-ai/dsh-session-persistence@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-brand@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4))(@deepseek-ai/dsh-session@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-scope@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-invariants@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4))))(@deepseek-ai/dsh-timeout@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4)))(@deepseek-ai/dsh-session@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-scope@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4)(@deepseek-ai/dsh-invariants@0.2.0-rc.2(@deepseek-ai/cordis@4.0.4))))(@deepseek-ai/dsh-tools@0.2.0-rc.2(52b5a8ab481be2b3d891c22a71641755))':
     dependencies:

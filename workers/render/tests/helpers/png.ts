@@ -31,3 +31,9 @@ export function solidPng(width: number, height: number, rgb: [number, number, nu
   const raw = Buffer.concat(Array.from({ length: height }, () => row))
   return Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chunk('IHDR', header), chunk('IDAT', deflateSync(raw)), chunk('IEND', Buffer.alloc(0))])
 }
+
+/** 在 IHDR 之后插一个额外的块（造带元数据的截图） */
+export function pngWithChunk(png: Buffer, type: string, data: Buffer): Buffer {
+  const ihdrEnd = 8 + 8 + 13 + 4
+  return Buffer.concat([png.subarray(0, ihdrEnd), chunk(type, data), png.subarray(ihdrEnd)])
+}
