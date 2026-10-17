@@ -1,0 +1,156 @@
+# maolab-prep-host：猫叔备课室的 dsh 宿主，从空树显式组合，不叠 dsh-base。
+# 不含 fs、shell、沙箱、会话搜索、会话引用、本地 skills、插件管理器、Web 壳、MCP。
+# 只有一个正式 preset：prep（备课）。测试 preset（probe-*）只在 YUNYI_TEST_PRESETS=1 时启用。
+- insert:
+    - id: timer
+      name: '@deepseek-ai/cordis-plugin-timer'
+    - id: llm
+      name: '@deepseek-ai/dsh-llm'
+    - id: llm-retry
+      name: '@deepseek-ai/dsh-llm-retry'
+    - id: llm-pi-ai
+      name: '@deepseek-ai/dsh-llm-pi-ai'
+      config:
+        providers:
+          fake:
+            displayName: Fake OpenAI (tests)
+            apiKeyEnv: FAKE_API_KEY
+            api: openai-completions
+            baseURL: !!js process.env.FAKE_OPENAI_BASE_URL ?? 'http://127.0.0.1:9/v1'
+            models:
+              - id: fake-1
+                name: fake-1
+                contextWindow: !!js Number(process.env.FAKE_CONTEXT_WINDOW ?? 32000)
+                reasoningEfforts: false
+    - id: session
+      name: '@deepseek-ai/dsh-session'
+    - id: session-projection
+      name: '@deepseek-ai/dsh-session-projection'
+    - id: sessions
+      name: '@deepseek-ai/dsh-session-persistence-jsonl'
+      disabled: !!js Boolean(process.env.YUNYI_PG_URL)
+      config:
+        root: !!js process.env.YUNYI_SESSIONS_ROOT ?? dshHomePath('sessions')
+        compression: none
+    - id: sessions-pg
+      name: '@maolab/prep-harness/persistence-router'
+      disabled: !!js Boolean(process.env.YUNYI_PG_URL) === false
+      config:
+        url: !!js process.env.YUNYI_PG_URL ?? ''
+        schema: !!js process.env.YUNYI_PG_SCHEMA ?? 'harness'
+        leaseTtlMs: !!js Number(process.env.YUNYI_LEASE_TTL_MS ?? 15000)
+    - id: system-prompt
+      name: '@deepseek-ai/dsh-system-prompt'
+      config:
+        includeHarnessIdentity: false
+        includeRuntimeContext: false
+        personaPrefix: 你是猫叔备课室的智能体。
+    - id: tools
+      name: '@deepseek-ai/dsh-tools'
+    # skill 注册表（全局）。提供方与 skill 工具挂在各 preset 里，只对该 preset 可见；不挂 dsh-skill-filesystem（不扫项目、DSH_HOME、~/.agents）
+    - id: skills
+      name: '@deepseek-ai/dsh-skill'
+    - id: agent
+      name: '@deepseek-ai/dsh-agent'
+    - id: agent-loop
+      name: '@deepseek-ai/dsh-agent-loop'
+      config:
+        agents: []
+    - id: token-meter
+      name: '@deepseek-ai/dsh-token-meter'
+    - id: compaction
+      name: '@deepseek-ai/dsh-compaction-basic'
+    - id: agent-preset-registry
+      name: '@deepseek-ai/dsh-agent-preset-registry'
+      config:
+        default: &default-preset prep
+    # 私密判定与缺省 preset 的唯一来源：网关与持久化路由都查它。备课没有私密 preset，名单里只有测试用的探针
+    - id: preset-policy
+      name: '@maolab/prep-harness/preset-policy'
+      config:
+        defaultPreset: *default-preset
+        privatePresets: [probe-private]
+    # 会话规则（网关 inject 它）：备课不带 context，任何账号能用 prep（备课室只有老师账号）
+    - id: session-policy
+      name: '@maolab/prep-harness/session-policy'
+    # 备课：非私密；只挂备课工具、两份备课 skill 与 skill 工具（诊断变量下多 whoami）。persona 只一句身份，工作顺序在工具描述里
+    - id: preset-prep
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: prep
+        plugins:
+          - name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: 你是猫叔备课室的备课助理，帮老师把选定的知识点做成一节能上的课。
+          - name: '@maolab/prep-bundle/tools-prep'
+          - name: '@maolab/prep-bundle/skills'
+            config:
+              skills: [prep-quality-contract, prep-review-standards]
+          - name: '@deepseek-ai/dsh-tool-skill'
+          - name: '@maolab/prep-bundle/tool-whoami'
+            disabled: !!js process.env.YUNYI_DIAGNOSTIC_TOOLS !== '1'
+    # 仅测试用：YUNYI_TEST_PRESETS=1 才启用。probe-private 验证"只改配置即私密"，probe-other 验证 skills 与身份探针隔离。
+    - id: preset-probe-private
+      name: '@deepseek-ai/dsh-agent-preset'
+      disabled: !!js process.env.YUNYI_TEST_PRESETS !== '1'
+      config:
+        id: probe-private
+        plugins:
+          - name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: 测试用私密 preset。
+    - id: preset-probe-other
+      name: '@deepseek-ai/dsh-agent-preset'
+      disabled: !!js process.env.YUNYI_TEST_PRESETS !== '1'
+      config:
+        id: probe-other
+        plugins:
+          - name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: 测试用普通 preset。
+          - name: '@maolab/prep-bundle/tool-whoami'
+            disabled: !!js process.env.YUNYI_DIAGNOSTIC_TOOLS !== '1'
+          - name: '@maolab/prep-bundle/diagnostics-probe'
+          - name: '@maolab/prep-bundle/skills'
+            config:
+              skills: []
+          - name: '@deepseek-ai/dsh-tool-skill'
+    - id: subagent
+      name: '@deepseek-ai/dsh-subagent'
+    - id: subagent-fork
+      name: '@deepseek-ai/dsh-subagent-fork-in-process'
+    - id: jobs
+      name: '@deepseek-ai/dsh-jobs-local'
+    - id: yunyi-gateway
+      name: '@maolab/prep-harness/gateway'
+      config:
+        port: !!js Number(process.env.YUNYI_GATEWAY_PORT ?? 0)
+        host: !!js process.env.YUNYI_GATEWAY_HOST ?? '127.0.0.1'
+        internalKey: !!js process.env.YUNYI_INTERNAL_KEY ?? ''
+        # 空或非法用缺省（idleMs 900000、finalizeTimeoutMs 10000），idleMs 只有显式 0 关闭；由网关解析
+        idleMs: !!js process.env.YUNYI_IDLE_DISPOSE_MS
+        finalizeTimeoutMs: !!js process.env.YUNYI_FINALIZE_TIMEOUT_MS
+    # 回合定稿：网关在 turn/end 时调用；prep 会话发 yunyi/turn-final，api 据此收尾
+    - id: yunyi-finalize
+      name: '@maolab/prep-bundle/finalize'
+    # 备课服务：prep 工具经它取 owner（只取自会话）、按 owner 缓存的备课门面、渲染队列与工具内模型通道（只用会话凭证）。
+    # PG 缺省同 YUNYI_PG_URL；未配时课程只在进程内（开发用），没有知识点与渲染队列。知识点读 kp schema（k12 数据集）。图像模型缺省空 = 图像不可用
+    - id: yunyi-prep
+      name: '@maolab/prep-bundle/prep'
+      config:
+        url: !!js process.env.YUNYI_PREP_PG_URL || process.env.YUNYI_PG_URL || ''
+        courseSchema: !!js process.env.YUNYI_COURSE_SCHEMA || 'course'
+        knowledgeSchema: !!js process.env.YUNYI_PREP_KNOWLEDGE_SCHEMA || 'kp'
+        model: !!js process.env.YUNYI_PREP_MODEL || 'glm-5.3'
+        imageModel: !!js process.env.YUNYI_PREP_IMAGE_MODEL || ''
+        baseUrl: !!js process.env.YUNYI_LLM_BASE_URL || 'https://api.everai.cloud/v1'
+    - id: yunyi-llm
+      name: '@maolab/prep-harness/llm-yunyi'
+      config:
+        baseUrl: !!js process.env.YUNYI_LLM_BASE_URL ?? 'https://api.everai.cloud/v1'
+        # 按 preset 的输出预算：适配器按会话 preset（沿父链）取值。工具内的模型调用显式带 sessionId，所以同样按 prep 预算。
+        # maxTokens 只替换 dsh 传入的全局缺省 8192；reasoningEffort 只收 low/high/max（glm-5.3 不能关思考），缺省 low。
+        budgets:
+          prep:
+            maxTokens: !!js process.env.YUNYI_LLM_MAX_TOKENS_PREP
+            reasoningEffort: !!js process.env.YUNYI_LLM_REASONING_EFFORT_PREP ?? 'low'

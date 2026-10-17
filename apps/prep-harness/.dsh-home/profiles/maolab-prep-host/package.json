@@ -1,0 +1,1 @@
+{ "name": "maolab-prep-host-profile", "private": true, "dsh": { "profile": { "bundles": ["@maolab/prep-harness"] } }, "dependencies": { "@maolab/prep-harness": "link:../../.." } }

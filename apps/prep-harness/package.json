@@ -1,0 +1,68 @@
+{
+  "name": "@maolab/prep-harness",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "dsh": {
+    "bundle": {
+      "patch": "./profile/cordis.patch.yml"
+    }
+  },
+  "exports": {
+    "./gateway": "./src/gateway.ts",
+    "./preset-policy": "./src/preset-policy.ts",
+    "./session-policy": "./src/session-policy.ts",
+    "./persistence-router": "./src/persistence/router.ts",
+    "./llm-yunyi": "./src/llm-yunyi.ts"
+  },
+  "scripts": {
+    "start": "node node_modules/@deepseek-ai/dsh/lib/bin.js --profile maolab-prep-host",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "e2e:prep": "tsx scripts/prep-e2e.ts",
+    "realmodel:prep": "tsx scripts/prep-realmodel.ts"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "4.0.4",
+    "@deepseek-ai/dsh": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-llm": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-scope": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-session": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-session-persistence": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-tools": "0.2.0-rc.2",
+    "@maolab/domain": "workspace:*",
+    "@maolab/prep-bundle": "workspace:*",
+    "@maolab-core/harness": "file:../../../maolab-core/packages/harness",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@agentia/auth-node": "file:../../../maolab-core/packages/agentia-auth-node",
+    "@maolab-core/auth": "file:../../../maolab-core/packages/auth",
+    "@maolab-core/knowledge": "file:../../../maolab-core/packages/knowledge",
+    "@maolab-core/types": "file:../../../maolab-core/packages/types",
+    "@maolab/course": "workspace:*",
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.15.5",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "dependenciesMeta": {
+    "@maolab-core/harness": {
+      "injected": true
+    },
+    "@agentia/auth-node": {
+      "injected": true
+    },
+    "@maolab-core/auth": {
+      "injected": true
+    },
+    "@maolab-core/knowledge": {
+      "injected": true
+    },
+    "@maolab-core/types": {
+      "injected": true
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "@maolab/prep-bundle",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./tool-whoami": "./src/tools/whoami.ts",
+    "./diagnostics-probe": "./src/diagnostics/probe.ts",
+    "./finalize": "./src/finalize.ts",
+    "./chatter": "./src/chatter.ts",
+    "./skills": "./src/skills/provider.ts",
+    "./prep-model": "./src/prep/model.ts",
+    "./prep": "./src/prep/service.ts",
+    "./prep-course-loader": "./src/prep/course-loader.ts",
+    "./prep-finalize": "./src/prep/finalize.ts",
+    "./tools-prep": "./src/tools/prep-tools.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-tools": "0.2.0-rc.2",
+    "@maolab/course": "workspace:*",
+    "@maolab/domain": "workspace:*",
+    "@maolab-core/harness": "file:../../../maolab-core/packages/harness",
+    "tsx": "^4.20.3"
+  },
+  "dependenciesMeta": {
+    "@maolab-core/harness": { "injected": true }
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3"
+  }
+}
