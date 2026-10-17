@@ -1,0 +1,28 @@
+{
+  "name": "@maolab/course",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:pg": "vitest run --config vitest.pg.config.ts"
+  },
+  "dependencies": {
+    "@maolab/pedagogy": "workspace:*",
+    "@maolab/shared-types": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.15.5",
+    "dotenv": "^16.4.5",
+    "pg": "^8.16.3",
+    "typescript": "^5.9.3",
+    "vitest": "^2.0.0"
+  }
+}
