@@ -1,13 +1,16 @@
 packages:
   - 'packages/*'
-  - 'app'
+  - 'apps/*'
+  - 'workers/*'
+# 允许运行安装脚本的依赖：esbuild（tsx/vitest）、sharp，以及 dsh 宿主的原生依赖。
+# core-js 的脚本只打印捐助提示，@scarf/scarf 会上报安装统计，均不运行。
 allowBuilds:
-  better-sqlite3: set this to true or false
-  core-js: set this to true or false
-  esbuild: set this to true or false
-  sharp: set this to true or false
-onlyBuiltDependencies:
-  - better-sqlite3
-  - core-js
-  - esbuild
-  - sharp
+  esbuild: true
+  sharp: true
+  '@deepseek-ai/dsh-subprocess-local': true
+  koffi: true
+  node-pty: true
+  protobufjs: true
+  '@google/genai': true
+  core-js: false
+  '@scarf/scarf': false
