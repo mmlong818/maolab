@@ -5,8 +5,8 @@
   "license": "PolyForm-Noncommercial-1.0.0",
   "description": "猫叔备课室",
   "scripts": {
-    "test": "pnpm -r test",
-    "typecheck": "pnpm -r typecheck"
+    "test": "corepack pnpm -r --workspace-concurrency=1 test",
+    "typecheck": "corepack pnpm -r typecheck"
   },
   "devDependencies": {
     "tsx": "^4.15.0"
