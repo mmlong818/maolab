@@ -4,6 +4,7 @@
   "entries": [
     { "idx": 0, "version": "7", "when": 1792195200000, "tag": "0000_course", "breakpoints": true },
     { "idx": 1, "version": "7", "when": 1792195200001, "tag": "0001_render", "breakpoints": true },
-    { "idx": 2, "version": "7", "when": 1792195200002, "tag": "0002_prep", "breakpoints": true }
+    { "idx": 2, "version": "7", "when": 1792195200002, "tag": "0002_prep", "breakpoints": true },
+    { "idx": 3, "version": "7", "when": 1792195200003, "tag": "0003_export", "breakpoints": true }
   ]
 }

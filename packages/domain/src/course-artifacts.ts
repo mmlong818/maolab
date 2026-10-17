@@ -8,10 +8,13 @@ import type pg from 'pg'
 const SCHEMA_RE = /^[a-z_][a-z0-9_]*$/
 const check = (schema: string): string => { if (!SCHEMA_RE.test(schema)) throw new Error(`invalid schema name: ${schema}`); return schema }
 
-export type ArtifactKind = 'image' | 'evidence' | 'export'
-export const ARTIFACT_KINDS: readonly ArtifactKind[] = ['image', 'evidence', 'export']
+export type ArtifactKind = 'image' | 'evidence' | 'export' | 'package' | 'recall'
+export const ARTIFACT_KINDS: readonly ArtifactKind[] = ['image', 'evidence', 'export', 'package', 'recall']
 export const PPTX_CONTENT_TYPE = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-export const ARTIFACT_CONTENT_TYPES: readonly string[] = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml', PPTX_CONTENT_TYPE]
+/** S4：课程包（zip）与撤回单（JSON） */
+export const PACKAGE_CONTENT_TYPE = 'application/zip'
+export const RECALL_CONTENT_TYPE = 'application/json'
+export const ARTIFACT_CONTENT_TYPES: readonly string[] = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml', PPTX_CONTENT_TYPE, PACKAGE_CONTENT_TYPE, RECALL_CONTENT_TYPE]
 export const ARTIFACT_MAX_BYTES = 64 * 1024 * 1024
 export const EXPORT_RETENTION_MS = 7 * 24 * 60 * 60 * 1000
 /** 浏览器与渲染页里产物的地址前缀；@maolab/course 的 render-contract 有同值常量（浏览器侧不能引 pg），course 的测试校验两者一致 */
