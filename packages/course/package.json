@@ -18,6 +18,7 @@
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@maolab/domain": "workspace:*",
     "@types/node": "^24.0.0",
     "@types/pg": "^8.15.5",
     "dotenv": "^16.4.5",
