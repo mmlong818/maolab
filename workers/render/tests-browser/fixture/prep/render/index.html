@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>projection fixture</title>
+<style>
+  html, body { margin: 0; background: #0e0c09; }
+  #stage { position: relative; width: 1920px; height: 1080px; background: #fcfbf9; overflow: hidden; }
+  .t { position: absolute; left: 120px; font-family: sans-serif; color: #16181d; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(async () => {
+  const params = new URLSearchParams(location.search)
+  const page = Number(params.get('page'))
+  // stall=1：document.fonts.ready 永不完成（模拟页面在采集阶段的 evaluate 里挂住）
+  if (params.get('stall') === '1') Object.defineProperty(document.fonts, 'ready', { get: () => new Promise(() => {}) })
+  try {
+    if (params.get('fail') === '1') throw new Error('夹具要求报错')
+    if (params.get('hang') === '1') return
+    const res = await fetch('/api/prep/render/' + encodeURIComponent(params.get('course') || '') + '/', { cache: 'no-store' })
+    if (!res.ok) throw new Error('渲染数据不可用（HTTP ' + res.status + '）')
+    const body = await res.json()
+    if (body.contract !== 1) throw new Error('渲染数据版本不符')
+    try { await fetch('https://example.com/leak') } catch (ignored) {}
+    const slides = Array.isArray(body.course.slides) ? body.course.slides : null
+    const slide = slides ? slides[page - 1] : { title: String(body.course.topic || body.course.id) + ' 第 ' + page + ' 页', titlePx: 40, body: '导出夹具', bodyPx: 32 }
+    if (!slide) throw new Error('页码超出范围')
+    const stage = document.createElement('div')
+    stage.id = 'stage'
+    stage.setAttribute('data-projection-stage', 'true')
+    const title = document.createElement('div')
+    title.className = 't'; title.style.top = '120px'; title.style.fontSize = slide.titlePx + 'px'; title.textContent = slide.title
+    const text = document.createElement('div')
+    text.className = 't'; text.style.top = '420px'; text.style.fontSize = slide.bodyPx + 'px'; text.textContent = slide.body
+    stage.append(title, text)
+    if (slide.image) {
+      const img = document.createElement('img')
+      img.alt = ''; img.src = slide.image
+      img.style.cssText = 'position:absolute;right:120px;top:300px;width:400px;height:300px'
+      stage.append(img)
+    }
+    document.getElementById('root').append(stage)
+    await Promise.all([...document.images].map((img) => img.complete ? null : new Promise((done) => { img.onload = done; img.onerror = done })))
+    document.body.dataset.exportReady = String(page)
+  } catch (error) {
+    const main = document.createElement('main')
+    main.setAttribute('data-render-error', error.message)
+    main.textContent = error.message
+    document.body.append(main)
+  }
+})()
+</script>
+</body>
+</html>
