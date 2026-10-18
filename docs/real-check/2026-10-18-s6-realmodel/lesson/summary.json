@@ -1,0 +1,52 @@
+{
+  "outlinePagesMentioned": 0,
+  "outlinePages": 13,
+  "citedCourse": false,
+  "checkpointAsked": 2,
+  "checkpointResolved": 0,
+  "refusedAfterRecall": true,
+  "replyCount": 4,
+  "publishedCitations": 0,
+  "turnsSent": 4,
+  "turns": [
+    {
+      "terminal": "done",
+      "modelStatus": "live",
+      "ms": 8908
+    },
+    {
+      "terminal": "done",
+      "modelStatus": "live",
+      "ms": 9739
+    },
+    {
+      "terminal": "done",
+      "modelStatus": "live",
+      "ms": 4896
+    },
+    {
+      "terminal": "done",
+      "modelStatus": "live",
+      "ms": 4244
+    }
+  ],
+  "toolCalls": [
+    "set_stage",
+    "set_stage",
+    "create_checkpoint"
+  ],
+  "eventTypes": [
+    "board.block.upsert",
+    "board.page.ensure",
+    "checkpoint.ask",
+    "narration.say",
+    "turn.commit"
+  ],
+  "model": "glm-5.3",
+  "at": "2026-10-18T14:53:28.659Z",
+  "startedAt": "2026-10-18T14:52:54.588Z",
+  "secretScan": {
+    "hostLogHitsRedacted": 0,
+    "summaryHits": 0
+  }
+}

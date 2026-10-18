@@ -1,0 +1,955 @@
+[
+  {
+    "turn": 1,
+    "stage": "plan",
+    "text": "我想用这两个知识点备一节高中语文课，知识点 id 是 7085c609-1f17-4a6e-a6f5-18aadadf5d14、6dc7c761-17b7-4e6e-b0a4-e5b805cd0084。先把课程计划做出来讲给我听。",
+    "ms": 13294,
+    "results": [
+      {
+        "tool": "plan_course",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      }
+    ],
+    "frameTypes": {
+      "agent/inbox/spliced": 2,
+      "turn/start": 1,
+      "step/start": 2,
+      "system/message": 1,
+      "user/message": 2,
+      "request/header": 1,
+      "request/context": 1,
+      "agent/assistant-stream": 424,
+      "assistant/message": 2,
+      "tool/call": 1,
+      "tool/result": 1,
+      "step/end": 2,
+      "turn/end": 1,
+      "yunyi/turn-final": 1
+    },
+    "agentSteps": 2,
+    "llmRetries": 0,
+    "turnEnd": {
+      "kind": "completed"
+    },
+    "reply": "课程计划已经做好了，给您讲一下：\n\n**课题**：《芣苢》——叠词与重章叠句的表达效果、重章叠句结构与劳动场景描摹（高中语文，新授课）\n\n**整体结构**：共 13 页，两个知识点各走一轮\"观察→解释→练习→反馈\"的学习循环，前后有定向、收束和迁移。\n\n**逐页安排**：\n\n1. **导入定向**：抛出本课学习问题，让学生先有自己的初步判断。\n2. **学习任务总览**：看清本课依次要完成的任务。\n3–6. **第一轮：叠词与表意功能**（\"采采\"等叠词）\n   - 观察圈画：在诗中找出叠词，记录可直接核对的证据\n   - 解释：用证据说明叠词的表意功能\n   - 练习：独立完成任务，写答案和依据\n   - 反馈：对照成功标准核对并修正\n7–10. **第二轮：重章叠句与劳动场景**（\"采采\"\"薄言\"等重章叠句形式）\n   - 同样走\"观察→解释→练习→反馈\"四步，落到重章叠句结构如何描摹…"
+  },
+  {
+    "turn": 2,
+    "stage": "approve",
+    "text": "计划可以。请确认计划，然后开始逐页生成。",
+    "ms": 364758,
+    "results": [
+      {
+        "tool": "approve_plan",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 2,
+          "failures": 0,
+          "ms": 7405,
+          "inputTokens": 2079,
+          "outputTokens": 467,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 1
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 2,
+          "failures": 0,
+          "ms": 6827,
+          "inputTokens": 2089,
+          "outputTokens": 372,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 2
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 2,
+          "failures": 0,
+          "ms": 7035,
+          "inputTokens": 2384,
+          "outputTokens": 350,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 3
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 2,
+          "failures": 0,
+          "ms": 14736,
+          "inputTokens": 2713,
+          "outputTokens": 916,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 4
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 2,
+          "failures": 0,
+          "ms": 5616,
+          "inputTokens": 2620,
+          "outputTokens": 314,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 5
+      },
+      {
+        "tool": "generate_page",
+        "ok": false,
+        "reason": "page-blocked",
+        "message": "第 6 页自动修复 1 次、重跑 0 次后仍未通过：单页事实核查未通过：页面与讲稿均称“采采芣苢”出现“共三次”，但《芣苢》全诗三章，每章两句均以“采采芣苢”起句（采之/有之；掇之/捋之；袺之/襭之），故“采采”实际共出现六次，而非三次。页面还把“六章开头”判定为错误并要求改为“三章开头”，这一修正结论本身基于错误的次数统计。（《芣苢》原文每章两句，句式为“采采芣苢，薄言采之。采采芣苢，薄言有之。”三章合计“采采芣苢”出现六次。页面证据栏写“‘采采芣苢’在三章开头反复出现，共三次”，结论栏与教师讲稿均重复“一共三次”。；将“共三次”改为“共六次（三章，每章开头两句各出现一次）”，并把修改建议改为：若同学误写出现次数，应据原文每章两句均以“采采芣苢”起句订正为六章句、共六次；讲稿同步更正。）。可以用 repair_page 带上修改意见重做这一页。",
+        "modelCalls": {
+          "calls": 7,
+          "failures": 0,
+          "ms": 57954,
+          "inputTokens": 12942,
+          "outputTokens": 2894,
+          "imageCalls": 0
+        },
+        "repairs": 1,
+        "requeues": 0,
+        "rounds": 2,
+        "pageOrder": 6,
+        "details": {
+          "pageId": "lp-006-feedback",
+          "order": 6,
+          "status": "blocked",
+          "rounds": 2,
+          "repairs": 1,
+          "requeues": 0,
+          "attempts": 2,
+          "sessionStatus": "generating",
+          "remaining": 8,
+          "diagnostics": [
+            {
+              "kind": "validation_error",
+              "message": "单页事实核查未通过：《芣苢》全诗为三章，每章四句，“采采芣苢”共出现三次（每章开头一次），页面上“六章开头反复出现”的说法与原诗结构不符。（页面结论与证据处写“‘采采芣苢’在六章开头反复出现”。《诗经·周南·芣苢》实际为三章，叠句“采采芣苢”每章出现一次，共三次。；将“六章开头反复出现”改为“三章开头反复出现（共三次）”，相关表述同步修改。）"
+            },
+            {
+              "kind": "validation_error",
+              "message": "单页事实核查未通过：页面与讲稿均称“采采芣苢”出现“共三次”，但《芣苢》全诗三章，每章两句均以“采采芣苢”起句（采之/有之；掇之/捋之；袺之/襭之），故“采采”实际共出现六次，而非三次。页面还把“六章开头”判定为错误并要求改为“三章开头”，这一修正结论本身基于错误的次数统计。（《芣苢》原文每章两句，句式为“采采芣苢，薄言采之。采采芣苢，薄言有之。”三章合计“采采芣苢”出现六次。页面证据栏写“‘采采芣苢’在三章开头反复出现，共三次”，结论栏与教师讲稿均重复“一共三次”。；将“共三次”改为“共六次（三章，每章开头两句各出现一次）”，并把修改建议改为：若同学误写出现次数，应据原文每章两句均以“采采芣苢”起句订正为六章句、共六次；讲稿同步更正。）"
+            }
+          ]
+        }
+      },
+      {
+        "tool": "repair_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 3,
+          "failures": 0,
+          "ms": 17864,
+          "inputTokens": 6221,
+          "outputTokens": 939,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 6
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 2,
+          "failures": 0,
+          "ms": 10207,
+          "inputTokens": 3275,
+          "outputTokens": 775,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 7
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 4,
+          "failures": 0,
+          "ms": 28719,
+          "inputTokens": 6862,
+          "outputTokens": 1644,
+          "imageCalls": 0
+        },
+        "repairs": 1,
+        "requeues": 0,
+        "rounds": 2,
+        "pageOrder": 8
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 2,
+          "failures": 0,
+          "ms": 8299,
+          "inputTokens": 3236,
+          "outputTokens": 312,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 9
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 6,
+          "failures": 0,
+          "ms": 39888,
+          "inputTokens": 14553,
+          "outputTokens": 2838,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 10
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 3,
+          "failures": 0,
+          "ms": 13596,
+          "inputTokens": 5666,
+          "outputTokens": 938,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 11
+      },
+      {
+        "tool": "generate_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 4,
+          "failures": 0,
+          "ms": 25522,
+          "inputTokens": 8713,
+          "outputTokens": 1363,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 12
+      },
+      {
+        "tool": "generate_page",
+        "ok": false,
+        "reason": "page-blocked",
+        "message": "第 13 页自动修复 1 次、重跑 0 次后仍未通过：单页事实核查未通过：页面内部证据自相矛盾：结论称“仅第四字更换为‘拾、捡、装’”，但第三条证据却说“‘拾、捡、装’出现在第四字‘枣’之前的位置”，即第四字是“枣”而非“拾/捡/装”，二者对第四字的认定冲突，学生无法据此核对答案。（studentContent.conclusion 写“仅第四字更换为‘拾、捡、装’”；studentContent.evidence[2] 写“‘拾、捡、装’出现在第四字‘枣’之前的位置，三句各不相同”。；统一口径：若更换字位于第三字、第四字为“枣”，则结论与成功标准应改为“写出第三字更换为‘拾、捡、装’”；若更换字确为第四字，则修正第三条证据的表述，删除“第四字‘枣’”的矛盾描述。）。可以用 repair_page 带上修改意见重做这一页。",
+        "modelCalls": {
+          "calls": 5,
+          "failures": 0,
+          "ms": 27409,
+          "inputTokens": 8967,
+          "outputTokens": 1819,
+          "imageCalls": 0
+        },
+        "repairs": 1,
+        "requeues": 0,
+        "rounds": 2,
+        "pageOrder": 13,
+        "details": {
+          "pageId": "lp-013-feedback",
+          "order": 13,
+          "status": "blocked",
+          "rounds": 2,
+          "repairs": 1,
+          "requeues": 0,
+          "attempts": 2,
+          "sessionStatus": "generating",
+          "remaining": 1,
+          "diagnostics": [
+            {
+              "kind": "validation_error",
+              "message": "单页事实核查未通过：结论自相矛盾：先说“‘轻轻提篮，弯腰’三句完全相同”，紧接着又说“仅第四字‘拾、捡、装’更换”。若第四字不同，三句就不可能完全相同。（学生页结论：“三句中叠词‘轻轻’反复出现，‘轻轻提篮，弯腰’三句完全相同，仅第四字‘拾、捡、装’更换，构成重章叠句形式。”；将结论改为“三句除第四字外其余字句完全相同，仅第四字更换为‘拾、捡、装’，构成重章叠句形式”。）"
+            },
+            {
+              "kind": "validation_error",
+              "message": "单页事实核查未通过：页面内部证据自相矛盾：结论称“仅第四字更换为‘拾、捡、装’”，但第三条证据却说“‘拾、捡、装’出现在第四字‘枣’之前的位置”，即第四字是“枣”而非“拾/捡/装”，二者对第四字的认定冲突，学生无法据此核对答案。（studentContent.conclusion 写“仅第四字更换为‘拾、捡、装’”；studentContent.evidence[2] 写“‘拾、捡、装’出现在第四字‘枣’之前的位置，三句各不相同”。；统一口径：若更换字位于第三字、第四字为“枣”，则结论与成功标准应改为“写出第三字更换为‘拾、捡、装’”；若更换字确为第四字，则修正第三条证据的表述，删除“第四字‘枣’”的矛盾描述。）"
+            }
+          ]
+        }
+      },
+      {
+        "tool": "repair_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 2,
+          "failures": 0,
+          "ms": 9294,
+          "inputTokens": 3572,
+          "outputTokens": 645,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 13
+      }
+    ],
+    "frameTypes": {
+      "agent/inbox/spliced": 2,
+      "turn/start": 1,
+      "step/start": 17,
+      "user/message": 1,
+      "agent/assistant-stream": 301,
+      "assistant/message": 17,
+      "tool/call": 16,
+      "tool/result": 16,
+      "step/end": 17,
+      "turn/end": 1,
+      "yunyi/turn-final": 1
+    },
+    "agentSteps": 17,
+    "llmRetries": 0,
+    "turnEnd": {
+      "kind": "completed"
+    },
+    "reply": "13 页正文全部生成完毕。过程中有两页被事实核查拦下后重做：\n\n- **第 6 页（反馈）**：原文中\"采采芣苢\"的出现次数统计有误（实际三章、每章两句均以此起句，共六次），已按核查意见更正。\n- **第 13 页（迁移反馈）**：迁移材料中\"更换的字在第几位\"前后表述矛盾，已统一口径重做。\n\n其余 11 页均一次或自动修复后通过单页事实核查。\n\n下一步是把所有页送去截图检查，全部通过后做整课审查，再逐页验收。要我现在把 13 页都送去截图吗？"
+  },
+  {
+    "turn": 3,
+    "stage": "render",
+    "text": "页面都生成好了，请把还没截图的页送去截图检查。",
+    "ms": 19886,
+    "results": [
+      {
+        "tool": "render_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null,
+        "details": {
+          "queued": 13,
+          "alreadyQueued": []
+        }
+      }
+    ],
+    "frameTypes": {
+      "agent/inbox/spliced": 2,
+      "turn/start": 1,
+      "step/start": 2,
+      "user/message": 1,
+      "agent/assistant-stream": 65,
+      "assistant/message": 2,
+      "tool/call": 1,
+      "tool/result": 1,
+      "step/end": 2,
+      "turn/end": 1,
+      "yunyi/turn-final": 1
+    },
+    "agentSteps": 2,
+    "llmRetries": 0,
+    "turnEnd": {
+      "kind": "completed"
+    },
+    "reply": "已把全部 13 页都送去截图检查（后台进行中）。稍后我用 read_course 查看每页的截图结论——都通过之后就可以做整课审查了。需要我现在就查一次进度，还是您稍后再叫我？",
+    "drain": {
+      "schema": "course_test_prep_real",
+      "fake": false,
+      "elapsedMs": 10479,
+      "truncated": false,
+      "counts": {
+        "succeeded": 13,
+        "idle": 1
+      },
+      "ms": 11669,
+      "leftActive": 0,
+      "drained": true
+    }
+  },
+  {
+    "turn": 4,
+    "stage": "audit",
+    "text": "截图都通过了，请做整课审查，然后告诉我结论。",
+    "ms": 63649,
+    "results": [
+      {
+        "tool": "audit_course",
+        "ok": false,
+        "reason": "audit-blocked",
+        "message": "整课审计发现 1 个阻断项，请修正后重新检查。 事实错误：“薄言”出现在每句第三、第四字处 factIssues 与 findings 每条按它自带的 fix 与 action 处理：action 为 repair-page 的，用 repair_page 按 fix 修改对应页面，重新截图后再 audit_course（也可以用 audit_page 查看单页问题）。",
+        "modelCalls": {
+          "calls": 1,
+          "failures": 0,
+          "ms": 29338,
+          "inputTokens": 20391,
+          "outputTokens": 2727,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null,
+        "details": {
+          "teachingQuality": null,
+          "qualityStatus": "blocked",
+          "findings": [],
+          "factIssues": [
+            {
+              "severity": "blocking",
+              "pageId": "lp-003-observe",
+              "relatedPageIds": [
+                "lp-007-observe"
+              ],
+              "message": "事实错误：“薄言”出现在每句第三、第四字处",
+              "impact": "每句第三、第四字处出现的词",
+              "fix": "改为“薄言出现在每句第五、第六字处（‘采采芣苢’之后）”，与 lp-008 的正确表述保持一致，避免学生按错误位置圈画并影响后续位置核对。",
+              "action": "repair-page"
+            }
+          ],
+          "unverifiedPageIds": [],
+          "pendingPageIds": [],
+          "advice": "factIssues 与 findings 每条按它自带的 fix 与 action 处理：action 为 repair-page 的，用 repair_page 按 fix 修改对应页面，重新截图后再 audit_course（也可以用 audit_page 查看单页问题）。"
+        }
+      },
+      {
+        "tool": "repair_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 2,
+          "failures": 0,
+          "ms": 18918,
+          "inputTokens": 2375,
+          "outputTokens": 795,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": 1,
+        "pageOrder": 3
+      },
+      {
+        "tool": "render_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null,
+        "details": {
+          "queued": 1,
+          "alreadyQueued": []
+        }
+      }
+    ],
+    "frameTypes": {
+      "agent/inbox/spliced": 2,
+      "turn/start": 1,
+      "step/start": 4,
+      "user/message": 1,
+      "agent/assistant-stream": 197,
+      "assistant/message": 4,
+      "tool/call": 3,
+      "tool/result": 3,
+      "step/end": 4,
+      "turn/end": 1,
+      "yunyi/turn-final": 1
+    },
+    "agentSteps": 4,
+    "llmRetries": 0,
+    "turnEnd": {
+      "kind": "completed"
+    },
+    "reply": "整课审查第一次没有通过，发现一个事实错误：\n\n**阻断问题（第 3 页）**：页面上写\"薄言\"出现在每句第三、第四字处——实际上\"薄言\"在\"采采芣苢\"之后，是每句的第五、第六字。学生会按错误位置去圈画，影响后续核对（第 7 页也相关，但修第 3 页即可）。\n\n我已经：\n1. 按核查意见重做了第 3 页（改为\"薄言出现在每句第五、第六字处（'采采芣苢'之后）\"），重做后通过了单页核查；\n2. 把第 3 页重新送去截图（正在后台进行）。\n\n等这页截图通过后，我会重新跑整课审查，再向您报告结论。"
+  },
+  {
+    "turn": 5,
+    "stage": "render",
+    "text": null,
+    "ms": 2195,
+    "results": [],
+    "frameTypes": {},
+    "agentSteps": 0,
+    "llmRetries": 0,
+    "turnEnd": null,
+    "reply": null,
+    "drain": {
+      "schema": "course_test_prep_real",
+      "fake": false,
+      "elapsedMs": 1037,
+      "truncated": false,
+      "counts": {
+        "succeeded": 1,
+        "idle": 1
+      },
+      "ms": 2195,
+      "leftActive": 0,
+      "drained": true
+    }
+  },
+  {
+    "turn": 6,
+    "stage": "audit",
+    "text": "截图都通过了，请做整课审查，然后告诉我结论。",
+    "ms": 31790,
+    "results": [
+      {
+        "tool": "audit_course",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 1,
+          "failures": 0,
+          "ms": 21788,
+          "inputTokens": 20256,
+          "outputTokens": 2085,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null,
+        "details": {
+          "auditId": "e8d12a9b68dcbfa0f3271abf26795b287e88c78705fb161f7c570737879dcb86",
+          "sessionStatus": "awaiting-teacher-acceptance",
+          "teachingQuality": "passed",
+          "acceptable": true,
+          "findings": [],
+          "unverifiedSources": [
+            "curriculum-standard",
+            "textbook"
+          ],
+          "note": "整课审查通过：可以逐页 accept_page。注意：知识点库里没有这节课的课标与教材原文，本次审查未核对课标与教材原文，要如实告诉老师。findings 里只剩不阻断的提醒。"
+        }
+      }
+    ],
+    "frameTypes": {
+      "agent/inbox/spliced": 2,
+      "turn/start": 1,
+      "step/start": 2,
+      "user/message": 1,
+      "agent/assistant-stream": 170,
+      "assistant/message": 2,
+      "tool/call": 1,
+      "tool/result": 1,
+      "step/end": 2,
+      "turn/end": 1,
+      "yunyi/turn-final": 1
+    },
+    "agentSteps": 2,
+    "llmRetries": 0,
+    "turnEnd": {
+      "kind": "completed"
+    },
+    "reply": "**整课审查通过了** ✅\n\n结论：\n- **教学审查**：通过，没有阻断性问题或待修正项。\n- **事实核查**：之前发现的问题（\"薄言\"位置错误）已修正并通过。\n- **一点提醒（不阻断）**：知识点库里没有这节课对应的**课标和教材原文**，本次审查未能核对课标与教材。建议您在验收前自己对照教材原文（尤其是《芣苢》的诗句字句）把把关，确保与您使用的教材版本一致。\n\n现在课程处于\"待老师逐页验收\"状态。如果您确认没问题，我可以逐页验收（13 页），全部验收后这节课就是可上课的版本，还能导出 PPTX。要我开始逐页验收吗？"
+  },
+  {
+    "turn": 7,
+    "stage": "accept",
+    "text": "我逐页看过了，都可以。请把每一页都验收，然后做整课验收。",
+    "ms": 54086,
+    "results": [
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_page",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      },
+      {
+        "tool": "accept_course",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      }
+    ],
+    "frameTypes": {
+      "agent/inbox/spliced": 2,
+      "turn/start": 1,
+      "step/start": 15,
+      "user/message": 1,
+      "agent/assistant-stream": 244,
+      "assistant/message": 15,
+      "tool/call": 14,
+      "tool/result": 14,
+      "step/end": 15,
+      "turn/end": 1,
+      "yunyi/turn-final": 1
+    },
+    "agentSteps": 15,
+    "llmRetries": 0,
+    "turnEnd": {
+      "kind": "completed"
+    },
+    "reply": "全部完成 ✅\n\n- **13 页已全部逐页验收**\n- **整课验收通过**，课程状态为 **ready**（可上课的版本）\n\n这节《芣苢》——叠词与重章叠句的表达效果、重章叠句结构与劳动场景描摹的课现在可以直接上课了。\n\n后续如果需要：\n- **导出 PPTX**：随时可以导出，下载链接 7 天内有效；\n- **想修改已验收的课**：需要建修订版（正文、截图、审查、验收都要重做），代价较大，到时候先告诉我具体要改什么。\n\n需要我现在导出 PPTX 吗？"
+  },
+  {
+    "turn": 8,
+    "stage": "export",
+    "text": "请导出 PPTX。",
+    "ms": 31670,
+    "results": [
+      {
+        "tool": "export_pptx",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null,
+        "details": {
+          "job": {
+            "jobId": "rj_00000000000000057743_9e935aac-a0a7-46de-89c5-5272fb78ab4c",
+            "status": "queued",
+            "created": true
+          }
+        }
+      },
+      {
+        "tool": "read_course",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": null,
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null
+      }
+    ],
+    "frameTypes": {
+      "agent/inbox/spliced": 2,
+      "turn/start": 1,
+      "step/start": 3,
+      "user/message": 1,
+      "agent/assistant-stream": 112,
+      "assistant/message": 3,
+      "tool/call": 2,
+      "tool/result": 2,
+      "step/end": 3,
+      "turn/end": 1,
+      "yunyi/turn-final": 1
+    },
+    "agentSteps": 3,
+    "llmRetries": 0,
+    "turnEnd": {
+      "kind": "completed"
+    },
+    "reply": "PPTX 导出任务已提交，正在后台进行中（包含全部 13 页）。文件名为：\n\n**《芣苢》中叠词与重章叠句的表达效果、《芣苢》的重章叠句结构与劳动场景描摹.pptx**\n\n任务完成后会有下载地址（7 天内有效）。稍后您叫我一声，我再查一次导出进度把下载链接给您；或者您需要的话，我现在就可以再查。",
+    "drain": {
+      "schema": "course_test_prep_real",
+      "fake": false,
+      "elapsedMs": 20259,
+      "truncated": false,
+      "counts": {
+        "succeeded": 1,
+        "idle": 1
+      },
+      "ms": 21433,
+      "leftActive": 0,
+      "drained": true
+    }
+  },
+  {
+    "turn": 9,
+    "stage": "rehearse",
+    "text": "最后请试讲一遍，告诉我学生可能会卡在哪里。",
+    "ms": 26263,
+    "results": [
+      {
+        "tool": "rehearse",
+        "ok": true,
+        "reason": null,
+        "message": null,
+        "modelCalls": {
+          "calls": 1,
+          "failures": 0,
+          "ms": 13072,
+          "inputTokens": 1916,
+          "outputTokens": 520,
+          "imageCalls": 0
+        },
+        "repairs": 0,
+        "requeues": 0,
+        "rounds": null,
+        "pageOrder": null,
+        "details": {
+          "overall": "课程讲解思路清晰，第4页对'采采'两个功能的讲解和第8页对重章叠句'反复的是什么、固定在哪、换的是什么'的归纳都很好懂。但整节课从头到尾没有展示《芣苢》原文，多处要求'回到具体诗句写依据'却没有诗句可查，第12、13页的迁移练习也没有给出新材料内容，我根本无法完成练习和核对。",
+          "issues": [
+            {
+              "pageNo": 3,
+              "kind": "信息缺失",
+              "detail": "老师让我到材料上圈叠词并指出在哪一句哪个位置，但课件里没有附《芣苢》原文，我不知道去哪里圈、圈的是哪一句。"
+            },
+            {
+              "pageNo": 5,
+              "kind": "信息缺失",
+              "detail": "独立练习要求抄录叠词并写出对应诗句依据，但页面没有给出原文，我只能凭第4页老师讲过的印象写，没法真正核对诗句。"
+            },
+            {
+              "pageNo": 6,
+              "kind": "信息缺失",
+              "detail": "核对环节说'采采芣苢'一共出现六次、写成三次要依据原文订正，但我手上没有原文，无法自己验证到底是六次还是三次。"
+            },
+            {
+              "pageNo": 12,
+              "kind": "信息缺失",
+              "detail": "迁移练习说换一份新材料找出叠词和重章叠句，但新材料的具体内容没有出现在页面上，我完全没有对象可以分析。"
+            },
+            {
+              "pageNo": 13,
+              "kind": "衔接断层",
+              "detail": "核对反馈直接给出叠词是'轻轻'、换的字是'拾、捡、装'，但我从没见过这份材料，不知道这些字出自什么句子、在什么位置，等于对不上自己的答案。"
+            }
+          ],
+          "clearestPageNo": 4
+        }
+      }
+    ],
+    "frameTypes": {
+      "agent/inbox/spliced": 2,
+      "turn/start": 1,
+      "step/start": 2,
+      "user/message": 1,
+      "agent/assistant-stream": 443,
+      "assistant/message": 2,
+      "tool/call": 1,
+      "tool/result": 1,
+      "step/end": 2,
+      "turn/end": 1,
+      "yunyi/turn-final": 1
+    },
+    "agentSteps": 2,
+    "llmRetries": 0,
+    "turnEnd": {
+      "kind": "completed"
+    },
+    "reply": "试讲（AI 扮演高中学生上了一遍）结果出来了。整体思路清晰，讲解页效果不错（第 4 页、第 8 页被认为最好懂），但暴露出一个**贯穿全课的问题**：\n\n**学生最可能卡住的地方：课件从头到尾没有《芣苢》原文，多处要求\"圈画诗句、写依据\"却无诗可查。**\n\n具体卡点：\n- **第 3 页（观察圈画）**：要求\"到材料上圈叠词、指出在哪一句哪个位置\"，但页面没附原文，学生不知道去哪圈。\n- **第 5 页（练习）**：要求抄录叠词并写诗句依据，学生只能凭第 4 页的印象写，无法核对。\n- **第 6 页（核对）**：说\"采采芣苢\"共六次、写成三次要订正，但学生手上没原文，无法自己验证。\n- **第 12 页（迁移）**：**最严重**——要求\"换一份新材料找出叠词和重章叠句\"，但新材料内容根本没出现在页面上，学生完全无法完成练习。\n- **第 13 页（核对）**：直接给出答案\"叠词是'轻轻…"
+  }
+]
