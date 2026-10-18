@@ -107,7 +107,12 @@ export async function dropPrepSchemas(input: { courseSchema: string; knowledgeSc
 export function toolResultsOf(frames: EventFrame[]): Array<Record<string, any>> {
   return frames.filter((frame) => frame.type === 'tool/result').map((frame) => {
     const blocks = (frame.data as { message?: { content?: Array<{ type?: string; text?: string }> } }).message?.content ?? []
-    return JSON.parse(blocks.find((block) => block.type === 'text')?.text ?? '{}') as Record<string, any>
+    // skill 工具返回 <skill_content> 文本而不是 JSON（S6 真实模型实测会先读 skill）：记成空结果，序号仍与工具名对齐
+    try {
+      return JSON.parse(blocks.find((block) => block.type === 'text')?.text ?? '{}') as Record<string, any>
+    } catch {
+      return {}
+    }
   })
 }
 

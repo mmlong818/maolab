@@ -408,10 +408,13 @@ function normalizeReviewIssue(value: unknown): unknown {
     role: 'audience',
   }
   const rawCategory = typeof item.category === 'string' ? item.category.toLowerCase() : ''
+  // 外部模型常把类别写成组合词（answer-mismatch、answer-consistency）：整词认不出时按词逐个认，取第一个认得的
+  const category = categoryAliases[rawCategory]
+    ?? rawCategory.split(/[-_\s]+/).map((word) => categoryAliases[word]).find(Boolean)
   return {
     pageIds,
     severity: severityAliases[rawSeverity] ?? item.severity,
-    category: categoryAliases[rawCategory] ?? item.category,
+    category: category ?? item.category,
     claim: item.claim ?? item.message ?? item.problem,
     evidence: item.evidence ?? item.reason ?? item.impact,
     fix: item.fix ?? item.correction ?? item.recommendation,

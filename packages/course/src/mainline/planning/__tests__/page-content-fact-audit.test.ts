@@ -271,4 +271,20 @@ describe('页面优先课程整课事实核查', () => {
       message: expect.stringContaining('缺少可检查的图像或材料'),
     })
   })
+  it('兼容外部模型把类别写成组合词（answer-mismatch、answer-consistency）', async () => {
+    const issue = (category: string) => ({
+      pageIds: ['page-answer'], severity: 'blocking', category,
+      claim: '答案与题目问的不是一回事。', evidence: '密闭体系总质量守恒。', fix: '让答案回应密度问题。',
+    })
+    const llm: PageContentFactAuditLLMCall = vi.fn(async () => ({
+      issues: [issue('answer-mismatch'), issue('Answer_Consistency')],
+      goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }],
+    }))
+
+    const result = await factAuditPageContentCourse(reviewCourse(), { llm })
+
+    expect(result.record.auditedSceneCount).toBe(2)
+    expect(result.record.fatalCount).toBe(2)
+    expect(result.record.issues.map((i) => i.message)).toEqual([expect.stringContaining('题目与回答不匹配'), expect.stringContaining('题目与回答不匹配')])
+  })
 })
