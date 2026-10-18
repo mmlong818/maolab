@@ -1,0 +1,608 @@
+{
+  "outcome": "completed",
+  "model": "glm-5.3",
+  "imageModel": null,
+  "gateway": "llm-yunyi.ts 缺省地址",
+  "capture": "real-browser",
+  "budgets": {
+    "reasoningEffort": "low（profile 缺省，未设 YUNYI_LLM_REASONING_EFFORT_PREP）",
+    "maxTokens": "8192（适配器缺省，未设 YUNYI_LLM_MAX_TOKENS_PREP；T8 实测对工具内调用同样生效）"
+  },
+  "kpIds": [
+    "7085c609-1f17-4a6e-a6f5-18aadadf5d14",
+    "6dc7c761-17b7-4e6e-b0a4-e5b805cd0084"
+  ],
+  "elapsedMs": 629231,
+  "turns": 9,
+  "packageExport": {
+    "status": "succeeded",
+    "error": null,
+    "version": 1,
+    "pageCount": 13,
+    "bytes": 8638088,
+    "ms": 21478,
+    "drained": true
+  },
+  "stages": {
+    "plan": {
+      "turns": 1,
+      "ms": 13294,
+      "toolCalls": 1,
+      "toolModelCalls": 0,
+      "toolModelMs": 0,
+      "toolModelFailures": 0,
+      "toolInputTokens": 0,
+      "toolOutputTokens": 0,
+      "imageCalls": 0,
+      "toolFailures": 0,
+      "repairs": 0,
+      "requeues": 0,
+      "agentModelRequests": 2,
+      "llmRetries": 0
+    },
+    "approve": {
+      "turns": 1,
+      "ms": 364758,
+      "toolCalls": 16,
+      "toolModelCalls": 48,
+      "toolModelMs": 280371,
+      "toolModelFailures": 0,
+      "toolInputTokens": 85892,
+      "toolOutputTokens": 16586,
+      "imageCalls": 0,
+      "toolFailures": 2,
+      "repairs": 3,
+      "requeues": 0,
+      "agentModelRequests": 17,
+      "llmRetries": 0
+    },
+    "render": {
+      "turns": 2,
+      "ms": 22081,
+      "toolCalls": 1,
+      "toolModelCalls": 0,
+      "toolModelMs": 0,
+      "toolModelFailures": 0,
+      "toolInputTokens": 0,
+      "toolOutputTokens": 0,
+      "imageCalls": 0,
+      "toolFailures": 0,
+      "repairs": 0,
+      "requeues": 0,
+      "agentModelRequests": 2,
+      "llmRetries": 0
+    },
+    "audit": {
+      "turns": 2,
+      "ms": 95439,
+      "toolCalls": 4,
+      "toolModelCalls": 4,
+      "toolModelMs": 70044,
+      "toolModelFailures": 0,
+      "toolInputTokens": 43022,
+      "toolOutputTokens": 5607,
+      "imageCalls": 0,
+      "toolFailures": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "agentModelRequests": 6,
+      "llmRetries": 0
+    },
+    "accept": {
+      "turns": 1,
+      "ms": 54086,
+      "toolCalls": 14,
+      "toolModelCalls": 0,
+      "toolModelMs": 0,
+      "toolModelFailures": 0,
+      "toolInputTokens": 0,
+      "toolOutputTokens": 0,
+      "imageCalls": 0,
+      "toolFailures": 0,
+      "repairs": 0,
+      "requeues": 0,
+      "agentModelRequests": 15,
+      "llmRetries": 0
+    },
+    "export": {
+      "turns": 1,
+      "ms": 31670,
+      "toolCalls": 2,
+      "toolModelCalls": 0,
+      "toolModelMs": 0,
+      "toolModelFailures": 0,
+      "toolInputTokens": 0,
+      "toolOutputTokens": 0,
+      "imageCalls": 0,
+      "toolFailures": 0,
+      "repairs": 0,
+      "requeues": 0,
+      "agentModelRequests": 3,
+      "llmRetries": 0
+    },
+    "rehearse": {
+      "turns": 1,
+      "ms": 26263,
+      "toolCalls": 1,
+      "toolModelCalls": 1,
+      "toolModelMs": 13072,
+      "toolModelFailures": 0,
+      "toolInputTokens": 1916,
+      "toolOutputTokens": 520,
+      "imageCalls": 0,
+      "toolFailures": 0,
+      "repairs": 0,
+      "requeues": 0,
+      "agentModelRequests": 2,
+      "llmRetries": 0
+    }
+  },
+  "toolsByName": {
+    "plan_course": {
+      "calls": 1,
+      "failures": {},
+      "modelCalls": 0,
+      "modelMs": 0
+    },
+    "approve_plan": {
+      "calls": 1,
+      "failures": {},
+      "modelCalls": 0,
+      "modelMs": 0
+    },
+    "generate_page": {
+      "calls": 13,
+      "failures": {
+        "page-blocked": 2
+      },
+      "modelCalls": 43,
+      "modelMs": 253213
+    },
+    "repair_page": {
+      "calls": 3,
+      "failures": {},
+      "modelCalls": 7,
+      "modelMs": 46076
+    },
+    "render_page": {
+      "calls": 2,
+      "failures": {},
+      "modelCalls": 0,
+      "modelMs": 0
+    },
+    "audit_course": {
+      "calls": 2,
+      "failures": {
+        "audit-blocked": 1
+      },
+      "modelCalls": 2,
+      "modelMs": 51126
+    },
+    "accept_page": {
+      "calls": 13,
+      "failures": {},
+      "modelCalls": 0,
+      "modelMs": 0
+    },
+    "accept_course": {
+      "calls": 1,
+      "failures": {},
+      "modelCalls": 0,
+      "modelMs": 0
+    },
+    "export_pptx": {
+      "calls": 1,
+      "failures": {},
+      "modelCalls": 0,
+      "modelMs": 0
+    },
+    "read_course": {
+      "calls": 1,
+      "failures": {},
+      "modelCalls": 0,
+      "modelMs": 0
+    },
+    "rehearse": {
+      "calls": 1,
+      "failures": {},
+      "modelCalls": 1,
+      "modelMs": 13072
+    }
+  },
+  "pageRuns": [
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 1,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 2,
+      "failures": 0,
+      "ms": 7405,
+      "outputTokens": 467,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 2,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 2,
+      "failures": 0,
+      "ms": 6827,
+      "outputTokens": 372,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 3,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 2,
+      "failures": 0,
+      "ms": 7035,
+      "outputTokens": 350,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 4,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 2,
+      "failures": 0,
+      "ms": 14736,
+      "outputTokens": 916,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 5,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 2,
+      "failures": 0,
+      "ms": 5616,
+      "outputTokens": 314,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": false,
+      "reason": "page-blocked",
+      "order": 6,
+      "rounds": 2,
+      "repairs": 1,
+      "requeues": 0,
+      "calls": 7,
+      "failures": 0,
+      "ms": 57954,
+      "outputTokens": 2894,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "repair_page",
+      "ok": true,
+      "reason": null,
+      "order": 6,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 3,
+      "failures": 0,
+      "ms": 17864,
+      "outputTokens": 939,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 7,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 2,
+      "failures": 0,
+      "ms": 10207,
+      "outputTokens": 775,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 8,
+      "rounds": 2,
+      "repairs": 1,
+      "requeues": 0,
+      "calls": 4,
+      "failures": 0,
+      "ms": 28719,
+      "outputTokens": 1644,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 9,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 2,
+      "failures": 0,
+      "ms": 8299,
+      "outputTokens": 312,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 10,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 6,
+      "failures": 0,
+      "ms": 39888,
+      "outputTokens": 2838,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 11,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 3,
+      "failures": 0,
+      "ms": 13596,
+      "outputTokens": 938,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": true,
+      "reason": null,
+      "order": 12,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 4,
+      "failures": 0,
+      "ms": 25522,
+      "outputTokens": 1363,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "generate_page",
+      "ok": false,
+      "reason": "page-blocked",
+      "order": 13,
+      "rounds": 2,
+      "repairs": 1,
+      "requeues": 0,
+      "calls": 5,
+      "failures": 0,
+      "ms": 27409,
+      "outputTokens": 1819,
+      "imageCalls": 0
+    },
+    {
+      "turn": 2,
+      "tool": "repair_page",
+      "ok": true,
+      "reason": null,
+      "order": 13,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 2,
+      "failures": 0,
+      "ms": 9294,
+      "outputTokens": 645,
+      "imageCalls": 0
+    },
+    {
+      "turn": 4,
+      "tool": "repair_page",
+      "ok": true,
+      "reason": null,
+      "order": 3,
+      "rounds": 1,
+      "repairs": 0,
+      "requeues": 0,
+      "calls": 2,
+      "failures": 0,
+      "ms": 18918,
+      "outputTokens": 795,
+      "imageCalls": 0
+    }
+  ],
+  "audits": [
+    {
+      "turn": 4,
+      "ok": false,
+      "reason": "audit-blocked",
+      "perPage": true,
+      "findings": 0,
+      "factIssues": 1,
+      "unverified": 0,
+      "pending": 0,
+      "advice": "factIssues 与 findings 每条按它自带的 fix 与 action 处理：action 为 repair-page 的，用 repair_page 按 fix 修改对应页面，重新截图后再 audit_course（也可以用 audit_page 查看单页问题）。"
+    },
+    {
+      "turn": 6,
+      "ok": true,
+      "reason": null,
+      "perPage": false,
+      "findings": 0,
+      "factIssues": 0,
+      "unverified": 0,
+      "pending": 0,
+      "advice": "整课审查通过：可以逐页 accept_page。注意：知识点库里没有这节课的课标与教材原文，本次审查未核对课标与教材原文，要如实告诉老师。findings 里只剩不阻断的提醒。"
+    }
+  ],
+  "drains": [
+    {
+      "turn": 3,
+      "stage": "render",
+      "schema": "course_test_prep_real",
+      "fake": false,
+      "elapsedMs": 10479,
+      "truncated": false,
+      "counts": {
+        "succeeded": 13,
+        "idle": 1
+      },
+      "ms": 11669,
+      "leftActive": 0,
+      "drained": true
+    },
+    {
+      "turn": 5,
+      "stage": "render",
+      "schema": "course_test_prep_real",
+      "fake": false,
+      "elapsedMs": 1037,
+      "truncated": false,
+      "counts": {
+        "succeeded": 1,
+        "idle": 1
+      },
+      "ms": 2195,
+      "leftActive": 0,
+      "drained": true
+    },
+    {
+      "turn": 8,
+      "stage": "export",
+      "schema": "course_test_prep_real",
+      "fake": false,
+      "elapsedMs": 20259,
+      "truncated": false,
+      "counts": {
+        "succeeded": 1,
+        "idle": 1
+      },
+      "ms": 21433,
+      "leftActive": 0,
+      "drained": true
+    }
+  ],
+  "finalState": {
+    "courseId": "86d59987-c365-4c6a-816d-cf5264b0f6db",
+    "planStatus": "ready",
+    "sessionStatus": "ready",
+    "qualityStatus": "passed",
+    "teaching": "passed",
+    "pages": [
+      {
+        "pageId": "lp-001-orient",
+        "order": 1,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-002-structure",
+        "order": 2,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-003-observe",
+        "order": 3,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-004-explain",
+        "order": 4,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-005-practice",
+        "order": 5,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-006-feedback",
+        "order": 6,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-007-observe",
+        "order": 7,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-008-explain",
+        "order": 8,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-009-practice",
+        "order": 9,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-010-feedback",
+        "order": 10,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-011-recap",
+        "order": 11,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-012-transfer",
+        "order": 12,
+        "status": "passed"
+      },
+      {
+        "pageId": "lp-013-feedback",
+        "order": 13,
+        "status": "passed"
+      }
+    ],
+    "blockedShots": [],
+    "activeRenderJobs": 0,
+    "exportJob": {
+      "status": "succeeded"
+    }
+  },
+  "hostLog": {},
+  "secretScan": {
+    "hostLogHitsRedacted": 0
+  }
+}
