@@ -8,27 +8,33 @@
 // 整课验收 session-conflict 时按"页有改动先 render_page、再 audit_course、再验收"说。截图与导出用 workers/render 的排空脚本（缺省真实浏览器），
 // 每次排空后核对跑到 idle 且本课没有排队或运行中的任务。
 // 只动 course_test_prep_real* schema 与 course_test_prep_real_teacher 账号行，结束时清理。没有密钥时跳过并退出 0。
-// 用法：corepack pnpm -C apps/prep-harness realmodel:prep [--fake-capture] [--image-model <id>] [--max-turns 60]
-import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
+// S6：--package-out <目录> 时，整课验收后再导出课程包（同 api 的 POST /package：建包、投 export-package、排空），把 lesson-v1.zip 与本次临时公钥 public.pem
+// 写到该目录，给自习室的 lesson-realmodel --from 用；--key-env 指定读 LEARNING_LLM_API_KEY 的 .env（不叫 --env-file：那是 node 自己的参数）（maolab 自己的 .env 没有它时）；--out 改摘要目录。
+// 用法：corepack pnpm -C apps/prep-harness realmodel:prep [--fake-capture] [--image-model <id>] [--max-turns 60] [--key-env <.env>] [--out <目录>] [--package-out <目录>]
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { parse } from 'dotenv'
 import pg from 'pg'
-import { PgCourseDocuments } from '@maolab/domain'
+import { PgCourseArtifacts, PgCourseDocuments, PgExports, PgRenderJobs } from '@maolab/domain'
+import { importDataset, readDataset } from '@maolab-core/knowledge'
+import { exportKeyFiles } from '../../prep-api/scripts/package-keygen.ts'
 import { startHost, type EventFrame } from '../tests/helpers/host.ts'
 import { drainRenderQueue, dropPrepSchemas, loadCourseForTests, prepPgUrl, resetPrepSchemas, toolResultsOf } from '../tests/helpers/prep.ts'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..')
-const OUT = join(ROOT, 'docs', 'real-check', '2026-10-14-phase3c-prep', 'realmodel')
+
 const HOST_LOG = join(ROOT, 'apps', 'harness', 'host-test.log')
-const { values } = parseArgs({ options: { 'fake-capture': { type: 'boolean', default: false }, 'image-model': { type: 'string', default: '' }, 'max-turns': { type: 'string', default: '60' } } })
+const { values } = parseArgs({ options: { 'fake-capture': { type: 'boolean', default: false }, 'image-model': { type: 'string', default: '' }, 'max-turns': { type: 'string', default: '60' }, 'key-env': { type: 'string' }, out: { type: 'string' }, 'package-out': { type: 'string' }, 'k12-dir': { type: 'string' }, 'kp-ids': { type: 'string' } } })
+const OUT = values.out ? resolve(values.out) : join(ROOT, 'docs', 'real-check', '2026-10-14-phase3c-prep', 'realmodel')
 const maxTurns = Number(values['max-turns'])
 const fakeCapture = values['fake-capture'] === true
 /** 单回合等待上限：老师一句"逐页生成到底"可能让 agent 在一个回合里连调十几次 generate_page */
 const TURN_TIMEOUT_MS = 90 * 60_000
 
-const envFile = join(ROOT, '.env')
+const envFile = values['key-env'] ? resolve(values['key-env']) : join(ROOT, '.env')
 const fileEnv = existsSync(envFile) ? parse(readFileSync(envFile)) : {}
 const key = fileEnv.LEARNING_LLM_API_KEY?.trim()
 if (!key) {
@@ -50,6 +56,24 @@ const MODEL = 'glm-5.3'
 const hostLogStart = existsSync(HOST_LOG) ? statSync(HOST_LOG).size : 0
 const course = await loadCourseForTests()
 await resetPrepSchemas({ courseSchema: COURSE_SCHEMA, knowledgeSchema: KNOWLEDGE_SCHEMA, owners: [TEACHER], fixtures: course })
+// S6：--k12-dir + --kp-ids 时用真实的 k12 知识点（id 与自习室同一套）：只把选中的知识点与它们之间的关系导入走查用的知识点库，替换夹具
+let KP_IDS: string[] = [...course.PREP_FIXTURE_KP_IDS]
+let KP_BAND = '初中'
+if (values['k12-dir'] && values['kp-ids']) {
+  const wanted = values['kp-ids'].split(',').map((s) => s.trim()).filter(Boolean)
+  const full = await readDataset(resolve(values['k12-dir']))
+  const points = full.knowledgePoints.filter((p) => wanted.includes(p.id))
+  if (points.length !== wanted.length) throw new Error(`数据集里找不到知识点：${wanted.filter((id) => !points.some((p) => p.id === id)).join('、')}`)
+  const kpPool = new pg.Pool({ connectionString: prepPgUrl(), max: 1 })
+  try {
+    await kpPool.query(`DELETE FROM ${KNOWLEDGE_SCHEMA}.knowledge_points; DELETE FROM ${KNOWLEDGE_SCHEMA}.datasets`)
+    await importDataset(kpPool, { ...full, knowledgePoints: points, relations: full.relations.filter((r) => wanted.includes(r.fromKpId) && wanted.includes(r.toKpId)) }, { schema: KNOWLEDGE_SCHEMA })
+  } finally {
+    await kpPool.end()
+  }
+  KP_IDS = wanted
+  KP_BAND = points[0]!.gradeBand
+}
 const host = await startHost({
   YUNYI_PREP_PG_URL: pgUrl, YUNYI_COURSE_SCHEMA: COURSE_SCHEMA, YUNYI_PREP_KNOWLEDGE_SCHEMA: KNOWLEDGE_SCHEMA,
   YUNYI_PREP_MODEL: MODEL, YUNYI_PREP_IMAGE_MODEL: values['image-model'] ?? '', YUNYI_DIAGNOSTIC_TOOLS: '', YUNYI_TEST_PRESETS: '',
@@ -114,7 +138,7 @@ function auditRepairText(details: Record<string, any> | null): string {
 
 /** 老师的下一句话（脚本化的老师）；drain 为真时这回合之后跑一次排空 */
 function nextMove(s: CourseState): { stage: string; text?: string; drain?: boolean } | undefined {
-  if (!s.courseId) return { stage: 'plan', text: `我想用这两个知识点备一节初中语文课，知识点 id 是 ${course.PREP_FIXTURE_KP_IDS.join('、')}。先把课程计划做出来讲给我听。` }
+  if (!s.courseId) return { stage: 'plan', text: `我想用这两个知识点备一节${KP_BAND}语文课，知识点 id 是 ${KP_IDS.join('、')}。先把课程计划做出来讲给我听。` }
   if (!s.sessionStatus) return { stage: 'approve', text: '计划可以。请确认计划，然后开始逐页生成。' }
   if (s.sessionStatus === 'generating') {
     const blocked = s.pages.find((page) => page.status === 'blocked')
@@ -315,6 +339,33 @@ const pageRuns = turns.flatMap((turn) => turn.results.filter((result) => (result
   calls: result.modelCalls?.calls ?? 0, failures: result.modelCalls?.failures ?? 0, ms: result.modelCalls?.ms ?? 0, outputTokens: result.modelCalls?.outputTokens ?? 0, imageCalls: result.modelCalls?.imageCalls ?? 0,
 })))
 const finalState = await readState().catch(() => undefined)
+// S6：整课验收后导出课程包（与 api 的 POST /api/prep/courses/:id/package 同一路径：建包 → 投 export-package → 排空），写出包与公钥
+let packageExport: Record<string, unknown> | null = null
+if (values['package-out'] && outcome === 'completed' && finalState?.courseId) {
+  const keyDir = mkdtempSync(join(tmpdir(), 'maolab-s6-key-'))
+  try {
+    const keys = exportKeyFiles(join(keyDir, 'keys'))
+    const doc = (await documents.find('course', finalState.courseId))!.payload as { revision?: { familyId?: string } }
+    const pkg = await new PgExports(pool, { schema: COURSE_SCHEMA }).forOwner(TEACHER).ensureActivePackage(doc.revision?.familyId ?? finalState.courseId)
+    const { job } = await new PgRenderJobs(pool, { schema: COURSE_SCHEMA }).forOwner(TEACHER).enqueue({ courseId: finalState.courseId, kind: 'export-package', requestKey: 'realmodel:package', payload: { packageId: pkg.packageId } })
+    const t = Date.now()
+    const drained = await drainRenderQueue(COURSE_SCHEMA, { fakeCapture, timeoutMs: 1_200_000, knowledgeSchema: KNOWLEDGE_SCHEMA, env: { MAOLAB_PACKAGE_SIGNING_KEY: keys.privateKeyPath } })
+    const done = (await new PgRenderJobs(pool, { schema: COURSE_SCHEMA }).forOwner(TEACHER).get(job.id))!
+    const result = done.result as { artifactId?: string; version?: number; pageCount?: number; bytes?: number } | null
+    if (done.status === 'succeeded' && result?.artifactId) {
+      const stored = (await new PgCourseArtifacts(pool, { schema: COURSE_SCHEMA }).forOwner(TEACHER).get(result.artifactId))!
+      const outDir = resolve(values['package-out'])
+      mkdirSync(outDir, { recursive: true })
+      writeFileSync(join(outDir, 'lesson-v1.zip'), stored.bytes)
+      writeFileSync(join(outDir, 'public.pem'), keys.publicKeyPem)
+    }
+    packageExport = { status: done.status, error: done.error ? { code: done.error.code, message: clip(done.error.message, 400) } : null, version: result?.version ?? null, pageCount: result?.pageCount ?? null, bytes: result?.bytes ?? null, ms: Date.now() - t, drained: (drained.counts as Record<string, number> | undefined)?.idle === 1 }
+  } catch (error) {
+    packageExport = { status: 'error', error: clip(error instanceof Error ? error.message : String(error), 1200) }
+  } finally {
+    rmSync(keyDir, { recursive: true, force: true })
+  }
+}
 await events?.close().catch(() => undefined)
 await host.stop()
 await pool.end()
@@ -333,8 +384,8 @@ if (existsSync(HOST_LOG)) {
 const summary = {
   outcome, model: MODEL, imageModel: values['image-model'] || null, gateway: 'llm-yunyi.ts 缺省地址', capture: fakeCapture ? 'fake-capture' : 'real-browser',
   budgets: { reasoningEffort: 'low（profile 缺省，未设 YUNYI_LLM_REASONING_EFFORT_PREP）', maxTokens: '8192（适配器缺省，未设 YUNYI_LLM_MAX_TOKENS_PREP；T8 实测对工具内调用同样生效）' },
-  kpIds: [...course.PREP_FIXTURE_KP_IDS],
-  elapsedMs: Date.now() - started, turns: turns.length, stages, toolsByName, pageRuns, audits: auditObservations, drains, finalState,
+  kpIds: KP_IDS,
+  elapsedMs: Date.now() - started, turns: turns.length, packageExport, stages, toolsByName, pageRuns, audits: auditObservations, drains, finalState,
   hostLog: hostLogFindings,
   secretScan: { hostLogHitsRedacted: hostLogHits },
 }
