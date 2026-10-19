@@ -38,9 +38,16 @@ AI 教研组在背后打磨每一幕。
 
 ```bash
 pnpm install
-pnpm db:init      # 初始化 SQLite
-pnpm dev          # 开发模式
+pnpm db:init               # 初始化 SQLite
+pnpm db:seed-kp            # 导入教材知识点（从 GitHub Release 下载约 22MB 种子包）
+pnpm textbook:sync:trees   # 拉取教材章节树缓存（教材索引已随仓库提供）
+pnpm dev                   # 开发模式
 ```
+
+不导入知识点种子，教材目录能打开但章节下没有知识点，无法从知识点建课。
+种子包只含 pep-cn 教材知识点、聚类、来源、章节关联与关系，不含任何学生或课程数据；
+本地已有知识点时 `db:seed-kp` 会拒绝执行。维护者更新知识点后用 `pnpm db:export-kp-seed`
+生成 `data/kp-seed.sqlite.gz`，作为新 Release 的附件发布。
 
 ```bash
 pnpm build        # 构建

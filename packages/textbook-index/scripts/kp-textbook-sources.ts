@@ -18,6 +18,7 @@ export interface KpTextbookSource {
   textbook_title: string
   grade: string
   volume: string
+  chapter_node_id: string
   chapter_path: string[]
 }
 
@@ -69,6 +70,7 @@ export function loadKpTextbookSources(db: ReturnType<typeof openSqliteRaw>): Map
       textbook_title: tb.title,
       grade: tb.grade ?? '',
       volume: tb.volume ?? '',
+      chapter_node_id: node_id,
       chapter_path: node.path,
     })
     out.set(kp_id, list)

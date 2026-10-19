@@ -13,6 +13,8 @@
     "db:migrate": "pnpm --filter @maolab/db db:migrate",
     "db:init": "tsx scripts/init-db.ts",
     "db:reset": "rimraf data/maolab.db && tsx scripts/init-db.ts",
+    "db:seed-kp": "tsx scripts/seed-kp.ts",
+    "db:export-kp-seed": "tsx scripts/export-kp-seed.ts",
     "textbook:sync": "pnpm --filter @maolab/textbook-index sync",
     "textbook:sync:trees": "pnpm --filter @maolab/textbook-index sync:trees"
   },
