@@ -15,6 +15,8 @@ const ReviewIssueSchema = z.object({
     'prompt-answer-mismatch',
     'visual-evidence',
     'audience',
+    // 外部模型自造、别名也认不出的类别归到这里：问题照常报，不让整次核查因类别名作废
+    'other',
   ]),
   claim: z.string().trim().min(2).max(300),
   evidence: z.string().trim().min(2).max(500),
@@ -345,6 +347,7 @@ function categoryLabel(category: z.infer<typeof ReviewIssueSchema>['category']):
     'prompt-answer-mismatch': '题目与回答不匹配',
     'visual-evidence': '缺少可检查的图像或材料',
     audience: '学生与教师内容边界错误',
+    other: '其他问题',
   }
   return labels[category]
 }
@@ -408,9 +411,13 @@ function normalizeReviewIssue(value: unknown): unknown {
     role: 'audience',
   }
   const rawCategory = typeof item.category === 'string' ? item.category.toLowerCase() : ''
-  // 外部模型常把类别写成组合词（answer-mismatch、answer-consistency）：整词认不出时按词逐个认，取第一个认得的
-  const category = categoryAliases[rawCategory]
-    ?? rawCategory.split(/[-_\s]+/).map((word) => categoryAliases[word]).find(Boolean)
+  // 外部模型常把类别写成组合词（answer-mismatch、answer-consistency）或复数（materials）：整词认不出时按词逐个认（去掉复数 s），
+  // 取第一个认得的；还认不出的非空类别归 other
+  const known = new Set<string>(ReviewIssueSchema.shape.category.options)
+  const aliasOf = (word: string) => (known.has(word) ? word as z.infer<typeof ReviewIssueSchema>['category'] : categoryAliases[word] ?? categoryAliases[word.replace(/s$/, '')])
+  const category = aliasOf(rawCategory)
+    ?? rawCategory.split(/[-_\s]+/).map(aliasOf).find(Boolean)
+    ?? (rawCategory.trim() ? 'other' : undefined)
   return {
     pageIds,
     severity: severityAliases[rawSeverity] ?? item.severity,
