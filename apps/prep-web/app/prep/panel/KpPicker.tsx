@@ -76,7 +76,7 @@ export default function KpPicker({ onConfirm, busy = false }: { onConfirm(kps: K
         </label>
       ))}
       {warning ? <p className={styles.hint}>{warning}</p> : null}
-      <button type="button" disabled={busy || selected.length === 0} onClick={() => onConfirm(selected)}>{busy ? '正在建课…' : `用选中的 ${selected.length} 个知识点建课`}</button>
+      <button className={styles.primary} type="button" disabled={busy || selected.length === 0} onClick={() => onConfirm(selected)}>{busy ? '正在建课…' : `用选中的 ${selected.length} 个知识点建课`}</button>
     </div>
   )
 }

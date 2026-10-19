@@ -60,7 +60,7 @@ export default function PlanView({ courseId, workbench, imagesAvailable, onChang
       <div className={styles.row}>
         <strong>计划（{planning.pages.length} 页 · {labelOf(PLAN_STATUS_LABEL, planning.status)}）</strong>
         {editable ? <button type="button" disabled={busy} onClick={() => void submit('save', '已保存。')}>保存修改</button> : null}
-        {editable ? <button type="button" disabled={busy} onClick={() => void submit('approve', '计划已确认，可以在对话里让备课助理逐页生成。')}>确认计划</button> : null}
+        {editable ? <button className={styles.primary} type="button" disabled={busy} onClick={() => void submit('approve', '计划已确认，可以在对话里让备课助理逐页生成。')}>确认计划</button> : null}
       </div>
       {message ? <p className={message.ok ? styles.hint : styles.error}>{message.text}</p> : null}
       <ol className={styles.planList}>

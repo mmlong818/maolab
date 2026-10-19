@@ -1,3 +1,16 @@
+/* 控件外观：Tailwind 的基础样式去掉了按钮、输入框、下拉框的默认边框与背景，备课页在这里补回。
+   :where() 不加优先级，后面 .tab、.pageTree 等专用样式照样覆盖。 */
+.shell :where(button) { font: inherit; color: inherit; padding: 5px 12px; border: 1px solid #d9c9ad; border-radius: 6px; background: #fff; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+.shell :where(button):hover:not(:disabled) { background: #fff3d6; border-color: #c9a96b; }
+.shell :where(button):disabled { opacity: 0.5; cursor: not-allowed; }
+.shell :where(input:not([type='checkbox']):not([type='radio']), select, textarea) { font: inherit; color: inherit; padding: 5px 8px; border: 1px solid #d9c9ad; border-radius: 6px; background: #fff; }
+.shell :where(input, select, textarea):focus { border-color: #b8862e; }
+/* 每一步的主操作（建课、确认计划、验收、导出、发送） */
+.primary { background: #b8862e; border-color: #b8862e; color: #fff; font-weight: 600; }
+.primary:hover:not(:disabled) { background: #9c6f1f; border-color: #9c6f1f; }
+/* 课程列表里的课名：链接样式 */
+.linkButton { border-color: transparent; background: transparent; padding: 0; color: #8a5a00; text-decoration: underline; text-underline-offset: 3px; text-align: left; }
+.linkButton:hover:not(:disabled) { background: transparent; border-color: transparent; text-decoration-thickness: 2px; }
 .shell { display: grid; grid-template-columns: minmax(320px, 2fr) minmax(420px, 3fr); height: 100vh; background: var(--paper, #fbf7ef); }
 .chatColumn { display: flex; flex-direction: column; min-height: 0; min-width: 0; border-right: 1px solid var(--line, #e6dccb); }
 /* 面板栏是容器：预览布局按面板自身宽度切换（终审修复：预览舞台不超出面板） */
@@ -23,7 +36,7 @@
 .md pre code { background: none; padding: 0; }
 /* 标签栏吸顶：背景不透明，表格滚上来不会透出来 */
 .tabs { display: flex; gap: 4px; padding: 8px 12px; border-bottom: 1px solid var(--line, #e6dccb); position: sticky; top: 0; background: var(--paper, #fbf7ef); z-index: 2; }
-.tab { padding: 6px 10px; border-radius: 6px; border: 0; background: transparent; cursor: pointer; }
+.tab { padding: 6px 10px; border-radius: 6px; border: 1px solid transparent; background: transparent; cursor: pointer; }
 .tabActive { background: #f2e6cf; }
 .section { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -36,6 +49,11 @@
 /* 预览：结构树 + 主区；主区可收缩，舞台按 16:9 等比缩放到主区宽度，胶片条在主区内横向滚动 */
 .previewLayout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 12px; min-height: 0; align-items: start; }
 .previewTree { max-height: 75vh; overflow: auto; display: flex; }
+/* 课程页目录：竖排条目，当前页高亮 */
+.pageTree { display: flex; flex-direction: column; gap: 2px; width: 100%; min-width: 0; }
+.pageTreeGroup { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; }
+.pageTree button { text-align: left; padding: 4px 8px; border-color: transparent; background: transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pageTree .pageTreeActive { background: #f2e6cf; border-color: #e3cfa6; font-weight: 600; }
 .previewMain { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
 .stageFrame { width: 100%; aspect-ratio: 16 / 9; min-width: 0; }
 .filmstripFrame { min-width: 0; max-width: 100%; overflow-x: auto; }

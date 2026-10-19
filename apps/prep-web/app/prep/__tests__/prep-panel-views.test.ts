@@ -107,8 +107,8 @@ describe('整课验收只在待验收时可点，422 转成老师能看懂的话
 
   it('待验收且逐页都验完：整课验收可点；还有未验收页时不可点', () => {
     expect(canAcceptCourse(workbench({ sessionStatus: 'awaiting-teacher-acceptance' }))).toBe(true)
-    expect(render(workbench({ sessionStatus: 'awaiting-teacher-acceptance' }))).toMatch(/<button type="button">整课验收<\/button>/)
-    expect(render(workbench({ sessionStatus: 'awaiting-teacher-acceptance', pending: ['p1'] }))).toMatch(/<button type="button" disabled="">整课验收<\/button>/)
+    expect(render(workbench({ sessionStatus: 'awaiting-teacher-acceptance' }))).toMatch(/<button( class="[^"]*")? type="button">整课验收<\/button>/)
+    expect(render(workbench({ sessionStatus: 'awaiting-teacher-acceptance', pending: ['p1'] }))).toMatch(/<button( class="[^"]*")? type="button" disabled="">整课验收<\/button>/)
     expect(canAcceptCourse(workbench({ sessionStatus: 'ready', finalSignature: 'sig' }))).toBe(false)
   })
 

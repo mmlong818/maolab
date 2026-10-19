@@ -37,7 +37,7 @@ export default function ExportView({ courseId, workbench, jobs, onChanged }: { c
     <div className={styles.section}>
       <strong>导出 PPTX</strong>
       {workbench.exportReady.ok ? <p className={styles.status}>共 {workbench.exportReady.pageCount} 页，文件名 {workbench.exportReady.filename}</p> : <p className={styles.status}>{workbench.exportReady.message || '这门课还不能导出。'}</p>}
-      <button type="button" disabled={busy || !workbench.exportReady.ok || pending} onClick={() => void start()}>导出</button>
+      <button className={styles.primary} type="button" disabled={busy || !workbench.exportReady.ok || pending} onClick={() => void start()}>导出</button>
       {message ? <p className={message.ok ? styles.hint : styles.error}>{message.text}</p> : null}
       {latest && 'href' in latest ? (downloadState(latest, now) === 'expired'
         ? <p className={styles.status}>上次导出的文件已过期，请重新导出。</p>

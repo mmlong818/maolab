@@ -36,7 +36,7 @@ export default function CourseList({ onSelect }: { onSelect(courseId: string): v
     <div className={styles.section}>
       <div className={styles.row}>
         <strong>我的课程</strong>
-        <button type="button" onClick={() => setCreating((v) => !v)}>{creating ? '收起' : '选知识点建课'}</button>
+        <button className={styles.primary} type="button" onClick={() => setCreating((v) => !v)}>{creating ? '收起' : '选知识点建课'}</button>
       </div>
       {creating ? <KpPicker busy={busy} onConfirm={(kps) => void create(kps.map((k) => k.kpId))} /> : null}
       {error ? <p className={styles.error}>{error}</p> : null}
@@ -44,7 +44,7 @@ export default function CourseList({ onSelect }: { onSelect(courseId: string): v
         <ul>
           {courses.map((c) => (
             <li key={c.courseId}>
-              <button type="button" onClick={() => onSelect(c.courseId)}>{c.topic}</button>
+              <button type="button" className={styles.linkButton} onClick={() => onSelect(c.courseId)}>{c.topic}</button>
               <span className={styles.status}> {courseStatusText(c)}</span>
             </li>
           ))}
