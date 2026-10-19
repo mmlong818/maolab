@@ -137,7 +137,7 @@ export default function PrepChat({ courseId, hasCredential, onCourseTouched }: {
       {error ? <p className={styles.error}>{error}</p> : null}
       <form className={styles.composer} onSubmit={(e) => { e.preventDefault(); send() }}>
         <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder={courseId ? '对备课助理说：继续生成下一页、按审查意见修第 3 页……' : '先在右侧选知识点建课，或直接告诉备课助理你要上的课'} disabled={!hasCredential} maxLength={4000} />
-        <button type="submit" disabled={!hasCredential || !text.trim()}>发送</button>
+        <button className={styles.primary} type="submit" disabled={!hasCredential || !text.trim()}>发送</button>
       </form>
     </>
   )

@@ -66,7 +66,7 @@ export default function PackageView({ courseId, title, ready, jobs, onChanged }:
     <div className={styles.section}>
       <strong>课程包（给云一自习室）</strong>
       <p className={styles.status}>课程包是页面图和文字，交给自习室运营导入后，孩子可以按知识点找到这节课。撤回只在备课室生效，需把撤回单交给自习室运营执行。</p>
-      <button type="button" disabled={busy || !ready || pending} onClick={() => void start()}>{packageExportLabel(packages)}</button>
+      <button className={styles.primary} type="button" disabled={busy || !ready || pending} onClick={() => void start()}>{packageExportLabel(packages)}</button>
       {pending ? <p className={styles.status}>课程包导出中…</p> : null}
       {job && 'failed' in job ? <p className={styles.error}>上次课程包导出没有完成：{job.failed}</p> : null}
       {message ? <p className={message.ok ? styles.hint : styles.error}>{message.text}</p> : null}

@@ -47,7 +47,7 @@ export default function AcceptanceView({ courseId, workbench, onChanged }: { cou
         <ul>{pending.map((pageId) => <li key={pageId}>{label(pageId)} <button type="button" disabled={busy} onClick={() => void act(() => prepApi.acceptPage(courseId, pageId), `${label(pageId)} 已验收。`, (e) => errorText(e, '没有完成，请稍后重试。'))}>验收这一页</button></li>)}</ul>
       ) : null}
       {!accepted && !awaiting ? <p className={styles.status}>{nextStepText(sessionStatus) || '整课审查通过后，这里会列出待逐页验收的页。'}</p> : null}
-      {!accepted && awaiting ? <button type="button" disabled={busy || !canAcceptCourse(workbench)} onClick={() => void act(() => prepApi.acceptCourse(courseId), '整课已验收。', (e) => acceptErrorText(e, sessionStatus))}>整课验收</button> : null}
+      {!accepted && awaiting ? <button className={styles.primary} type="button" disabled={busy || !canAcceptCourse(workbench)} onClick={() => void act(() => prepApi.acceptCourse(courseId), '整课已验收。', (e) => acceptErrorText(e, sessionStatus))}>整课验收</button> : null}
     </div>
   )
 }
