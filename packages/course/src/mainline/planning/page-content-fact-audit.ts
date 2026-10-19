@@ -3,7 +3,7 @@ import type { FactAuditRecord, MainlineCourse } from '../domain.js'
 import { callLLMJson } from '../../v2/llm.js'
 import { hasCheckablePageMaterial, visiblePageText } from './page-content-audit.js'
 import { sourceReferenceFor } from './source-reference.js'
-import { TeachingQualityReviewOutputSchema, TEACHING_QUALITY_REVIEW_PROMPT, teachingQualityReviewPayload, teachingQualityStandards, type TeachingQualityReviewOutput } from '../teaching-quality-audit.js'
+import { TEACHING_QUALITY_DIMENSIONS, TeachingQualityReviewOutputSchema, TEACHING_QUALITY_REVIEW_PROMPT, teachingQualityReviewPayload, teachingQualityStandards, type TeachingQualityReviewOutput } from '../teaching-quality-audit.js'
 
 const ReviewIssueSchema = z.object({
   pageIds: z.array(z.string().trim().min(1)).min(1).max(6),
@@ -364,10 +364,60 @@ function normalizeProviderAuditOutput(value: unknown): unknown {
   return {
     issues: rawIssues.map(item => normalizeReviewIssue(item)),
     goalCoverage: rawCoverage.map(item => normalizeGoalCoverage(item)),
-    ...(source.teachingQualityReview && typeof source.teachingQualityReview === 'object' && !Array.isArray(source.teachingQualityReview)
-      ? { teachingQualityReview: source.teachingQualityReview }
-      : {}),
+    ...teachingQualityReviewPart(source.teachingQualityReview),
   }
+}
+
+// 教学质量审查与事实核查在同一次调用里输出，两套类别名不同，外部模型常混用（answer-consistency、Materials）。
+// 先按同义词、组合词、复数映射到教学质量的维度；映射后仍不合格就只丢掉这一部分（落库时记为"没有返回可校验结果"），不让事实核查跟着作废。
+function teachingQualityReviewPart(value: unknown): { teachingQualityReview?: unknown } {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {}
+  const review = value as Record<string, unknown>
+  const normalized = {
+    ...review,
+    ...(Array.isArray(review.checks) ? { checks: review.checks.map(item => withFields(item, { dimension: teachingDimension, status: checkStatus })) } : {}),
+    ...(Array.isArray(review.findings) ? { findings: review.findings.map(item => withFields(item, { category: teachingDimension, severity: teachingSeverity })) } : {}),
+  }
+  return TeachingQualityReviewOutputSchema.safeParse(normalized).success ? { teachingQualityReview: normalized } : {}
+}
+
+function withFields(value: unknown, mappers: Record<string, (raw: string) => string | undefined>): unknown {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value
+  const item = { ...(value as Record<string, unknown>) }
+  for (const [key, map] of Object.entries(mappers)) {
+    if (typeof item[key] === 'string') item[key] = map(item[key] as string) ?? item[key]
+  }
+  return item
+}
+
+const TEACHING_DIMENSION_ALIASES: Record<string, (typeof TEACHING_QUALITY_DIMENSIONS)[number]> = {
+  goal: 'goal-alignment', alignment: 'goal-alignment', objective: 'goal-alignment', coverage: 'goal-alignment',
+  material: 'materials', resource: 'materials',
+  progression: 'progression', progress: 'progression', scaffold: 'progression', scaffolding: 'progression', sequence: 'progression', order: 'progression', prerequisite: 'progression',
+  gain: 'information-gain', information: 'information-gain', repetition: 'information-gain', redundancy: 'information-gain', duplicate: 'information-gain',
+  answer: 'answer-separation', separation: 'answer-separation', mismatch: 'answer-separation', consistency: 'answer-separation',
+  visual: 'visual-purpose', image: 'visual-purpose', picture: 'visual-purpose', figure: 'visual-purpose',
+  teacher: 'teacher-companion', companion: 'teacher-companion', script: 'teacher-companion',
+  standard: 'standards-evidence', standards: 'standards-evidence', evidence: 'standards-evidence', curriculum: 'standards-evidence', textbook: 'standards-evidence',
+}
+
+function teachingDimension(raw: string): string | undefined {
+  const value = raw.trim().toLowerCase()
+  if ((TEACHING_QUALITY_DIMENSIONS as readonly string[]).includes(value)) return value
+  const alias = (word: string) => TEACHING_DIMENSION_ALIASES[word] ?? TEACHING_DIMENSION_ALIASES[word.replace(/s$/, '')]
+  return alias(value) ?? value.split(/[-_\s]+/).map(alias).find(Boolean)
+}
+
+function teachingSeverity(raw: string): string | undefined {
+  const value = raw.trim().toLowerCase()
+  const aliases: Record<string, string> = { fatal: 'blocking', error: 'blocking', high: 'blocking', major: 'blocking', critical: 'blocking', warn: 'warning', low: 'warning', minor: 'warning', insufficient: 'insufficient-evidence', 'insufficient_evidence': 'insufficient-evidence', unverified: 'insufficient-evidence' }
+  return aliases[value] ?? value
+}
+
+function checkStatus(raw: string): string | undefined {
+  const value = raw.trim().toLowerCase()
+  const aliases: Record<string, string> = { passed: 'pass', ok: 'pass', fail: 'issue', failed: 'issue', issues: 'issue', insufficient: 'insufficient-evidence', 'insufficient_evidence': 'insufficient-evidence' }
+  return aliases[value] ?? value
 }
 
 function normalizeReviewIssue(value: unknown): unknown {
