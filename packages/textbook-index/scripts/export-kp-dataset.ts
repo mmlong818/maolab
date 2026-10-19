@@ -10,6 +10,7 @@ import { writeFileSync, mkdirSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
+import { loadKpTextbookSources, withTextbooks } from './kp-textbook-sources.js'
 ;(globalThis as { require?: NodeRequire }).require ??= createRequire(import.meta.url)
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -18,6 +19,7 @@ const OUT = resolve(__dirname, '..', '..', '..', 'kp-dataset')
 
 const db = openSqliteRaw(DB)
 mkdirSync(OUT, { recursive: true })
+const sources = loadKpTextbookSources(db)
 
 const kps = db.prepare(`
   SELECT id, canonical_name, subject, grade_band, curriculum_system,
@@ -25,7 +27,7 @@ const kps = db.prepare(`
   FROM knowledge_points
   WHERE curriculum_system = 'pep-cn'
   ORDER BY grade_band, subject, canonical_name
-`).all()
+`).all().map((kp: any) => withTextbooks(kp, sources))
 
 writeFileSync(`${OUT}/knowledge_points.json`, JSON.stringify(kps, null, 2), 'utf-8')
 console.log(`✓ knowledge_points.json: ${kps.length} 条`)
@@ -52,7 +54,7 @@ const meta = {
   subjects: [...new Set((kps as any[]).map((k: any) => k.subject))].sort(),
   relation_types: ['prerequisite', 'leads-to', 'related'],
   schema: {
-    knowledge_points: 'id, canonical_name, subject, grade_band, curriculum_system, confidence, aliases, annotations, summary, title',
+    knowledge_points: 'id, canonical_name, subject, grade_band, curriculum_system, confidence, aliases, annotations, summary, title, grades, textbooks[textbook_id, textbook_title, grade, volume, chapter_path]',
     kp_relations: 'id, from_kp_id, to_kp_id, relation_type, source_evidence, from_name, from_subject, to_name, to_subject',
   },
 }
