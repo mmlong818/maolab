@@ -54,7 +54,7 @@ const meta = {
   subjects: [...new Set((kps as any[]).map((k: any) => k.subject))].sort(),
   relation_types: ['prerequisite', 'leads-to', 'related'],
   schema: {
-    knowledge_points: 'id, canonical_name, subject, grade_band, curriculum_system, confidence, aliases, annotations, summary, title, grades, textbooks[textbook_id, textbook_title, grade, volume, chapter_path]',
+    knowledge_points: 'id, canonical_name, subject, grade_band, curriculum_system, confidence, aliases, annotations, summary, title, grades, textbooks[textbook_id, textbook_title, grade, volume, chapter_node_id, chapter_path]',
     kp_relations: 'id, from_kp_id, to_kp_id, relation_type, source_evidence, from_name, from_subject, to_name, to_subject',
   },
 }
