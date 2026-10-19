@@ -11,6 +11,7 @@ import { writeFileSync, mkdirSync, statSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
+import { loadKpTextbookSources, withTextbooks } from './kp-textbook-sources.js'
 ;(globalThis as { require?: NodeRequire }).require ??= createRequire(import.meta.url)
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -18,6 +19,7 @@ const DB = resolve(__dirname, '..', '..', '..', 'data', 'maolab.db')
 const OUT = resolve(__dirname, '..', '..', '..', 'kp-dataset', 'split')
 
 const db = openSqliteRaw(DB)
+const sources = loadKpTextbookSources(db)
 
 const groups = db.prepare(`
   SELECT grade_band, subject, COUNT(*) AS kp_count
@@ -53,7 +55,7 @@ const index: {
 } = { exported_at: new Date().toISOString(), total_kp: 0, total_relations: 0, files: [] }
 
 for (const g of groups) {
-  const kps = kpStmt.all(g.grade_band, g.subject)
+  const kps = kpStmt.all(g.grade_band, g.subject).map((kp: any) => withTextbooks(kp, sources))
   const rels = relStmt.all(g.grade_band, g.subject)
   const dir = resolve(OUT, g.grade_band)
   mkdirSync(dir, { recursive: true })
