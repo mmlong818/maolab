@@ -46,7 +46,9 @@ pnpm dev                   # 开发模式
 
 不导入知识点种子，教材目录能打开但章节下没有知识点，无法从知识点建课。
 种子包只含 pep-cn 教材知识点、聚类、来源、章节关联与关系，不含任何学生或课程数据；
-本地已有知识点时 `db:seed-kp` 会拒绝执行。维护者更新知识点后用 `pnpm db:export-kp-seed`
+本地已有知识点时 `db:seed-kp` 会拒绝执行。需要走代理下载时，设置环境变量
+`NODE_USE_ENV_PROXY=1`（Node 内置 fetch 默认不读 `HTTPS_PROXY`），或手动下载 Release 附件后用
+`pnpm db:seed-kp --file <路径>`。维护者更新知识点后用 `pnpm db:export-kp-seed`
 生成 `data/kp-seed.sqlite.gz`，作为新 Release 的附件发布。
 
 ```bash

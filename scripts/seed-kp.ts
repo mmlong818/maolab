@@ -29,7 +29,11 @@ async function fetchSeedGz(dir: string): Promise<string> {
   const fileArg = process.argv.indexOf('--file')
   if (fileArg !== -1) return process.argv[fileArg + 1]!
   console.log(`[seed-kp] 下载 ${RELEASE_URL}`)
-  const res = await fetch(RELEASE_URL)
+  const res = await fetch(RELEASE_URL).catch((err: Error) => {
+    // Node 内置 fetch 默认不读 HTTPS_PROXY，走代理的网络会直接连不上
+    throw new Error(`下载失败（${err.message}）。需要代理时设置 NODE_USE_ENV_PROXY=1（Node ≥ 22.21）后重试，` +
+      `或手动下载 ${RELEASE_URL} 后用 --file 指定`)
+  })
   if (!res.ok) throw new Error(`下载失败: HTTP ${res.status}`)
   const gzPath = join(dir, 'kp-seed.sqlite.gz')
   writeFileSync(gzPath, Buffer.from(await res.arrayBuffer()))
