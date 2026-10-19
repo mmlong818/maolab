@@ -303,4 +303,35 @@ describe('页面优先课程整课事实核查', () => {
     expect(result.record.fatalCount).toBe(2)
     expect(result.record.issues.map((i) => i.message)).toEqual([expect.stringContaining('缺少可检查的图像或材料'), expect.stringContaining('其他问题')])
   })
+  describe('教学质量审查部分的类别容错（模型把两套类别混用）', () => {
+    const dims = ['goal-alignment', 'materials', 'progression', 'information-gain', 'answer-separation', 'visual-purpose', 'teacher-companion', 'standards-evidence']
+    const tq = (dimensionOf: (d: string) => string, findingCategory: string) => ({
+      reviewedPageIds: ['page-question', 'page-answer'],
+      reviewedStandardIds: ['std-1'],
+      checks: dims.map((d) => ({ dimension: dimensionOf(d), standardId: 'std-1', pageIds: ['page-answer'], status: 'pass', evidence: '密闭体系总质量守恒。' })),
+      findings: [{ standardId: 'std-1', pageId: 'page-answer', severity: 'warning', category: findingCategory, evidence: '密闭体系总质量守恒。', impact: '学生不清楚答案依据。', fix: '补一句依据。' }],
+    })
+    const coverage = [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }]
+
+    it('answer-consistency、Materials 这类写法映射到教学质量的维度', async () => {
+      const llm: PageContentFactAuditLLMCall = vi.fn(async () => ({
+        issues: [], goalCoverage: coverage,
+        teachingQualityReview: tq((d) => (d === 'answer-separation' ? 'answer-consistency' : d === 'materials' ? 'Materials' : d), 'answer-mismatch'),
+      }))
+      const result = await factAuditPageContentCourse(reviewCourse(), { llm })
+      expect(result.teachingQualityReview?.checks.map((c) => c.dimension)).toEqual(dims)
+      expect(result.teachingQualityReview?.findings[0]?.category).toBe('answer-separation')
+    })
+
+    it('教学质量部分实在认不出时只丢掉这一部分，事实核查照常完成', async () => {
+      const llm: PageContentFactAuditLLMCall = vi.fn(async () => ({
+        issues: [], goalCoverage: coverage,
+        teachingQualityReview: tq((d) => (d === 'progression' ? 'zzz-unknown' : d), 'information-gain'),
+      }))
+      const result = await factAuditPageContentCourse(reviewCourse(), { llm })
+      expect(result.record.auditedSceneCount).toBe(2)
+      expect(result.record.fatalCount).toBe(0)
+      expect(result.teachingQualityReview).toBeUndefined()
+    })
+  })
 })
