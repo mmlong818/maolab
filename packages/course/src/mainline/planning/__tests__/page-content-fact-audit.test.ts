@@ -287,4 +287,20 @@ describe('页面优先课程整课事实核查', () => {
     expect(result.record.fatalCount).toBe(2)
     expect(result.record.issues.map((i) => i.message)).toEqual([expect.stringContaining('题目与回答不匹配'), expect.stringContaining('题目与回答不匹配')])
   })
+  it('复数类别（materials）按单数认；认不出的类别归"其他问题"，不让整次核查作废', async () => {
+    const issue = (category: string, pageIds: string[]) => ({
+      pageIds, severity: 'blocking', category,
+      claim: '页面内容与本课材料不一致。', evidence: '密闭体系总质量守恒。', fix: '按本课材料改写。',
+    })
+    const llm: PageContentFactAuditLLMCall = vi.fn(async () => ({
+      issues: [issue('Materials', ['page-answer']), issue('source-text-conflict', ['page-answer'])],
+      goalCoverage: [{ goalId: 'goal-1', status: 'covered', pageIds: ['page-answer'], evidence: '密闭体系总质量守恒。' }],
+    }))
+
+    const result = await factAuditPageContentCourse(reviewCourse(), { llm })
+
+    expect(result.record.auditedSceneCount).toBe(2)
+    expect(result.record.fatalCount).toBe(2)
+    expect(result.record.issues.map((i) => i.message)).toEqual([expect.stringContaining('缺少可检查的图像或材料'), expect.stringContaining('其他问题')])
+  })
 })
