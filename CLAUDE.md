@@ -35,6 +35,7 @@ corepack pnpm -C apps/prep-api dev
 corepack pnpm -C apps/prep-harness start   需先设 YUNYI_INTERNAL_KEY、YUNYI_PG_URL、DSH_HOME=apps/prep-harness/.dsh-home
 corepack pnpm -C apps/prep-web dev
 corepack pnpm -C workers/render start
+docker compose build prep-web prep-api prep-harness render   四个镜像；maolab-core 以具名构建上下文传入（默认 ../maolab-core），国内网络的镜像源见 docker-compose.yml 开头
 ```
 
 本机：PG 在自习室仓库的 docker compose（127.0.0.1:15433）；连 127.0.0.1 要设 `NO_PROXY=127.0.0.1,localhost`（有 HTTP_PROXY）；内存紧张，不要并行跑多个 Node 重任务。本机全链：先 `corepack pnpm -C apps/prep-web build`，再 `corepack pnpm -C apps/prep-api e2e:prep [--real-browser]`。

@@ -18,6 +18,7 @@
   "scripts": {
     "start": "node node_modules/@deepseek-ai/dsh/lib/bin.js --profile maolab-prep-host",
     "typecheck": "tsc --noEmit",
+    "typecheck:build": "tsc --noEmit -p tsconfig.build.json",
     "test": "vitest run",
     "e2e:prep": "tsx scripts/prep-e2e.ts",
     "realmodel:prep": "tsx scripts/prep-realmodel.ts"

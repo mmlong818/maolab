@@ -1,4 +1,4 @@
-# 备课室 dsh 宿主：node:http 控制网关 + dsh 运行时 + prep-bundle。构建上下文为仓库根目录（镜像构建待 maolab-core 改成 git tag 依赖后可用，见 docs/ISSUES.md）。
+# 备课室 dsh 宿主：node:http 控制网关 + dsh 运行时 + prep-bundle。构建上下文为仓库根目录。
 ARG NODE_IMAGE=node:24-slim
 FROM ${NODE_IMAGE} AS build
 ARG NPM_REGISTRY=https://registry.npmjs.org
@@ -6,6 +6,9 @@ ARG PNPM_VERSION=11.18.0
 ENV npm_config_registry=${NPM_REGISTRY} CI=1
 RUN npm install -g "pnpm@${PNPM_VERSION}"
 WORKDIR /src
+# maolab-core（私有仓库）以具名构建上下文 core 传入（compose 的 additional_contexts，或 docker build --build-context core=<core 目录>）；
+# 各包的 file: 依赖写的是 ../../../maolab-core，WORKDIR 为 /src 时即 /maolab-core。core 的 dist 已提交，不在镜像里编译
+COPY --from=core packages /maolab-core/packages
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json ./
 COPY apps/prep-harness/package.json apps/prep-harness/
 COPY packages/ packages/
@@ -15,11 +18,13 @@ COPY apps/prep-harness apps/prep-harness
 # profile 目录位于根工作区之下，根 install 不会为它建 node_modules；
 # 必须单独 --ignore-workspace 安装，宿主才能解析 @maolab/prep-harness/gateway
 RUN cd apps/prep-harness/.dsh-home/profiles/maolab-prep-host && pnpm install --ignore-workspace --ignore-scripts --registry="${NPM_REGISTRY}"
-RUN pnpm --filter @maolab/prep-harness typecheck
+# 镜像里只有 src：scripts 与测试引用 apps/prep-api 的脚本（不在镜像里），所以只检查 src（tsconfig.build.json）
+RUN pnpm --filter @maolab/prep-harness typecheck:build
 
 FROM ${NODE_IMAGE}
 RUN apt-get update && apt-get install -y --no-install-recommends curl tini && rm -rf /var/lib/apt/lists/*
 WORKDIR /src
+COPY --from=build /maolab-core /maolab-core
 COPY --from=build /src /src
 ENV NODE_ENV=production \
     DSH_HOME=/src/apps/prep-harness/.dsh-home \

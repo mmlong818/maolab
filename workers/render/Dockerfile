@@ -11,6 +11,9 @@ ARG PNPM_VERSION=11.18.0
 ENV npm_config_registry=${NPM_REGISTRY} CI=1 PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 RUN npm install -g "pnpm@${PNPM_VERSION}"
 WORKDIR /src
+# maolab-core（私有仓库）以具名构建上下文 core 传入（compose 的 additional_contexts，或 docker build --build-context core=<core 目录>）；
+# 各包的 file: 依赖写的是 ../../../maolab-core，WORKDIR 为 /src 时即 /maolab-core。core 的 dist 已提交，不在镜像里编译
+COPY --from=core packages /maolab-core/packages
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json ./
 COPY workers/render/package.json workers/render/
 COPY packages/ packages/
@@ -31,6 +34,7 @@ RUN if [ -n "$APT_MIRROR" ]; then sed -i "s#deb.debian.org#${APT_MIRROR}#g" /etc
 # Debian 的 /usr/bin/chromium 是包装脚本，会加载 /etc/chromium.d/*；本机直接用 Edge/Chrome 时无此参数（开发环境不渲染不可信内容）
 RUN printf '%s\n' 'export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --force-webrtc-ip-handling-policy=disable_non_proxied_udp --webrtc-ip-handling-policy=disable_non_proxied_udp"' > /etc/chromium.d/webrtc-hardening
 WORKDIR /src
+COPY --from=build /maolab-core /maolab-core
 COPY --from=build /src /src
 RUN useradd --create-home --uid 10001 app
 USER app
