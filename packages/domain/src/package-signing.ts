@@ -1,5 +1,6 @@
-// S4：课程包签名钥（render worker 签包、api 签撤回单）。MAOLAB_PACKAGE_SIGNING_KEY 是 ed25519 私钥 PEM 文件的路径；
-// 没设 = 本实例不能导出课程包（接口答 503），设了却读不出 = 配置错误，启动即失败。文件内容与路径之外的细节不进错误信息。
+// S4：课程包签名钥（render worker 签包、api 签撤回单）。MAOLAB_PACKAGE_SIGNING_KEY 是 ed25519 私钥 PEM 文件的路径，
+// 或直接是 PEM 内容（以 -----BEGIN 开头；平台环境变量里换行可写成字面的 \n）。
+// 没设 = 本实例不能导出课程包（接口答 503），设了却读不出 = 配置错误，启动即失败。私钥内容不进错误信息，路径才进。
 import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
@@ -10,6 +11,13 @@ export const PACKAGE_SIGNING_KEY_ENV = 'MAOLAB_PACKAGE_SIGNING_KEY'
 export function loadPackageSigningKey(env: NodeJS.ProcessEnv = process.env): SigningKey | undefined {
   const path = env[PACKAGE_SIGNING_KEY_ENV]?.trim()
   if (!path) return undefined
+  if (path.startsWith('-----BEGIN')) {
+    try {
+      return signingKeyFromPem(path.replace(/\\n/g, '\n'))
+    } catch {
+      throw new Error(`${PACKAGE_SIGNING_KEY_ENV} 不是 ed25519 私钥（PKCS#8 PEM）：变量里直接写的 PEM`)
+    }
+  }
   let pem: string
   try {
     pem = readFileSync(path, 'utf8')
