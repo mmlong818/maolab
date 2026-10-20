@@ -21,3 +21,5 @@ docs/real-check/**/*-profile/
 .claude/
 # S4 全链产出的课程包（每个约 9 MB）只留本机，跨产品全链从这里读；summary、撤回单、公钥入库
 docs/real-check/**/*.zip
+# k12 知识点 seed（packages/domain 的 kp:export-seed 生成，约 12MB）：只随 prep-api 镜像带入生产，不入库
+apps/prep-api/seed/*.gz

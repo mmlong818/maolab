@@ -12,6 +12,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "kp:export-seed": "tsx scripts/kp-export-seed.ts",
     "db:generate": "drizzle-kit generate",
     "db:generate:custom": "drizzle-kit generate --custom"
   },
