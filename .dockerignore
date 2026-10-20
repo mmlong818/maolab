@@ -1,0 +1,16 @@
+# 构建上下文都是仓库根目录（prep-web、prep-api、prep-harness、render）；maolab-core 另以具名上下文 core 传入（见 docker-compose.yml）
+.git
+**/node_modules
+**/.next
+apps/prep-web/out
+**/*.tsbuildinfo
+**/*.log
+data
+docs
+**/.env
+**/.env.*
+.claude
+.playwright-mcp
+coverage
+# 宿主运行时的本地会话不进镜像
+apps/prep-harness/.dsh-home/sessions

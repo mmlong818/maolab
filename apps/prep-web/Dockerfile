@@ -1,4 +1,4 @@
-# 备课室前端镜像：Next 静态导出 + Nginx。构建上下文为仓库根目录（pnpm 工作区；镜像构建待 maolab-core 改成 git tag 依赖后可用，见 docs/ISSUES.md）。
+# 备课室前端镜像：Next 静态导出 + Nginx。构建上下文为仓库根目录（pnpm 工作区）。
 # 运行时环境变量：API_UPSTREAM（prep-api 地址，默认 http://prep-api:8080）。容器端口 8080。
 ARG NODE_IMAGE=node:22-slim
 ARG NGINX_IMAGE=nginx:1.27-alpine
@@ -11,6 +11,8 @@ ENV npm_config_registry=${NPM_REGISTRY} \
     CI=1
 RUN npm install -g "pnpm@${PNPM_VERSION}" && pnpm --version
 WORKDIR /src
+# 前端不用 maolab-core，但 pnpm 按 lockfile 安装时仍要读 file: 依赖的目录，所以同样传入具名上下文 core（只在构建阶段）
+COPY --from=core packages /maolab-core/packages
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json ./
 COPY apps/prep-web/package.json apps/prep-web/
 COPY packages/ packages/

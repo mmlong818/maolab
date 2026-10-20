@@ -1,0 +1,108 @@
+# 猫叔备课室的四个镜像：前端（prep-web）、产品 API（prep-api）、备课宿主（prep-harness）、渲染 worker（render）。
+#
+#   构建：      docker compose build prep-web prep-api prep-harness render
+#   国内网络：  NODE_IMAGE=docker.m.daocloud.io/node:22-slim NODE_IMAGE_24=docker.m.daocloud.io/node:24-slim
+#               NGINX_IMAGE=docker.m.daocloud.io/nginx:1.27-alpine NPM_REGISTRY=https://registry.npmmirror.com APT_MIRROR=mirrors.aliyun.com
+#
+# maolab-core 是私有仓库，不在镜像里 git 拉取：以具名构建上下文 core 传入（默认同级目录 ../maolab-core，部署时先检出到约定的 tag）。
+# PostgreSQL 不在这里：本机用自习室仓库 compose 的 postgres（宿主 15433，库 maolab_prep）；平台部署由平台注入 PG_DATABASE_URL。
+
+x-core-context: &core-context
+  core: ${MAOLAB_CORE_DIR:-../maolab-core}
+
+services:
+  # -------- 前端（Next 静态导出 + Nginx，/api 反代到 prep-api） --------
+  prep-web:
+    image: maolab-prep:web
+    build:
+      context: .
+      dockerfile: apps/prep-web/Dockerfile
+      additional_contexts: *core-context
+      args:
+        NODE_IMAGE: "${NODE_IMAGE:-node:22-slim}"
+        NGINX_IMAGE: "${NGINX_IMAGE:-nginx:1.27-alpine}"
+        NPM_REGISTRY: "${NPM_REGISTRY:-https://registry.npmjs.org}"
+    container_name: maolab-prep-web
+    ports:
+      - "${PREP_WEB_PORT:-15300}:8080"
+    environment:
+      - API_UPSTREAM=${API_UPSTREAM:-http://prep-api:8080}
+    depends_on:
+      - prep-api
+    restart: unless-stopped
+
+  # -------- 产品 API（Fastify：登录、课程、备课对话、知识点检索、产物与导出） --------
+  prep-api:
+    image: maolab-prep:api
+    build:
+      context: .
+      dockerfile: apps/prep-api/Dockerfile
+      additional_contexts: *core-context
+      args:
+        NODE_IMAGE: "${NODE_IMAGE_24:-node:24-slim}"
+        NPM_REGISTRY: "${NPM_REGISTRY:-https://registry.npmjs.org}"
+    container_name: maolab-prep-api
+    ports:
+      # 只绑本机回环：对外一律经前端 Nginx
+      - "127.0.0.1:${PREP_API_PORT:-8101}:8080"
+    environment:
+      # api 启动时执行迁移（account、kp、course）
+      - PG_DATABASE_URL=${PG_DATABASE_URL:-postgresql://maolab_prep:maolab_prep@host.docker.internal:15433/maolab_prep}
+      - OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-}
+      - OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-}
+      - OIDC_AUTHORITY=${OIDC_AUTHORITY:-}
+      - OIDC_TOKEN_TTL=${OIDC_TOKEN_TTL:-720h}
+      - OIDC_GATEWAY_BASE_URL=${OIDC_GATEWAY_BASE_URL:-}
+      - PORTAL_BASE_URL=${PORTAL_BASE_URL:-}
+      - PORTAL_PLAN_CODES=${PORTAL_PLAN_CODES:-}
+      - SECRET_ENCRYPTION_KEY=${SECRET_ENCRYPTION_KEY:-}
+      - MAOLAB_ADMIN_USERS=${MAOLAB_ADMIN_USERS:-}
+      - API_TRUST_PROXY=${API_TRUST_PROXY:-1}
+      - YUNYI_HARNESS_URL=${YUNYI_HARNESS_URL:-http://prep-harness:8080}
+      - YUNYI_INTERNAL_KEY=${YUNYI_INTERNAL_KEY:-}
+      # 课程包签名私钥（导出给自习室的课程包）：容器内 PEM 文件的路径，私钥以只读卷或平台密钥文件挂入
+      - MAOLAB_PACKAGE_SIGNING_KEY=${MAOLAB_PACKAGE_SIGNING_KEY:-}
+    restart: unless-stopped
+
+  # -------- 备课宿主（dsh：控制网关 + prep-bundle） --------
+  prep-harness:
+    image: maolab-prep:harness
+    build:
+      context: .
+      dockerfile: apps/prep-harness/Dockerfile
+      additional_contexts: *core-context
+      args:
+        NODE_IMAGE: "${NODE_IMAGE_24:-node:24-slim}"
+        NPM_REGISTRY: "${NPM_REGISTRY:-https://registry.npmjs.org}"
+    container_name: maolab-prep-harness
+    ports:
+      # 网关只认内网密钥、没有用户鉴权，只绑本机回环
+      - "127.0.0.1:${PREP_HARNESS_PORT:-8180}:8080"
+    environment:
+      - YUNYI_PG_URL=${PG_DATABASE_URL:-postgresql://maolab_prep:maolab_prep@host.docker.internal:15433/maolab_prep}
+      - YUNYI_INTERNAL_KEY=${YUNYI_INTERNAL_KEY:-}
+      - YUNYI_LLM_BASE_URL=${YUNYI_LLM_BASE_URL:-https://api.everai.cloud/v1}
+    restart: unless-stopped
+
+  # -------- 渲染 worker（Playwright + chromium：截图门禁、PPTX） --------
+  render:
+    image: maolab-prep:render
+    build:
+      context: .
+      dockerfile: workers/render/Dockerfile
+      additional_contexts: *core-context
+      args:
+        NODE_IMAGE: "${NODE_IMAGE:-node:22-slim}"
+        NPM_REGISTRY: "${NPM_REGISTRY:-https://registry.npmjs.org}"
+        APT_MIRROR: "${APT_MIRROR:-}"
+    container_name: maolab-prep-render
+    environment:
+      - RENDER_PG_URL=${PG_DATABASE_URL:-postgresql://maolab_prep:maolab_prep@host.docker.internal:15433/maolab_prep}
+      # 渲染页在前端镜像里（/prep/render/）
+      - RENDER_PAGE_ORIGIN=${RENDER_PAGE_ORIGIN:-http://prep-web:8080}
+      - RENDER_CHROMIUM_NO_SANDBOX=1
+      # 课程包在这里打包签名：与 prep-api 同一把私钥（容器内 PEM 路径）；不配则导出课程包失败（PACKAGE_SIGNING_UNCONFIGURED）
+      - MAOLAB_PACKAGE_SIGNING_KEY=${MAOLAB_PACKAGE_SIGNING_KEY:-}
+    depends_on:
+      - prep-web
+    restart: unless-stopped
