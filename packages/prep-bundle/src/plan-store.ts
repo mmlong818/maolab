@@ -84,7 +84,8 @@ export function currentTurnMessages(agent: object): Array<Record<string, unknown
   const log = logOf(agent)
   let last = -1
   for (let i = log.length - 1; i >= 0; i--) if (isStudent(log[i]!)) { last = i; break }
-  return last < 0 ? [] : (log.slice(last + 1) as unknown as Array<Record<string, unknown>>)
+  // 没有学生消息 = 本回合的学生消息已被压缩进摘要：剩下的日志都属于本回合（与 currentTurnAssistantText 同一取法）
+  return log.slice(last + 1) as unknown as Array<Record<string, unknown>>
 }
 
 /** 会话日志里每条学生发言的消息 id（按时间顺序，位置与发言一一对应；没有 id 的为 undefined）。消息 id 即该回合的 runId
