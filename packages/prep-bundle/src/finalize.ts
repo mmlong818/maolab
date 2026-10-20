@@ -40,12 +40,12 @@ export interface FinalizeDeps {
   emit(event: string, payload: unknown): void
 }
 
-export function createFinalizer(deps: FinalizeDeps): { finalize(agent: { id: unknown }, end: TurnEndData): Promise<PrepTurnFinal | undefined> } {
+export function createFinalizer(deps: FinalizeDeps): { finalize(agent: { id: unknown }, end: TurnEndData, context?: { runId?: string }): Promise<PrepTurnFinal | undefined> } {
   const finalizer = createPrepFinalizer({ classify: (r) => classifyTurnEnd(r as TurnEndData['reason']), modelErrorOf: (r) => modelErrorOf(r as TurnEndData['reason']) })
   return {
-    async finalize(agent, end) {
+    async finalize(agent, end, context) {
       if (!deps.isPrep(agent)) return undefined
-      const final = finalizer.finalize(agent as object, end)
+      const final = finalizer.finalize(agent as object, end, context)
       if (!final) return undefined
       // 发帧失败不让 finalize reject；日志只写类别
       try {

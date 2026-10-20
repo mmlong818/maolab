@@ -1,6 +1,7 @@
 // 3d：prep 会话的回合定稿。prep preset 不挂 pre-step，没有导师的回合状态，导师定稿对它什么都不发（finalize.ts 的 getTurnState 为空）；
 // api 要靠 yunyi/turn-final { runId } 收尾（apps/api/src/learning/harness-client.ts 的 turnFinalOf），这里补上：
-// - runId = 本回合学生消息的 id，即网关 followup 交给 agent 的 messageId（= api 的回合 id，实测：prep-final.test.ts）；
+// - runId = 本回合学生消息的 id，即网关 followup 交给 agent 的 messageId（= api 的回合 id，实测：prep-final.test.ts）；网关在 finalize 的 context 里直接给，
+//   日志里的最后一条学生消息只作后备（压缩后它可能已不在日志里，回复与工具改取压缩后剩下的日志）；
 // - reply = 本回合 assistant 文字（与导师同一取法：去重复述，再 stripToolChatter(emptyIfAll) 剥离旁白与伪调用；另剥 prep 工具名的伪调用块，
 //   因为 chatter.ts 的工具名表只有导师工具，改它会动导师定稿）；剥完为空用"已处理。"，不把原始块交出去；失败回合用备课版兜底文案（工具写进课程的改动不受影响）；
 // - tools = 本回合每条工具结果的 ok/reason/课程 id（工具结果 JSON 来自 packages/bundle/src/tools/prep-tools.ts）；
@@ -89,14 +90,15 @@ export function createPrepFinalizer(deps: {
   classify(reason: unknown): 'live' | 'cancelled' | 'failed'
   modelErrorOf(reason: unknown): 'quota' | 'credential' | undefined
   uuid?: () => string
-}): { finalize(agent: object, end: { reason?: unknown; turn?: unknown }): PrepTurnFinal | undefined } {
+}): { finalize(agent: object, end: { reason?: unknown; turn?: unknown }, context?: { runId?: string }): PrepTurnFinal | undefined } {
   const uuid = deps.uuid ?? randomUUID
   /** 每个 agent 上一次定稿的回合结束标识 */
   const lastEnd = new WeakMap<object, string>()
   return {
-    finalize(agent, end) {
+    finalize(agent, end, context = {}) {
       const ids = studentMessageIds(agent)
-      const runId = ids.at(-1)
+      // 网关告诉的 runId（开启本回合的那条消息）优先：长回合中途压缩会把本回合的学生消息压进摘要，日志里就找不到了（2026-10-20 生产）
+      const runId = context.runId ?? ids.at(-1)
       if (!runId) return undefined
       const endKey = typeof end.turn === 'number' ? `turn:${end.turn}` : `log:${ids.length}:${runId}`
       if (lastEnd.get(agent) === endKey) return undefined

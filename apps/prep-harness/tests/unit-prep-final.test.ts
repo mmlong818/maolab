@@ -53,6 +53,27 @@ describe('prep finalizer', () => {
     expect(make().finalize(agentWith([]), { reason: { kind: 'completed' } })).toBeUndefined()
   })
 
+  // 2026-10-20 生产：53 步的长回合中途压缩，本回合的学生消息被压进摘要（摘要节点 role user、source 不是 user），日志里没有学生消息了。
+  // 网关告诉定稿是哪条消息开启了本回合：照样发收尾帧，回复与工具取压缩后剩下的日志
+  test('a turn whose student message was compacted away still finalizes with the runId the gateway gives', () => {
+    const agent = agentWith([
+      { role: 'user', source: { kind: 'compaction', compactionId: 'cp-1' }, content: [{ type: 'text', text: '（摘要）老师要求审查计划并逐页生成…' }] },
+      ...toolMessage('call_9', 'audit_course', { ok: false, reason: 'audit-blocked', courseId: 'c-9' }),
+      ...toolMessage('call_10', 'repair_page', { ok: true, course: { courseId: 'c-9' } }),
+      { role: 'assistant', content: [{ type: 'text', text: '已修好两页，等你验收。' }] },
+    ])
+    expect(make().finalize(agent, { reason: { kind: 'completed' }, turn: 1 }, { runId: RUN })).toEqual({
+      runId: RUN, prep: true, assistantMessageId: 'assistant-1', outcome: 'completed',
+      reply: '已修好两页，等你验收。',
+      tools: [{ name: 'audit_course', ok: false, reason: 'audit-blocked', courseId: 'c-9' }, { name: 'repair_page', ok: true, courseId: 'c-9' }],
+    })
+  })
+
+  test('the gateway runId wins over the log when both are present', () => {
+    const agent = agentWith([{ id: 'stale-run', role: 'user', source: { kind: 'user' }, content: '上一条' }, { role: 'assistant', content: [{ type: 'text', text: '好' }] }])
+    expect(make().finalize(agent, { reason: { kind: 'completed' }, turn: 2 }, { runId: RUN })).toMatchObject({ runId: RUN, reply: '好' })
+  })
+
   // Ruling [T2/T8] F4：api 对失败、超时、取消的回合用同一个 messageId 重试；dsh 接受重复 id（实测：新回合里再追加一条同 id 的学生消息），
   // 每次重试都要有自己的终帧，否则 api 等满 30 分钟
   test('a retry with the same message id gets its own final frame (turn numbers from turn/end)', () => {
