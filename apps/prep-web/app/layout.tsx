@@ -7,7 +7,7 @@ import AuthGate from './components/AuthGate'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: '猫叔备课室',
+  title: '云一备课室',
   description: '老师选知识点，和备课助理一起把它做成一节能上的课',
 }
 
