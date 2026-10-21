@@ -6,7 +6,7 @@ import { withSessionHeader } from './session-header'
 import type { AuthClient } from '../vendor/agentia-auth/agentia-auth-browser.esm-browser.js'
 
 const GATE_TEXT: Record<string, string> = {
-  'auth.gate_title': '猫叔备课室',
+  'auth.gate_title': '云一备课室',
   'auth.gate_desc': '登录后开始备课，课程会保存在你的账号下',
   'auth.gate_btn': '登录',
   'auth.gate_busy': '登录中…',
@@ -23,7 +23,7 @@ export function authClient(): AuthClient {
       callbackPath: '/login-callback', // 与云一登记的 redirect_uri 一致
       storageKey: 'maolab-prep-token',
       modeKey: 'maolab-prep-auth-mode',
-      appName: '猫叔备课室',
+      appName: '云一备课室',
       logo: '猫',
       fetch: window.fetch.bind(window), // SDK 内部请求必须用原生 fetch，不能走 apiFetch
       t: (key: string, fallback?: string) => GATE_TEXT[key] ?? fallback ?? key,
