@@ -24,7 +24,7 @@ export function authClient(): AuthClient {
       storageKey: 'maolab-prep-token',
       modeKey: 'maolab-prep-auth-mode',
       appName: '云一备课室',
-      logo: '猫',
+      logo: '云',
       fetch: window.fetch.bind(window), // SDK 内部请求必须用原生 fetch，不能走 apiFetch
       t: (key: string, fallback?: string) => GATE_TEXT[key] ?? fallback ?? key,
       wallet: false, // 余额由页面自己渲染（AccountMenu）
