@@ -1,4 +1,4 @@
-# maolab-prep-host：云一备课室的 dsh 宿主，从空树显式组合，不叠 dsh-base。
+# maolab-prep-host：云一助教的 dsh 宿主，从空树显式组合，不叠 dsh-base。
 # 不含 fs、shell、沙箱、会话搜索、会话引用、本地 skills、插件管理器、Web 壳、MCP。
 # 只有一个正式 preset：prep（备课）。测试 preset（probe-*）只在 YUNYI_TEST_PRESETS=1 时启用。
 - insert:
@@ -44,7 +44,7 @@
       config:
         includeHarnessIdentity: false
         includeRuntimeContext: false
-        personaPrefix: 你是云一备课室的智能体。
+        personaPrefix: 你是云一助教的智能体。
     - id: tools
       name: '@deepseek-ai/dsh-tools'
     # skill 注册表（全局）。提供方与 skill 工具挂在各 preset 里，只对该 preset 可见；不挂 dsh-skill-filesystem（不扫项目、DSH_HOME、~/.agents）
@@ -81,7 +81,7 @@
         plugins:
           - name: '@deepseek-ai/dsh-persona'
             config:
-              prefix: 你是云一备课室的备课助理，帮老师把选定的知识点做成一节能上的课。
+              prefix: 你是云一助教，帮老师把选定的知识点做成一节能上的课。
           - name: '@maolab/prep-bundle/tools-prep'
           - name: '@maolab/prep-bundle/skills'
             config:

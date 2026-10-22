@@ -1,4 +1,4 @@
-# 云一备课室的四个镜像：前端（prep-web）、产品 API（prep-api）、备课宿主（prep-harness）、渲染 worker（render）。
+# 云一助教的四个镜像：前端（prep-web）、产品 API（prep-api）、备课宿主（prep-harness）、渲染 worker（render）。
 #
 #   构建：      docker compose build prep-web prep-api prep-harness render
 #   国内网络：  NODE_IMAGE=docker.m.daocloud.io/node:22-slim NODE_IMAGE_24=docker.m.daocloud.io/node:24-slim

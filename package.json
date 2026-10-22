@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "license": "PolyForm-Noncommercial-1.0.0",
-  "description": "云一备课室",
+  "description": "云一助教",
   "scripts": {
     "test": "corepack pnpm -r --workspace-concurrency=1 test",
     "typecheck": "corepack pnpm -r typecheck"
