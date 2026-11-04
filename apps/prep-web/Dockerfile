@@ -1,5 +1,6 @@
 # 备课室前端镜像：Next 静态导出 + Nginx。构建上下文为仓库根目录（pnpm 工作区）。
 # 运行时环境变量：API_UPSTREAM（prep-api 地址，默认 http://prep-api:8080）。容器端口 8080。
+# ACME_UPSTREAM：cert-manager 的 SDP 域名，只用于转发 /.well-known/acme-challenge/（Let's Encrypt HTTP-01 验证）。
 ARG NODE_IMAGE=node:22-slim
 ARG NGINX_IMAGE=nginx:1.27-alpine
 
@@ -22,7 +23,8 @@ RUN cd apps/prep-web && pnpm exec next build
 
 FROM ${NGINX_IMAGE}
 ENV API_UPSTREAM=http://prep-api:8080 \
-    NGINX_ENVSUBST_FILTER='^(API_UPSTREAM)$'
+    ACME_UPSTREAM=https://cert-manager.sdp.ndaeweb.com \
+    NGINX_ENVSUBST_FILTER='^(API_UPSTREAM|ACME_UPSTREAM)$'
 RUN rm -f /etc/nginx/conf.d/default.conf
 COPY apps/prep-web/nginx/default.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /src/apps/prep-web/out/ /usr/share/nginx/html/

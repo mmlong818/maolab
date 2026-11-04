@@ -1,5 +1,5 @@
 # 备课室前端静态文件 + /api 反代到 prep-api。
-# 由官方 nginx 镜像在启动时用 envsubst 渲染：API_UPSTREAM（例如 http://prep-api:8080）。只替换这一个变量（见 Dockerfile 的 NGINX_ENVSUBST_FILTER），$uri 等 nginx 变量保持原样。
+# 由官方 nginx 镜像在启动时用 envsubst 渲染：API_UPSTREAM（例如 http://prep-api:8080）、ACME_UPSTREAM（cert-manager，只接 /.well-known/acme-challenge/）。只替换这两个变量（见 Dockerfile 的 NGINX_ENVSUBST_FILTER），$uri 等 nginx 变量保持原样。
 
 server {
     listen 8080;
@@ -16,6 +16,16 @@ server {
 
     gzip on;
     gzip_types text/css application/javascript application/json image/svg+xml text/plain;
+
+    # Let's Encrypt HTTP-01 验证：只转发这个前缀，交给 cert-manager 按 token 应答（ACME_UPSTREAM）
+    # ^~ 前缀：命中后不再查正则 location
+    location ^~ /.well-known/acme-challenge/ {
+        proxy_pass ${ACME_UPSTREAM};
+        proxy_http_version 1.1;
+        proxy_set_header Host $proxy_host;
+        proxy_ssl_server_name on;
+        proxy_set_header Connection "";
+    }
 
     location = / {
         return 302 /prep/;
