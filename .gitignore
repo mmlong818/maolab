@@ -52,3 +52,7 @@ scratch-*.json
 
 # Next.js 生成文件(dev/build 互相改写 reference path,不入库)
 app/next-env.d.ts
+
+# Local collaboration records
+/.collab/LOCKS.md
+/.collab/mailbox-*.md
